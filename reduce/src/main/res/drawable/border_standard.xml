@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="false">
+        <shape>
+            <!-- 填充的颜色(背景颜色) -->
+            <solid android:color="#F5F5F5" />
+            <!-- 设置按钮的四个角为弧形 -->
+            <!-- android:radius 弧形的所有半径 -->
+            <corners android:radius="2dp" />
+            <!-- 边框的宽度及颜色 -->
+            <stroke android:width="1dp" android:color="#DFDFDF" />
+        </shape>
+    </item>
+    <!--true 为按下的时候-->
+    <item android:state_pressed="true">
+        <shape>
+            <!--点击之后的颜色(背景颜色)-->
+            <solid android:color="#CCE1E1E1" />
+            <corners android:radius="2dp" />
+            <!--点击之后的边框-->
+            <stroke android:width="1dp" android:color="#DFDFDF" />
+        </shape>
+    </item>
+</selector>

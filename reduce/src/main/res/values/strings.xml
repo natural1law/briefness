@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="firstName">消息</string>
+    <string name="secondName">联系人</string>
+    <string name="thirdlyName">发现</string>
+    <string name="fourthlyName">我的</string>
+    <string name="fifthName">首页</string>
+    <string name="btn_return">返回</string>
+    <string name="btn_affirm">确认</string>
+</resources>

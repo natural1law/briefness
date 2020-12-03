@@ -1,0 +1,5 @@
+include ':http'
+include ':reduce'
+include ':fold'
+include ':app'
+rootProject.name = "briefness"

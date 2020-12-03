@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.androidx.http">
+
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 网络权限 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 网络状态权限 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- WiFi状态权限 -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE " /> <!-- 改变网络状态 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" /><!-- 改变WiFi多播状态 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- 控制WiFi开关 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" /><!--屏幕锁-->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:networkSecurityConfig="@xml/network_config"
+        tools:ignore="UnusedAttribute">
+
+        <service
+            android:name=".api.LoginServer"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter android:priority="1000">
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.USER_PRESENT" />
+                <action android:name="android.intent.action.PACKAGE_RESTARTED" />
+                <action android:name="com.dev.eim.service.LoginService" />
+            </intent-filter>
+        </service>
+
+    </application>
+</manifest>
