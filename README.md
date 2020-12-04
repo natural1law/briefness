@@ -2,13 +2,14 @@
   * android一些日常工具的封装、okhttp网络框架的二次封装、安全加密工具封装、布局控件等等
   * 目的是让开发者简单的快速的集成，减少不必要的工作量
 
+### 依赖版本 [![](https://jitpack.io/v/natural1law/briefness.svg)](https://jitpack.io/#natural1law/briefness)
 ### 使用依赖
-  * **implementation 'com.github.natural1law.briefness:1.1.1'**
+  * **implementation 'com.github.natural1law.briefness:tag'**
   
 #### 依赖分支
-  * **implementation 'com.github.natural1law.briefness:fold:1.1.1'**
-  * **implementation 'com.github.natural1law.briefness:http: 1.1.1'** 
-  * **implementation 'com.github.natural1law.briefness:reduce:1.1.1'** 
+  * **implementation 'com.github.natural1law.briefness:fold:tag'**
+  * **implementation 'com.github.natural1law.briefness:http: tag'** 
+  * **implementation 'com.github.natural1law.briefness:reduce:tag'** 
   
 ### 工具使用
   * 暂不介绍，目前由作者自己使用，待项目稳定后在做介绍
