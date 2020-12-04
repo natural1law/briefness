@@ -10,11 +10,16 @@
   * **implementation 'com.github.natural1law.briefness:http: 1.1.1'** 
   * **implementation 'com.github.natural1law.briefness:reduce:1.1.1'** 
   
-### 使用工具
+### 工具使用
   * 暂不介绍，待项目稳定后介绍
   
 ### 更新日志
+
   * @date 2020/12/02
   * @version 1.1.0
   * @explain 日常使用工具、分组布局、网络请求封装等等
+  
+  * @date 2020/12/03
+  * @version 1.1.1
+  * @explain 修复混淆后的BUG
   
