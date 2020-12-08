@@ -210,7 +210,7 @@ public class ChartView extends WebView {
 
 
     private void loadLocalFilesAndDrawChart(final Options options) {
-        this.loadUrl("file:///android_assets/ChartView.html");
+        this.loadUrl("file:///android_asset/ChartView.html");
         this.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageFinished(WebView view, String url) {
