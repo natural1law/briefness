@@ -22,18 +22,18 @@
 ### 更新日志
 
   > 修订版本1.1.0
-  * @ date: 2020/12/02
-  * @ version: 1.1.0
-  * @ statement: 日常使用工具、分组布局、网络请求封装等等
+  * @日期: 2020/12/02
+  * @版本号: 1.1.0
+  * @声明: 日常使用工具、分组布局、网络请求封装等等
   
   > 修订版本1.1.1
-  * @ date: 2020/12/03
-  * @ version: 1.1.1
-  * @ statement: 修复混淆后的BUG
+  * @日期: 2020/12/03
+  * @版本号: 1.1.1
+  * @声明: 修复混淆后的BUG
   
   > 修订版本1.2.0
-  * @ date: 2020/12/08
-  * @ version: 1.2.0
-  * @ statement: 新增图表控件-折线图、曲线图、圆柱图、饼状图等等
-  * @ explain: 此功能是参考 [AAChartCore](https://github.com/AAChartModel/AAChartCore "AAChartCore")  项目,因此项目没有java版依赖，所以封装一套使用
+  * @日期: 2020/12/08
+  * @版本号: 1.2.0
+  * @声明: 新增图表控件-折线图、曲线图、圆柱图、饼状图等等
+  * @解释: 此功能是参考 [AAChartCore](https://github.com/AAChartModel/AAChartCore "AAChartCore")  项目,因此项目没有java版依赖，所以封装一套使用
   
