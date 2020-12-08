@@ -3,14 +3,15 @@
   * 目的是让开发者简单的快速的集成，减少不必要的工作量
 
 ### 依赖版本 
-  ![](https://camo.githubusercontent.com/27b8683daf0dafc95859b9d4ae12c6a46a6de0cc574da44a3fc792bdc5a7accc/68747470733a2f2f6a69747061636b2e696f2f762f6e61747572616c316c61772f62726965666e6573732e737667)
+  ![](https://jitpack.io/v/natural1law/briefness.svg)
 ### 使用依赖
   * **implementation 'com.github.natural1law.briefness:tag'**
   
 #### 依赖分支
-  * **implementation 'com.github.natural1law.briefness:fold:tag'**
-  * **implementation 'com.github.natural1law.briefness:http: tag'** 
-  * **implementation 'com.github.natural1law.briefness:reduce:tag'** 
+  * 分组控件- **implementation 'com.github.natural1law.briefness:fold:tag'**
+  * okhttp工具- **implementation 'com.github.natural1law.briefness:http: tag'** 
+  * 加密等工具- **implementation 'com.github.natural1law.briefness:reduce:tag'** 
+  * 图表工具- **implementation 'com.github.natural1law.briefness:chart:tag'** 
   
 ### 工具使用
   * 暂不介绍，目前由作者自己使用，待项目稳定后在做介绍
@@ -20,15 +21,16 @@
   #### 修订版本1.1.0
   * @date 2020/12/02
   * @version 1.1.0
-  * @explain 日常使用工具、分组布局、网络请求封装等等
+  * @statement 日常使用工具、分组布局、网络请求封装等等
   
   #### 修订版本1.1.1
   * @date 2020/12/03
   * @version 1.1.1
-  * @explain 修复混淆后的BUG
+  * @statement 修复混淆后的BUG
   
   #### 修订版本1.2.0
   * @date 2020/12/08
   * @version 1.2.0
-  * @explain 新增图表控件-折线图、曲线图、圆柱图、饼状图等等
+  * @statement 新增图表控件-折线图、曲线图、圆柱图、饼状图等等
+  * @explain 此功能是参考 https://github.com/AAChartModel/AAChartCore 项目,因此项目没有java版依赖，所以封装一套使用
   
