@@ -1,7 +1,5 @@
 package com.androidx.http.net;
 
-import android.util.Log;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -43,11 +41,7 @@ public final class OkHttpInterceptor implements Interceptor {
         Request request = chain.request();
         Request.Builder requestBuilder = request.newBuilder();
         requestBuilder.addHeader("Content-Type", "application/x-protobuf");
-        Log.e("请求URL", request.url().toString());
-        Log.e("请求头", request.headers().toString());
         //响应
-        Response response = chain.proceed(requestBuilder.build());
-        Log.e("响应头", response.headers().toString());
-        return response;
+        return chain.proceed(requestBuilder.build());
     }
 }

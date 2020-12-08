@@ -301,19 +301,19 @@ public final class NetRequest {
         }
     }
 
-    public void send(MsgModule.Msg msg) {
-        try {
-            send(msg.getCode(), msg.toByteArray());
-        } catch (Exception e) {
-            Log.e(TAG + "发送消息异常4：", String.valueOf(e.getMessage()));
-        }
-    }
-
     public void send(int type, Map<String, Object> data) {
         try {
             send(type, data.toString().getBytes());
         } catch (Exception e) {
             Log.e(TAG + "发送消息异常5：", String.valueOf(e.getMessage()));
+        }
+    }
+
+    public void send(MsgModule.Msg msg) {
+        try {
+            send(msg.getCode(), msg.toByteArray());
+        } catch (Exception e) {
+            Log.e(TAG + "发送消息异常4：", String.valueOf(e.getMessage()));
         }
     }
 

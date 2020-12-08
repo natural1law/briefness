@@ -12,6 +12,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/chart" />
             <option value="$PROJECT_DIR$/fold" />
             <option value="$PROJECT_DIR$/http" />
             <option value="$PROJECT_DIR$/reduce" />
