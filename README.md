@@ -17,7 +17,9 @@
   * 图表工具- **implementation 'com.github.natural1law.briefness:chart :tag'** 
   
 ### 工具使用
-  * 暂不介绍，目前由作者自己使用，待项目稳定后在做介绍
+  ``` 
+  暂不介绍，目前由作者自己使用，待项目稳定后在做介绍
+  ```
   
 ### 更新日志
 
