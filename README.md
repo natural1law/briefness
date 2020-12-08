@@ -10,12 +10,6 @@
 ### 使用依赖
   * **implementation 'com.github.natural1law.briefness:tag'**
   
-#### 依赖分支
-  * 分组控件- **implementation 'com.github.natural1law.briefness:fold:tag'**
-  * okhttp工具- **implementation 'com.github.natural1law.briefness:http: tag'** 
-  * 加密等工具- **implementation 'com.github.natural1law.briefness:reduce:tag'** 
-  * 图表工具- **implementation 'com.github.natural1law.briefness:chart :tag'** 
-  
 ### 工具使用
   ```
     暂不介绍，目前由作者自己使用，待项目稳定后在做介绍
@@ -23,6 +17,11 @@
 
 ### 更新日志
 
+  > 修订版本1.2.4
+  * @日期: 2020/12/08
+  * @版本号: 1.2.4
+  * @声明: 修复assets资源js无法加载的问题
+  
   > 修订版本1.2.2
   * @日期: 2020/12/08
   * @版本号: 1.2.2
