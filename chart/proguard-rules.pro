@@ -1,5 +1,5 @@
 #指定代码的压缩级别
--optimizationpasses 5
+-optimizationpasses 3
 
 #包明不混合大小写
 -dontusemixedcaseclassnames
@@ -23,7 +23,7 @@
 -keepattributes *Annotation*,InnerClasses
 
 #预校验
--dontpreverify
+-dontoptimize
 
 #混淆时是否记录日志
 -verbose
@@ -44,8 +44,8 @@
 }
 
  # 混淆时所采用的算法
--optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
-#-optimizations !code/simplification/cast,!field/*,!class/merging/*
+#-optimizations !code/simplification/arithmetic,!field/*,!class/merging/*
+-optimizations !code/simplification/cast,!field/*,!class/merging/*
 
 #保持自定义控件类不被混淆
 -keepclasseswithmembers class * {
@@ -98,5 +98,7 @@
 -keep public class * extends android.view.View
 -keep public class android.widget.*
 # 保留类不被混淆
--keep public class com.androidx.chart.*{*;}
-
+-keep public class com.androidx.chart.creator.*{*;}
+-keep public class com.androidx.chart.enums.*{*;}
+-keep public class com.androidx.chart.model.*{*;}
+-keep public class com.androidx.chart.tools.*{*;}

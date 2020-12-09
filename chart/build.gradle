@@ -20,9 +20,16 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
-            multiDexEnabled true
+            minifyEnabled false
+            shrinkResources false
+            multiDexEnabled false
+            proguardFiles 'proguard-rules.pro'
+        }
+
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            multiDexEnabled false
             proguardFiles 'proguard-rules.pro'
         }
     }
