@@ -20,7 +20,7 @@
   > 修订版本1.2.9
   * @日期：2020/12/08
   * @声明：修复项目混淆后图表加载失败的问题
-  * @解释：项目使用时需添加混淆配置 --
+  * @解释：项目使用时需添加混淆配置
    ```
    -keep public class com.androidx.chart.creator.*{*;}
    -keep public class com.androidx.chart.enums.*{*;}
