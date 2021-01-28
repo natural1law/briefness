@@ -189,7 +189,6 @@ public final class NavigationBar {
                 return new NavigationBar(builder);
             }
         }
-
     }
 
     public static NewBuilder builder(AppCompatActivity aThis) {
