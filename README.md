@@ -9,6 +9,7 @@
   ![](https://jitpack.io/v/natural1law/briefness.svg "依赖版本")
 ### 使用依赖
   * **implementation 'com.github.natural1law.briefness:tag'**
+  tag换成版本号即可
   
 ### 工具使用
   ```
@@ -17,6 +18,11 @@
 
 ### 更新日志
 
+  > 修订版本1.3.1
+  * @日期: 2021/01/28
+  * @版本号: 1.3.1
+  * @声明: 修复资源缺失bug
+  
   > 修订版本1.3.0
   * @日期: 2021/01/28
   * @版本号: 1.3.0
