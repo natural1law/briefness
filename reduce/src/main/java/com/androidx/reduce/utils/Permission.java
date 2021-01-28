@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Process;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -163,6 +164,7 @@ public class Permission implements NextAction {
 
     @TargetApi(23)
     private void pollPermission() {
+        Log.d("", "");
         if (mPermissionList.isEmpty()) {
             PermissionRequestFragment.build(mPermissionGrantMap, mPermissionRequestListener).go(mActivity);
             return;
