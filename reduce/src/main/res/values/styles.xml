@@ -1,10 +1,5 @@
 <resources>
 
-    <style name="menuStyle">
-        <item name="android:textSize">10sp</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-
     <style name="dialogStyle" parent="android:style/Theme.Dialog">
         <!--背景颜色和透明程度-->
         <item name="android:windowBackground">@android:color/transparent</item>

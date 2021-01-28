@@ -1,5 +1,9 @@
 package com.androidx.reduce.utils;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
@@ -13,12 +17,14 @@ import java.security.KeyFactory;
 import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.SecureRandom;
 import java.security.Signature;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
 
@@ -1306,7 +1312,7 @@ public final class Secure {
         /**
          * base64字符串转化成图片
          *
-         * @param imgStr      图片base64字符串
+         * @param imgStr 图片base64字符串
          */
         public static byte[] decode(String imgStr) {
             // Base64解码
@@ -1318,6 +1324,33 @@ public final class Secure {
             }
             return b;
         }
+    }
+
+    public static final class SHA1 {
+
+        public static String key(Context context) {
+            try {
+                @SuppressLint("PackageManagerGetSignatures")
+                PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
+                byte[] cert = info.signatures[0].toByteArray();
+                MessageDigest md = MessageDigest.getInstance("SHA1");
+                byte[] publicKey = md.digest(cert);
+                StringBuilder hexString = new StringBuilder();
+                for (byte aPublicKey : publicKey) {
+                    String appendString = Integer.toHexString(0xFF & aPublicKey).toUpperCase(Locale.US);
+                    if (appendString.length() == 1)
+                        hexString.append("0");
+                    hexString.append(appendString);
+                    hexString.append(":");
+                }
+                String result = hexString.toString();
+                return result.substring(0, result.length() - 1);
+            } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
     }
 
 }
