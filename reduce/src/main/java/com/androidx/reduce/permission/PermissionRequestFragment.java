@@ -11,6 +11,9 @@ import android.os.Looper;
 import android.provider.Settings;
 import android.util.Log;
 
+import com.androidx.reduce.intertaces.PermissionRequestListener;
+import com.androidx.reduce.moudle.Permission;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,10 +35,6 @@ public final class PermissionRequestFragment extends Fragment implements Runnabl
 
     /**
      * build函数构造一个用于权限请求的fragment
-     *
-     * @param permissionMap
-     * @param permissionRequestListener
-     * @return
      */
     public static PermissionRequestFragment build(HashMap<String, GrantResult> permissionMap, PermissionRequestListener permissionRequestListener) {
         PermissionRequestFragment fragment = new PermissionRequestFragment();
@@ -95,7 +94,10 @@ public final class PermissionRequestFragment extends Fragment implements Runnabl
                 || (mPermissionGrantMap.containsKey(Permission.SYSTEM_ALERT_WINDOW) && mPermissionGrantMap.get(Permission.SYSTEM_ALERT_WINDOW) == GrantResult.DENIED)) {
             if (mPermissionGrantMap.containsKey(Permission.REQUEST_INSTALL_PACKAGES)) {
                 //跳转到允许安装未知来源设置页面
-                Intent intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + getActivity().getPackageName()));
+                Intent intent = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    intent = new Intent(Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES, Uri.parse("package:" + getActivity().getPackageName()));
+                }
                 startActivityForResult(intent, mRequestCode);
             }
 
@@ -184,8 +186,6 @@ public final class PermissionRequestFragment extends Fragment implements Runnabl
 
         /**
          * 同步生成方法
-         *
-         * @return
          */
         public synchronized int generate() {
             return FACTOR_REQUEST_CODE++;

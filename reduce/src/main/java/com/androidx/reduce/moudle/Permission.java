@@ -1,4 +1,4 @@
-package com.androidx.reduce.permission;
+package com.androidx.reduce.moudle;
 
 /**
  * @className: Permission

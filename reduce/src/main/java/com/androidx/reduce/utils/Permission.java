@@ -13,7 +13,7 @@ import com.androidx.reduce.permission.GrantResult;
 import com.androidx.reduce.permission.NextAction;
 import com.androidx.reduce.permission.NextActionType;
 import com.androidx.reduce.permission.PermissionRequestFragment;
-import com.androidx.reduce.permission.PermissionRequestListener;
+import com.androidx.reduce.intertaces.PermissionRequestListener;
 import com.androidx.reduce.permission.PermissionSettingPage;
 import com.androidx.reduce.permission.PermissionUtils;
 import com.androidx.reduce.permission.RequestPermissionRationalListener;
@@ -169,7 +169,7 @@ public class Permission implements NextAction {
         }
         String permission = mPermissionList.pollFirst();
 
-        if (com.androidx.reduce.permission.Permission.REQUEST_INSTALL_PACKAGES.equals(permission)) {
+        if (com.androidx.reduce.moudle.Permission.REQUEST_INSTALL_PACKAGES.equals(permission)) {
             if (PermissionUtils.isHasInstallPermission(mActivity)) {
                 mPermissionGrantMap.put(permission, GrantResult.GRANT);
                 pollPermission();
@@ -178,7 +178,7 @@ public class Permission implements NextAction {
                 pollPermission();
             }
 
-        } else if (com.androidx.reduce.permission.Permission.SYSTEM_ALERT_WINDOW.equals(permission)) {
+        } else if (com.androidx.reduce.moudle.Permission.SYSTEM_ALERT_WINDOW.equals(permission)) {
             if (PermissionUtils.isHasOverlaysPermission(mActivity)) {
                 mPermissionGrantMap.put(permission, GrantResult.GRANT);
                 pollPermission();

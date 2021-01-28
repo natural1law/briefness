@@ -104,5 +104,3 @@
 -keep public class com.androidx.reduce.utils.*{*;}
 -keep public class com.androidx.reduce.intertaces.*{*;}
 -keep public class com.androidx.reduce.service.*{*;}
--keep public class com.androidx.reduce.permission.PermissionRequestListener.*{*;}
--keep public class com.androidx.reduce.permission.Permission.*{*;}
