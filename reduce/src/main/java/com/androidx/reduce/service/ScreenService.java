@@ -19,7 +19,7 @@ import android.util.Log;
 import com.androidx.reduce.intertaces.NotificationListener;
 import com.androidx.reduce.intertaces.ScreenCallbackListener;
 import com.androidx.reduce.mix_interfaces.ScreenListener;
-import com.androidx.reduce.utils.Storage;
+import com.androidx.reduce.tools.Storage;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -165,7 +165,7 @@ public final class ScreenService extends Service implements ScreenListener {
         //设置声音编码
         mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
         //设置视频储存地址
-        fileUrl = Storage.getSaveDirectory("cmfVideo", ".mp4");
+        fileUrl = Storage.generatePath("video", ".mp4");
         mediaRecorder.setOutputFile(fileUrl);
         //设置视频编码
         mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);

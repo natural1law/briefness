@@ -13,7 +13,7 @@ import com.androidx.http.net.listener.Enqueue;
 import com.androidx.http.net.listener.LoginCallback;
 import com.androidx.http.net.listener.MsgCallback;
 import com.androidx.http.net.module.DataModule;
-import com.androidx.reduce.utils.Secure;
+import com.androidx.reduce.tools.Secure;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.protobuf.InvalidProtocolBufferException;

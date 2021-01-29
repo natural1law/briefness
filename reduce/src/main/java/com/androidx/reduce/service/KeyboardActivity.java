@@ -9,7 +9,7 @@ import android.widget.FrameLayout;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.androidx.reduce.utils.ScreenUtils;
+import com.androidx.reduce.tools.ScreenUtils;
 
 @SuppressWarnings({"RedundantSuppression", "unused"})
 public class KeyboardActivity extends AppCompatActivity implements ViewTreeObserver.OnGlobalLayoutListener {

@@ -12,12 +12,14 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.androidx.reduce.intertaces.PermissionRequestListener;
-import com.androidx.reduce.moudle.Permission;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import static android.Manifest.permission.REQUEST_INSTALL_PACKAGES;
+import static android.Manifest.permission.SYSTEM_ALERT_WINDOW;
 
 /**
  * @className: PermissionRequestFragment
@@ -90,9 +92,9 @@ public final class PermissionRequestFragment extends Fragment implements Runnabl
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mRequestCode = mRequestCodeGenerater.generate();
-        if ((mPermissionGrantMap.containsKey(Permission.REQUEST_INSTALL_PACKAGES) && mPermissionGrantMap.get(Permission.REQUEST_INSTALL_PACKAGES) == GrantResult.DENIED)
-                || (mPermissionGrantMap.containsKey(Permission.SYSTEM_ALERT_WINDOW) && mPermissionGrantMap.get(Permission.SYSTEM_ALERT_WINDOW) == GrantResult.DENIED)) {
-            if (mPermissionGrantMap.containsKey(Permission.REQUEST_INSTALL_PACKAGES)) {
+        if ((mPermissionGrantMap.containsKey(REQUEST_INSTALL_PACKAGES) && mPermissionGrantMap.get(REQUEST_INSTALL_PACKAGES) == GrantResult.DENIED)
+                || (mPermissionGrantMap.containsKey(SYSTEM_ALERT_WINDOW) && mPermissionGrantMap.get(SYSTEM_ALERT_WINDOW) == GrantResult.DENIED)) {
+            if (mPermissionGrantMap.containsKey(REQUEST_INSTALL_PACKAGES)) {
                 //跳转到允许安装未知来源设置页面
                 Intent intent = null;
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
@@ -101,7 +103,7 @@ public final class PermissionRequestFragment extends Fragment implements Runnabl
                 startActivityForResult(intent, mRequestCode);
             }
 
-            if (mPermissionGrantMap.containsKey(Permission.SYSTEM_ALERT_WINDOW)) {
+            if (mPermissionGrantMap.containsKey(SYSTEM_ALERT_WINDOW)) {
                 //跳转到悬浮窗设置页面
                 Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getActivity().getPackageName()));
                 startActivityForResult(intent, mRequestCode);
@@ -143,14 +145,14 @@ public final class PermissionRequestFragment extends Fragment implements Runnabl
         for (int i = 0; i < permissions.length; i++) {
             Log.i("返回权限状态", permissions[i] + "  是否授权：" + grantResults[i]);
             String permission = permissions[i];
-            if (Permission.REQUEST_INSTALL_PACKAGES.equals(permission)) {
+            if (REQUEST_INSTALL_PACKAGES.equals(permission)) {
                 if (PermissionUtils.isHasInstallPermission(getActivity().getApplicationContext())) {
                     mPermissionGrantMap.put(permission, GrantResult.GRANT);
                 } else {
                     mPermissionGrantMap.put(permission, GrantResult.DENIED);
                 }
 
-            } else if (Permission.SYSTEM_ALERT_WINDOW.equals(permission)) {
+            } else if (SYSTEM_ALERT_WINDOW.equals(permission)) {
                 if (PermissionUtils.isHasOverlaysPermission(getActivity().getApplicationContext())) {
                     mPermissionGrantMap.put(permission, GrantResult.GRANT);
                 } else {

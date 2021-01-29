@@ -1,5 +1,8 @@
-package com.androidx.reduce.utils;
+package com.androidx.reduce.tools;
 
+/**
+ * 点击事件延时
+ */
 public final class Idle {
 
     private static long lastClickTime;

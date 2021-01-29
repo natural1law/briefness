@@ -1,8 +1,11 @@
-package com.androidx.reduce.utils;
+package com.androidx.reduce.tools;
 
-public final class ConvertTools {
+/**
+ * 转换工具
+ */
+public final class Convert {
 
-    private ConvertTools() {
+    private Convert() {
     }
 
     public static final class Color {

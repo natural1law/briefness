@@ -2,8 +2,8 @@ package com.androidx.http.use
 
 import android.app.Application
 import android.content.Context
-import com.androidx.reduce.utils.This
-import com.androidx.reduce.utils.Toasts
+import com.androidx.reduce.tools.This
+import com.androidx.reduce.tools.Toasts
 
 open class IMApp : Application() {
 

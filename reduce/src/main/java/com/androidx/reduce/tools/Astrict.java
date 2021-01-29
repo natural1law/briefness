@@ -1,4 +1,4 @@
-package com.androidx.reduce.utils;
+package com.androidx.reduce.tools;
 
 import android.Manifest;
 import android.content.Context;
@@ -15,6 +15,9 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+/**
+ * 输入和屏幕适配限制
+ */
 public final class Astrict {
 
     private Astrict() {

@@ -1,4 +1,4 @@
-package com.androidx.reduce.utils;
+package com.androidx.reduce.tools;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
@@ -15,10 +15,13 @@ import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.Objects;
 
-public final class Net {
+/**
+ * 检查网络连接
+ */
+public final class NetCheck {
 
     @SuppressWarnings("FieldCanBeLocal")
-    private static volatile Net instance;
+    private static volatile NetCheck instance;
 
     /**
      * 没有连接网络
@@ -141,14 +144,14 @@ public final class Net {
         }
     }
 
-    private Net(Context context) {
+    private NetCheck(Context context) {
         this.wrContext = new WeakReference<>(context);
     }
 
-    public static Net builder(Context context) {
+    public static NetCheck builder(Context context) {
         try {
-            synchronized (Net.class) {
-                instance = new Net(context);
+            synchronized (NetCheck.class) {
+                instance = new NetCheck(context);
             }
             return instance;
         } catch (Exception e) {

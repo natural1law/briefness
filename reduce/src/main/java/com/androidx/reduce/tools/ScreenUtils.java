@@ -1,4 +1,4 @@
-package com.androidx.reduce.utils;
+package com.androidx.reduce.tools;
 
 import android.content.Context;
 import android.content.res.Resources;

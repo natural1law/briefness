@@ -1,4 +1,4 @@
-package com.androidx.reduce.utils;
+package com.androidx.reduce.tools;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -9,11 +9,11 @@ import android.text.TextUtils;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.androidx.reduce.intertaces.PermissionRequestListener;
 import com.androidx.reduce.permission.GrantResult;
 import com.androidx.reduce.permission.NextAction;
 import com.androidx.reduce.permission.NextActionType;
 import com.androidx.reduce.permission.PermissionRequestFragment;
-import com.androidx.reduce.intertaces.PermissionRequestListener;
 import com.androidx.reduce.permission.PermissionSettingPage;
 import com.androidx.reduce.permission.PermissionUtils;
 import com.androidx.reduce.permission.RequestPermissionRationalListener;
@@ -22,17 +22,23 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
+import static android.Manifest.permission.REQUEST_INSTALL_PACKAGES;
+import static android.Manifest.permission.SYSTEM_ALERT_WINDOW;
 import static android.os.Build.VERSION_CODES.M;
 
+/**
+ * 授权权限
+ */
 public class Permission implements NextAction {
-    private AppCompatActivity mActivity;
-    private LinkedList<String> mPermissionList = new LinkedList<>();
+    private final AppCompatActivity mActivity;
+    private final LinkedList<String> mPermissionList = new LinkedList<>();
     private PermissionRequestListener mPermissionRequestListener;
     private String mCurPermission;
 
-    private HashMap<String, RequestPermissionRationalListener> mRequestPermissionRationalListenerMap = new HashMap<>();
-    private HashMap<String, GrantResult> mPermissionGrantMap = new HashMap<>();
+    private final HashMap<String, RequestPermissionRationalListener> mRequestPermissionRationalListenerMap = new HashMap<>();
+    private final HashMap<String, GrantResult> mPermissionGrantMap = new HashMap<>();
 
     public Permission(AppCompatActivity activity) {
         mActivity = activity;
@@ -146,7 +152,6 @@ public class Permission implements NextAction {
         if (mPermissionList.isEmpty()) {
             throw new RuntimeException("must add some permission to request!!");
         }
-
         if (Build.VERSION.SDK_INT < M) {
             HashMap<String, GrantResult> grantMap = new HashMap<>();
             for (String permission : mPermissionList) {
@@ -169,7 +174,7 @@ public class Permission implements NextAction {
         }
         String permission = mPermissionList.pollFirst();
 
-        if (com.androidx.reduce.moudle.Permission.REQUEST_INSTALL_PACKAGES.equals(permission)) {
+        if (REQUEST_INSTALL_PACKAGES.equals(permission)) {
             if (PermissionUtils.isHasInstallPermission(mActivity)) {
                 mPermissionGrantMap.put(permission, GrantResult.GRANT);
                 pollPermission();
@@ -178,7 +183,7 @@ public class Permission implements NextAction {
                 pollPermission();
             }
 
-        } else if (com.androidx.reduce.moudle.Permission.SYSTEM_ALERT_WINDOW.equals(permission)) {
+        } else if (SYSTEM_ALERT_WINDOW.equals(permission)) {
             if (PermissionUtils.isHasOverlaysPermission(mActivity)) {
                 mPermissionGrantMap.put(permission, GrantResult.GRANT);
                 pollPermission();
@@ -193,7 +198,7 @@ public class Permission implements NextAction {
             mPermissionGrantMap.put(permission, GrantResult.DENIED);
             if (mRequestPermissionRationalListenerMap.get(permission) != null) {
                 mCurPermission = permission;
-                mRequestPermissionRationalListenerMap.get(permission).onRequestPermissionRational(permission, mActivity.shouldShowRequestPermissionRationale(permission), this);
+                Objects.requireNonNull(mRequestPermissionRationalListenerMap.get(permission)).onRequestPermissionRational(permission, mActivity.shouldShowRequestPermissionRationale(permission), this);
             } else {
                 pollPermission();
             }
