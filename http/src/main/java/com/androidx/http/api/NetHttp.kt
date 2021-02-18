@@ -44,18 +44,18 @@ class NetHttp private constructor() {
         internal var bytes: ByteArray? = null
         internal var callback: Callback? = null
 
-
         fun setMaxAnewCount(maxAnewCount: Int?): Builder {
             this.maxAnewCount = maxAnewCount
             return builder
         }
 
-        fun setHost(host: String?, port: String?, isHttps: Boolean): Builder {
-            if (isHttps) {
-                this.host = host?.let { port?.let { hosts(it) } }
-            } else {
-                this.host = host?.let { port?.let { it1 -> host(it, it1) } }
-            }
+        fun setHost(host: String?, port: String?): Builder {
+            this.host = host?.let { port?.let { it1 -> host(it, it1) } }
+            return builder
+        }
+
+        fun setHosts(host: String?): Builder {
+            this.host = host?.let { hosts(it) }
             return builder
         }
 
@@ -98,46 +98,46 @@ class NetHttp private constructor() {
     private fun init(builder: Builder, url: String?, requestListener: HttpRequestListener) {
         when (builder.mode) {
             GET_MAP -> requestListener.getRequest(
-                    url,
-                    builder.map,
-                    builder.maxAnewCount!!,
-                    builder.callback
+                url,
+                builder.map,
+                builder.maxAnewCount!!,
+                builder.callback
             )
             POST_JSON -> requestListener.postRequest(
-                    url,
-                    builder.json,
-                    builder.maxAnewCount!!,
-                    builder.callback
+                url,
+                builder.json,
+                builder.maxAnewCount!!,
+                builder.callback
             )
             POST_MAP -> requestListener.postRequest(
-                    url,
-                    builder.map,
-                    builder.maxAnewCount!!,
-                    builder.callback
+                url,
+                builder.map,
+                builder.maxAnewCount!!,
+                builder.callback
             )
             POST_BYTES -> requestListener.postRequestProto(
-                    url,
-                    builder.bytes,
-                    builder.maxAnewCount!!,
-                    builder.callback
+                url,
+                builder.bytes,
+                builder.maxAnewCount!!,
+                builder.callback
             )
             DEL_MAP -> requestListener.deleteRequest(
-                    url,
-                    builder.map,
-                    builder.maxAnewCount!!,
-                    builder.callback
+                url,
+                builder.map,
+                builder.maxAnewCount!!,
+                builder.callback
             )
             FROM_JSON -> requestListener.formRequest(
-                    url,
-                    builder.json,
-                    builder.maxAnewCount!!,
-                    builder.callback
+                url,
+                builder.json,
+                builder.maxAnewCount!!,
+                builder.callback
             )
             DEL_JSON -> requestListener.deleteRequest(
-                    url,
-                    builder.json,
-                    builder.maxAnewCount!!,
-                    builder.callback
+                url,
+                builder.json,
+                builder.maxAnewCount!!,
+                builder.callback
             )
         }
     }

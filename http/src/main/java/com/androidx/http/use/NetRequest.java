@@ -327,7 +327,7 @@ public final class NetRequest {
      */
     public static void sendMapGet(String host, String port, String suffix, Map<String, Object> data, Callback callback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
-                .setHost(host, port, false)
+                .setHost(host, port)
                 .setUrlSuffix(suffix)
                 .setMode(1)
                 .setMap(data)
@@ -345,7 +345,7 @@ public final class NetRequest {
      */
     public static void sendMapGet(String host, String suffix, Map<String, Object> data, Callback callback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
-                .setHost(host, "", true)
+                .setHosts(host)
                 .setUrlSuffix(suffix)
                 .setMode(1)
                 .setMap(data)
@@ -364,7 +364,7 @@ public final class NetRequest {
      */
     public static void sendJsonPost(String host, String port, String suffix, JSONObject data, Callback callback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
-                .setHost(host, port, false)
+                .setHost(host, port)
                 .setUrlSuffix(suffix)
                 .setMode(2)
                 .setJson(data)
@@ -382,7 +382,7 @@ public final class NetRequest {
      */
     public static void sendJsonPost(String host, String suffix, JSONObject data, Callback callback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
-                .setHost(host, "", true)
+                .setHosts(host)
                 .setUrlSuffix(suffix)
                 .setMode(2)
                 .setJson(data)
@@ -401,7 +401,7 @@ public final class NetRequest {
      */
     public static void sendMapPost(String host, String port, String suffix, Map<String, Object> data, Callback callback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
-                .setHost(host, port, false)
+                .setHost(host, port)
                 .setUrlSuffix(suffix)
                 .setMode(3)
                 .setMap(data)
@@ -419,7 +419,7 @@ public final class NetRequest {
      */
     public static void sendMapPost(String host, String suffix, Map<String, Object> data, Callback callback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
-                .setHost(host, "", true)
+                .setHosts(host)
                 .setUrlSuffix(suffix)
                 .setMode(3)
                 .setMap(data)
@@ -438,7 +438,7 @@ public final class NetRequest {
      */
     public static void sendBytes(String host, String port, String suffix, byte[] data, Callback callback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
-                .setHost(host, port, false)
+                .setHost(host, port)
                 .setUrlSuffix(suffix)
                 .setMode(4)
                 .setBytes(data)
@@ -456,7 +456,7 @@ public final class NetRequest {
      */
     public static void sendBytes(String host, String suffix, byte[] data, Callback callback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
-                .setHost(host, "", true)
+                .setHosts(host)
                 .setUrlSuffix(suffix)
                 .setMode(4)
                 .setBytes(data)
@@ -475,7 +475,7 @@ public final class NetRequest {
      */
     public static void sendMapDelete(String host, String port, String suffix, Map<String, Object> data, Callback callback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
-                .setHost(host, port, false)
+                .setHost(host, port)
                 .setUrlSuffix(suffix)
                 .setMode(5)
                 .setMap(data)
@@ -493,7 +493,7 @@ public final class NetRequest {
      */
     public static void sendMapDelete(String host, String suffix, Map<String, Object> data, Callback callback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
-                .setHost(host, "", true)
+                .setHosts(host)
                 .setUrlSuffix(suffix)
                 .setMode(5)
                 .setMap(data)
@@ -512,7 +512,7 @@ public final class NetRequest {
      */
     public static void sendJsonDelete(String host, String port, String suffix, JSONObject data, Callback callback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
-                .setHost(host, port, false)
+                .setHost(host, port)
                 .setUrlSuffix(suffix)
                 .setMode(6)
                 .setJson(data)
@@ -530,7 +530,7 @@ public final class NetRequest {
      */
     public static void sendJsonDelete(String host, String suffix, JSONObject data, Callback callback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
-                .setHost(host, "", true)
+                .setHosts(host)
                 .setUrlSuffix(suffix)
                 .setMode(6)
                 .setJson(data)
@@ -549,7 +549,7 @@ public final class NetRequest {
      */
     public static void sendJsonFrom(String host, String port, String suffix, JSONObject data, Callback callback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
-                .setHost(host, port, false)
+                .setHost(host, port)
                 .setUrlSuffix(suffix)
                 .setMode(7)
                 .setJson(data)
@@ -567,7 +567,7 @@ public final class NetRequest {
      */
     public static void sendJsonFrom(String host, String suffix, JSONObject data, Callback callback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
-                .setHost(host, "", true)
+                .setHosts(host)
                 .setUrlSuffix(suffix)
                 .setMode(7)
                 .setJson(data)
