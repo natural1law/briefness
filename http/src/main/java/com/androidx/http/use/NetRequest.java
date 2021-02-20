@@ -11,7 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.androidx.http.api.LoginServer;
 import com.androidx.http.api.NetHttp;
 import com.androidx.http.module.MsgModule;
-import com.androidx.http.net.listener.Callback;
+import com.androidx.http.net.listener.BytesCallback;
+import com.androidx.http.net.listener.StringCallback;
 import com.androidx.http.net.listener.Enqueue;
 import com.androidx.http.net.listener.LoginCallback;
 import com.androidx.http.net.listener.MsgCallback;
@@ -323,15 +324,15 @@ public final class NetRequest {
      * @param port     服务器端口
      * @param suffix   路径后缀
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param stringCallback 结果回调
      */
-    public static void sendMapGet(String host, String port, String suffix, Map<String, Object> data, Callback callback) {
+    public static void sendMapGet(String host, String port, String suffix, Map<String, Object> data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHost(host, port)
                 .setUrlSuffix(suffix)
                 .setMode(1)
                 .setMap(data)
-                .setCallback(callback)
+                .setCallback(stringCallback)
                 .build();
     }
 
@@ -341,15 +342,15 @@ public final class NetRequest {
      * @param host     服务器IP地址
      * @param suffix   路径后缀
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param stringCallback 结果回调
      */
-    public static void sendMapGet(String host, String suffix, Map<String, Object> data, Callback callback) {
+    public static void sendMapGet(String host, String suffix, Map<String, Object> data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHosts(host)
                 .setUrlSuffix(suffix)
                 .setMode(1)
                 .setMap(data)
-                .setCallback(callback)
+                .setCallback(stringCallback)
                 .build();
     }
 
@@ -360,15 +361,15 @@ public final class NetRequest {
      * @param port     服务器端口
      * @param suffix   路径后缀
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param stringCallback 结果回调
      */
-    public static void sendJsonPost(String host, String port, String suffix, JSONObject data, Callback callback) {
+    public static void sendJsonPost(String host, String port, String suffix, JSONObject data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHost(host, port)
                 .setUrlSuffix(suffix)
                 .setMode(2)
                 .setJson(data)
-                .setCallback(callback)
+                .setCallback(stringCallback)
                 .build();
     }
 
@@ -378,15 +379,15 @@ public final class NetRequest {
      * @param host     服务器IP地址
      * @param suffix   路径后缀
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param stringCallback 结果回调
      */
-    public static void sendJsonPost(String host, String suffix, JSONObject data, Callback callback) {
+    public static void sendJsonPost(String host, String suffix, JSONObject data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHosts(host)
                 .setUrlSuffix(suffix)
                 .setMode(2)
                 .setJson(data)
-                .setCallback(callback)
+                .setCallback(stringCallback)
                 .build();
     }
 
@@ -397,15 +398,15 @@ public final class NetRequest {
      * @param port     服务器端口
      * @param suffix   路径后缀
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param stringCallback 结果回调
      */
-    public static void sendMapPost(String host, String port, String suffix, Map<String, Object> data, Callback callback) {
+    public static void sendMapPost(String host, String port, String suffix, Map<String, Object> data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHost(host, port)
                 .setUrlSuffix(suffix)
                 .setMode(3)
                 .setMap(data)
-                .setCallback(callback)
+                .setCallback(stringCallback)
                 .build();
     }
 
@@ -415,15 +416,15 @@ public final class NetRequest {
      * @param host     服务器IP地址
      * @param suffix   路径后缀
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param stringCallback 结果回调
      */
-    public static void sendMapPost(String host, String suffix, Map<String, Object> data, Callback callback) {
+    public static void sendMapPost(String host, String suffix, Map<String, Object> data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHosts(host)
                 .setUrlSuffix(suffix)
                 .setMode(3)
                 .setMap(data)
-                .setCallback(callback)
+                .setCallback(stringCallback)
                 .build();
     }
 
@@ -434,15 +435,15 @@ public final class NetRequest {
      * @param port     服务器端口
      * @param suffix   路径后缀
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param bytesCallback 结果回调
      */
-    public static void sendBytes(String host, String port, String suffix, byte[] data, Callback callback) {
+    public static void sendBytes(String host, String port, String suffix, byte[] data, BytesCallback bytesCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHost(host, port)
                 .setUrlSuffix(suffix)
                 .setMode(4)
                 .setBytes(data)
-                .setCallback(callback)
+                .setCallback(bytesCallback)
                 .build();
     }
 
@@ -452,15 +453,15 @@ public final class NetRequest {
      * @param host     服务器IP地址
      * @param suffix   路径后缀
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param stringCallback 结果回调
      */
-    public static void sendBytes(String host, String suffix, byte[] data, Callback callback) {
+    public static void sendBytes(String host, String suffix, byte[] data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHosts(host)
                 .setUrlSuffix(suffix)
                 .setMode(4)
                 .setBytes(data)
-                .setCallback(callback)
+                .setCallback(stringCallback)
                 .build();
     }
 
@@ -471,15 +472,15 @@ public final class NetRequest {
      * @param port     服务器端口
      * @param suffix   路径后缀
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param stringCallback 结果回调
      */
-    public static void sendMapDelete(String host, String port, String suffix, Map<String, Object> data, Callback callback) {
+    public static void sendMapDelete(String host, String port, String suffix, Map<String, Object> data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHost(host, port)
                 .setUrlSuffix(suffix)
                 .setMode(5)
                 .setMap(data)
-                .setCallback(callback)
+                .setCallback(stringCallback)
                 .build();
     }
 
@@ -489,15 +490,15 @@ public final class NetRequest {
      * @param host     服务器IP地址
      * @param suffix   路径后缀
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param stringCallback 结果回调
      */
-    public static void sendMapDelete(String host, String suffix, Map<String, Object> data, Callback callback) {
+    public static void sendMapDelete(String host, String suffix, Map<String, Object> data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHosts(host)
                 .setUrlSuffix(suffix)
                 .setMode(5)
                 .setMap(data)
-                .setCallback(callback)
+                .setCallback(stringCallback)
                 .build();
     }
 
@@ -508,15 +509,15 @@ public final class NetRequest {
      * @param port     服务器端口
      * @param suffix   路径后缀
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param stringCallback 结果回调
      */
-    public static void sendJsonDelete(String host, String port, String suffix, JSONObject data, Callback callback) {
+    public static void sendJsonDelete(String host, String port, String suffix, JSONObject data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHost(host, port)
                 .setUrlSuffix(suffix)
                 .setMode(6)
                 .setJson(data)
-                .setCallback(callback)
+                .setCallback(stringCallback)
                 .build();
     }
 
@@ -526,15 +527,15 @@ public final class NetRequest {
      * @param host     服务器IP地址
      * @param suffix   路径后缀
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param stringCallback 结果回调
      */
-    public static void sendJsonDelete(String host, String suffix, JSONObject data, Callback callback) {
+    public static void sendJsonDelete(String host, String suffix, JSONObject data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHosts(host)
                 .setUrlSuffix(suffix)
                 .setMode(6)
                 .setJson(data)
-                .setCallback(callback)
+                .setCallback(stringCallback)
                 .build();
     }
 
@@ -545,15 +546,15 @@ public final class NetRequest {
      * @param port     服务器端口
      * @param suffix   路径后缀
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param stringCallback 结果回调
      */
-    public static void sendJsonFrom(String host, String port, String suffix, JSONObject data, Callback callback) {
+    public static void sendJsonFrom(String host, String port, String suffix, JSONObject data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHost(host, port)
                 .setUrlSuffix(suffix)
                 .setMode(7)
                 .setJson(data)
-                .setCallback(callback)
+                .setCallback(stringCallback)
                 .build();
     }
 
@@ -563,15 +564,15 @@ public final class NetRequest {
      * @param host     服务器IP地址
      * @param suffix   路径后缀
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param stringCallback 结果回调
      */
-    public static void sendJsonFrom(String host, String suffix, JSONObject data, Callback callback) {
+    public static void sendJsonFrom(String host, String suffix, JSONObject data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHosts(host)
                 .setUrlSuffix(suffix)
                 .setMode(7)
                 .setJson(data)
-                .setCallback(callback)
+                .setCallback(stringCallback)
                 .build();
     }
 

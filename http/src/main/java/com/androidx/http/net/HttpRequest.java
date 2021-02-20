@@ -3,8 +3,9 @@ package com.androidx.http.net;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.androidx.http.net.listener.Callback;
+import com.androidx.http.net.listener.BytesCallback;
 import com.androidx.http.net.listener.HttpRequestListener;
+import com.androidx.http.net.listener.StringCallback;
 import com.androidx.http.net.module.MsgModule;
 
 import org.jetbrains.annotations.NotNull;
@@ -25,14 +26,17 @@ public final class HttpRequest implements HttpRequestListener {
     private static final Handler handler = new Handler(Looper.getMainLooper(), message -> {
         MsgModule msg = (MsgModule) message.obj;
         switch (message.what) {
+            case -2:
+                msg.getBytesCallback().onFailure(new String(msg.getMsg1()));
+                return false;
             case -1:
-                msg.getCallback().onFailure(msg.getMsg());
+                msg.getStringCallback().onFailure(msg.getMsg());
                 return false;
             case 0:
-                msg.getCallback().onSuccess(msg.getMsg());
+                msg.getStringCallback().onSuccess(msg.getMsg());
                 return false;
             case 1:
-                msg.getCallback().onSuccess(msg.getMsg1());
+                msg.getBytesCallback().onSuccess(msg.getMsg1());
                 return false;
             default:
                 return false;
@@ -40,7 +44,7 @@ public final class HttpRequest implements HttpRequestListener {
     });
 
     @Override
-    public void getRequest(String url, Map<String, Object> map, int maxAnewCount, Callback callBack) {
+    public void getRequest(String url, Map<String, Object> map, int maxAnewCount, StringCallback callBack) {
         httpNetwork.getClient().newCall(httpNetwork.getRequest(url, map)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -60,11 +64,11 @@ public final class HttpRequest implements HttpRequestListener {
     }
 
     @Override
-    public void postRequestProto(String url, byte[] bytes, int maxAnewCount, Callback callBack) {
+    public void postRequestProto(String url, byte[] bytes, int maxAnewCount, BytesCallback callBack) {
         httpNetwork.getClient().newCall(httpNetwork.postRequestProto(url, bytes)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                handler.sendMessage(handler.obtainMessage(-1, new MsgModule(e.getMessage() == null ? "" : e.getMessage(), callBack)));
+                handler.sendMessage(handler.obtainMessage(-2, new MsgModule(e.getMessage().getBytes(), callBack)));
                 // 如果超时并未超过指定次数，则重新连接
                 if (e instanceof SocketTimeoutException && currentConnect < maxAnewCount) {
                     currentConnect++;
@@ -80,7 +84,7 @@ public final class HttpRequest implements HttpRequestListener {
     }
 
     @Override
-    public void postRequest(String url, Map<String, Object> map, int maxAnewCount, Callback callBack) {
+    public void postRequest(String url, Map<String, Object> map, int maxAnewCount, StringCallback callBack) {
         httpNetwork.getClient().newCall(httpNetwork.postRequest(url, map)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -100,7 +104,7 @@ public final class HttpRequest implements HttpRequestListener {
     }
 
     @Override
-    public void postRequest(String url, JSONObject json, int maxAnewCount, Callback callBack) {
+    public void postRequest(String url, JSONObject json, int maxAnewCount, StringCallback callBack) {
         httpNetwork.getClient().newCall(httpNetwork.postRequest(url, json)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -120,7 +124,7 @@ public final class HttpRequest implements HttpRequestListener {
     }
 
     @Override
-    public void deleteRequest(String url, JSONObject json, int maxAnewCount, Callback callBack) {
+    public void deleteRequest(String url, JSONObject json, int maxAnewCount, StringCallback callBack) {
         httpNetwork.getClient().newCall(httpNetwork.deleteRequest(url, json)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -140,7 +144,7 @@ public final class HttpRequest implements HttpRequestListener {
     }
 
     @Override
-    public void deleteRequest(String url, Map<String, Object> map, int maxAnewCount, Callback callBack) {
+    public void deleteRequest(String url, Map<String, Object> map, int maxAnewCount, StringCallback callBack) {
         httpNetwork.getClient().newCall(httpNetwork.deleteRequest(url, map)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -160,7 +164,7 @@ public final class HttpRequest implements HttpRequestListener {
     }
 
     @Override
-    public void formRequest(String url, JSONObject json, int maxAnewCount, Callback callBack) {
+    public void formRequest(String url, JSONObject json, int maxAnewCount, StringCallback callBack) {
         httpNetwork.getClient().newCall(httpNetwork.formRequest(url, json)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {

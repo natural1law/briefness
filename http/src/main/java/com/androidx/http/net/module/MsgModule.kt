@@ -3,27 +3,29 @@ package com.androidx.http.net.module
 import android.os.Parcel
 import android.os.Parcelable
 import com.androidx.http.base.BaseBean
-import com.androidx.http.net.listener.Callback
+import com.androidx.http.net.listener.BytesCallback
+import com.androidx.http.net.listener.StringCallback
 
 class MsgModule() : BaseBean() {
 
     lateinit var msg: String
     lateinit var msg1: ByteArray
-    lateinit var callback: Callback
+    lateinit var stringCallback: StringCallback
+    lateinit var bytesCallback: BytesCallback
 
     constructor(parcel: Parcel) : this() {
         msg = parcel.readString()!!
         msg1 = parcel.createByteArray()!!
     }
 
-    constructor(msg: String, callBack: Callback) : this() {
+    constructor(msg: String, callBack: StringCallback) : this() {
         this.msg = msg
-        this.callback = callBack
+        this.stringCallback = callBack
     }
 
-    constructor(bytes: ByteArray, callBack: Callback) : this() {
+    constructor(bytes: ByteArray, callBack: BytesCallback) : this() {
         this.msg1 = bytes
-        this.callback = callBack
+        this.bytesCallback = callBack
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

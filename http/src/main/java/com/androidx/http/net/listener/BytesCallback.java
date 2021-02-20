@@ -1,9 +1,9 @@
 package com.androidx.http.net.listener;
 
-public interface Callback {
+public interface BytesCallback {
 
     void onFailure(String msg);
 
-    <T>void onSuccess(T data);
+    void onSuccess(byte[] data);
 
 }
