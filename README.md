@@ -6,7 +6,8 @@
   * 目的是让开发者简单的快速的集成，减少不必要的工作量
 
 ### 使用依赖
-  * **implementation 'com.github.natural1law.briefness:xxx'** ![](https://jitpack.io/v/natural1law/briefness.svg "")
+  * ![](https://jitpack.io/v/natural1law/briefness.svg "")
+  * **implementation 'com.github.natural1law.briefness:xxx'**
 
 ### 工具使用
   ```
