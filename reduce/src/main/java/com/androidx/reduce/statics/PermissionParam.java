@@ -38,7 +38,7 @@ import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
  * @author: Pan_
  * @createTime: 2018/10/26
  */
-public class PermissionParam {
+public final class PermissionParam {
 
     /**
      * 日历权限

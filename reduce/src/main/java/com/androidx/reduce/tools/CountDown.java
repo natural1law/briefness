@@ -47,18 +47,19 @@ public final class CountDown extends CountDownTimer {
 
     @Override
     @SuppressLint("SetTextI18n")
+    @SuppressWarnings("ConstantConditions")
     public void onTick(long millisUntilFinished) {
         //防止计时过程中重复点击
-        if (view instanceof Button && view != null) {
+        if (view instanceof Button) {
             ((Button) view).setClickable(false);
             ((Button) view).setText(prefixWordage + (millisUntilFinished / 1000) + suffixWordage);
-        } else if (view instanceof TextView && view != null) {
+        } else if (view instanceof TextView) {
             ((TextView) view).setClickable(false);
             ((TextView) view).setText(prefixWordage + (millisUntilFinished / 1000) + suffixWordage);
-        } else if (view instanceof AppCompatButton && view != null) {
+        } else if (view instanceof AppCompatButton) {
             ((AppCompatButton) view).setClickable(false);
             ((AppCompatButton) view).setText(prefixWordage + (millisUntilFinished / 1000) + suffixWordage);
-        } else if (view instanceof AppCompatTextView && view != null) {
+        } else if (view instanceof AppCompatTextView) {
             ((AppCompatTextView) view).setClickable(false);
             ((AppCompatTextView) view).setText(prefixWordage + (millisUntilFinished / 1000) + suffixWordage);
         } else {
@@ -67,17 +68,18 @@ public final class CountDown extends CountDownTimer {
     }
 
     @Override
+    @SuppressWarnings("ConstantConditions")
     public void onFinish() {
-        if (view instanceof Button && view != null) {
+        if (view instanceof Button) {
             ((Button) view).setClickable(true);
             ((Button) view).setText(finishWordage);
-        } else if (view instanceof TextView && view != null) {
+        } else if (view instanceof TextView) {
             ((TextView) view).setClickable(true);
             ((TextView) view).setText(finishWordage);
-        } else if (view instanceof AppCompatButton && view != null) {
+        } else if (view instanceof AppCompatButton) {
             ((AppCompatButton) view).setClickable(true);
             ((AppCompatButton) view).setText(finishWordage);
-        } else if (view instanceof AppCompatTextView && view != null) {
+        } else if (view instanceof AppCompatTextView) {
             ((AppCompatTextView) view).setClickable(true);
             ((AppCompatTextView) view).setText(finishWordage);
         } else {
@@ -86,6 +88,7 @@ public final class CountDown extends CountDownTimer {
         cancel();
     }
 
+    @SuppressWarnings({"unused", "RedundantSuppression"})
     public static final class Builder implements Parcelable {
 
         private Builder builder = this;
