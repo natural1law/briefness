@@ -29,6 +29,16 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    dexOptions {
+        javaMaxHeapSize "4g"
+        preDexLibraries = false
+    }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+        maven { url 'https://jitpack.io' }
+    }
 }
 
 dependencies {
