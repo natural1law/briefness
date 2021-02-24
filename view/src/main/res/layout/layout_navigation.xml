@@ -25,8 +25,7 @@
             android:theme="@style/menuStyle"
             app:itemBackground="@null"
             app:itemHorizontalTranslationEnabled="false"
-            app:labelVisibilityMode="labeled"
-            app:menu="@menu/nav_menu_default" />
+            app:labelVisibilityMode="labeled" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

@@ -1,4 +1,4 @@
-package com.androidx.view.bar.fragment;
+package com.androidx.view.bar;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,30 +11,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import java.lang.ref.WeakReference;
-
 /**
- * 第四页碎片
- *
  * @author 李玄道
  * @date 2020/06/29
  */
 @SuppressWarnings({"RedundantSuppression", "unused"})
-public abstract class FragmentsFourthly extends Fragment {
+public abstract class BaseFragment extends Fragment {
 
-    private static volatile WeakReference<View> rootView;
+    private volatile View rootView;
 
     public View setRootView(LayoutInflater inflater, ViewGroup container, @LayoutRes int layoutId) {
-        if (rootView == null || rootView.get() == null) {
-            View view = inflater.inflate(layoutId, container, false);
-            rootView = new WeakReference<>(view);
+        if (rootView == null) {
+            rootView = inflater.inflate(layoutId, container, false);
         } else {
-            ViewGroup parent = (ViewGroup) rootView.get().getParent();
+            ViewGroup parent = (ViewGroup) rootView.getParent();
             if (parent != null) {
-                parent.removeView(rootView.get());
+                parent.removeView(rootView);
             }
         }
-        return rootView.get();
+        return rootView;
     }
 
     @Override

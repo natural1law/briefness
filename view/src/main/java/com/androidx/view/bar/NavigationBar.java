@@ -1,5 +1,6 @@
 package com.androidx.view.bar;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -8,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
+import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.LinearLayoutCompat;
@@ -16,12 +20,12 @@ import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.androidx.view.R;
-import com.androidx.view.bar.fragment.FragmentsFirst;
-import com.androidx.view.bar.fragment.FragmentsFourthly;
-import com.androidx.view.bar.fragment.FragmentsSecond;
-import com.androidx.view.bar.fragment.FragmentsThirdly;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 底部导航栏
@@ -32,16 +36,16 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 @SuppressWarnings("ALL")
 public final class NavigationBar {
 
+    private int menu;
+    private List<Integer> menuIds;
     private int frameBackgroundColor;
-    private int navigationBackgroundColor;
+    private int navBackgroundColor;
+    private int navItemTextColor;
 
     private AppCompatActivity aThis;
     private Fragment currentFragment;//当前碎片
 
-    private FragmentsFirst fragmentsFirst;
-    private FragmentsSecond fragmentsSecond;
-    private FragmentsThirdly fragmentsThirdly;
-    private FragmentsFourthly fragmentsFourthly;
+    private List<Fragment> fragments;
 
     public BottomNavigationView navigationView;
     private LinearLayoutCompat navigationLayout;
@@ -51,42 +55,41 @@ public final class NavigationBar {
         try {
             this.aThis = builder.aThis;
             this.currentFragment = new Fragment();
-            this.fragmentsFirst = builder.fragmentsFirst;
-            this.fragmentsSecond = builder.fragmentsSecond;
-            this.fragmentsThirdly = builder.fragmentsThirdly;
-            this.fragmentsFourthly = builder.fragmentsFourthly;
+            this.fragments = builder.fragments;
+            this.menu = builder.menu;
+            this.menuIds = builder.menuIds;
+            this.navItemTextColor = builder.navItemTextColor;
             this.frameBackgroundColor = builder.frameBackgroundColor;
-            this.navigationBackgroundColor = builder.navigationBackgroundColor;
+            this.navBackgroundColor = builder.navigationBackgroundColor;
             this.navigationView = aThis.findViewById(R.id.navigation_view);
             this.navigationLayout = aThis.findViewById(R.id.navigation_layout);
             this.fragmentLayout = aThis.findViewById(R.id.standard_frame);
             initView();
-            fragmentManager(fragmentsFourthly);
-            fragmentManager(fragmentsThirdly);
-            fragmentManager(fragmentsSecond);
-            fragmentManager(fragmentsFirst);
             adjustNavigationIcoSize(navigationView);
+            for (Fragment fragment : fragments) {
+                fragmentManager(fragment);
+            }
         } catch (Exception e) {
-            Log.e("BottomNavigation异常", String.valueOf(e.getMessage()));
+            Log.e("NavigationBar", String.valueOf(e.getMessage()));
         }
     }
 
+    @SuppressLint("ResourceType")
     private void initView() {
+        navigationView.inflateMenu(menu);
         navigationView.setItemIconTintList(null);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            navigationView.setItemTextColor(aThis.getResources().getColorStateList(navItemTextColor, aThis.getTheme()));
             navigationView.setBackgroundColor(aThis.getResources().getColor(R.color.transparent, aThis.getTheme()));
-            navigationLayout.setBackgroundColor(aThis.getResources().getColor(navigationBackgroundColor, aThis.getTheme()));
+            navigationLayout.setBackgroundColor(aThis.getResources().getColor(navBackgroundColor, aThis.getTheme()));
             fragmentLayout.setBackgroundColor(aThis.getResources().getColor(frameBackgroundColor, aThis.getTheme()));
         } else {
+            navigationView.setItemTextColor(aThis.getResources().getColorStateList(navItemTextColor));
             navigationView.setBackgroundColor(aThis.getResources().getColor(R.color.transparent));
-            navigationLayout.setBackgroundColor(aThis.getResources().getColor(navigationBackgroundColor));
+            navigationLayout.setBackgroundColor(aThis.getResources().getColor(navBackgroundColor));
             fragmentLayout.setBackgroundColor(aThis.getResources().getColor(frameBackgroundColor));
         }
         navigationView.setOnNavigationItemSelectedListener(selectedListener);
-
-//        navigationView.inflateMenu();
-//        navigationView.setItemIconTintList(aThis.getResources().getColorStateList(R.drawable.selector_tab_color, aThis.getTheme()));
-        navigationView.setItemTextColor(aThis.getResources().getColorStateList(R.drawable.pagination_selector_tab_color, aThis.getTheme()));
     }
 
     private void fragmentManager(Fragment fragment) {
@@ -99,7 +102,7 @@ public final class NavigationBar {
             }
             currentFragment = fragment;
         } catch (Exception e) {
-            Log.e("2", String.valueOf(e.getMessage()));
+            Log.e("NavigationBar", String.valueOf(e.getMessage()));
         }
     }
 
@@ -118,24 +121,70 @@ public final class NavigationBar {
                 iconView.setLayoutParams(layoutParams);
             }
         } catch (Exception e) {
-            Log.e("1", String.valueOf(e.getMessage()));
+            Log.e("NavigationBar", String.valueOf(e.getMessage()));
         }
     }
 
-    private BottomNavigationView.OnNavigationItemSelectedListener selectedListener = menuItem -> {
+    private final BottomNavigationView.OnNavigationItemSelectedListener selectedListener = menuItem -> {
         int itemId = menuItem.getItemId();
-        if (itemId == R.id.first) {
-            fragmentManager(fragmentsFirst);
-            return true;
-        } else if (itemId == R.id.second) {
-            fragmentManager(fragmentsSecond);
-            return true;
-        } else if (itemId == R.id.thirdly) {
-            fragmentManager(fragmentsThirdly);
-            return true;
-        } else if (itemId == R.id.fourthly) {
-            fragmentManager(fragmentsFourthly);
-            return true;
+        if (fragments.size() == 2) {
+            if (itemId == menuIds.get(0)) {
+                fragmentManager(fragments.get(0));
+                return true;
+            } else if (itemId == menuIds.get(1)) {
+                fragmentManager(fragments.get(1));
+                return true;
+            } else {
+                return false;
+            }
+        } else if (fragments.size() == 3) {
+            if (itemId == menuIds.get(0)) {
+                fragmentManager(fragments.get(0));
+                return true;
+            } else if (itemId == menuIds.get(1)) {
+                fragmentManager(fragments.get(1));
+                return true;
+            } else if (itemId == menuIds.get(2)) {
+                fragmentManager(fragments.get(2));
+                return true;
+            } else {
+                return false;
+            }
+        } else if (fragments.size() == 4) {
+            if (itemId == menuIds.get(0)) {
+                fragmentManager(fragments.get(0));
+                return true;
+            } else if (itemId == menuIds.get(1)) {
+                fragmentManager(fragments.get(1));
+                return true;
+            } else if (itemId == menuIds.get(2)) {
+                fragmentManager(fragments.get(2));
+                return true;
+            } else if (itemId == menuIds.get(3)) {
+                fragmentManager(fragments.get(3));
+                return true;
+            } else {
+                return false;
+            }
+        } else if (fragments.size() == 5) {
+            if (itemId == menuIds.get(0)) {
+                fragmentManager(fragments.get(0));
+                return true;
+            } else if (itemId == menuIds.get(1)) {
+                fragmentManager(fragments.get(1));
+                return true;
+            } else if (itemId == menuIds.get(2)) {
+                fragmentManager(fragments.get(2));
+                return true;
+            } else if (itemId == menuIds.get(3)) {
+                fragmentManager(fragments.get(3));
+                return true;
+            } else if (itemId == menuIds.get(4)) {
+                fragmentManager(fragments.get(4));
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
@@ -143,19 +192,45 @@ public final class NavigationBar {
 
     public static final class NewBuilder {
 
-        private static volatile NavigationBar instance;
-        private NewBuilder builder;
-        private AppCompatActivity aThis;
-        private FragmentsFirst fragmentsFirst;
-        private FragmentsSecond fragmentsSecond;
-        private FragmentsThirdly fragmentsThirdly;
-        private FragmentsFourthly fragmentsFourthly;
+        private final NewBuilder builder;
+        private final AppCompatActivity aThis;
+        private final List<Fragment> fragments = new ArrayList<>();
+        private int menu = R.menu.nav_menu_default;
+        private final List<Integer> menuIds = new ArrayList<>();
+        private int navItemTextColor = R.drawable.pagination_selector_tab_color;
         private int navigationBackgroundColor = R.color.transparent;
         private int frameBackgroundColor = R.color.transparent;
 
         private NewBuilder(@NonNull AppCompatActivity obj) {
             this.aThis = obj;
             this.builder = this;
+        }
+
+        public NewBuilder setMenu(@MenuRes int menu) {
+            this.menu = menu;
+            return builder;
+        }
+
+        public NewBuilder setMenuIds(@IdRes Integer... menuIds) {
+            //默认值
+            Integer[] ids = {R.id.second, R.id.thirdly, R.id.fourthly, R.id.first};
+            this.menuIds.addAll(Arrays.asList(ids));
+            if (menuIds.length < 2) {
+                Log.e("NavigationBar", "menuIds长度不能小于2");
+                return builder;
+            } else if (menuIds.length > 5) {
+                Log.e("NavigationBar", "menuIds长度不能大于5");
+                return builder;
+            } else {
+                this.menuIds.clear();
+                this.menuIds.addAll(Arrays.asList(menuIds));
+                return builder;
+            }
+        }
+
+        public NewBuilder setItemTextColor(@DrawableRes int itemTextColor) {
+            this.navItemTextColor = itemTextColor;
+            return builder;
         }
 
         public NewBuilder setBackgroundColor(@ColorRes int backgroundColor) {
@@ -168,24 +243,17 @@ public final class NavigationBar {
             return builder;
         }
 
-        public NewBuilder setFragmentsFirst(FragmentsFirst fragmentsFirst) {
-            this.fragmentsFirst = fragmentsFirst;
-            return builder;
-        }
-
-        public NewBuilder setFragmentsSecond(FragmentsSecond fragmentsSecond) {
-            this.fragmentsSecond = fragmentsSecond;
-            return builder;
-        }
-
-        public NewBuilder setFragmentsThirdly(FragmentsThirdly fragmentsThirdly) {
-            this.fragmentsThirdly = fragmentsThirdly;
-            return builder;
-        }
-
-        public NewBuilder setFragmentsFourthly(FragmentsFourthly fragmentsFourthly) {
-            this.fragmentsFourthly = fragmentsFourthly;
-            return builder;
+        public NewBuilder setFragments(@NonNull Fragment... fragment) {
+            if (fragment.length < 2) {
+                Log.e("NavigationBar", "fragment长度不能小于2");
+                return builder;
+            } else if (fragment.length > 5) {
+                Log.e("NavigationBar", "fragment长度不能大于5");
+                return builder;
+            } else {
+                this.fragments.addAll(Arrays.asList(fragment));
+                return builder;
+            }
         }
 
         public NavigationBar build() {
