@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/layer1">
+        <shape>
+            <corners android:radius="6dp"/>
+            <stroke
+                android:width="1dp"
+                android:color="@color/indicator_rect_selected"/>
+        </shape>
+    </item>
+
+    <item
+        android:id="@+id/layer2"
+        android:left="56dp"
+        android:right="6dp">
+        <bitmap
+            android:gravity="end"
+            android:src="@drawable/pagination_arrow_down"/>
+    </item>
+</layer-list>

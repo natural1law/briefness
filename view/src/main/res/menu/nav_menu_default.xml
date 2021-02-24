@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/first"
+        android:icon="@drawable/nav_icon1"
+        android:title="@string/firstName" />
+
+    <item
+        android:id="@+id/second"
+        android:icon="@drawable/nav_icon2"
+        android:title="@string/secondName" />
+
+    <item
+        android:id="@+id/thirdly"
+        android:icon="@drawable/nav_icon3"
+        android:title="@string/thirdlyName" />
+
+    <item
+        android:id="@+id/fourthly"
+        android:icon="@drawable/nav_icon4"
+        android:title="@string/fourthlyName" />
+
+</menu>

@@ -1,6 +1,6 @@
+include ':app'
 include ':chart'
 include ':http'
+include ':view'
 include ':reduce'
-include ':fold'
-include ':app'
 rootProject.name = "briefness"
