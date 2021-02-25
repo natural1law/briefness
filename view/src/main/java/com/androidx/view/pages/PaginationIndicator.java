@@ -107,7 +107,7 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
 
     @SuppressLint("InflateParams")
     private void init() {
-        LinearLayout mControllerView = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.pagination_indicator, null);
+        LinearLayoutCompat mControllerView = (LinearLayoutCompat) LayoutInflater.from(getContext()).inflate(R.layout.pagination_indicator, null);
         mLastBtn = mControllerView.findViewById(R.id.last_btn);
         mNextBtn = mControllerView.findViewById(R.id.next_btn);
         mNumberLlt = mControllerView.findViewById(R.id.number_llt);

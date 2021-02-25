@@ -12,14 +12,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Checkable;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
-import android.widget.TextView;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.IdRes;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ViewHolder extends RecyclerView.ViewHolder {
@@ -67,25 +67,25 @@ public class ViewHolder extends RecyclerView.ViewHolder {
      * 设置TextView的值
      */
     public ViewHolder setText(@IdRes int viewId, String text) {
-        TextView tv = getView(viewId);
+        AppCompatTextView tv = getView(viewId);
         tv.setText(text);
         return this;
     }
 
     public ViewHolder setImageResource(@IdRes int viewId, int resId) {
-        ImageView view = getView(viewId);
+        AppCompatImageView view = getView(viewId);
         view.setImageResource(resId);
         return this;
     }
 
     public ViewHolder setImageBitmap(@IdRes int viewId, Bitmap bitmap) {
-        ImageView view = getView(viewId);
+        AppCompatImageView view = getView(viewId);
         view.setImageBitmap(bitmap);
         return this;
     }
 
     public ViewHolder setImageDrawable(@IdRes int viewId, Drawable drawable) {
-        ImageView view = getView(viewId);
+        AppCompatImageView view = getView(viewId);
         view.setImageDrawable(drawable);
         return this;
     }
@@ -103,13 +103,13 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     }
 
     public ViewHolder setTextColor(@IdRes int viewId, @ColorInt int textColor) {
-        TextView view = getView(viewId);
+        AppCompatTextView view = getView(viewId);
         view.setTextColor(textColor);
         return this;
     }
 
     public ViewHolder setTextColorRes(int viewId, @ColorRes int textColorRes) {
-        TextView view = getView(viewId);
+        AppCompatTextView view = getView(viewId);
         view.setTextColor(mContext.getResources().getColor(textColorRes, mContext.getTheme()));
         return this;
     }
@@ -127,14 +127,14 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     }
 
     public ViewHolder linkIfy(@IdRes int viewId) {
-        TextView view = getView(viewId);
+        AppCompatTextView view = getView(viewId);
         Linkify.addLinks(view, Linkify.ALL);
         return this;
     }
 
     public ViewHolder setTypeface(Typeface typeface, @IdRes int... viewIds) {
         for (int viewId : viewIds) {
-            TextView view = getView(viewId);
+            AppCompatTextView view = getView(viewId);
             view.setTypeface(typeface);
             view.setPaintFlags(view.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG);
         }
