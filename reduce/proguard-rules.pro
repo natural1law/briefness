@@ -105,3 +105,4 @@
 -keep public class com.androidx.reduce.intertaces.*{*;}
 -keep public class com.androidx.reduce.service.*{*;}
 -keep public class com.androidx.reduce.statics.*{*;}
+-keep public class com.androidx.reduce.base.*{*;}
