@@ -17,7 +17,7 @@ import com.androidx.reduce.tools.ScreenUtils;
  * @date 2021/02/24
  */
 @SuppressWarnings({"RedundantSuppression", "unused"})
-public class KeyboardActivity extends AppCompatActivity implements ViewTreeObserver.OnGlobalLayoutListener {
+public abstract class KeyboardActivity extends AppCompatActivity implements ViewTreeObserver.OnGlobalLayoutListener {
 
     public int screenHeight = 0;
     private OnGlobalLayoutListener onGlobalLayoutListener;
@@ -52,7 +52,7 @@ public class KeyboardActivity extends AppCompatActivity implements ViewTreeObser
     }
 
     @Override
-    public void onGlobalLayout() {
+    public final void onGlobalLayout() {
         Rect r = new Rect();
         //获取当前界面可视部分
         getWindow().getDecorView().getWindowVisibleDisplayFrame(r);
@@ -70,7 +70,7 @@ public class KeyboardActivity extends AppCompatActivity implements ViewTreeObser
 
     }
 
-    public int getScreenHeight() {
+    public final int getScreenHeight() {
         return screenHeight;
     }
 
@@ -96,8 +96,9 @@ public class KeyboardActivity extends AppCompatActivity implements ViewTreeObser
 
     public interface OnGlobalLayoutListener {
         void onKeyboardShowedNow(Rect rect);//键盘刚显示
-
         void onKeyboardHideNow();//键盘刚隐藏
     }
 
 }
+
+
