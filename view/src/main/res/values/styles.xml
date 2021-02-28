@@ -61,11 +61,4 @@
         <item name="android:background">#00000000</item>
     </style>
 
-    <style name="progress" parent="Theme.AppCompat.Light">
-        <item name="android:indeterminateDrawable">@drawable/load</item>
-        <item name="android:minWidth">25dp</item>
-        <item name="android:minHeight">25dp</item>
-        <item name="android:maxWidth">60dp</item>
-        <item name="android:maxHeight">60dp</item>
-    </style>
 </resources>

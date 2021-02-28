@@ -21,13 +21,13 @@ import java.util.Map;
 import static com.androidx.view.pages.PaginationIndicator.dp2px;
 import static com.androidx.view.pages.PaginationIndicator.sp2px;
 
-public class PaginationRecycleView extends LinearLayout implements PaginationIndicator.OnChangedListener {
+public class PaginationTopRecycleView extends LinearLayout implements PaginationIndicator1.OnChangedListener {
 
     public static final int SUCCESS = 0;
     public static final int FAILED = 1;
     public static final int EMPTY = 2;
     private RecyclerView mRecycleView;
-    private PaginationIndicator mPaginationIndicatorView;
+    private PaginationIndicator1 mPaginationIndicatorView;
     private Adapter<?, ?> mAdapter;
     private Listener mListener;
     public ZLoadingView mProgressBar;
@@ -36,15 +36,15 @@ public class PaginationRecycleView extends LinearLayout implements PaginationInd
         this.mListener = listener;
     }
 
-    public PaginationRecycleView(Context context) {
+    public PaginationTopRecycleView(Context context) {
         this(context, null);
     }
 
-    public PaginationRecycleView(Context context, AttributeSet attrs) {
+    public PaginationTopRecycleView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public PaginationRecycleView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PaginationTopRecycleView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
@@ -63,10 +63,10 @@ public class PaginationRecycleView extends LinearLayout implements PaginationInd
         }
         a.recycle();
 
-        View.inflate(getContext(), R.layout.pagination_layout, this);
-        mRecycleView = findViewById(R.id.rcv);
-        mPaginationIndicatorView = findViewById(R.id.indicator);
-        mProgressBar = findViewById(R.id.progress);
+        View.inflate(getContext(), R.layout.pagination_top_layout, this);
+        mRecycleView = findViewById(R.id.rcv1);
+        mPaginationIndicatorView = findViewById(R.id.indicator1);
+        mProgressBar = findViewById(R.id.progress1);
 
         if (numberTipShowCount != 0)
             mPaginationIndicatorView.setNumberTipShowCount(numberTipShowCount);
@@ -176,7 +176,7 @@ public class PaginationRecycleView extends LinearLayout implements PaginationInd
      * @param <VH> RecycleView体系里的ViewHolder增强
      */
     public static abstract class Adapter<T, VH extends ViewHolder> {
-        private PaginationRecycleView mPaginationRecycleView;
+        private PaginationTopRecycleView mPaginationRecycleView;
         private final Map<Integer, List<T>> mDataMap;
         private List<T> mShowList;
         private int mCurrentPagePos;
@@ -185,27 +185,6 @@ public class PaginationRecycleView extends LinearLayout implements PaginationInd
         private final InnerAdapter mInnerAdapter;
         private int mLastPagePos;
         private OnItemClickListener mOnItemClickListener;
-
-        /**
-         * 根据页码获取相应的页的数据列表
-         */
-        public List<T> getDataByPage(int pagePos) {
-            return mDataMap.get(pagePos);
-        }
-
-        /**
-         * 获取当前页码
-         */
-        public int getCurrentPagePos() {
-            return mCurrentPagePos;
-        }
-
-        /**
-         * 获取每页条数
-         */
-        public int getPerPageCount() {
-            return mPerPageCount;
-        }
 
         /**
          * @param dataTotalCount 数据源总量(需要传入进行分页器初始化)

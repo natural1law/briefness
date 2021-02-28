@@ -9,8 +9,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <com.androidx.view.pages.PaginationIndicator
+            android:id="@+id/indicator1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp" />
+
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rcv"
+            android:id="@+id/rcv1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginBottom="3dp"
@@ -18,16 +24,10 @@
             android:overScrollMode="never"
             android:scrollbars="none" />
 
-        <com.androidx.view.pages.PaginationIndicator
-            android:id="@+id/indicator"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp" />
-
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <com.zyao89.view.zloading.ZLoadingView
-        android:id="@+id/progress"
+        android:id="@+id/progress1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
