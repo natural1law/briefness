@@ -100,7 +100,6 @@ public class PaginationTopRecycleView extends LinearLayout implements Pagination
 
     /**
      * 当Listener.loadMore回调执行后，外部加载完数据后应该设置相应状态
-     *
      * @param flag SUCCESS : 加载数据成功  EMPTY : 空数据  FAILED : 加载失败
      */
     public void setState(int flag) {
