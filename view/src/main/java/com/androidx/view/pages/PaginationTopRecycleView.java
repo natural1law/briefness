@@ -62,7 +62,6 @@ public class PaginationTopRecycleView extends LinearLayout implements Pagination
             width = dp2px(getContext(), 32);
         }
         a.recycle();
-
         View.inflate(getContext(), R.layout.pagination_top_layout, this);
         mRecycleView = findViewById(R.id.rcv1);
         mPaginationIndicatorView = findViewById(R.id.indicator1);
