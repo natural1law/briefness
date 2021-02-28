@@ -138,11 +138,11 @@ public class PaginationTopRecycleView extends LinearLayout implements Pagination
     }
 
     @Override
-    public void onPageSelectedChanged(int currentPapePos, int lastPagePos, int totalPageCount, int total) {
-        if (currentPapePos > lastPagePos) {
-            mAdapter.nextSkip(currentPapePos, lastPagePos);
+    public void onPageSelectedChanged(int currentPagePos, int lastPagePos, int totalPageCount, int total) {
+        if (currentPagePos > lastPagePos) {
+            mAdapter.nextSkip(currentPagePos, lastPagePos);
         } else {
-            mAdapter.lastSkip(currentPapePos, lastPagePos);
+            mAdapter.lastSkip(currentPagePos, lastPagePos);
         }
     }
 
