@@ -129,6 +129,7 @@ public class PaginationTopRecycleView extends LinearLayout implements Pagination
         mPaginationIndicatorView.setTotalCount(total);
     }
 
+
     /**
      * 设置分页控件中间的数字显示个数
      */
