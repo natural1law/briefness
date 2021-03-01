@@ -91,8 +91,8 @@ public class PaginationIndicator extends FrameLayout implements View.OnClickList
     public PaginationIndicator(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PaginationIndicator);
-        sColor_selected = a.getColor(R.styleable.PaginationIndicator_selected_color, getContext().getResources().getColor(R.color.indicator_rect_selected, null));
-        sColor_unselected = a.getColor(R.styleable.PaginationIndicator_unselected_color, getContext().getResources().getColor(R.color.indicator_rect_unselected, null));
+        sColor_selected = a.getColor(R.styleable.PaginationIndicator_selected_color, getContext().getResources().getColor(R.color.irs, null));
+        sColor_unselected = a.getColor(R.styleable.PaginationIndicator_unselected_color, getContext().getResources().getColor(R.color.iru, null));
         mNumberTipShowCount = a.getInteger(R.styleable.PaginationIndicator_number_tip_count, 5);
         sTextSize = a.getDimensionPixelSize(R.styleable.PaginationIndicator_text_size, sp2px(getContext(), 16));
         sWidth = a.getDimensionPixelSize(R.styleable.PaginationIndicator_rect_size, 0);
