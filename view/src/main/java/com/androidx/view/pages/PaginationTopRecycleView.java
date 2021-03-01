@@ -21,13 +21,13 @@ import java.util.Map;
 import static com.androidx.view.pages.PaginationIndicator.dp2px;
 import static com.androidx.view.pages.PaginationIndicator.sp2px;
 
-public class PaginationTopRecycleView extends LinearLayout implements PaginationIndicator1.OnChangedListener {
+public class PaginationTopRecycleView extends LinearLayout implements PaginationIndicatorTop.OnChangedListener {
 
     public static final int SUCCESS = 0;
     public static final int FAILED = 1;
     public static final int EMPTY = 2;
     private RecyclerView mRecycleView;
-    private PaginationIndicator1 mPaginationIndicatorView;
+    private PaginationIndicatorTop mPaginationIndicatorView;
     private Adapter<?, ?> mAdapter;
     private Listener mListener;
     public ZLoadingView mProgressBar;

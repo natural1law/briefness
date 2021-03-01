@@ -31,7 +31,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-public class PaginationIndicator1 extends FrameLayout implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class PaginationIndicatorTop extends FrameLayout implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private AppCompatSpinner mPerPageCountSpinner;
     private ArrayAdapter<String> mPerPageCountAdapter;
@@ -77,21 +77,21 @@ public class PaginationIndicator1 extends FrameLayout implements View.OnClickLis
         this.mListener = mListener;
     }
 
-    public PaginationIndicator1(Context context) {
+    public PaginationIndicatorTop(Context context) {
         this(context, null);
     }
 
-    public PaginationIndicator1(Context context, AttributeSet attrs) {
+    public PaginationIndicatorTop(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public PaginationIndicator1(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PaginationIndicatorTop(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         @SuppressLint("CustomViewStyleable")
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PaginationIndicator);
         sColor_selected = a.getColor(R.styleable.PaginationIndicator_selected_color, getContext().getResources().getColor(R.color.indicator_rect_selected, null));
         sColor_unselected = a.getColor(R.styleable.PaginationIndicator_unselected_color, getContext().getResources().getColor(R.color.indicator_rect_unselected, null));
-        mNumberTipShowCount = a.getInteger(R.styleable.PaginationIndicator_number_tip_count, 5);
+        mNumberTipShowCount = a.getInteger(R.styleable.PaginationIndicator_number_tip_count, 10);
         sTextSize = a.getDimensionPixelSize(R.styleable.PaginationIndicator_text_size, sp2px(getContext(), 16));
         sWidth = a.getDimensionPixelSize(R.styleable.PaginationIndicator_rect_size, 0);
 
@@ -105,7 +105,7 @@ public class PaginationIndicator1 extends FrameLayout implements View.OnClickLis
 
     @SuppressLint("InflateParams")
     private void init() {
-        LinearLayoutCompat mControllerView = (LinearLayoutCompat) LayoutInflater.from(getContext()).inflate(R.layout.pagination_indicator1, null);
+        LinearLayoutCompat mControllerView = (LinearLayoutCompat) LayoutInflater.from(getContext()).inflate(R.layout.pagination_indicator_top, null);
         mNumberLlt = mControllerView.findViewById(R.id.number_llt);
         mPerPageCountSpinner = mControllerView.findViewById(R.id.per_page_count_spinner);
         initSpinner();
