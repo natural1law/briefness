@@ -9,16 +9,7 @@
         android:id="@+id/number_llt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/text3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:gravity="center" />
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
+        android:orientation="horizontal"/>
 
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/per_page_count_spinner"
