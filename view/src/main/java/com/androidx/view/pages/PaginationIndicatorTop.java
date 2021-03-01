@@ -269,9 +269,8 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
         } else {
             return;
         }
-        AppCompatTextView textView = null;
         for (int i = 0; i < mNumberTipTextViewArray.length; i++) {
-            textView = new AppCompatTextView(getContext());
+            AppCompatTextView textView = new AppCompatTextView(getContext());
             StateListDrawable selectSelectorDrawable = new StateListDrawable();
             selectSelectorDrawable.addState(new int[]{android.R.attr.state_selected}, mDrawableSelected);
             selectSelectorDrawable.addState(new int[]{-android.R.attr.state_selected}, mDrawableUnselected);
@@ -279,16 +278,15 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
             mNumberTipTextViewArray[i] = textView;
             textView.setGravity(Gravity.CENTER);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
-            textView.layout(3, 0, 0, 0);
             //noinspection SuspiciousNameCombination
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sWidth, sWidth);
             if (i > 0 && i < mNumberTipTextViewArray.length)
-                params.setMargins(3, 0, 0, 0);
+                params.setMargins(dp2px(getContext(), 2), 0, 0, 0);
             textView.setLayoutParams(params);
-            mNumberLlt.addView(textView, params);
-        }
-        if (textView != null) {
+            textView.layout(dp2px(getContext(), 2), 0, 0, 0);
+            textView.setLeft(dp2px(getContext(), 2));
             textView.setOnClickListener(this);
+            mNumberLlt.addView(textView, params);
         }
     }
 
