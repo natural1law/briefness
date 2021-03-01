@@ -12,11 +12,11 @@
 
     <item
         android:id="@+id/layer2"
-        android:left="60dp"
-        android:right="5dp">
+        android:left="80dp"
+        android:right="0dp">
         <bitmap
             android:gravity="end"
-            android:src="@drawable/keyboard_arrow_down" />
+            android:src="@drawable/chevron_small_down" />
     </item>
 
 </layer-list>
