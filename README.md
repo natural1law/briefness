@@ -7,7 +7,7 @@
 
 ### 使用依赖
   * ![](https://jitpack.io/v/natural1law/briefness.svg "")
-  * **implementation 'com.github.natural1law.briefness:xxx'**
+  * **implementation 'com.github.natural1law.briefness:versionCode'**
 
 ### 工具使用
   ```
@@ -16,8 +16,8 @@
 
 ### 更新日志
   
-  > 修订版本 2.0.6-daily
-  * @日期: 2021/02/25
+  > 修订版本 2.0.8-daily
+  * @日期: 2021/03/01
   * @声明: 代码重构、新增html风格分页工具
  
   > 修订版本 1.3.5.1
