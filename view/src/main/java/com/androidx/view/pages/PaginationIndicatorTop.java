@@ -89,8 +89,8 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
         super(context, attrs, defStyleAttr);
         @SuppressLint("CustomViewStyleable")
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PaginationIndicator);
-        sColor_selected = a.getColor(R.styleable.PaginationIndicator_selected_color, getContext().getResources().getColor(R.color.indicator_rect_selected, null));
-        sColor_unselected = a.getColor(R.styleable.PaginationIndicator_unselected_color, getContext().getResources().getColor(R.color.indicator_rect_unselected, null));
+        sColor_selected = a.getColor(R.styleable.PaginationIndicator_selected_color, getContext().getResources().getColor(R.color.irs, null));
+        sColor_unselected = a.getColor(R.styleable.PaginationIndicator_unselected_color, getContext().getResources().getColor(R.color.iru, null));
         mNumberTipShowCount = a.getInteger(R.styleable.PaginationIndicator_number_tip_count, 9);
         sTextSize = a.getDimensionPixelSize(R.styleable.PaginationIndicator_text_size, sp2px(getContext(), 16));
         sWidth = a.getDimensionPixelSize(R.styleable.PaginationIndicator_rect_size, 0);
@@ -126,28 +126,28 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
             mSpinnerDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.pagination_spinner, null);
         }
         GradientDrawable drawable = (GradientDrawable) mSpinnerDrawable.findDrawableByLayerId(R.id.layer1);
-        drawable.setStroke(2, sColor_selected);
+        drawable.setStroke(5, sColor_selected);
 
         if (mDrawableSelected == null) {
             mDrawableSelected = (GradientDrawable) getResources().getDrawable(R.drawable.pagination_shape_round_rect_selected, null);
             mDrawableUnselected = (GradientDrawable) getResources().getDrawable(R.drawable.pagination_shape_round_rect_unselected, null);
         }
-        mDrawableSelected.setStroke(2, sColor_selected);
-        mDrawableUnselected.setStroke(2, sColor_unselected);
+        mDrawableSelected.setStroke(5, sColor_selected);
+        mDrawableUnselected.setStroke(5, sColor_unselected);
 
         StateListDrawable enableSelectorDrawable1 = new StateListDrawable();
         GradientDrawable drawableSelected1 = (GradientDrawable) getResources().getDrawable(R.drawable.pagination_shape_round_rect_selected, null);
-        drawableSelected1.setStroke(2, sColor_selected);
+        drawableSelected1.setStroke(5, sColor_selected);
         GradientDrawable drawableUnselected1 = (GradientDrawable) getResources().getDrawable(R.drawable.pagination_shape_round_rect_unselected, null);
-        drawableUnselected1.setStroke(2, sColor_unselected);
+        drawableUnselected1.setStroke(5, sColor_unselected);
         enableSelectorDrawable1.addState(new int[]{android.R.attr.state_enabled}, drawableSelected1);
         enableSelectorDrawable1.addState(new int[]{-android.R.attr.state_enabled}, drawableUnselected1);
 
         StateListDrawable enableSelectorDrawable2 = new StateListDrawable();
         GradientDrawable drawableSelected2 = (GradientDrawable) getResources().getDrawable(R.drawable.pagination_shape_round_rect_selected, null);
-        drawableSelected2.setStroke(2, sColor_selected);
+        drawableSelected2.setStroke(5, sColor_selected);
         GradientDrawable drawableUnselected2 = (GradientDrawable) getResources().getDrawable(R.drawable.pagination_shape_round_rect_unselected, null);
-        drawableUnselected2.setStroke(2, sColor_unselected);
+        drawableUnselected2.setStroke(5, sColor_unselected);
         enableSelectorDrawable2.addState(new int[]{android.R.attr.state_enabled}, drawableSelected2);
         enableSelectorDrawable2.addState(new int[]{-android.R.attr.state_enabled}, drawableUnselected2);
 

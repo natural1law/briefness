@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="transparent">#00000000</color>
-    <color name="indicator_rect_selected">#1895FF</color>
-    <color name="irs">#67BFEF</color>
-    <color name="indicator_rect_unselected">#A7A7A7</color>
+    <color name="irs">#E47168</color>
+    <color name="iru">#A7A7A7</color>
 </resources>

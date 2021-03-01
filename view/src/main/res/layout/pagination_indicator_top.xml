@@ -11,7 +11,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="3dp"
         android:layout_marginEnd="3dp"
-        android:orientation="horizontal"/>
+        android:orientation="horizontal"
+        android:paddingStart="3dp"
+        android:paddingEnd="3dp" />
 
     <androidx.appcompat.widget.AppCompatSpinner
         android:id="@+id/per_page_count_spinner"
