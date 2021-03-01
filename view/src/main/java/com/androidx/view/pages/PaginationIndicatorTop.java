@@ -7,6 +7,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -278,11 +279,12 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
             mNumberTipTextViewArray[i] = textView;
             textView.setGravity(Gravity.CENTER);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
-            textView.layout(2, 0, 2, 0);
+            textView.layout(5, 0, 5, 0);
             //noinspection SuspiciousNameCombination
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sWidth, sWidth);
             if (i > 0 && i < mNumberTipTextViewArray.length)
-                params.leftMargin = 2;
+                params.leftMargin = 5;
+            Log.e("布局", String.valueOf(params.leftMargin));
             textView.setOnClickListener(this);
             mNumberLlt.addView(textView, params);
         }

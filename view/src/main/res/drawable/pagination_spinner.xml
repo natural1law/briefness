@@ -11,7 +11,7 @@
     </item>
     <item
         android:id="@+id/layer2"
-        android:left="80dp"
+        android:left="65dp"
         android:right="0dp">
         <bitmap
             android:gravity="end"
