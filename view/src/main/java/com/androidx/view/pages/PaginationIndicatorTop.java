@@ -287,6 +287,7 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
             textView.setLeft(dp2px(getContext(), 2));
             textView.setOnClickListener(this);
             mNumberLlt.addView(textView, params);
+
         }
     }
 
