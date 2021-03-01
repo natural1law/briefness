@@ -9,7 +9,6 @@
                 android:color="@color/irs" />
         </shape>
     </item>
-
     <item
         android:id="@+id/layer2"
         android:left="80dp"
