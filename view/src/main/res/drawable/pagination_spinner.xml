@@ -18,4 +18,5 @@
             android:gravity="end"
             android:src="@drawable/keyboard_arrow_down" />
     </item>
+
 </layer-list>
