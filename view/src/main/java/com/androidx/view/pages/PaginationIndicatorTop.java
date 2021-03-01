@@ -99,7 +99,6 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
             sWidth = dp2px(getContext(), 32);
         }
         a.recycle();
-
         init();
     }
 
