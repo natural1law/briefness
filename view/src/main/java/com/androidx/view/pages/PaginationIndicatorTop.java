@@ -91,7 +91,7 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.PaginationIndicator);
         sColor_selected = a.getColor(R.styleable.PaginationIndicator_selected_color, getContext().getResources().getColor(R.color.indicator_rect_selected, null));
         sColor_unselected = a.getColor(R.styleable.PaginationIndicator_unselected_color, getContext().getResources().getColor(R.color.indicator_rect_unselected, null));
-        mNumberTipShowCount = a.getInteger(R.styleable.PaginationIndicator_number_tip_count, 11);
+        mNumberTipShowCount = a.getInteger(R.styleable.PaginationIndicator_number_tip_count, 9);
         sTextSize = a.getDimensionPixelSize(R.styleable.PaginationIndicator_text_size, sp2px(getContext(), 16));
         sWidth = a.getDimensionPixelSize(R.styleable.PaginationIndicator_rect_size, 0);
 
@@ -99,6 +99,7 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
             sWidth = dp2px(getContext(), 32);
         }
         a.recycle();
+
         init();
     }
 
