@@ -7,16 +7,13 @@ import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatSpinner;
@@ -48,6 +45,7 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
     private int mNumberTipShowCount;  // 奇数: 数字指示器的数量
 
     private LinearLayoutCompat mNumberLlt;
+    private AppCompatTextView textView;
     private AppCompatTextView[] mNumberTipTextViewArray;
 
     protected static int sWidth;
@@ -108,6 +106,7 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
     private void init() {
         LinearLayoutCompat mControllerView = (LinearLayoutCompat) LayoutInflater.from(getContext()).inflate(R.layout.pagination_indicator_top, null);
         mNumberLlt = mControllerView.findViewById(R.id.number_llt);
+        textView = mControllerView.findViewById(R.id.text3);
         mPerPageCountSpinner = mControllerView.findViewById(R.id.per_page_count_spinner);
         initSpinner();
 
@@ -271,22 +270,13 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
             return;
         }
         for (int i = 0; i < mNumberTipTextViewArray.length; i++) {
-            AppCompatTextView textView = new AppCompatTextView(getContext());
             StateListDrawable selectSelectorDrawable = new StateListDrawable();
             selectSelectorDrawable.addState(new int[]{android.R.attr.state_selected}, mDrawableSelected);
             selectSelectorDrawable.addState(new int[]{-android.R.attr.state_selected}, mDrawableUnselected);
             textView.setBackgroundDrawable(selectSelectorDrawable);
             mNumberTipTextViewArray[i] = textView;
-            textView.setGravity(Gravity.CENTER);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
-            textView.layout(5, 0, 5, 0);
-            //noinspection SuspiciousNameCombination
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sWidth, sWidth);
-            if (i > 0 && i < mNumberTipTextViewArray.length)
-                params.leftMargin = 5;
-            Log.e("布局", String.valueOf(params.leftMargin));
             textView.setOnClickListener(this);
-            mNumberLlt.addView(textView, params);
         }
     }
 
