@@ -279,11 +279,11 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
             mNumberTipTextViewArray[i] = textView;
             textView.setGravity(Gravity.CENTER);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
-            textView.layout(4, 0, 0, 0);
+            textView.layout(5, 0, 0, 0);
             //noinspection SuspiciousNameCombination
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sWidth, sWidth);
             if (i > 0 && i < mNumberTipTextViewArray.length)
-                params.setMargins(4, 0, 0, 0);
+                params.setMargins(5, 0, 0, 0);
             textView.setLayoutParams(params);
             mNumberLlt.addView(textView, params);
         }
