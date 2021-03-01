@@ -126,28 +126,28 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
             mSpinnerDrawable = (LayerDrawable) getResources().getDrawable(R.drawable.pagination_spinner, null);
         }
         GradientDrawable drawable = (GradientDrawable) mSpinnerDrawable.findDrawableByLayerId(R.id.layer1);
-        drawable.setStroke(5, sColor_selected);
+        drawable.setStroke(2, sColor_selected);
 
         if (mDrawableSelected == null) {
             mDrawableSelected = (GradientDrawable) getResources().getDrawable(R.drawable.pagination_shape_round_rect_selected, null);
             mDrawableUnselected = (GradientDrawable) getResources().getDrawable(R.drawable.pagination_shape_round_rect_unselected, null);
         }
-        mDrawableSelected.setStroke(5, sColor_selected);
-        mDrawableUnselected.setStroke(5, sColor_unselected);
+        mDrawableSelected.setStroke(2, sColor_selected);
+        mDrawableUnselected.setStroke(2, sColor_unselected);
 
         StateListDrawable enableSelectorDrawable1 = new StateListDrawable();
         GradientDrawable drawableSelected1 = (GradientDrawable) getResources().getDrawable(R.drawable.pagination_shape_round_rect_selected, null);
-        drawableSelected1.setStroke(5, sColor_selected);
+        drawableSelected1.setStroke(2, sColor_selected);
         GradientDrawable drawableUnselected1 = (GradientDrawable) getResources().getDrawable(R.drawable.pagination_shape_round_rect_unselected, null);
-        drawableUnselected1.setStroke(5, sColor_unselected);
+        drawableUnselected1.setStroke(2, sColor_unselected);
         enableSelectorDrawable1.addState(new int[]{android.R.attr.state_enabled}, drawableSelected1);
         enableSelectorDrawable1.addState(new int[]{-android.R.attr.state_enabled}, drawableUnselected1);
 
         StateListDrawable enableSelectorDrawable2 = new StateListDrawable();
         GradientDrawable drawableSelected2 = (GradientDrawable) getResources().getDrawable(R.drawable.pagination_shape_round_rect_selected, null);
-        drawableSelected2.setStroke(5, sColor_selected);
+        drawableSelected2.setStroke(2, sColor_selected);
         GradientDrawable drawableUnselected2 = (GradientDrawable) getResources().getDrawable(R.drawable.pagination_shape_round_rect_unselected, null);
-        drawableUnselected2.setStroke(5, sColor_unselected);
+        drawableUnselected2.setStroke(2, sColor_unselected);
         enableSelectorDrawable2.addState(new int[]{android.R.attr.state_enabled}, drawableSelected2);
         enableSelectorDrawable2.addState(new int[]{-android.R.attr.state_enabled}, drawableUnselected2);
 
@@ -278,6 +278,8 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
             mNumberTipTextViewArray[i] = textView;
             textView.setGravity(Gravity.CENTER);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
+            textView.setLeft(2);
+            textView.setRight(2);
             //noinspection SuspiciousNameCombination
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sWidth, sWidth);
             if (i > 0 && i < mNumberTipTextViewArray.length)

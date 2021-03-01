@@ -16,6 +16,6 @@
         android:right="5dp">
         <bitmap
             android:gravity="end"
-            android:src="@drawable/angle_down" />
+            android:src="@drawable/keyboard_arrow_down" />
     </item>
 </layer-list>

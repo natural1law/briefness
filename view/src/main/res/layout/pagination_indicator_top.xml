@@ -19,6 +19,7 @@
         android:id="@+id/per_page_count_spinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
         android:layout_marginLeft="2dp" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
