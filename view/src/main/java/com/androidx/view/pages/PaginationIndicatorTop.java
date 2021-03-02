@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.AppCompatSpinner;
@@ -248,8 +247,8 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
             AppCompatTextView textView = mNumberTipTextViewArray[i];
 //            textView.setLeft(2);
             //noinspection SuspiciousNameCombination
-            textView.setLayoutParams(new LinearLayout.LayoutParams(sWidth, sWidth));
-            LinearLayout.LayoutParams param = (LinearLayout.LayoutParams) textView.getLayoutParams();
+            textView.setLayoutParams(new LinearLayoutCompat.LayoutParams(sWidth, sWidth));
+            LinearLayoutCompat.LayoutParams param = (LinearLayoutCompat.LayoutParams) textView.getLayoutParams();
             param.setMargins(5, 0, 0, 0);
             textView.setLayoutParams(param);
             textView.setText((start + i) + "");
