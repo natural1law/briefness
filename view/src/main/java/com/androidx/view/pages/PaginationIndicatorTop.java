@@ -277,13 +277,13 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
             selectSelectorDrawable.addState(new int[]{android.R.attr.state_selected}, mDrawableSelected);
             selectSelectorDrawable.addState(new int[]{-android.R.attr.state_selected}, mDrawableUnselected);
             textView.setBackgroundDrawable(selectSelectorDrawable);
-            mNumberTipTextViewArray[i] = textView;
             textView.setGravity(Gravity.CENTER);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
             LinearLayout.LayoutParams param = (LinearLayout.LayoutParams) textView.getLayoutParams();
             param.setMargins(5, 0, 0, 0);
             textView.setLayoutParams(param);
             textView.setOnClickListener(this);
+            mNumberTipTextViewArray[i] = textView;
             mNumberLlt.addView(textView);
         }
     }
