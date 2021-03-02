@@ -245,7 +245,7 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
     @SuppressLint("SetTextI18n")
     private void updateNumberText(int start, int end) {
         for (int i = 0; i < end - start + 1; i++) {
-            TextView textView = mNumberTipTextViewArray[i];
+            AppCompatTextView textView = mNumberTipTextViewArray[i];
             textView.setText((start + i) + "");
             if (start + i == mCurrentPagePos) {
                 textView.setSelected(true);
@@ -282,8 +282,9 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
             LinearLayout.LayoutParams param = (LinearLayout.LayoutParams) textView.getLayoutParams();
             param.setMargins(5, 0, 0, 0);
+            textView.setLayoutParams(param);
             textView.setOnClickListener(this);
-            mNumberLlt.addView(textView, param);
+            mNumberLlt.addView(textView);
         }
     }
 
