@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.util.Linkify;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -53,7 +55,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     /**
      * 通过viewId获取控件
      */
-    private <T extends View> T getView(int viewId) {
+    public <T extends View> T getView(int viewId) {
         View view = mViews.get(viewId);
         if (view == null) {
             view = mConvertView.findViewById(viewId);
@@ -126,10 +128,11 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         ViewGroup view = getView(viewId);
         if (visible) {
             view.setAnimation(moveToViewBottom());
+            new Handler(Looper.getMainLooper()).postDelayed(() -> view.setVisibility(View.VISIBLE), 500);
         } else {
             view.setAnimation(moveToViewLocation());
+            new Handler(Looper.getMainLooper()).postDelayed(() -> view.setVisibility(View.GONE), 500);
         }
-        view.setVisibility(visible ? View.VISIBLE : View.GONE);
         return this;
     }
 
