@@ -10,12 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Checkable;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -75,14 +77,20 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    public <T> ViewHolder setImageView(@IdRes int viewId, T resId) {
+    public <T> ViewHolder setImageView(@IdRes int viewId, T resId, @Nullable ImageView.ScaleType... types) {
         AppCompatImageView view = getView(viewId);
+        if (types != null) {
+            view.setScaleType(types[0]);
+        }
         Glide.with(mContext).load(resId).into(view);
         return this;
     }
 
-    public <T> ViewHolder setImageButton(@IdRes int viewId, T resId) {
+    public <T> ViewHolder setImageButton(@IdRes int viewId, T resId, @Nullable ImageView.ScaleType... types) {
         AppCompatImageButton view = getView(viewId);
+        if (types != null) {
+            view.setScaleType(types[0]);
+        }
         Glide.with(mContext).load(resId).into(view);
         return this;
     }
