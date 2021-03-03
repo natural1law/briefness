@@ -218,7 +218,6 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         mHiddenAction.setDuration(500);
         return mHiddenAction;
     }
-
     /**
      * 从控件的底部移动到控件所在位置
      */
