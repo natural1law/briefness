@@ -1,5 +1,6 @@
 package com.androidx.view.pages;
 
+import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Paint;
@@ -126,7 +127,9 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     }
 
     public ViewHolder setVisible(@IdRes int viewId, boolean visible) {
-        View view = getView(viewId);
+        ViewGroup view = getView(viewId);
+        LayoutTransition transition = view.getLayoutTransition();
+        transition.enableTransitionType(LayoutTransition.CHANGING);
         view.setVisibility(visible ? View.VISIBLE : View.GONE);
         return this;
     }
