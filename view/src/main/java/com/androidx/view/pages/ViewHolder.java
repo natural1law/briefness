@@ -2,25 +2,28 @@ package com.androidx.view.pages;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.text.util.Linkify;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Checkable;
-import android.widget.ProgressBar;
 import android.widget.RatingBar;
 
 import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
+import com.zyao89.view.zloading.ZLoadingView;
+import com.zyao89.view.zloading.Z_TYPE;
 
 public class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -47,7 +50,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     /**
      * 通过viewId获取控件
      */
-    public <T extends View> T getView(int viewId) {
+    private <T extends View> T getView(int viewId) {
         View view = mViews.get(viewId);
         if (view == null) {
             view = mConvertView.findViewById(viewId);
@@ -66,27 +69,21 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     /**
      * 设置TextView的值
      */
-    public ViewHolder setText(@IdRes int viewId, String text) {
+    public ViewHolder setTextView(@IdRes int viewId, String text) {
         AppCompatTextView tv = getView(viewId);
         tv.setText(text);
         return this;
     }
 
-    public ViewHolder setImageResource(@IdRes int viewId, int resId) {
+    public <T> ViewHolder setImageView(@IdRes int viewId, T resId) {
         AppCompatImageView view = getView(viewId);
-        view.setImageResource(resId);
+        Glide.with(mContext).load(resId).into(view);
         return this;
     }
 
-    public ViewHolder setImageBitmap(@IdRes int viewId, Bitmap bitmap) {
-        AppCompatImageView view = getView(viewId);
-        view.setImageBitmap(bitmap);
-        return this;
-    }
-
-    public ViewHolder setImageDrawable(@IdRes int viewId, Drawable drawable) {
-        AppCompatImageView view = getView(viewId);
-        view.setImageDrawable(drawable);
+    public <T> ViewHolder setImageButton(@IdRes int viewId, T resId) {
+        AppCompatImageButton view = getView(viewId);
+        Glide.with(mContext).load(resId).into(view);
         return this;
     }
 
@@ -141,22 +138,9 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    public ViewHolder setProgress(@IdRes int viewId, int progress) {
-        ProgressBar view = getView(viewId);
-        view.setProgress(progress);
-        return this;
-    }
-
-    public ViewHolder setProgress(@IdRes int viewId, int progress, int max) {
-        ProgressBar view = getView(viewId);
-        view.setMax(max);
-        view.setProgress(progress);
-        return this;
-    }
-
-    public ViewHolder setMax(@IdRes int viewId, int max) {
-        ProgressBar view = getView(viewId);
-        view.setMax(max);
+    public ViewHolder setLoading(@IdRes int viewId, @NonNull Z_TYPE builder) {
+        ZLoadingView view = getView(viewId);
+        view.setLoadingBuilder(builder);
         return this;
     }
 
