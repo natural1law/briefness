@@ -1,6 +1,5 @@
 package com.androidx.view.pages;
 
-import android.animation.LayoutTransition;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Paint;
@@ -10,6 +9,8 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.TranslateAnimation;
 import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -18,7 +19,6 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.ColorRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -78,20 +78,16 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         return this;
     }
 
-    public <T> ViewHolder setImageView(@IdRes int viewId, T resId, @Nullable ImageView.ScaleType... types) {
+    public <T> ViewHolder setImageView(@IdRes int viewId, T resId) {
         AppCompatImageView view = getView(viewId);
-        if (types != null) {
-            view.setScaleType(types[0]);
-        }
+        view.setScaleType(ImageView.ScaleType.FIT_CENTER);
         Glide.with(mContext).load(resId).into(view);
         return this;
     }
 
-    public <T> ViewHolder setImageButton(@IdRes int viewId, T resId, @Nullable ImageView.ScaleType... types) {
+    public <T> ViewHolder setImageButton(@IdRes int viewId, T resId) {
         AppCompatImageButton view = getView(viewId);
-        if (types != null) {
-            view.setScaleType(types[0]);
-        }
+        view.setScaleType(ImageView.ScaleType.FIT_CENTER);
         Glide.with(mContext).load(resId).into(view);
         return this;
     }
@@ -128,8 +124,11 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     public ViewHolder setVisible(@IdRes int viewId, boolean visible) {
         ViewGroup view = getView(viewId);
-        LayoutTransition transition = view.getLayoutTransition();
-        transition.enableTransitionType(LayoutTransition.CHANGING);
+        if (visible) {
+            view.setAnimation(moveToViewBottom());
+        } else {
+            view.setAnimation(moveToViewLocation());
+        }
         view.setVisibility(visible ? View.VISIBLE : View.GONE);
         return this;
     }
@@ -206,4 +205,31 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         view.setOnLongClickListener(listener);
         return this;
     }
+
+    /**
+     * 从控件所在位置移动到控件的底部
+     */
+    public static TranslateAnimation moveToViewBottom() {
+        TranslateAnimation mHiddenAction = new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 1.0f);
+        mHiddenAction.setDuration(500);
+        return mHiddenAction;
+    }
+
+    /**
+     * 从控件的底部移动到控件所在位置
+     */
+    public static TranslateAnimation moveToViewLocation() {
+        TranslateAnimation mHiddenAction = new TranslateAnimation(
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f,
+                Animation.RELATIVE_TO_SELF, 1.0f,
+                Animation.RELATIVE_TO_SELF, 0.0f);
+        mHiddenAction.setDuration(500);
+        return mHiddenAction;
+    }
+
 }
