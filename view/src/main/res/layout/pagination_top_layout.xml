@@ -9,12 +9,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <com.androidx.view.pages.PaginationIndicatorTop
-            android:id="@+id/indicator1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rcv1"
             android:layout_width="match_parent"
@@ -23,6 +17,12 @@
             android:layout_weight="1"
             android:overScrollMode="never"
             android:scrollbars="none" />
+
+        <com.androidx.view.pages.PaginationIndicatorTop
+            android:id="@+id/indicator1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

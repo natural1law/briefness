@@ -253,12 +253,25 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
     @Override
     public void onClick(View v) {
         int lastPos = mCurrentPagePos;
-        int clickNumber = Integer.parseInt(((TextView) v).getText().toString());
-        if (clickNumber == mCurrentPagePos) {
-            return;
+        if (v.getId() == R.id.next_btn) {
+            if (mCurrentPagePos == mTotalPageCount)  // 已经是最后一页了
+                return;
+            mLastPagePos = mCurrentPagePos;
+            mCurrentPagePos++;
+        } else if (v.getId() == R.id.last_btn) {
+            if (mCurrentPagePos == 1)  // 已经是第一页了
+                return;
+            mLastPagePos = mCurrentPagePos;
+            mCurrentPagePos--;
+        } else {
+            // 点击了中间的数字指示器
+            int clickNumber = Integer.parseInt(((TextView) v).getText().toString());
+            if (clickNumber == mCurrentPagePos) {
+                return;
+            }
+            mLastPagePos = mCurrentPagePos;
+            mCurrentPagePos = clickNumber;
         }
-        mLastPagePos = mCurrentPagePos;
-        mCurrentPagePos = clickNumber;
         updateState(lastPos);
     }
 
