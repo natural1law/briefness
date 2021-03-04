@@ -238,7 +238,6 @@ public class PaginationIndicatorTop extends FrameLayout implements AdapterView.O
         }
     }
 
-
     private void geneNumberTextView() {
         int count = Math.min(mNumberTipShowCount, mTotalPageCount);
         if (mNumberTipTextViewArray == null) {
