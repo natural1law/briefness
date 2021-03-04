@@ -126,12 +126,13 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     public ViewHolder setVisible(@IdRes int viewId, boolean visible) {
         ViewGroup view = getView(viewId);
+        Handler handler = new Handler(Looper.getMainLooper());
         if (visible) {
             view.setAnimation(moveToViewBottom());
-            new Handler(Looper.getMainLooper()).postDelayed(() -> view.setVisibility(View.VISIBLE), 500);
+            handler.postDelayed(() -> view.setVisibility(View.VISIBLE), 100);
         } else {
             view.setAnimation(moveToViewLocation());
-            new Handler(Looper.getMainLooper()).postDelayed(() -> view.setVisibility(View.GONE), 500);
+            handler.postDelayed(() -> view.setVisibility(View.GONE), 900);
         }
         return this;
     }
@@ -218,7 +219,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                 Animation.RELATIVE_TO_SELF, 0.0f,
                 Animation.RELATIVE_TO_SELF, 0.0f,
                 Animation.RELATIVE_TO_SELF, 1.0f);
-        mHiddenAction.setDuration(500);
+        mHiddenAction.setDuration(1000);
         return mHiddenAction;
     }
     /**
@@ -230,7 +231,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                 Animation.RELATIVE_TO_SELF, 0.0f,
                 Animation.RELATIVE_TO_SELF, 1.0f,
                 Animation.RELATIVE_TO_SELF, 0.0f);
-        mHiddenAction.setDuration(500);
+        mHiddenAction.setDuration(1000);
         return mHiddenAction;
     }
 
