@@ -21,7 +21,7 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 
 import com.androidx.view.R;
 
-public class PaginationIndicatorTop extends FrameLayout implements AdapterView.OnItemSelectedListener {
+public class PaginationIndicatorTop extends FrameLayout implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     private OnChangedListener mListener;
 
@@ -211,22 +211,6 @@ public class PaginationIndicatorTop extends FrameLayout implements AdapterView.O
             LinearLayoutCompat.LayoutParams param = (LinearLayoutCompat.LayoutParams) textView.getLayoutParams();
             param.setMargins(5, 0, 0, 0);
             textView.setLayoutParams(param);
-            final int finalI = i;
-            textView.setOnClickListener(v -> {
-                listener.onClick(finalI);
-                StateListDrawable selectSelectorDrawable = new StateListDrawable();
-                selectSelectorDrawable.addState(new int[]{android.R.attr.state_selected}, mDrawableSelected);
-                selectSelectorDrawable.addState(new int[]{-android.R.attr.state_selected}, mDrawableUnselected);
-                textView.setBackgroundDrawable(selectSelectorDrawable);
-                // 点击了中间的数字指示器
-                int clickNumber = Integer.parseInt(((TextView) v).getText().toString());
-                if (clickNumber == mCurrentPagePos) {
-                    return;
-                }
-                mLastPagePos = mCurrentPagePos;
-                mCurrentPagePos = clickNumber;
-                updateState(mCurrentPagePos);
-            });
             textView.setText((start + i) + "");
             if (start + i == mCurrentPagePos) {
                 textView.setSelected(true);
@@ -237,6 +221,7 @@ public class PaginationIndicatorTop extends FrameLayout implements AdapterView.O
             }
         }
     }
+
 
     private void geneNumberTextView() {
         int count = Math.min(mNumberTipShowCount, mTotalPageCount);
@@ -251,11 +236,29 @@ public class PaginationIndicatorTop extends FrameLayout implements AdapterView.O
         }
         for (int i = 0; i < mNumberTipTextViewArray.length; i++) {
             AppCompatTextView textView = new AppCompatTextView(getContext());
+            StateListDrawable selectSelectorDrawable = new StateListDrawable();
+            selectSelectorDrawable.addState(new int[]{android.R.attr.state_selected}, mDrawableSelected);
+            selectSelectorDrawable.addState(new int[]{-android.R.attr.state_selected}, mDrawableUnselected);
+            textView.setBackgroundDrawable(selectSelectorDrawable);
             textView.setGravity(Gravity.CENTER);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
+            textView.setOnClickListener(this);
             mNumberTipTextViewArray[i] = textView;
             mNumberLlt.addView(textView);
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+        int lastPos = mCurrentPagePos;
+        int clickNumber = Integer.parseInt(((TextView) v).getText().toString());
+        if (clickNumber == mCurrentPagePos) {
+            return;
+        }
+        mLastPagePos = mCurrentPagePos;
+        mCurrentPagePos = clickNumber;
+        updateState(lastPos);
+        listener.onClick(clickNumber);
     }
 
     /**
