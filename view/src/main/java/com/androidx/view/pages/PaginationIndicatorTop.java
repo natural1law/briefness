@@ -21,7 +21,7 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 
 import com.androidx.view.R;
 
-public class PaginationIndicatorTop extends FrameLayout implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class PaginationIndicatorTop extends FrameLayout implements AdapterView.OnItemSelectedListener {
 
     private OnChangedListener mListener;
 
@@ -212,7 +212,21 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
             param.setMargins(5, 0, 0, 0);
             textView.setLayoutParams(param);
             final int finalI = i;
-            textView.setOnClickListener(v -> listener.onClick(finalI));
+            textView.setOnClickListener(v -> {
+                listener.onClick(finalI);
+                StateListDrawable selectSelectorDrawable = new StateListDrawable();
+                selectSelectorDrawable.addState(new int[]{android.R.attr.state_selected}, mDrawableSelected);
+                selectSelectorDrawable.addState(new int[]{-android.R.attr.state_selected}, mDrawableUnselected);
+                textView.setBackgroundDrawable(selectSelectorDrawable);
+                // 点击了中间的数字指示器
+                int clickNumber = Integer.parseInt(((TextView) v).getText().toString());
+                if (clickNumber == mCurrentPagePos) {
+                    return;
+                }
+                mLastPagePos = mCurrentPagePos;
+                mCurrentPagePos = clickNumber;
+                updateState(mCurrentPagePos);
+            });
             textView.setText((start + i) + "");
             if (start + i == mCurrentPagePos) {
                 textView.setSelected(true);
@@ -238,41 +252,11 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
         }
         for (int i = 0; i < mNumberTipTextViewArray.length; i++) {
             AppCompatTextView textView = new AppCompatTextView(getContext());
-            StateListDrawable selectSelectorDrawable = new StateListDrawable();
-            selectSelectorDrawable.addState(new int[]{android.R.attr.state_selected}, mDrawableSelected);
-            selectSelectorDrawable.addState(new int[]{-android.R.attr.state_selected}, mDrawableUnselected);
-            textView.setBackgroundDrawable(selectSelectorDrawable);
             textView.setGravity(Gravity.CENTER);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
-            textView.setOnClickListener(this);
             mNumberTipTextViewArray[i] = textView;
             mNumberLlt.addView(textView);
         }
-    }
-
-    @Override
-    public void onClick(View v) {
-        int lastPos = mCurrentPagePos;
-        if (v.getId() == R.id.next_btn) {
-            if (mCurrentPagePos == mTotalPageCount)  // 已经是最后一页了
-                return;
-            mLastPagePos = mCurrentPagePos;
-            mCurrentPagePos++;
-        } else if (v.getId() == R.id.last_btn) {
-            if (mCurrentPagePos == 1)  // 已经是第一页了
-                return;
-            mLastPagePos = mCurrentPagePos;
-            mCurrentPagePos--;
-        } else {
-            // 点击了中间的数字指示器
-            int clickNumber = Integer.parseInt(((TextView) v).getText().toString());
-            if (clickNumber == mCurrentPagePos) {
-                return;
-            }
-            mLastPagePos = mCurrentPagePos;
-            mCurrentPagePos = clickNumber;
-        }
-        updateState(lastPos);
     }
 
     /**
