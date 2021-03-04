@@ -13,37 +13,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
-import androidx.appcompat.widget.AppCompatSpinner;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.LinearLayoutCompat;
 
 import com.androidx.view.R;
 
-import org.jetbrains.annotations.NotNull;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-
 public class PaginationIndicatorTop extends FrameLayout implements View.OnClickListener, AdapterView.OnItemSelectedListener {
-
-    private AppCompatSpinner mPerPageCountSpinner;
-    private ArrayAdapter<String> mPerPageCountAdapter;
 
     private OnChangedListener mListener;
 
-    private int[] mPerPageCountChoices = {5, 10, 20, 30, 50, 100};
     private int mCurrentPagePos = 1;
     private int mLastPagePos = 0;
     private int mTotalPageCount;
     private int mTotalCount;
-    private int mPerPageCount = 10;
+    private final int mPerPageCount = 10;
     private int mNumberTipShowCount;  // 奇数: 数字指示器的数量
+    private PaginationOnClickListener listener;
 
     private LinearLayoutCompat mNumberLlt;
     private AppCompatTextView[] mNumberTipTextViewArray;
@@ -62,14 +50,6 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
     public void setNumberTipShowCount(int numberTipShowCount) {
         mNumberTipShowCount = numberTipShowCount;
         updateNumberLlt();
-    }
-
-    /**
-     * 设置"x条/页"的spinner的选项源
-     */
-    public void setPerPageCountChoices(int[] perPageCountChoices) {
-        this.mPerPageCountChoices = perPageCountChoices;
-        initSpinner();
     }
 
     public void setListener(OnChangedListener mListener) {
@@ -106,8 +86,6 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
     private void init() {
         LinearLayoutCompat mControllerView = (LinearLayoutCompat) LayoutInflater.from(getContext()).inflate(R.layout.pagination_indicator_top, null);
         mNumberLlt = mControllerView.findViewById(R.id.number_llt);
-        mPerPageCountSpinner = mControllerView.findViewById(R.id.per_page_count_spinner);
-        initSpinner();
 
         LayoutParams layoutParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         addView(mControllerView, layoutParams);
@@ -118,7 +96,6 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
     /**
      * 刷新分页器子组件相关字体颜色属性等
      */
-    @SuppressWarnings("SuspiciousNameCombination")
     @SuppressLint("UseCompatLoadingForDrawables")
     void refreshView() {
         if (mSpinnerDrawable == null) {
@@ -149,23 +126,6 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
         drawableUnselected2.setStroke(2, sColor_unselected);
         enableSelectorDrawable2.addState(new int[]{android.R.attr.state_enabled}, drawableSelected2);
         enableSelectorDrawable2.addState(new int[]{-android.R.attr.state_enabled}, drawableUnselected2);
-
-        mPerPageCountSpinner.setBackground(mSpinnerDrawable);
-        mPerPageCountSpinner.getLayoutParams().height = sWidth;
-    }
-
-    private void initSpinner() {
-        if (mPerPageCountAdapter == null) {
-            mPerPageCountAdapter = new CustomArrayAdapter(getContext());
-            mPerPageCountSpinner.setAdapter(mPerPageCountAdapter);
-            mPerPageCountSpinner.setOnItemSelectedListener(this);
-        } else {
-            mPerPageCountAdapter.clear();
-        }
-        for (int perPageCountChoice : mPerPageCountChoices) {
-            mPerPageCountAdapter.add(perPageCountChoice + "条/页");
-        }
-        mPerPageCountSpinner.setSelection(0);
     }
 
     /**
@@ -251,6 +211,8 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
             LinearLayoutCompat.LayoutParams param = (LinearLayoutCompat.LayoutParams) textView.getLayoutParams();
             param.setMargins(5, 0, 0, 0);
             textView.setLayoutParams(param);
+            final int finalI = i;
+            textView.setOnClickListener(v -> listener.onClick(finalI));
             textView.setText((start + i) + "");
             if (start + i == mCurrentPagePos) {
                 textView.setSelected(true);
@@ -291,26 +253,12 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
     @Override
     public void onClick(View v) {
         int lastPos = mCurrentPagePos;
-
-        if (v.getId() == R.id.next_btn) {
-            if (mCurrentPagePos == mTotalPageCount)  // 已经是最后一页了
-                return;
-            mLastPagePos = mCurrentPagePos;
-            mCurrentPagePos++;
-        } else if (v.getId() == R.id.last_btn) {
-            if (mCurrentPagePos == 1)  // 已经是第一页了
-                return;
-            mLastPagePos = mCurrentPagePos;
-            mCurrentPagePos--;
-        } else {
-            // 点击了中间的数字指示器
-            int clickNumber = Integer.parseInt(((TextView) v).getText().toString());
-            if (clickNumber == mCurrentPagePos) {
-                return;
-            }
-            mLastPagePos = mCurrentPagePos;
-            mCurrentPagePos = clickNumber;
+        int clickNumber = Integer.parseInt(((TextView) v).getText().toString());
+        if (clickNumber == mCurrentPagePos) {
+            return;
         }
+        mLastPagePos = mCurrentPagePos;
+        mCurrentPagePos = clickNumber;
         updateState(lastPos);
     }
 
@@ -319,7 +267,6 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
      */
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        mPerPageCount = mPerPageCountChoices[position];
         if (this.mListener != null) {
             mListener.onPerPageCountChanged(mPerPageCount);
         }
@@ -358,75 +305,12 @@ public class PaginationIndicatorTop extends FrameLayout implements View.OnClickL
         void onPerPageCountChanged(int perPageCount);
     }
 
-    // 为了自定义Spinner字体颜色等
-    static class CustomArrayAdapter extends ArrayAdapter<String> {
-        private final Context mContext;
-        private List<String> mStringArray = new ArrayList<>();
+    public interface PaginationOnClickListener{
+        void onClick(int position);
+    }
 
-        public CustomArrayAdapter(Context context) {
-            super(context, android.R.layout.simple_spinner_item);
-            mContext = context;
-        }
-
-        @SuppressWarnings({"unused", "RedundantSuppression"})
-        public CustomArrayAdapter(Context context, List<String> stringArray) {
-            super(context, android.R.layout.simple_spinner_item, stringArray);
-            mContext = context;
-            mStringArray = stringArray;
-        }
-
-        @Override
-        public void add(String object) {
-            super.add(object);
-            mStringArray.add(object);
-        }
-
-        @Override
-        public void addAll(String... items) {
-            super.addAll(items);
-            mStringArray.addAll(Arrays.asList(items));
-        }
-
-        @Override
-        public void addAll(Collection<? extends String> collection) {
-            super.addAll(collection);
-            mStringArray.addAll(collection);
-        }
-
-        @Override
-        public View getDropDownView(int position, View convertView, @NotNull ViewGroup parent) {
-            //修改Spinner展开后的字体颜色
-            if (convertView == null) {
-                LayoutInflater inflater = LayoutInflater.from(mContext);
-                convertView = inflater.inflate(android.R.layout.simple_spinner_dropdown_item, parent, false);
-            }
-
-            //此处text1是Spinner默认的用来显示文字的TextView
-            TextView tv = convertView.findViewById(android.R.id.text1);
-            tv.setText(mStringArray.get(position));
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
-            tv.setTextColor(sColor_selected);
-
-            return convertView;
-
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            // 修改Spinner选择后结果的字体颜色
-            if (convertView == null) {
-                LayoutInflater inflater = LayoutInflater.from(mContext);
-                convertView = inflater.inflate(android.R.layout.simple_spinner_item, parent, false);
-            }
-
-            //此处text1是Spinner默认的用来显示文字的TextView
-            TextView tv = convertView.findViewById(android.R.id.text1);
-            tv.setText(mStringArray.get(position));
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, sTextSize);
-            tv.setTextColor(sColor_selected);
-            return convertView;
-        }
-
+    public void setPaginationOnClickListener(PaginationOnClickListener listener) {
+        this.listener = listener;
     }
 
     /**

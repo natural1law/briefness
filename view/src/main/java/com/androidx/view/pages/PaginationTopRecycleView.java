@@ -36,6 +36,10 @@ public class PaginationTopRecycleView extends LinearLayout implements Pagination
         this.mListener = listener;
     }
 
+    public void setPagination(PaginationIndicatorTop.PaginationOnClickListener listener){
+        mPaginationIndicatorView.setPaginationOnClickListener(listener);
+    }
+
     public PaginationTopRecycleView(Context context) {
         this(context, null);
     }
@@ -87,14 +91,6 @@ public class PaginationTopRecycleView extends LinearLayout implements Pagination
 
     public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
         mRecycleView.setLayoutManager(layoutManager);
-    }
-
-    /**
-     *
-     * 设置"x条/页"的spinner的选项源
-     */
-    public void setPerPageCountChoices(int[] perPageCountChoices) {
-        mPaginationIndicatorView.setPerPageCountChoices(perPageCountChoices);
     }
 
     /**
@@ -166,7 +162,9 @@ public class PaginationTopRecycleView extends LinearLayout implements Pagination
         /**
          * 当"x条/每页"选择改变时触发的回调
          */
-        void onPerPageCountChanged(int perPageCount);
+        default void onPerPageCountChanged(int perPageCount) {
+
+        }
     }
 
     /**
