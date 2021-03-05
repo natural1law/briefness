@@ -74,9 +74,9 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     /**
      * 设置TextView的值
      */
-    public ViewHolder setTextView(@IdRes int viewId, String text) {
+    public <P> ViewHolder setTextView(@IdRes int viewId, P text) {
         AppCompatTextView tv = getView(viewId);
-        tv.setText(text);
+        tv.setText(String.valueOf(text));
         return this;
     }
 
@@ -222,6 +222,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         mHiddenAction.setDuration(1000);
         return mHiddenAction;
     }
+
     /**
      * 从控件的底部移动到控件所在位置
      */
