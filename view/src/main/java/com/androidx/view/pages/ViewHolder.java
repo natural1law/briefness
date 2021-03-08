@@ -128,11 +128,24 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         ViewGroup view = getView(viewId);
         Handler handler = new Handler(Looper.getMainLooper());
         if (visible) {
-            view.setAnimation(moveToViewBottom());
-            handler.postDelayed(() -> view.setVisibility(View.VISIBLE), 100);
+            view.setAnimation(moveToViewBottom(500));
+            handler.postDelayed(() -> view.setVisibility(View.VISIBLE), 800);
         } else {
-            view.setAnimation(moveToViewLocation());
-            handler.postDelayed(() -> view.setVisibility(View.GONE), 900);
+            view.setAnimation(moveToViewLocation(500));
+            handler.postDelayed(() -> view.setVisibility(View.GONE), 200);
+        }
+        return this;
+    }
+
+    public ViewHolder setVisible(@IdRes int viewId, boolean visible, Integer... delay) {
+        ViewGroup view = getView(viewId);
+        Handler handler = new Handler(Looper.getMainLooper());
+        if (visible) {
+            view.setAnimation(moveToViewBottom(delay[0]));
+            handler.postDelayed(() -> view.setVisibility(View.VISIBLE), delay[1]);
+        } else {
+            view.setAnimation(moveToViewLocation(delay[0]));
+            handler.postDelayed(() -> view.setVisibility(View.GONE), delay[2]);
         }
         return this;
     }
@@ -212,27 +225,31 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     /**
      * 从控件所在位置移动到控件的底部
+     *
+     * @param delay 动画时间
      */
-    public static TranslateAnimation moveToViewBottom() {
+    public static TranslateAnimation moveToViewBottom(int delay) {
         TranslateAnimation mHiddenAction = new TranslateAnimation(
                 Animation.RELATIVE_TO_SELF, 0.0f,
                 Animation.RELATIVE_TO_SELF, 0.0f,
                 Animation.RELATIVE_TO_SELF, 0.0f,
                 Animation.RELATIVE_TO_SELF, 1.0f);
-        mHiddenAction.setDuration(1000);
+        mHiddenAction.setDuration(delay);
         return mHiddenAction;
     }
 
     /**
      * 从控件的底部移动到控件所在位置
+     *
+     * @param delay 动画时间
      */
-    public static TranslateAnimation moveToViewLocation() {
+    public static TranslateAnimation moveToViewLocation(int delay) {
         TranslateAnimation mHiddenAction = new TranslateAnimation(
                 Animation.RELATIVE_TO_SELF, 0.0f,
                 Animation.RELATIVE_TO_SELF, 0.0f,
                 Animation.RELATIVE_TO_SELF, 1.0f,
                 Animation.RELATIVE_TO_SELF, 0.0f);
-        mHiddenAction.setDuration(1000);
+        mHiddenAction.setDuration(delay);
         return mHiddenAction;
     }
 
