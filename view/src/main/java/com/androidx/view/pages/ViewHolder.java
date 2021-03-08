@@ -252,4 +252,5 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         mHiddenAction.setDuration(delay);
         return mHiddenAction;
     }
+
 }
