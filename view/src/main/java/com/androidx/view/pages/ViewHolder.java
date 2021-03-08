@@ -157,6 +157,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     }
 
     public ViewHolder setTypeface(Typeface typeface, @IdRes int... viewIds) {
+
         for (int viewId : viewIds) {
             AppCompatTextView view = getView(viewId);
             view.setTypeface(typeface);
