@@ -1,8 +1,12 @@
 package com.androidx.http.net.listener;
 
+import android.util.Log;
+
 public interface BytesCallback {
 
-    void onFailure(String msg);
+    default void onFailure(String msg) {
+        Log.e("接口异常", msg);
+    }
 
     void onSuccess(byte[] data);
 
