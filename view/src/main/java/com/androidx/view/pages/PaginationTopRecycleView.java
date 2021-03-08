@@ -336,7 +336,9 @@ public class PaginationTopRecycleView extends LinearLayout implements Pagination
              */
             void onItemClick(View view, RecyclerView.ViewHolder holder, int position);
 
-            boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position);
+            default boolean onItemLongClick(View view, RecyclerView.ViewHolder holder, int position) {
+                return false;
+            }
         }
 
         public void setOnItemClickListener(OnItemClickListener onItemClickListener) {

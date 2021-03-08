@@ -145,7 +145,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
             handler.postDelayed(() -> view.setVisibility(View.VISIBLE), delay[1]);
         } else {
             view.setAnimation(moveToViewLocation(delay[0]));
-            handler.postDelayed(() -> view.setVisibility(View.GONE), delay[2]);
+            handler.postDelayed(() -> view.setVisibility(View.GONE), delay[1]);
         }
         return this;
     }
@@ -247,7 +247,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         TranslateAnimation mHiddenAction = new TranslateAnimation(
                 Animation.RELATIVE_TO_SELF, 0.0f,
                 Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, 1.0f,
+                Animation.RELATIVE_TO_SELF, 2.0f,
                 Animation.RELATIVE_TO_SELF, 0.0f);
         mHiddenAction.setDuration(delay);
         return mHiddenAction;
