@@ -693,8 +693,9 @@ public final class DialogTools extends AppCompatDialog {
          *
          * @param listener 事件
          */
-        public void setListener(OnEventTriggerListener listener) {
+        public Builder setListener(OnEventTriggerListener listener) {
             this.listener = listener;
+            return newBuilder;
         }
 
         /**
@@ -702,8 +703,9 @@ public final class DialogTools extends AppCompatDialog {
          *
          * @param totalTime 总时长
          */
-        public void setTotalTime(int totalTime) {
+        public Builder setTotalTime(int totalTime) {
             this.totalTime = totalTime;
+            return newBuilder;
         }
 
         /**
@@ -711,8 +713,9 @@ public final class DialogTools extends AppCompatDialog {
          *
          * @param cdPrefix 前缀
          */
-        public void setCdPrefix(String cdPrefix) {
+        public Builder setCdPrefix(String cdPrefix) {
             this.cdPrefix = cdPrefix;
+            return newBuilder;
         }
 
         /**
@@ -720,8 +723,9 @@ public final class DialogTools extends AppCompatDialog {
          *
          * @param cdSuffix 后缀
          */
-        public void setCdSuffix(String cdSuffix) {
+        public Builder setCdSuffix(String cdSuffix) {
             this.cdSuffix = cdSuffix;
+            return newBuilder;
         }
 
         @NotNull
