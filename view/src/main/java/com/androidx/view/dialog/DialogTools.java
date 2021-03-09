@@ -742,7 +742,9 @@ public final class DialogTools extends AppCompatDialog {
      */
     public interface OnEventTriggerListener {
 
-        void ok(DialogTools dialog);
+        default void ok(DialogTools dialog) {
+
+        }
 
         default void ok(DialogTools dialog, String param) {
 
