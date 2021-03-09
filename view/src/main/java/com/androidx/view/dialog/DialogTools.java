@@ -118,6 +118,7 @@ public final class DialogTools extends AppCompatDialog {
             }
             window.setWindowAnimations(animations);
         }
+
         try {
             titleView();
             contentView();
