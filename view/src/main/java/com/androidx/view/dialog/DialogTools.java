@@ -117,6 +117,7 @@ public final class DialogTools extends AppCompatDialog {
                 params.gravity = gravity;
             }
             window.setWindowAnimations(animations);
+
         }
         try {
             titleView();
