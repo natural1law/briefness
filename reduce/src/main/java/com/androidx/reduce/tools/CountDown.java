@@ -12,6 +12,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatTextView;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 /**
  * @date 2021/02/19
  * @see CountDownTimer 倒计时工具类
@@ -27,7 +30,8 @@ public final class CountDown extends CountDownTimer {
         super(millisInFuture, countDownInterval);
     }
 
-    private static CountDown builds(Builder builder) {
+    @Contract("_ -> new")
+    private static @NotNull CountDown builds(Builder builder) {
         view = builder.view;
         finishWordage = builder.finishWordage;
         prefixWordage = builder.prefixWordage;
@@ -35,7 +39,8 @@ public final class CountDown extends CountDownTimer {
         return new CountDown(builder.millisInFuture, builder.countDownInterval);
     }
 
-    public static Builder builder() {
+    @Contract(" -> new")
+    public static @NotNull Builder builder() {
         try {
             synchronized (Builder.class) {
                 return new Builder();
@@ -47,7 +52,6 @@ public final class CountDown extends CountDownTimer {
 
     @Override
     @SuppressLint("SetTextI18n")
-    @SuppressWarnings("ConstantConditions")
     public void onTick(long millisUntilFinished) {
         //防止计时过程中重复点击
         if (view instanceof Button) {
@@ -68,7 +72,6 @@ public final class CountDown extends CountDownTimer {
     }
 
     @Override
-    @SuppressWarnings("ConstantConditions")
     public void onFinish() {
         if (view instanceof Button) {
             ((Button) view).setClickable(true);

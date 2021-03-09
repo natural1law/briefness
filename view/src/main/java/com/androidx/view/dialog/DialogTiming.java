@@ -67,7 +67,7 @@ public final class DialogTiming extends AppCompatDialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_timing);
+        setContentView(R.layout.dialog5);
         dialog = this;
         AppCompatTextView contentView = findViewById(R.id.dialog_content);
         ZLoadingTextView countDownView = findViewById(R.id.dialog_timing_animation);
@@ -88,7 +88,7 @@ public final class DialogTiming extends AppCompatDialog {
             contentView.setTextSize(contentTextSize);
         }
         //倒计时显示
-        new CountDownTimer(count, 1000) {
+        new CountDownTimer(count * 1000, 1000) {
             @Override
             public void onTick(long m) {
                 if (countDownView != null) {

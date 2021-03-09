@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings({"unused", "RedundantSuppression"})
-public final class AlertDialog {
+public final class DialogAlert {
 
     private final Context context;
     private Dialog dialog;
@@ -54,13 +54,13 @@ public final class AlertDialog {
         NORMAL, PROGRESS, BOTTOM, CUSTOM_DIALOG
     }
 
-    public static AlertDialog build(Context context) {
-        synchronized (AlertDialog.class) {
-            return new AlertDialog(context);
+    public static DialogAlert build(Context context) {
+        synchronized (DialogAlert.class) {
+            return new DialogAlert(context);
         }
     }
 
-    private AlertDialog(Context context) {
+    private DialogAlert(Context context) {
         this.context = context;
         WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 
@@ -74,12 +74,12 @@ public final class AlertDialog {
     /**
      * 默认NORMAL类型
      */
-    public AlertDialog builder() {
+    public DialogAlert builder() {
         initNormalType();
         return this;
     }
 
-    public AlertDialog builder(Type type) {
+    public DialogAlert builder(Type type) {
         this.mType = type;
         switch (type) {
             case NORMAL:
@@ -95,7 +95,7 @@ public final class AlertDialog {
         return this;
     }
 
-    public AlertDialog builder(Type type, int resource) {
+    public DialogAlert builder(Type type, int resource) {
         this.mType = type;
         if (type == Type.CUSTOM_DIALOG) {
             initCustomDialog(resource);
@@ -194,7 +194,7 @@ public final class AlertDialog {
         void initView(View view, Dialog dialog);
     }
 
-    public AlertDialog initDialogLayout(OnInitDialogLayoutListener onInitDialogLayoutListener) {
+    public DialogAlert initDialogLayout(OnInitDialogLayoutListener onInitDialogLayoutListener) {
         onInitDialogLayoutListener.initView(mDialogLayout, dialog);
         return this;
     }
@@ -202,7 +202,7 @@ public final class AlertDialog {
     /**
      * 设置标题
      */
-    public AlertDialog setProgressText(String msg) {
+    public DialogAlert setProgressText(String msg) {
         if (mProMsgText != null) {
             mProMsgText.setVisibility(View.VISIBLE);
             mProMsgText.setText(msg == null ? "" : msg);
@@ -210,7 +210,7 @@ public final class AlertDialog {
         return this;
     }
 
-    public AlertDialog setProgressTextGone() {
+    public DialogAlert setProgressTextGone() {
         if (mProMsgText != null) mProMsgText.setVisibility(View.GONE);
         return this;
     }
@@ -219,7 +219,7 @@ public final class AlertDialog {
     /**
      * 设置标题
      */
-    public AlertDialog setTitle(String title) {
+    public DialogAlert setTitle(String title) {
         showTitle = true;
         if (txt_title != null) txt_title.setText(title == null ? "" : title);
         return this;
@@ -228,7 +228,7 @@ public final class AlertDialog {
     /**
      * 设置内容
      */
-    public AlertDialog setMsg(String msg) {
+    public DialogAlert setMsg(String msg) {
         showMsg = true;
         if (txt_msg != null) txt_msg.setText(msg == null ? "" : msg);
         return this;
@@ -237,7 +237,7 @@ public final class AlertDialog {
     /**
      * 设置false点击屏幕或物理返回键，dialog不消失
      */
-    public AlertDialog setCancelable(boolean cancel) {
+    public DialogAlert setCancelable(boolean cancel) {
         dialog.setCancelable(cancel);
         return this;
     }
@@ -245,7 +245,7 @@ public final class AlertDialog {
     /**
      * 设置false点击屏幕：dialog不消失；点击物理返回键：dialog消失
      */
-    public AlertDialog setCanceledOnTouchOutside(boolean cancel) {
+    public DialogAlert setCanceledOnTouchOutside(boolean cancel) {
         dialog.setCanceledOnTouchOutside(cancel);
         return this;
     }
@@ -253,7 +253,7 @@ public final class AlertDialog {
     /**
      * 设置确定键及监听事件
      */
-    public AlertDialog setPositiveButton(String text,
+    public DialogAlert setPositiveButton(String text,
                                          final View.OnClickListener listener) {
         showPosBtn = true;
         btn_pos.setText(TextUtils.isEmpty(text) ? "确定" : text);
@@ -267,7 +267,7 @@ public final class AlertDialog {
     /**
      * 设置确定监听事件
      */
-    public AlertDialog setPositiveButton(final View.OnClickListener listener) {
+    public DialogAlert setPositiveButton(final View.OnClickListener listener) {
         showPosBtn = true;
         btn_pos.setText("确定");
         btn_pos.setOnClickListener(v -> {
@@ -280,7 +280,7 @@ public final class AlertDialog {
     /**
      * 设置取消键及监听事件
      */
-    public AlertDialog setNegativeButton(String text, final View.OnClickListener listener) {
+    public DialogAlert setNegativeButton(String text, final View.OnClickListener listener) {
         showNegBtn = true;
         if (btn_neg != null) {
             btn_neg.setText(TextUtils.isEmpty(text) ? "取消" : text);
@@ -295,7 +295,7 @@ public final class AlertDialog {
     /**
      * 设置取消监听事件
      */
-    public AlertDialog setNegativeButton(final View.OnClickListener listener) {
+    public DialogAlert setNegativeButton(final View.OnClickListener listener) {
         showNegBtn = true;
         if (btn_neg != null) {
             btn_neg.setText("取消");
@@ -352,7 +352,7 @@ public final class AlertDialog {
     /**
      * 条目点击事件
      */
-    public AlertDialog setOnItemClickListener(final OnAlertItemClickListener onAlertItemClickListener) {
+    public DialogAlert setOnItemClickListener(final OnAlertItemClickListener onAlertItemClickListener) {
         if (mAlertViewAdapter != null) {
             mAlertViewAdapter.setOnItemClickLitener((view, position) -> {
                 onAlertItemClickListener.onItemClick(view, position);
@@ -367,19 +367,19 @@ public final class AlertDialog {
      * @param strItem 条目名称
      * @param color   条目字体颜色，设置null则默认蓝色
      */
-    public AlertDialog addItem(String strItem, int color) {
+    public DialogAlert addItem(String strItem, int color) {
         if (mAlertViewItems != null)
             mAlertViewItems.add(new ItemBean(strItem, color));
         return this;
     }
 
-    public AlertDialog addItem(String strItem) {
+    public DialogAlert addItem(String strItem) {
         if (mAlertViewItems != null)
             mAlertViewItems.add(new ItemBean(strItem, 0));
         return this;
     }
 
-    public AlertDialog addItem(String[] strItem) {
+    public DialogAlert addItem(String[] strItem) {
         if (mAlertViewItems != null) {
             for (String s : strItem)
                 mAlertViewItems.add(new ItemBean(s, 0));
@@ -387,7 +387,7 @@ public final class AlertDialog {
         return this;
     }
 
-    public AlertDialog addItem(List<ItemBean> strItem) {
+    public DialogAlert addItem(List<ItemBean> strItem) {
         if (mAlertViewItems != null && strItem != null) {
             mAlertViewItems.addAll(strItem);
         }
