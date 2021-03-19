@@ -504,11 +504,11 @@ public final class DialogTools extends AppCompatDialog {
         public Builder setDimension(@NotNull int... values) {
             switch (values.length) {
                 case 1:
-                    this.height = values[0];
+                    this.width = values[0];
                     break;
                 case 2:
-                    this.height = values[0];
-                    this.width = values[1];
+                    this.width = values[0];
+                    this.height = values[1];
                     break;
             }
             return newBuilder;
