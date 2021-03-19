@@ -4,8 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Paint;
 import android.graphics.Typeface;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.util.Linkify;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -13,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
-import android.view.animation.TranslateAnimation;
 import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -128,28 +125,20 @@ public class ViewHolder extends RecyclerView.ViewHolder {
 
     public ViewHolder setVisible(@IdRes int viewId, boolean visible) {
         ViewGroup view = getView(viewId);
-        Handler handler = new Handler(Looper.getMainLooper());
         if (visible) {
             AnimUtil.expand(view);
-//            view.setAnimation(moveToViewBottom(500));
-//            handler.postDelayed(() -> view.setVisibility(View.VISIBLE), 800);
         } else {
             AnimUtil.collapse(view);
-//            view.setAnimation(moveToViewLocation(500));
-//            handler.postDelayed(() -> view.setVisibility(View.GONE), 200);
         }
         return this;
     }
 
     public ViewHolder setVisible(@IdRes int viewId, boolean visible, Integer... delay) {
         ViewGroup view = getView(viewId);
-        Handler handler = new Handler(Looper.getMainLooper());
         if (visible) {
-            view.setAnimation(moveToViewBottom(delay[0]));
-            handler.postDelayed(() -> view.setVisibility(View.VISIBLE), delay[1]);
+            AnimUtil.expand(view, delay[0]);
         } else {
-            view.setAnimation(moveToViewLocation(delay[0]));
-            handler.postDelayed(() -> view.setVisibility(View.GONE), delay[1]);
+            AnimUtil.collapse(view, delay[1]);
         }
         return this;
     }
@@ -228,38 +217,11 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     }
 
     /**
-     * 从控件所在位置移动到控件的底部
-     *
-     * @param delay 动画时间
+     * 动画工具类
      */
-    public static TranslateAnimation moveToViewBottom(int delay) {
-        TranslateAnimation mHiddenAction = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, 1.0f);
-        mHiddenAction.setDuration(delay);
-        return mHiddenAction;
-    }
-
-    /**
-     * 从控件的底部移动到控件所在位置
-     *
-     * @param delay 动画时间
-     */
-    public static TranslateAnimation moveToViewLocation(int delay) {
-        TranslateAnimation mHiddenAction = new TranslateAnimation(
-                Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, 2.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f);
-        mHiddenAction.setDuration(delay);
-        return mHiddenAction;
-    }
-
     public static class AnimUtil {
 
-        public static void expand(final View view) {
+        public static void expand(final View view, int integer) {
             view.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             final int viewHeight = view.getMeasuredHeight();
             view.getLayoutParams().height = 0;
@@ -276,12 +238,12 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                     view.requestLayout();
                 }
             };
-            animation.setDuration(500);
+            animation.setDuration(integer);
             animation.setInterpolator(new FastOutLinearInInterpolator());
             view.startAnimation(animation);
         }
 
-        public static void collapse(final View view) {
+        public static void collapse(final View view, Integer integer) {
             view.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             final int viewHeight = view.getMeasuredHeight();
 
@@ -296,9 +258,67 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                     }
                 }
             };
-            animation.setDuration(500);
+            animation.setDuration(integer);
             animation.setInterpolator(new FastOutLinearInInterpolator());
             view.startAnimation(animation);
+        }
+
+        //展开
+        public static void expand(final View v) {
+            int matchParentMeasureSpec = View.MeasureSpec.makeMeasureSpec(((View) v.getParent()).getWidth(), View.MeasureSpec.EXACTLY);
+            int wrapContentMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+            v.measure(matchParentMeasureSpec, wrapContentMeasureSpec);
+            final int targetHeight = v.getMeasuredHeight();
+
+            // Older versions of android (pre API 21) cancel animations for views with a height of 0.
+            v.getLayoutParams().height = 1;
+            v.setVisibility(View.VISIBLE);
+            Animation a = new Animation()
+            {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    v.getLayoutParams().height = interpolatedTime == 1
+                            ? ViewGroup.LayoutParams.WRAP_CONTENT
+                            : (int)(targetHeight * interpolatedTime);
+                    v.requestLayout();
+                }
+
+                @Override
+                public boolean willChangeBounds() {
+                    return true;
+                }
+            };
+
+            // Expansion speed of 1dp/ms
+            a.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density));
+            v.startAnimation(a);
+        }
+
+        //收起
+        public static void collapse(final View v) {
+            final int initialHeight = v.getMeasuredHeight();
+
+            Animation a = new Animation()
+            {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    if(interpolatedTime == 1){
+                        v.setVisibility(View.GONE);
+                    }else{
+                        v.getLayoutParams().height = initialHeight - (int)(initialHeight * interpolatedTime);
+                        v.requestLayout();
+                    }
+                }
+
+                @Override
+                public boolean willChangeBounds() {
+                    return true;
+                }
+            };
+
+            // Collapse speed of 1dp/ms
+            a.setDuration((int)(initialHeight / v.getContext().getResources().getDisplayMetrics().density));
+            v.startAnimation(a);
         }
     }
 }

@@ -42,6 +42,10 @@ public final class DialogTools extends AppCompatDialog {
      */
     private final int bdr;
     private final String[] datas;
+    private final int left;
+    private final int right;
+    private final int top;
+    private final int bottom;
     private final int width;
     private final int height;
     private final int layout;
@@ -139,8 +143,6 @@ public final class DialogTools extends AppCompatDialog {
         if (window != null) {
             window.setBackgroundDrawableResource(bdr);
             WindowManager.LayoutParams params = window.getAttributes();
-            params.width = width;
-            params.height = height;
             if (gravity != -1) {
                 params.gravity = gravity;
             }
@@ -154,8 +156,8 @@ public final class DialogTools extends AppCompatDialog {
             if (windowDrawable != -1) {
                 layout.setBackground(getContext().getResources().getDrawable(windowDrawable, getContext().getTheme()));
             }
+            layout.layout(left, top, right, bottom);
         }
-
         try {
             titleView();
             contentView();
@@ -190,6 +192,12 @@ public final class DialogTools extends AppCompatDialog {
                 contentView.setTextColor(getContext().getResources().getColor(contentColorId, getContext().getTheme()));
             } else {
                 contentView.setTextColor(contentColor);
+            }
+            if (width != -1) {
+                contentView.setWidth(width);
+            }
+            if (height != -1) {
+                contentView.setHeight(height);
             }
         }
     }
@@ -339,6 +347,10 @@ public final class DialogTools extends AppCompatDialog {
         this.canceled = builder.canceled;
         this.cancelable = builder.cancelable;
         this.bdr = builder.bdr;
+        this.left = builder.left;
+        this.right = builder.right;
+        this.top = builder.top;
+        this.bottom = builder.bottom;
         this.width = builder.width;
         this.height = builder.height;
         this.gravity = builder.gravity;
@@ -387,8 +399,12 @@ public final class DialogTools extends AppCompatDialog {
         private int layout;
         private int style = R.style.dialogStyle;
         private int animations = R.style.animation;
-        private int width = -1;
-        private int height = -1;
+        private int left = 0;
+        private int right = 0;
+        private int top = 0;
+        private int bottom = 0;
+        private int width;
+        private int height;
         private int gravity = -1;
         private int windowColor = -1;
         private int windowDrawable = -1;
@@ -450,13 +466,26 @@ public final class DialogTools extends AppCompatDialog {
         }
 
         /**
-         * 设置二次元维度
+         * 设置布局间距
          *
-         * @param dimension 维度值（宽高）
+         * @param dimension 维度值
+         */
+        public Builder setMargin(@NotNull int... dimension) {
+            this.left = dimension[0];
+            this.right = dimension[1];
+            this.top = dimension[2];
+            this.bottom = dimension[3];
+            return newBuilder;
+        }
+
+        /**
+         * 设置布局填充
+         *
+         * @param dimension 维度值
          */
         public Builder setDimension(@NotNull int... dimension) {
-            this.width = dimension[0];
-            this.height = dimension[1];
+            this.height = dimension[0];
+            this.width = dimension[1];
             return newBuilder;
         }
 
