@@ -5,6 +5,8 @@ import android.os.Parcelable
 import com.androidx.http.base.BaseBean
 import com.androidx.http.net.listener.BytesCallback
 import com.androidx.http.net.listener.StringCallback
+import java.io.ObjectInput
+import java.io.ObjectOutput
 
 class MsgModule() : BaseBean() {
 
@@ -31,6 +33,20 @@ class MsgModule() : BaseBean() {
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(msg)
         parcel.writeByteArray(msg1)
+    }
+
+    override fun writeExternal(out: ObjectOutput?) {
+        out!!.writeUTF(msg)
+        out.write(msg1)
+        out.writeObject(stringCallback)
+        out.writeObject(stringCallback)
+    }
+
+    override fun readExternal(`in`: ObjectInput?) {
+        `in`!!.readUTF()
+        `in`.readByte()
+        `in`.readObject()
+        `in`.readObject()
     }
 
     companion object CREATOR : Parcelable.Creator<MsgModule> {

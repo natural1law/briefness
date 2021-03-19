@@ -3,10 +3,12 @@ package com.androidx.http.module
 import android.os.Parcel
 import android.os.Parcelable
 import com.androidx.http.base.BaseBean
+import java.io.ObjectInput
+import java.io.ObjectOutput
 
 data class ResModule(
-    val msg: String,
-    val user: String
+    val msg: String?,
+    val user: String?
 ) : BaseBean() {
 
     constructor(parcel: Parcel) : this(
@@ -17,6 +19,16 @@ data class ResModule(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(msg)
         parcel.writeString(user)
+    }
+
+    override fun writeExternal(out: ObjectOutput?) {
+        out!!.writeUTF(msg)
+        out.writeUTF(user)
+    }
+
+    override fun readExternal(`in`: ObjectInput?) {
+        `in`!!.readUTF()
+        `in`.readUTF()
     }
 
     companion object CREATOR : Parcelable.Creator<ResModule> {

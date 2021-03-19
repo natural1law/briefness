@@ -4,35 +4,29 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp">
+    android:padding="10dp">
 
-
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_content"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:background="@drawable/alert_bg"
-        android:orientation="vertical">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_content"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:overScrollMode="never" />
-
-    </androidx.appcompat.widget.LinearLayoutCompat>
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        tools:itemCount="2"
+        tools:listitem="@layout/item_dialog6" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/txt_cancel"
+        android:id="@+id/dialog_quit"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="45dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:background="@drawable/alert_bottom_single_selector"
         android:gravity="center"
         android:text="取消"
         android:textColor="#006cff"
-        android:textSize="17sp"
+        android:textSize="16sp"
         tools:ignore="HardcodedText" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

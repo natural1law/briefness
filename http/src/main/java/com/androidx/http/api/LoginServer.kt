@@ -9,8 +9,8 @@ import android.os.PowerManager.WakeLock
 import android.provider.Settings
 import android.provider.Telephony.Carriers
 import android.provider.Telephony.Mms.Addr
+import com.androidx.http.net.WebSocketRequest
 import com.androidx.http.use.NetRequest
-import com.androidx.http.use.WebSocketRequest
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 

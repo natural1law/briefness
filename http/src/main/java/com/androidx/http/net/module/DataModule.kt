@@ -6,7 +6,10 @@ import com.androidx.http.base.BaseBean
 import com.androidx.http.net.listener.LoginCallback
 import com.androidx.http.net.listener.MsgCallback
 import okio.ByteString
+import java.io.ObjectInput
+import java.io.ObjectOutput
 
+@Suppress("JoinDeclarationAndAssignment")
 class DataModule() : BaseBean() {
 
     lateinit var msg: String
@@ -34,6 +37,20 @@ class DataModule() : BaseBean() {
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(msg)
+    }
+
+    override fun writeExternal(out: ObjectOutput?) {
+        out!!.writeUTF(msg)
+        out.write(bytes.toByteArray())
+        out.writeObject(loginCallback)
+        out.writeObject(msgCallback)
+    }
+
+    override fun readExternal(`in`: ObjectInput?) {
+        `in`!!.readUTF()
+        `in`.read(bytes.toByteArray())
+        `in`.readObject()
+        `in`.readObject()
     }
 
     override fun describeContents(): Int {

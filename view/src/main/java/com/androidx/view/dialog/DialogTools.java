@@ -21,8 +21,11 @@ import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatDialog;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidx.view.R;
+import com.androidx.view.dialog.adapter.CameraAdapter;
 import com.zyao89.view.zloading.ZLoadingTextView;
 
 import org.jetbrains.annotations.Contract;
@@ -39,14 +42,18 @@ public final class DialogTools extends AppCompatDialog {
      * 基础参数
      */
     private final int bdr;
+    private final String[] datas;
     private final int width;
     private final int height;
     private final int layout;
     private final int gravity;
+    private final int windowColor;
+    private final int windowDrawable;
     private final int animations;
     private final boolean canceled;
     private final boolean cancelable;
     private final OnEventTriggerListener listener;
+    private final CameraAdapter.OnClickCameraAdapterListener adapterListener;
     /**
      * 内容模块参数
      */
@@ -92,13 +99,37 @@ public final class DialogTools extends AppCompatDialog {
      * 布局文件
      */
     public static final class LayoutResId {
-        public static final int A = R.layout.dialog1;
-        public static final int B = R.layout.dialog2;
-        public static final int C = R.layout.dialog3;
-        public static final int D = R.layout.dialog4;
-        public static final int E = R.layout.dialog5;
+
+        private LayoutResId() {
+        }
+
+        /**
+         * 普通单点消息提示弹窗
+         */
+        public static final int ALERT = R.layout.dialog1;
+        /**
+         * 标准消息提示弹窗（样式1）
+         */
+        public static final int TIGHTNESS = R.layout.dialog2;
+        /**
+         * 标准消息提示弹窗（样式2）
+         */
+        public static final int RELAX = R.layout.dialog3;
+        /**
+         * 消息输入提示窗
+         */
+        public static final int INPUT = R.layout.dialog4;
+        /**
+         * 倒计时提示弹窗
+         */
+        public static final int COUNT_DOWN = R.layout.dialog5;
+        /**
+         * 相机相册底部弹窗
+         */
+        public static final int CAMERA = R.layout.dialog6;
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,16 +138,19 @@ public final class DialogTools extends AppCompatDialog {
         setCancelable(cancelable);
         Window window = this.getWindow();
         if (window != null) {
-            FrameLayout layout = findViewById(R.id.dialog_frame);
             window.setBackgroundDrawableResource(bdr);
             WindowManager.LayoutParams params = window.getAttributes();
             params.width = width;
             params.height = height;
-            layout.setLayoutParams(params);
             if (gravity != -1) {
                 params.gravity = gravity;
             }
             window.setWindowAnimations(animations);
+        }
+        FrameLayout layout = findViewById(R.id.dialog_frame);
+        if (layout != null) {
+            layout.setBackgroundColor(windowColor);
+            layout.setBackground(getContext().getResources().getDrawable(windowDrawable, getContext().getTheme()));
         }
 
         try {
@@ -125,6 +159,7 @@ public final class DialogTools extends AppCompatDialog {
             affirmView();
             quitView();
             timingView();
+            cameraView();
         } catch (Exception e) {
             Log.e("dialogTools异常", String.valueOf(e.getMessage()), e);
         }
@@ -183,6 +218,47 @@ public final class DialogTools extends AppCompatDialog {
     }
 
     /**
+     * 倒计时布局
+     */
+    private void timingView() {
+        if (layout == LayoutResId.COUNT_DOWN) {
+            ZLoadingTextView countDownView = findViewById(R.id.dialog_timing_animation);
+            CountDownTimer countDownTimer = new CountDownTimer(totalTime, 1000) {
+                @Override
+                public void onTick(long m) {
+                    if (countDownView != null) {
+                        countDownView.setText(cdPrefix + (m / 1000 + 1) + "秒" + cdSuffix);
+                    }
+                }
+
+                @Override
+                public void onFinish() {
+                    cancel();
+                }
+            };
+            countDownTimer.start();
+        }
+    }
+
+    /**
+     * 相机相册布局
+     */
+    private void cameraView() {
+        if (layout == LayoutResId.CAMERA) {
+            RecyclerView rv = findViewById(R.id.rv_content);
+            CameraAdapter adapter = new CameraAdapter();
+            if (rv != null) {
+                rv.setLayoutManager(new LinearLayoutManager(getContext()));
+                rv.setAdapter(adapter);
+            }
+            adapter.setData(datas);
+            adapter.setTextColor(contentColor);
+            adapter.setTextSize(contentSize);
+            adapter.setListener(adapterListener);
+        }
+    }
+
+    /**
      * 确认按钮布局
      */
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -210,38 +286,16 @@ public final class DialogTools extends AppCompatDialog {
                 affirmView.setTextColor(affirmColor);
             }
             if (listener != null) {
-                affirmView.setOnClickListener(v -> listener.ok(this));
-            }
-            if (paramView != null && !paramView.getText().toString().equals("")) {
-                String param = paramView.getText().toString().trim();
-                affirmView.setOnClickListener(v -> {
-                    listener.ok(this, param);
-                    paramView.setText("");
-                });
-            }
-        }
-    }
-
-    /**
-     * 倒计时布局
-     */
-    private void timingView() {
-        ZLoadingTextView countDownView = findViewById(R.id.dialog_timing_animation);
-        if (countDownView != null && totalTime != 0) {
-            CountDownTimer countDownTimer = new CountDownTimer(totalTime, 1000) {
-                @Override
-                public void onTick(long m) {
-                    if (countDownView != null) {
-                        countDownView.setText(cdPrefix + (m / 1000 + 1) + "秒" + cdSuffix);
-                    }
+                if (paramView != null && !paramView.getText().toString().equals("")) {
+                    String param = paramView.getText().toString().trim();
+                    affirmView.setOnClickListener(v -> {
+                        listener.ok(this, param);
+                        paramView.setText("");
+                    });
+                } else {
+                    affirmView.setOnClickListener(v -> listener.ok(this));
                 }
-
-                @Override
-                public void onFinish() {
-                    cancel();
-                }
-            };
-            countDownTimer.start();
+            }
         }
     }
 
@@ -286,6 +340,8 @@ public final class DialogTools extends AppCompatDialog {
         this.width = builder.width;
         this.height = builder.height;
         this.gravity = builder.gravity;
+        this.windowColor = builder.windowColor;
+        this.windowDrawable = builder.windowDrawable;
         this.animations = builder.animations;
         this.contentText = builder.contentText;
         this.contentSize = builder.contentSize;
@@ -313,6 +369,8 @@ public final class DialogTools extends AppCompatDialog {
         this.totalTime = builder.totalTime;
         this.cdPrefix = builder.cdPrefix;
         this.cdSuffix = builder.cdSuffix;
+        this.datas = builder.datas;
+        this.adapterListener = builder.adapterListener;
     }
 
     @NotNull
@@ -331,6 +389,8 @@ public final class DialogTools extends AppCompatDialog {
         private int width = -1;
         private int height = -1;
         private int gravity = -1;
+        private int windowColor;
+        private int windowDrawable;
         private boolean canceled = true;
         private boolean cancelable = true;
         private int bdr = android.R.color.transparent;
@@ -360,6 +420,8 @@ public final class DialogTools extends AppCompatDialog {
         private int quitTextStyle = -1;
         private int backDrawableQuit = -1;
         private OnEventTriggerListener listener;
+        private String[] datas;
+        private CameraAdapter.OnClickCameraAdapterListener adapterListener;
 
         private Builder(Context context) {
             this.context = context;
@@ -702,6 +764,7 @@ public final class DialogTools extends AppCompatDialog {
          * 倒计时（引入相应布局文件totalTime>0开启）
          *
          * @param totalTime 总时长
+         * @statement layout等于COUNT_DOWN生效
          */
         public Builder setTotalTime(int totalTime) {
             this.totalTime = totalTime;
@@ -712,6 +775,7 @@ public final class DialogTools extends AppCompatDialog {
          * 倒计时显示前缀
          *
          * @param cdPrefix 前缀
+         * @statement layout等于COUNT_DOWN生效
          */
         public Builder setCdPrefix(String cdPrefix) {
             this.cdPrefix = cdPrefix;
@@ -722,9 +786,52 @@ public final class DialogTools extends AppCompatDialog {
          * 倒计时显示后缀
          *
          * @param cdSuffix 后缀
+         * @statement layout等于COUNT_DOWN生效
          */
         public Builder setCdSuffix(String cdSuffix) {
             this.cdSuffix = cdSuffix;
+            return newBuilder;
+        }
+
+        /**
+         * 添加底部弹窗按钮
+         *
+         * @param datas 按钮文字数据
+         * @statement layout等于CAMERA生效
+         */
+        public Builder setDatas(String... datas) {
+            this.datas = datas;
+            return newBuilder;
+        }
+
+        /**
+         * 添加底部弹窗按钮点击事件
+         *
+         * @param adapterListener 事件
+         * @statement layout等于CAMERA生效
+         */
+        public Builder setAdapterListener(CameraAdapter.OnClickCameraAdapterListener adapterListener) {
+            this.adapterListener = adapterListener;
+            return newBuilder;
+        }
+
+        /**
+         * 设置窗口颜色
+         *
+         * @param windowColor 窗口颜色值
+         */
+        public Builder setWindowColor(@ColorRes int windowColor) {
+            this.windowColor = windowColor;
+            return newBuilder;
+        }
+
+        /**
+         * 设置窗口可绘制的颜色
+         *
+         * @param windowDrawable 窗口可绘制的值
+         */
+        public Builder setWindowDrawable(@DrawableRes int windowDrawable) {
+            this.windowDrawable = windowDrawable;
             return newBuilder;
         }
 

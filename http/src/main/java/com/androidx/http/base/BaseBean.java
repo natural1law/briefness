@@ -2,9 +2,9 @@ package com.androidx.http.base;
 
 import android.os.Parcelable;
 
-import java.io.Serializable;
+import java.io.Externalizable;
 
-public abstract class BaseBean implements Parcelable , Serializable {
+public abstract class BaseBean implements Parcelable, Externalizable {
 
     @Override
     public int describeContents() {

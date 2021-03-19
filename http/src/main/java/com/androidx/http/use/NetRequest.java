@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.androidx.http.api.LoginServer;
 import com.androidx.http.api.NetHttp;
 import com.androidx.http.module.MsgModule;
+import com.androidx.http.net.WebSocketRequest;
 import com.androidx.http.net.listener.BytesCallback;
 import com.androidx.http.net.listener.StringCallback;
 import com.androidx.http.net.listener.Enqueue;

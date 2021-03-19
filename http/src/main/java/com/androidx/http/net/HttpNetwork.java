@@ -1,5 +1,7 @@
 package com.androidx.http.net;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -31,12 +33,13 @@ public final class HttpNetwork implements IHttpNetwork {
     private HttpNetwork() {
     }
 
+    @Contract(pure = true)
     public static HttpNetwork builder() {
         return instance;
     }
 
     @Override
-    public OkHttpClient getClient() {
+    public @NotNull OkHttpClient getClient() {
         OkHttpClient.Builder client = new OkHttpClient.Builder()
                 .dns(new HttpDns())
                 .retryOnConnectionFailure(true)//错误重连
@@ -64,17 +67,31 @@ public final class HttpNetwork implements IHttpNetwork {
      * 异步/发起get请求(map接收方式)
      */
     @Override
-    public Request getRequest(String url, Map<String, Object> map) {
-        int i = 0;
-        param.setLength(i);
-        for (String key : map.keySet()) {
-            if (i == 0) {
-                param.append("?");
-            } else {
-                param.append("&");
+    public @NotNull Request getRequest(String url, Map<String, Object> map) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            final int[] p = {0};
+            param.setLength(p[0]);
+            map.forEach((key, o) -> {
+                if (p[0] == 0) {
+                    param.append("?");
+                } else {
+                    param.append("&");
+                }
+                param.append(key).append("=").append(map.get(key));
+                p[0]++;
+            });
+        } else {
+            int i = 0;
+            param.setLength(i);
+            for (String key : map.keySet()) {
+                if (i == 0) {
+                    param.append("?");
+                } else {
+                    param.append("&");
+                }
+                param.append(key).append("=").append(map.get(key));
+                i++;
             }
-            param.append(key).append("=").append(map.get(key));
-            i++;
         }
         return new Request.Builder()
                 .get()
@@ -86,7 +103,7 @@ public final class HttpNetwork implements IHttpNetwork {
      * 异步/发起post请求(map接收方式)
      */
     @Override
-    public Request postRequest(String url, Map<String, Object> map) {
+    public @NotNull Request postRequest(String url, Map<String, Object> map) {
         FormBody.Builder formBody = new FormBody.Builder();
         for (String key : map.keySet()) {
             formBody.add(key, Objects.requireNonNull(map.get(key)).toString());
@@ -101,7 +118,7 @@ public final class HttpNetwork implements IHttpNetwork {
      * 异步/发起post请求(json接收方式)
      */
     @Override
-    public Request postRequest(String url, JSONObject json) {
+    public @NotNull Request postRequest(String url, JSONObject json) {
         try {
             return new Request.Builder()
                     .post(RequestBody.create(json.toString(), JSON))
@@ -119,17 +136,31 @@ public final class HttpNetwork implements IHttpNetwork {
      * 异步/发起delete请求(map接收方式)
      */
     @Override
-    public Request deleteRequest(String url, Map<String, Object> map) {
-        int i = 0;
-        param.setLength(i);
-        for (String key : map.keySet()) {
-            if (i == 0) {
-                param.append("?");
-            } else {
-                param.append("&");
+    public @NotNull Request deleteRequest(String url, Map<String, Object> map) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            final int[] p = {0};
+            param.setLength(p[0]);
+            map.forEach((key, o) -> {
+                if (p[0] == 0) {
+                    param.append("?");
+                } else {
+                    param.append("&");
+                }
+                param.append(key).append("=").append(map.get(key));
+                p[0]++;
+            });
+        } else {
+            int i = 0;
+            param.setLength(i);
+            for (String key : map.keySet()) {
+                if (i == 0) {
+                    param.append("?");
+                } else {
+                    param.append("&");
+                }
+                param.append(key).append("=").append(map.get(key));
+                i++;
             }
-            param.append(key).append("=").append(map.get(key));
-            i++;
         }
         return new Request.Builder()
                 .delete()
@@ -141,7 +172,7 @@ public final class HttpNetwork implements IHttpNetwork {
      * 异步/发起delete请求(json接收方式)
      */
     @Override
-    public Request deleteRequest(String url, JSONObject json) {
+    public @NotNull Request deleteRequest(String url, JSONObject json) {
         try {
             return new Request.Builder()
                     .delete(RequestBody.create(json.toString(), null))
@@ -160,7 +191,7 @@ public final class HttpNetwork implements IHttpNetwork {
      * 表单形式
      */
     @Override
-    public Request formRequest(String url, JSONObject json) {
+    public @NotNull Request formRequest(String url, JSONObject json) {
         try {
             return new Request.Builder()
                     .post(new FormBody.Builder()
@@ -182,7 +213,7 @@ public final class HttpNetwork implements IHttpNetwork {
      * 登录
      */
     @Override
-    public Request postRequestProto(String url, byte[] bytes) {
+    public @NotNull Request postRequestProto(String url, byte[] bytes) {
         try {
             return new Request.Builder()
                     .post(RequestBody.create(bytes, PROTO))
@@ -197,6 +228,9 @@ public final class HttpNetwork implements IHttpNetwork {
     }
 
     private static final class Singleton {
+        private Singleton() {
+        }
+
         private static final HttpNetwork INSTANCE = new HttpNetwork();
     }
 }

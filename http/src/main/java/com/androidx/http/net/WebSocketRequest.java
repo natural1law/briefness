@@ -1,4 +1,4 @@
-package com.androidx.http.use;
+package com.androidx.http.net;
 
 import android.annotation.SuppressLint;
 import android.os.Handler;
@@ -8,7 +8,6 @@ import android.util.Log;
 
 import com.androidx.http.module.MessageModule;
 import com.androidx.http.module.ResModule;
-import com.androidx.http.net.HttpNetwork;
 import com.androidx.http.net.listener.Enqueue;
 import com.androidx.http.net.listener.LoginCallback;
 import com.androidx.http.net.listener.MsgCallback;
@@ -52,11 +51,11 @@ public final class WebSocketRequest implements Enqueue {
 
     private static native int success();
 
-    protected static native int msg();
+    public static native int msg();
 
-    protected static native int offline();
+    public static native int offline();
 
-    protected static native int online();
+    public static native int online();
 
     private static final String FAIL_MSG = "服务器连接已断开";//连接异常消息
 
@@ -76,8 +75,8 @@ public final class WebSocketRequest implements Enqueue {
     private static long reconnectInterval;
     private static int reconnectCount = 0;//重连次数
     private boolean isSend = false;//发送状态
-    protected static volatile LoginCallback loginCallback;//登录回调
-    protected static volatile MsgCallback msgCallback;//消息回调
+    public static volatile LoginCallback loginCallback;//登录回调
+    public static volatile MsgCallback msgCallback;//消息回调
 
     private static final Runnable run = WebSocketRequest::init;
 

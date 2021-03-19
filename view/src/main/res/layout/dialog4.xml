@@ -20,7 +20,7 @@
             android:layout_height="50dp"
             android:gravity="center"
             android:padding="10dp"
-            android:text="阿斯顿撒打算"
+            android:text="标题"
             android:textColor="#232323"
             android:textSize="18sp"
             android:textStyle="bold"

@@ -19,11 +19,12 @@ import java.util.Objects;
 import okhttp3.Call;
 import okhttp3.Response;
 
-public final class HttpRequest implements HttpRequestListener {
+@Deprecated
+public final class HttpRequest1 implements HttpRequestListener {
 
     private int currentConnect;
     private static final IHttpNetwork httpNetwork = HttpNetwork.builder();
-    private static final Handler handler = new Handler(Looper.getMainLooper(), message -> {
+    private final Handler handler = new Handler(Looper.getMainLooper(), message -> {
         MsgModule msg = (MsgModule) message.obj;
         switch (message.what) {
             case -2:
