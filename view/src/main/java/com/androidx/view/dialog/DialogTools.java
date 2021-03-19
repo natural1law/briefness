@@ -28,7 +28,6 @@ import com.androidx.view.R;
 import com.androidx.view.dialog.adapter.CameraAdapter;
 import com.zyao89.view.zloading.ZLoadingTextView;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -134,7 +133,6 @@ public final class DialogTools extends AppCompatDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(layout);
-        Log.i("布局", String.valueOf(layout));
         setCanceledOnTouchOutside(canceled);
         setCancelable(cancelable);
         Window window = this.getWindow();
@@ -150,8 +148,12 @@ public final class DialogTools extends AppCompatDialog {
         }
         FrameLayout layout = findViewById(R.id.dialog_frame);
         if (layout != null) {
-            layout.setBackgroundColor(windowColor);
-            layout.setBackground(getContext().getResources().getDrawable(windowDrawable, getContext().getTheme()));
+            if (windowColor != -1) {
+                layout.setBackgroundColor(windowColor);
+            }
+            if (windowDrawable != -1) {
+                layout.setBackground(getContext().getResources().getDrawable(windowDrawable, getContext().getTheme()));
+            }
         }
 
         try {
@@ -374,7 +376,6 @@ public final class DialogTools extends AppCompatDialog {
     }
 
     @NotNull
-    @Contract(value = "_ -> new", pure = true)
     public static Builder builder(Context context) {
         return new Builder(context);
     }
@@ -389,8 +390,8 @@ public final class DialogTools extends AppCompatDialog {
         private int width = -1;
         private int height = -1;
         private int gravity = -1;
-        private int windowColor;
-        private int windowDrawable;
+        private int windowColor = -1;
+        private int windowDrawable = -1;
         private boolean canceled = true;
         private boolean cancelable = true;
         private int bdr = android.R.color.transparent;
@@ -836,7 +837,6 @@ public final class DialogTools extends AppCompatDialog {
         }
 
         @NotNull
-        @Contract(" -> new")
         public DialogTools build() {
             synchronized (DialogTools.class) {
                 return new DialogTools(context, newBuilder);
