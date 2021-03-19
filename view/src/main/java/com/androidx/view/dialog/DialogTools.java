@@ -143,6 +143,8 @@ public final class DialogTools extends AppCompatDialog {
         if (window != null) {
             window.setBackgroundDrawableResource(bdr);
             WindowManager.LayoutParams params = window.getAttributes();
+            params.width = WindowManager.LayoutParams.MATCH_PARENT;
+            params.height = WindowManager.LayoutParams.WRAP_CONTENT;
             if (gravity != -1) {
                 params.gravity = gravity;
             }
@@ -403,8 +405,8 @@ public final class DialogTools extends AppCompatDialog {
         private int right = 0;
         private int top = 0;
         private int bottom = 0;
-        private int width;
-        private int height;
+        private int width = -1;
+        private int height = -1;
         private int gravity = -1;
         private int windowColor = -1;
         private int windowDrawable = -1;
@@ -468,24 +470,47 @@ public final class DialogTools extends AppCompatDialog {
         /**
          * 设置布局间距
          *
-         * @param dimension 维度值
+         * @param values 维度值
          */
-        public Builder setMargin(@NotNull int... dimension) {
-            this.left = dimension[0];
-            this.right = dimension[1];
-            this.top = dimension[2];
-            this.bottom = dimension[3];
+        public Builder setMargin(@NotNull int... values) {
+            switch (values.length) {
+                case 1:
+                    this.left = values[0];
+                    break;
+                case 2:
+                    this.left = values[0];
+                    this.right = values[1];
+                    break;
+                case 3:
+                    this.left = values[0];
+                    this.right = values[1];
+                    this.top = values[2];
+                    break;
+                case 4:
+                    this.left = values[0];
+                    this.right = values[1];
+                    this.top = values[2];
+                    this.bottom = values[3];
+                    break;
+            }
             return newBuilder;
         }
 
         /**
          * 设置布局填充
          *
-         * @param dimension 维度值
+         * @param values 维度值
          */
-        public Builder setDimension(@NotNull int... dimension) {
-            this.height = dimension[0];
-            this.width = dimension[1];
+        public Builder setDimension(@NotNull int... values) {
+            switch (values.length) {
+                case 1:
+                    this.height = values[0];
+                    break;
+                case 2:
+                    this.height = values[0];
+                    this.width = values[1];
+                    break;
+            }
             return newBuilder;
         }
 
