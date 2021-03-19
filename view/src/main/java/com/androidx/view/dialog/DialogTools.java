@@ -143,8 +143,8 @@ public final class DialogTools extends AppCompatDialog {
         if (window != null) {
             window.setBackgroundDrawableResource(bdr);
             WindowManager.LayoutParams params = window.getAttributes();
-            params.width = WindowManager.LayoutParams.MATCH_PARENT;
-            params.height = WindowManager.LayoutParams.WRAP_CONTENT;
+            params.width = width;
+            params.height = height;
             if (gravity != -1) {
                 params.gravity = gravity;
             }
@@ -405,8 +405,8 @@ public final class DialogTools extends AppCompatDialog {
         private int right = 0;
         private int top = 0;
         private int bottom = 0;
-        private int width = -1;
-        private int height = -1;
+        private int width = WindowManager.LayoutParams.MATCH_PARENT;
+        private int height = WindowManager.LayoutParams.WRAP_CONTENT;
         private int gravity = -1;
         private int windowColor = -1;
         private int windowDrawable = -1;
