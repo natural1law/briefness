@@ -1,17 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="240dp"
-    android:layout_height="150dp"
-    android:layout_gravity="center"
     android:id="@+id/dialog_frame"
+    android:layout_width="match_parent"
+    android:layout_height="240dp"
+    android:layout_gravity="center"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
     android:background="@drawable/dialog_border"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/dialog_content"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
+        android:layout_height="180dp"
         android:gravity="center"
         android:padding="10dp"
         android:textSize="16sp"
@@ -21,21 +23,23 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="179dp"
         android:background="#DFDFDF" />
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="111dp"
+        android:layout_height="60dp"
+        android:layout_gravity="bottom"
+        android:gravity="center"
         android:orientation="horizontal"
         android:weightSum="2">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/dialog_affirm"
             android:layout_width="120dp"
-            android:layout_height="38dp"
+            android:layout_height="match_parent"
             android:layout_marginStart="1dp"
+            android:layout_marginBottom="1dp"
             android:layout_weight="1"
             android:background="@drawable/dialog_border_left"
             android:gravity="center"
@@ -52,8 +56,9 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/dialog_quit"
             android:layout_width="120dp"
-            android:layout_height="38dp"
+            android:layout_height="match_parent"
             android:layout_marginEnd="1dp"
+            android:layout_marginBottom="1dp"
             android:layout_weight="1"
             android:background="@drawable/dialog_border_right"
             android:gravity="center"

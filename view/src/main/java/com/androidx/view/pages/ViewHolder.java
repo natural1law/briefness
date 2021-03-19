@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.Transformation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Checkable;
 import android.widget.ImageView;
@@ -24,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.interpolator.view.animation.FastOutLinearInInterpolator;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -128,11 +130,13 @@ public class ViewHolder extends RecyclerView.ViewHolder {
         ViewGroup view = getView(viewId);
         Handler handler = new Handler(Looper.getMainLooper());
         if (visible) {
-            view.setAnimation(moveToViewBottom(500));
-            handler.postDelayed(() -> view.setVisibility(View.VISIBLE), 800);
+            AnimUtil.expand(view);
+//            view.setAnimation(moveToViewBottom(500));
+//            handler.postDelayed(() -> view.setVisibility(View.VISIBLE), 800);
         } else {
-            view.setAnimation(moveToViewLocation(500));
-            handler.postDelayed(() -> view.setVisibility(View.GONE), 200);
+            AnimUtil.collapse(view);
+//            view.setAnimation(moveToViewLocation(500));
+//            handler.postDelayed(() -> view.setVisibility(View.GONE), 200);
         }
         return this;
     }
@@ -251,5 +255,50 @@ public class ViewHolder extends RecyclerView.ViewHolder {
                 Animation.RELATIVE_TO_SELF, 0.0f);
         mHiddenAction.setDuration(delay);
         return mHiddenAction;
+    }
+
+    public static class AnimUtil {
+
+        public static void expand(final View view) {
+            view.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            final int viewHeight = view.getMeasuredHeight();
+            view.getLayoutParams().height = 0;
+            view.setVisibility(View.VISIBLE);
+
+            Animation animation = new Animation() {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    if (interpolatedTime == 1) {
+                        view.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+                    } else {
+                        view.getLayoutParams().height = (int) (viewHeight * interpolatedTime);
+                    }
+                    view.requestLayout();
+                }
+            };
+            animation.setDuration(500);
+            animation.setInterpolator(new FastOutLinearInInterpolator());
+            view.startAnimation(animation);
+        }
+
+        public static void collapse(final View view) {
+            view.measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            final int viewHeight = view.getMeasuredHeight();
+
+            Animation animation = new Animation() {
+                @Override
+                protected void applyTransformation(float interpolatedTime, Transformation t) {
+                    if (interpolatedTime == 1) {
+                        view.setVisibility(View.GONE);
+                    } else {
+                        view.getLayoutParams().height = viewHeight - (int) (viewHeight * interpolatedTime);
+                        view.requestLayout();
+                    }
+                }
+            };
+            animation.setDuration(500);
+            animation.setInterpolator(new FastOutLinearInInterpolator());
+            view.startAnimation(animation);
+        }
     }
 }
