@@ -134,6 +134,7 @@ public final class DialogTools extends AppCompatDialog {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(layout);
+        Log.i("布局", String.valueOf(layout));
         setCanceledOnTouchOutside(canceled);
         setCancelable(cancelable);
         Window window = this.getWindow();
@@ -286,14 +287,13 @@ public final class DialogTools extends AppCompatDialog {
                 affirmView.setTextColor(affirmColor);
             }
             if (listener != null) {
+                affirmView.setOnClickListener(v -> listener.ok(this));
                 if (paramView != null && !paramView.getText().toString().equals("")) {
                     String param = paramView.getText().toString().trim();
                     affirmView.setOnClickListener(v -> {
-                        listener.ok(this, param);
+                        listener.value(param);
                         paramView.setText("");
                     });
-                } else {
-                    affirmView.setOnClickListener(v -> listener.ok(this));
                 }
             }
         }
@@ -383,7 +383,7 @@ public final class DialogTools extends AppCompatDialog {
 
         private final Builder newBuilder = this;
         private final Context context;
-        private int layout = R.layout.dialog2;
+        private int layout;
         private int style = R.style.dialogStyle;
         private int animations = R.style.animation;
         private int width = -1;
@@ -849,11 +849,9 @@ public final class DialogTools extends AppCompatDialog {
      */
     public interface OnEventTriggerListener {
 
-        default void ok(DialogTools dialog) {
+        void ok(DialogTools dialog);
 
-        }
-
-        default void ok(DialogTools dialog, String param) {
+        default void value(String param) {
 
         }
 
