@@ -7,9 +7,9 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.FrameLayout;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
@@ -150,7 +150,7 @@ public final class DialogTools extends AppCompatDialog {
             }
             window.setWindowAnimations(animations);
         }
-        FrameLayout layout = findViewById(R.id.dialog_frame);
+        View layout = findViewById(R.id.dialog_frame);
         if (layout != null) {
             if (windowColor != -1) {
                 layout.setBackgroundColor(windowColor);
