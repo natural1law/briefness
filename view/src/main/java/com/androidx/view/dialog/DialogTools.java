@@ -150,9 +150,7 @@ public final class DialogTools extends AppCompatDialog {
             }
             window.setWindowAnimations(animations);
         }
-
         View layout = findViewById(R.id.dialog_frame);
-
         if (layout != null) {
             if (windowColor != -1) {
                 layout.setBackgroundColor(windowColor);
