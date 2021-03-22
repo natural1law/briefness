@@ -5,8 +5,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiConsumer;
 
 /**
@@ -58,26 +63,6 @@ public final class MicroCache {
         sp.edit().putBoolean(key, value).apply();
     }
 
-    public String getApplyStr(String key) {
-        return sp != null ? sp.getString(key, "") : "";
-    }
-
-    public Integer getApplyInt(String key) {
-        return sp != null ? sp.getInt(key, 0) : 0;
-    }
-
-    public Float getApplyFloat(String key) {
-        return sp != null ? sp.getFloat(key, 0f) : 0f;
-    }
-
-    public Long getApplyLong(String key) {
-        return sp != null ? sp.getLong(key, 0) : 0;
-    }
-
-    public Boolean getApplyBoolean(String key) {
-        return sp != null && sp.getBoolean(key, false);
-    }
-
     public void setCommit(String key, String value) {
         sp.edit().putString(key, value).commit();
     }
@@ -98,37 +83,30 @@ public final class MicroCache {
         sp.edit().putBoolean(key, value).commit();
     }
 
-    public String getCommitStr(String key) {
-        return sp != null ? sp.getString(key, "") : "";
+    public Object getValue(String key) {
+        try {
+            Message message = new Handler(Looper.getMainLooper()).obtainMessage();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                sp.getAll().forEach((key1, value) -> {
+                    if (Objects.equals(key, key1)) message.obj = value;
+                });
+            } else {
+                for (String key1 : sp.getAll().keySet()) {
+                    if (Objects.equals(key, key1)) message.obj = sp.getAll().get(key1);
+                }
+            }
+            return message.obj;
+        } catch (Exception e) {
+            Log.e("MicroCache异常", String.valueOf(e.getMessage()));
+            return "";
+        }
     }
 
-    public Integer getCommitInt(String key) {
-        return sp != null ? sp.getInt(key, 0) : 0;
-    }
+    public Map<String, ?> getAll() { return sp.getAll(); }
 
-    public Float getCommitFloat(String key) {
-        return sp != null ? sp.getFloat(key, 0f) : 0f;
-    }
+    public void clearApply(String key) { sp.edit().remove(key).apply(); }
 
-    public Long getCommitLong(String key) {
-        return sp != null ? sp.getLong(key, 0) : 0;
-    }
-
-    public Boolean getCommitBoolean(String key) {
-        return sp != null && sp.getBoolean(key, false);
-    }
-
-    public void clearApply(String key) {
-        sp.edit().remove(key).apply();
-    }
-
-    public void clearCommit(String key) {
-        sp.edit().remove(key).commit();
-    }
-
-    public Map<String, ?> getAll() {
-        return sp.getAll();
-    }
+    public void clearCommit(String key) { sp.edit().remove(key).commit(); }
 
     public void clearAll() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
