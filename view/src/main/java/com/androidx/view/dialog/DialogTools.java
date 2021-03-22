@@ -242,7 +242,7 @@ public final class DialogTools extends AppCompatDialog {
                 @Override
                 public void onTick(long m) {
                     if (countDownView != null) {
-                        countDownView.setText(cdPrefix + (m / 1000 + 1) + "秒" + cdSuffix);
+                        countDownView.setText(cdPrefix + (m / 1000) + "秒" + cdSuffix);
                     }
                 }
 

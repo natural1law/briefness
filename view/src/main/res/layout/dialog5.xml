@@ -25,6 +25,7 @@
 
     <com.zyao89.view.zloading.ZLoadingTextView
         android:id="@+id/dialog_timing_animation"
+        style="@style/textSize14"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_marginTop="40dp"
