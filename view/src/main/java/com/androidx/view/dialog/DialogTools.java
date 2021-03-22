@@ -149,6 +149,7 @@ public final class DialogTools extends AppCompatDialog {
                 params.gravity = gravity;
             }
             window.setWindowAnimations(animations);
+
         }
         View layout = findViewById(R.id.dialog_frame);
         if (layout != null) {
