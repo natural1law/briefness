@@ -95,7 +95,7 @@ public final class MicroCache {
                     if (Objects.equals(key, key1)) message.obj = sp.getAll().get(key1);
                 }
             }
-            return message.obj;
+            return message.obj == null ? "" : message.obj;
         } catch (Exception e) {
             Log.e("MicroCache异常", String.valueOf(e.getMessage()));
             return "";
