@@ -19,7 +19,6 @@ import com.androidx.reduce.toast.DefaultToastView;
 import com.androidx.reduce.toast.ErrorToastView;
 import com.androidx.reduce.toast.InfoToastView;
 import com.androidx.reduce.toast.SuccessToastView;
-import com.google.android.material.snackbar.Snackbar;
 
 import java.lang.ref.WeakReference;
 
@@ -79,24 +78,6 @@ public final class Toasts {
     }
 
     /**
-     * android 11 成功提示
-     */
-    private void success(String msg) {
-        try {
-            View layout = LayoutInflater.from(wrc.get()).inflate(R.layout.success_toast_layout, null, NO);
-            AppCompatTextView text = layout.findViewById(R.id.toastMessage);
-            SuccessToastView successToastView = layout.findViewById(R.id.successView);
-            successToastView.startAnim(2000);
-            text.setText(msg);
-            text.setBackgroundResource(R.drawable.success_toast);
-            text.setTextColor(Color.parseColor("#FFFFFF"));
-            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            Log.e("ToastSuccessException", String.valueOf(e.getMessage()));
-        }
-    }
-
-    /**
      * 信息提示
      */
     private void info(Toast toast, String msg) {
@@ -109,24 +90,6 @@ public final class Toasts {
             text.setBackgroundResource(R.drawable.info_toast);
             text.setTextColor(Color.parseColor("#FFFFFF"));
             toast.setView(layout);
-        } catch (Exception e) {
-            Log.e("ToastInfoException", String.valueOf(e.getMessage()));
-        }
-    }
-
-    /**
-     * android 11 信息提示
-     */
-    private void info(String msg) {
-        try {
-            View layout = LayoutInflater.from(wrc.get()).inflate(R.layout.info_toast_layout, null, false);
-            AppCompatTextView text = layout.findViewById(R.id.toastMessage);
-            InfoToastView infoToastView = layout.findViewById(R.id.infoView);
-            infoToastView.startAnim(2000);
-            text.setText(msg);
-            text.setBackgroundResource(R.drawable.info_toast);
-            text.setTextColor(Color.parseColor("#FFFFFF"));
-            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT).show();
         } catch (Exception e) {
             Log.e("ToastInfoException", String.valueOf(e.getMessage()));
         }
@@ -151,24 +114,6 @@ public final class Toasts {
     }
 
     /**
-     * android 11 错误提示
-     */
-    private void error(String msg) {
-        try {
-            View layout = LayoutInflater.from(wrc.get()).inflate(R.layout.error_toast_layout, null, false);
-            AppCompatTextView text = layout.findViewById(R.id.toastMessage);
-            ErrorToastView errorToastView = layout.findViewById(R.id.errorView);
-            errorToastView.startAnim(2000);
-            text.setText(msg);
-            text.setBackgroundResource(R.drawable.error_toast);
-            text.setTextColor(Color.parseColor("#FFFFFF"));
-            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            Log.e("ToastErrorException", String.valueOf(e.getMessage()));
-        }
-    }
-
-    /**
      * 默认提示
      */
     private void defaults(Toast toast, String msg) {
@@ -187,24 +132,6 @@ public final class Toasts {
     }
 
     /**
-     * android 11 默认提示
-     */
-    private void defaults(String msg) {
-        try {
-            View layout = LayoutInflater.from(wrc.get()).inflate(R.layout.default_toast_layout, null, false);
-            AppCompatTextView text = layout.findViewById(R.id.toastMessage);
-            DefaultToastView defaultToastView = layout.findViewById(R.id.defaultView);
-            defaultToastView.startAnim(2000);
-            text.setText(msg);
-            text.setBackgroundResource(R.drawable.default_toast);
-            text.setTextColor(Color.parseColor("#FFFFFF"));
-            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT).show();
-        } catch (Exception e) {
-            Log.e("ToastDefaultsException", String.valueOf(e.getMessage()));
-        }
-    }
-
-    /**
      * 不知道提示
      */
     private void confusing(Toast toast, String msg) {
@@ -217,24 +144,6 @@ public final class Toasts {
             text.setBackgroundResource(R.drawable.confusing_toast);
             text.setTextColor(Color.parseColor("#FFFFFF"));
             toast.setView(layout);
-        } catch (Exception e) {
-            Log.e("ToastConfusingException", String.valueOf(e.getMessage()));
-        }
-    }
-
-    /**
-     * android 11 不知道提示
-     */
-    private void confusing(String msg) {
-        try {
-            View layout = LayoutInflater.from(wrc.get()).inflate(R.layout.confusing_toast_layout, null, false);
-            AppCompatTextView text = layout.findViewById(R.id.toastMessage);
-            ConfusingToastView confusingToastView = layout.findViewById(R.id.confusingView);
-            confusingToastView.startAnim(2000);
-            text.setText(msg);
-            text.setBackgroundResource(R.drawable.confusing_toast);
-            text.setTextColor(Color.parseColor("#FFFFFF"));
-            Snackbar.make(layout, msg, Snackbar.LENGTH_SHORT).show();
         } catch (Exception e) {
             Log.e("ToastConfusingException", String.valueOf(e.getMessage()));
         }
@@ -267,26 +176,7 @@ public final class Toasts {
                 }
             });
         } else {
-            handler.post(() -> {
-                switch (type) {
-                    case ERROR:
-                        error(msg);
-                        break;
-                    case DEFAULT:
-                        defaults(msg);
-                        break;
-                    case SUCCESS:
-                        success(msg);
-                        break;
-                    case INFO:
-                        info(msg);
-                        break;
-                    case CONFUSING:
-                        confusing(msg);
-                        break;
-                    default:
-                }
-            });
+            Toast.makeText(wrc.get(), msg, LENGTH_SHORT).show();
         }
     }
 
