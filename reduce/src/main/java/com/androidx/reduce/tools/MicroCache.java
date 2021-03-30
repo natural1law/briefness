@@ -12,6 +12,7 @@ import android.util.Log;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.WeakHashMap;
 import java.util.function.BiConsumer;
 
 /**
@@ -85,14 +86,17 @@ public final class MicroCache {
 
     public Object getValue(String key) {
         try {
+            if (getAll().isEmpty()) {
+                return "";
+            }
             Message message = new Handler(Looper.getMainLooper()).obtainMessage();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                sp.getAll().forEach((key1, value) -> {
+                getAll().forEach((key1, value) -> {
                     if (Objects.equals(key, key1)) message.obj = value;
                 });
             } else {
-                for (String key1 : sp.getAll().keySet()) {
-                    if (Objects.equals(key, key1)) message.obj = sp.getAll().get(key1);
+                for (String key1 : getAll().keySet()) {
+                    if (Objects.equals(key, key1)) message.obj = getAll().get(key1);
                 }
             }
             return message.obj == null ? "" : message.obj;
@@ -102,17 +106,21 @@ public final class MicroCache {
         }
     }
 
-    public Map<String, ?> getAll() { return sp.getAll(); }
+    public Map<String, ?> getAll() { return sp.getAll() == null ? new WeakHashMap<>() : sp.getAll(); }
 
-    public void clearApply(String key) { sp.edit().remove(key).apply(); }
+    public void clearApply(String key) {
+        sp.edit().remove(key).apply();
+    }
 
-    public void clearCommit(String key) { sp.edit().remove(key).commit(); }
+    public void clearCommit(String key) {
+        sp.edit().remove(key).commit();
+    }
 
     public void clearAll() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            sp.getAll().forEach((BiConsumer<String, Object>) (s, o) -> sp.edit().remove(s).commit());
+            getAll().forEach((BiConsumer<String, Object>) (s, o) -> sp.edit().remove(s).commit());
         } else {
-            for (String key : sp.getAll().keySet()) {
+            for (String key : getAll().keySet()) {
                 sp.edit().remove(key).commit();
             }
         }
