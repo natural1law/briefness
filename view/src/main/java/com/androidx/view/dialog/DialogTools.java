@@ -323,11 +323,11 @@ public final class DialogTools extends AppCompatDialog {
                     if (paramView != null && codeView != null) {
                         String var1 = paramView.getText().toString().trim();
                         String var2 = codeView.getText().toString().trim();
-                        qrListener.callbackValue(var1, var2);
+                        qrListener.callbackValue(this, var1, var2);
                         paramView.setText("");
                         codeView.setText("");
                     } else {
-                        qrListener.callbackValue("", "");
+                        qrListener.callbackValue(this, "", "");
                     }
                 });
             }
@@ -362,6 +362,9 @@ public final class DialogTools extends AppCompatDialog {
             }
             if (listener != null) {
                 quitView.setOnClickListener(v -> listener.no(this));
+            }
+            if (qrListener != null) {
+                quitView.setOnClickListener(v -> qrListener.no(this));
             }
         }
     }
@@ -968,6 +971,10 @@ public final class DialogTools extends AppCompatDialog {
          * @param var1 烤房编码
          * @param var2 验证码
          */
-        void callbackValue(String var1, String var2);
+        void callbackValue(DialogTools dialog, String var1, String var2);
+
+        default void no(DialogTools dialog) {
+            dialog.cancel();
+        }
     }
 }
