@@ -40,6 +40,16 @@ android {
         }
         maven { url 'https://jitpack.io' }
     }
+    sourceSets {
+        main {
+            resources {
+                srcDirs 'src\\main\\resources', 'src\\main\\resources\\mipmap'
+            }
+            res {
+                srcDirs 'src\\main\\res', 'src\\main\\res\\mipmap'
+            }
+        }
+    }
 }
 
 dependencies {
