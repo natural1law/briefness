@@ -26,4 +26,11 @@
         <!-- 指定消失的动画xml -->
     </style>
 
+    <style name="menuStyle">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="colorPrimary">#49B5EF</item>//是选中颜色
+        <item name="android:textColorSecondary">#252525</item>//未选中颜色
+    </style>
+
 </resources>
