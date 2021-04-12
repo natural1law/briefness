@@ -58,7 +58,7 @@ public final class DialogTools extends AppCompatDialog {
     private final boolean canceled;
     private final boolean cancelable;
     private final OnEventTriggerListener listener;
-    private OnClickQrListener qrListener;
+    private final OnClickQrListener qrListener;
     private final CameraAdapter.OnClickCameraAdapterListener adapterListener;
     /**
      * 内容模块参数
@@ -415,6 +415,7 @@ public final class DialogTools extends AppCompatDialog {
         this.quitTextStyle = builder.quitTextStyle;
         this.backDrawableQuit = builder.backDrawableQuit;
         this.listener = builder.listener;
+        this.qrListener = builder.qrListener;
         this.totalTime = builder.totalTime;
         this.cdPrefix = builder.cdPrefix;
         this.cdSuffix = builder.cdSuffix;
@@ -472,6 +473,7 @@ public final class DialogTools extends AppCompatDialog {
         private int quitTextStyle = -1;
         private int backDrawableQuit = -1;
         private OnEventTriggerListener listener;
+        private OnClickQrListener qrListener;
         private String[] datas;
         private CameraAdapter.OnClickCameraAdapterListener adapterListener;
 
@@ -845,6 +847,16 @@ public final class DialogTools extends AppCompatDialog {
          */
         public Builder setListener(OnEventTriggerListener listener) {
             this.listener = listener;
+            return newBuilder;
+        }
+
+        /**
+         * 确认按钮或取消按钮触发事件的实现
+         *
+         * @param listener 事件
+         */
+        public Builder setListener(OnClickQrListener listener) {
+            this.qrListener = listener;
             return newBuilder;
         }
 

@@ -27,7 +27,7 @@
         android:gravity="center"
         android:padding="5dp"
         android:scaleType="fitXY"
-        android:text="@string/btn_return"
+        android:text="返回"
         android:textColor="#171717"
         android:textSize="14sp"
         android:visibility="gone"
@@ -67,9 +67,10 @@
         android:layout_marginEnd="5dp"
         android:gravity="center"
         android:padding="10dp"
-        android:text="@string/btn_affirm"
+        android:text="更多"
         android:textColor="#171717"
         android:textSize="14sp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:ignore="HardcodedText" />
 
 </FrameLayout>
