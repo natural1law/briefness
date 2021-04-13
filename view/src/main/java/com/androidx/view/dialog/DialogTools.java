@@ -20,7 +20,6 @@ import androidx.annotation.Size;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatDialog;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -287,7 +286,6 @@ public final class DialogTools extends AppCompatDialog {
     private void affirmView() {
         AppCompatTextView affirmView = findViewById(R.id.dialog_affirm);
         AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
-        AppCompatAutoCompleteTextView codeView = findViewById(R.id.dialog_code);
         if (affirmView != null) {
             if (affirmText != null) {
                 affirmView.setText(affirmText);
@@ -320,14 +318,12 @@ public final class DialogTools extends AppCompatDialog {
             }
             if (qrListener != null) {
                 affirmView.setOnClickListener(v -> {
-                    if (paramView != null && codeView != null) {
+                    if (paramView != null) {
                         String var1 = paramView.getText().toString().trim();
-                        String var2 = codeView.getText().toString().trim();
-                        qrListener.callbackValue(this, var1, var2);
+                        qrListener.callbackValue(this, var1);
                         paramView.setText("");
-                        codeView.setText("");
                     } else {
-                        qrListener.callbackValue(this, "", "");
+                        qrListener.callbackValue(this, "");
                     }
                 });
             }
@@ -373,9 +369,7 @@ public final class DialogTools extends AppCompatDialog {
         if (layout == LayoutResId.INPUT_CHECK) {
             AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
             AppCompatImageView qrView = findViewById(R.id.dialog_qr);
-            AppCompatButton getCodeView = findViewById(R.id.dialog_get_code);
             if (qrView != null) qrView.setOnClickListener(v -> qrListener.qr(paramView));
-            if (getCodeView != null) getCodeView.setOnClickListener(v -> qrListener.getCode());
         }
     }
 
@@ -965,13 +959,10 @@ public final class DialogTools extends AppCompatDialog {
     public interface OnClickQrListener {
         void qr(AppCompatAutoCompleteTextView paramView);
 
-        void getCode();
-
         /**
          * @param var1 烤房编码
-         * @param var2 验证码
          */
-        void callbackValue(DialogTools dialog, String var1, String var2);
+        void callbackValue(DialogTools dialog, String var1);
 
         default void no(DialogTools dialog) {
             dialog.cancel();
