@@ -107,15 +107,15 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
     implementation project(path: ':reduce')
-    api 'com.squareup.okio:okio:2.9.0'
-    api 'com.squareup.okhttp3:okhttp:4.9.0'
-    api 'com.squareup.okhttp3:logging-interceptor:4.9.0'
-    api 'org.conscrypt:conscrypt-android:2.5.0'
+    api 'com.squareup.okio:okio:+'
+    api 'com.squareup.okhttp3:okhttp:+'
+    api 'com.squareup.okhttp3:logging-interceptor:+'
+    api 'org.conscrypt:conscrypt-android:+'
 
-    api 'com.google.protobuf:protoc:3.13.0'
-    api 'com.google.protobuf:protobuf-java:3.13.0'
+    api 'com.google.protobuf:protoc:+'
+    api 'com.google.protobuf:protobuf-java:+'
 
-    api 'com.google.code.gson:gson:2.8.6'
+    api 'com.google.code.gson:gson:+'
 
 }
 
