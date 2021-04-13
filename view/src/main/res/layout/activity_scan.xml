@@ -47,4 +47,5 @@
         android:layout_marginBottom="150dp"
         android:scaleType="fitCenter"
         android:src="@drawable/picture" />
+
 </FrameLayout>
