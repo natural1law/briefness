@@ -286,6 +286,7 @@ public final class DialogTools extends AppCompatDialog {
     private void affirmView() {
         AppCompatTextView affirmView = findViewById(R.id.dialog_affirm);
         AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
+        AppCompatAutoCompleteTextView nameView = findViewById(R.id.dialog_name);
         if (affirmView != null) {
             if (affirmText != null) {
                 affirmView.setText(affirmText);
@@ -318,12 +319,13 @@ public final class DialogTools extends AppCompatDialog {
             }
             if (qrListener != null) {
                 affirmView.setOnClickListener(v -> {
-                    if (paramView != null) {
+                    if (paramView != null && nameView != null) {
                         String var1 = paramView.getText().toString().trim();
-                        qrListener.callbackValue(this, var1);
+                        String var2 = nameView.getText().toString().trim();
+                        qrListener.callbackValue(this, var1, var2);
                         paramView.setText("");
                     } else {
-                        qrListener.callbackValue(this, "");
+                        qrListener.callbackValue(this, "", "");
                     }
                 });
             }
@@ -961,8 +963,9 @@ public final class DialogTools extends AppCompatDialog {
 
         /**
          * @param var1 烤房编码
+         * @param var2 烤房名称
          */
-        void callbackValue(DialogTools dialog, String var1);
+        void callbackValue(DialogTools dialog, String var1, String var2);
 
         default void no(DialogTools dialog) {
             dialog.cancel();

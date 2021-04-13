@@ -1,10 +1,13 @@
 package com.androidx.view.scan;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -36,6 +39,7 @@ public final class ScanActivity extends AppCompatActivity implements QRCodeView.
 
     private ZXingView zxView;
     private AppCompatImageView zxPhotoView;
+    private final ScanActivity aThis = this;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,11 +87,11 @@ public final class ScanActivity extends AppCompatActivity implements QRCodeView.
     public void onScanQRCodeSuccess(String result) {
         try {
             vibrate();
-            setResult(RESULT_CODE, new Intent().putExtra(RESULT_KEY, result));
-            finish();
+            if (result != null) setResult(RESULT_CODE, new Intent().putExtra(RESULT_KEY, result));
         } catch (Exception e) {
             Log.e("扫码异常", String.valueOf(e.getMessage()), e);
         }
+        finish();
     }
 
     @Override
@@ -114,7 +118,7 @@ public final class ScanActivity extends AppCompatActivity implements QRCodeView.
     }
 
     private void photoView() {
-        zxPhotoView.setOnClickListener(v -> EasyPhotos.createAlbum(this, false, GlideEngine.getInstance())
+        zxPhotoView.setOnClickListener(v -> EasyPhotos.createAlbum(aThis, false, GlideEngine.getInstance())
                 .setCleanMenu(true)
                 .setGif(false)
                 .isCompress(false)
@@ -124,11 +128,42 @@ public final class ScanActivity extends AppCompatActivity implements QRCodeView.
                     @Override
                     public void onResult(ArrayList<Photo> photos, ArrayList<String> paths, boolean isOriginal) {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            photos.forEach(photo -> zxView.decodeQRCode(photo.path));
+                            paths.forEach(photo -> {
+                                if (photo.contains("content:")) {
+                                    zxView.decodeQRCode(realUri(Uri.parse(photo)));
+                                } else {
+                                    zxView.decodeQRCode(photo);
+                                }
+                            });
                         } else {
-                            for (Photo photo : photos) zxView.decodeQRCode(photo.path);
+                            for (Photo photo : photos) {
+                                if (photo.path.contains("content:")) {
+                                    zxView.decodeQRCode(realUri(Uri.parse(photo.path)));
+                                } else {
+                                    zxView.decodeQRCode(photo.path);
+                                }
+                            }
                         }
                     }
                 }));
     }
+
+    /**
+     * 转换真实路径
+     */
+    private String realUri(Uri contentUri) {
+        Cursor cursor = null;
+        try {
+            String[] pro = {MediaStore.Images.Media.DATA};
+            cursor = aThis.getContentResolver().query(contentUri, pro, null, null, null);
+            int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+            cursor.moveToFirst();
+            return cursor.getString(column_index);
+        } finally {
+            if (cursor != null) {
+                cursor.close();
+            }
+        }
+    }
+
 }
