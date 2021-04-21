@@ -32,9 +32,6 @@ import com.zyao89.view.zloading.ZLoadingTextView;
 
 import org.jetbrains.annotations.NotNull;
 
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-
 /**
  * @author 李玄道
  * @date 2021/03/09
@@ -178,7 +175,7 @@ public final class DialogTools extends AppCompatDialog {
             if (windowDrawable != -1) {
                 layout.setBackground(getContext().getResources().getDrawable(windowDrawable, getContext().getTheme()));
             }
-            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
+            FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) layout.getLayoutParams();
             lp.setMargins(left, top, right, bottom);
             layout.setLayoutParams(lp);
         }
