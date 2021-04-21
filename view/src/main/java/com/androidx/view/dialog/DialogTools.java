@@ -319,7 +319,7 @@ public final class DialogTools extends AppCompatDialog {
             TimePickerView startTime = new TimePickerBuilder(ct, (OnTimeSelectListener) (date, v) -> {//选中事件回调
                 paramView.setText(dateToString(date));
             })
-                    .setType(new boolean[]{true, true, true, true, true, true})// 默认全部显示
+                    .setType(new boolean[]{true, true, true, true, true, false})// 默认全部显示
                     .setCancelText("取消")//取消按钮文字
                     .setSubmitText("确认")//确认按钮文字
                     .setContentTextSize(16)//滚轮文字大小
@@ -334,13 +334,13 @@ public final class DialogTools extends AppCompatDialog {
                     .setBgColor(Color.parseColor("#F6F6F6"))//滚轮背景颜色 Night mode
                     .setLabel("年", "月", "日", "时", "分", null)//默认设置为年月日时分秒
                     .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                    .isDialog(true)//是否显示为对话框样式
+                    .isDialog(false)//是否显示为对话框样式
                     .build();
 
             TimePickerView endTime = new TimePickerBuilder(ct, (OnTimeSelectListener) (date, v) -> {//选中事件回调
                 nameView.setText(dateToString(date));
             })
-                    .setType(new boolean[]{true, true, true, true, true, true})// 默认全部显示
+                    .setType(new boolean[]{true, true, true, true, true, false})// 默认全部显示
                     .setCancelText("取消")//取消按钮文字
                     .setSubmitText("确认")//确认按钮文字
                     .setContentTextSize(16)//滚轮文字大小
@@ -355,7 +355,7 @@ public final class DialogTools extends AppCompatDialog {
                     .setBgColor(Color.parseColor("#F6F6F6"))//滚轮背景颜色 Night mode
                     .setLabel("年", "月", "日", "时", "分", null)//默认设置为年月日时分秒
                     .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                    .isDialog(true)//是否显示为对话框样式
+                    .isDialog(false)//是否显示为对话框样式
                     .build();
 
             timeStartView.setOnClickListener(v -> startTime.show());

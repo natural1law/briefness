@@ -32,7 +32,6 @@
                 android:gravity="center_vertical"
                 android:hint="开始时间"
                 android:inputType="datetime"
-                android:maxLength="14"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:textColor="#282222"
@@ -43,6 +42,7 @@
                 android:id="@+id/time_start"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:background="@null"
                 android:padding="10dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/calendar" />
@@ -73,7 +73,6 @@
                 android:gravity="center_vertical"
                 android:hint="结束时间"
                 android:inputType="datetime"
-                android:maxLength="14"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:textColor="#282222"
@@ -84,6 +83,7 @@
                 android:id="@+id/time_end"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
+                android:background="@null"
                 android:padding="10dp"
                 android:scaleType="fitCenter"
                 android:src="@drawable/calendar" />
