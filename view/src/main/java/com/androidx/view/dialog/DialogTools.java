@@ -99,6 +99,11 @@ public final class DialogTools extends AppCompatDialog {
     private final int totalTime;
     private final String cdPrefix;
     private final String cdSuffix;
+    /**
+     * 输入内容提示
+     */
+    private final String hintText1;
+    private final String hintText2;
 
     /**
      * 布局文件
@@ -136,6 +141,10 @@ public final class DialogTools extends AppCompatDialog {
          * 消息输入提示窗
          */
         public static final int INPUT_CHECK = R.layout.dialog7;
+        /**
+         * 筛选输入提示窗
+         */
+        public static final int FILTRATE = R.layout.dialog8;
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -167,6 +176,11 @@ public final class DialogTools extends AppCompatDialog {
             }
             layout.layout(left, top, right, bottom);
         }
+
+        AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
+        AppCompatAutoCompleteTextView nameView = findViewById(R.id.dialog_name);
+        if (paramView != null) paramView.setHint(hintText1);
+        if (nameView != null) nameView.setHint(hintText2);
         try {
             titleView();
             contentView();
@@ -317,6 +331,7 @@ public final class DialogTools extends AppCompatDialog {
                     });
                 }
             }
+
             if (qrListener != null) {
                 affirmView.setOnClickListener(v -> {
                     if (paramView != null && nameView != null) {
@@ -420,6 +435,9 @@ public final class DialogTools extends AppCompatDialog {
         this.cdSuffix = builder.cdSuffix;
         this.datas = builder.datas;
         this.adapterListener = builder.adapterListener;
+        this.hintText1 = builder.hintText1;
+        this.hintText2 = builder.hintText2;
+
     }
 
     @NotNull
@@ -475,6 +493,8 @@ public final class DialogTools extends AppCompatDialog {
         private OnClickQrListener qrListener;
         private String[] datas;
         private CameraAdapter.OnClickCameraAdapterListener adapterListener;
+        private String hintText1 = "";
+        private String hintText2 = "";
 
         private Builder(Context context) {
             this.context = context;
@@ -931,6 +951,26 @@ public final class DialogTools extends AppCompatDialog {
          */
         public Builder setWindowDrawable(@DrawableRes int windowDrawable) {
             this.windowDrawable = windowDrawable;
+            return newBuilder;
+        }
+
+        /**
+         * 输入框提示
+         *
+         * @param hintText1 内容1
+         */
+        public Builder setHintText1(String hintText1) {
+            this.hintText1 = hintText1;
+            return newBuilder;
+        }
+
+        /**
+         * 输入框提示
+         *
+         * @param hintText2 内容2
+         */
+        public Builder setHintText2(String hintText2) {
+            this.hintText2 = hintText2;
             return newBuilder;
         }
 
