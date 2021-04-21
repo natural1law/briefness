@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
@@ -30,6 +31,9 @@ import com.androidx.view.dialog.adapter.CameraAdapter;
 import com.zyao89.view.zloading.ZLoadingTextView;
 
 import org.jetbrains.annotations.NotNull;
+
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 /**
  * @author 李玄道
@@ -174,7 +178,9 @@ public final class DialogTools extends AppCompatDialog {
             if (windowDrawable != -1) {
                 layout.setBackground(getContext().getResources().getDrawable(windowDrawable, getContext().getTheme()));
             }
-            layout.layout(left, top, right, bottom);
+            FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(MATCH_PARENT, WRAP_CONTENT);
+            lp.setMargins(left, top, right, bottom);
+            layout.setLayoutParams(lp);
         }
 
         AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
