@@ -6,7 +6,7 @@ plugins {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 23
@@ -69,4 +69,6 @@ dependencies {
     api 'com.github.bumptech.glide:glide:+'
     api 'com.github.bingoogolapple.BGAQRCode-Android:zxing:+'
     api 'com.joker.HuanTanSheng:EasyPhotos:andX-+'
+    // 选择器
+    api 'com.contrarywind:Android-PickerView:+'
 }
