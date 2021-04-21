@@ -999,7 +999,9 @@ public final class DialogTools extends AppCompatDialog {
     }
 
     public interface OnClickQrListener {
-        void qr(AppCompatAutoCompleteTextView paramView);
+        default void qr(AppCompatAutoCompleteTextView paramView) {
+            paramView.setText("");
+        }
 
         /**
          * @param var1 烤房编码
