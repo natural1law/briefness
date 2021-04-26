@@ -46,7 +46,6 @@ import static com.androidx.http.api.NetHttp.POST_JSON;
 import static com.androidx.http.api.NetHttp.POST_MAP;
 
 public final class NetRequest {
-
     private static final String TAG = "NetRequest--";
 
     private final AppCompatActivity aThis;
