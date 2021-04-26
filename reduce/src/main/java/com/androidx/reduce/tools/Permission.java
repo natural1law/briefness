@@ -3,7 +3,6 @@ package com.androidx.reduce.tools;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Process;
 import android.text.TextUtils;
 
@@ -26,7 +25,6 @@ import java.util.Objects;
 
 import static android.Manifest.permission.REQUEST_INSTALL_PACKAGES;
 import static android.Manifest.permission.SYSTEM_ALERT_WINDOW;
-import static android.os.Build.VERSION_CODES.M;
 
 /**
  * 授权权限
@@ -152,14 +150,6 @@ public class Permission implements NextAction {
         if (mPermissionList.isEmpty()) {
             throw new RuntimeException("must add some permission to request!!");
         }
-        if (Build.VERSION.SDK_INT < M) {
-            HashMap<String, GrantResult> grantMap = new HashMap<>();
-            for (String permission : mPermissionList) {
-                grantMap.put(permission, GrantResult.GRANT);
-            }
-            listener.onGrant(grantMap);
-            return;
-        }
         PermissionUtils.checkPermissions(mActivity, mPermissionList);
         mPermissionRequestListener = listener;
         pollPermission();
@@ -177,20 +167,17 @@ public class Permission implements NextAction {
         if (REQUEST_INSTALL_PACKAGES.equals(permission)) {
             if (PermissionUtils.isHasInstallPermission(mActivity)) {
                 mPermissionGrantMap.put(permission, GrantResult.GRANT);
-                pollPermission();
             } else {
                 mPermissionGrantMap.put(permission, GrantResult.DENIED);
-                pollPermission();
             }
-
+            pollPermission();
         } else if (SYSTEM_ALERT_WINDOW.equals(permission)) {
             if (PermissionUtils.isHasOverlaysPermission(mActivity)) {
                 mPermissionGrantMap.put(permission, GrantResult.GRANT);
-                pollPermission();
             } else {
                 mPermissionGrantMap.put(permission, GrantResult.DENIED);
-                pollPermission();
             }
+            pollPermission();
         } else if (mActivity.checkPermission(permission, Process.myPid(), Process.myUid()) == PackageManager.PERMISSION_GRANTED) {
             mPermissionGrantMap.put(permission, GrantResult.GRANT);
             pollPermission();

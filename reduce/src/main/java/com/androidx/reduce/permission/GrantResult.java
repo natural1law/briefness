@@ -23,7 +23,7 @@ public enum GrantResult {
      */
     IGNORE(-2);
 
-    private int type;
+    private final int type;
 
     GrantResult(int type) {
         this.type = type;
