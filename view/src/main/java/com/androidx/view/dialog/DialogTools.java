@@ -21,7 +21,6 @@ import androidx.annotation.Size;
 import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatDialog;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
-import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -29,15 +28,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidx.view.R;
 import com.androidx.view.dialog.adapter.CameraAdapter;
-import com.bigkoo.pickerview.builder.TimePickerBuilder;
-import com.bigkoo.pickerview.listener.OnTimeSelectListener;
-import com.bigkoo.pickerview.view.TimePickerView;
 import com.zyao89.view.zloading.ZLoadingTextView;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author 李玄道
@@ -46,7 +41,6 @@ import java.util.Date;
  */
 public final class DialogTools extends AppCompatDialog {
 
-    private Context ct;
     /**
      * 基础参数
      */
@@ -108,11 +102,6 @@ public final class DialogTools extends AppCompatDialog {
     private final int totalTime;
     private final String cdPrefix;
     private final String cdSuffix;
-    /**
-     * 输入内容提示
-     */
-    private final String hintText1;
-    private final String hintText2;
 
     /**
      * 布局文件
@@ -150,10 +139,6 @@ public final class DialogTools extends AppCompatDialog {
          * 消息输入提示窗
          */
         public static final int INPUT_CHECK = R.layout.dialog7;
-        /**
-         * 筛选输入提示窗
-         */
-        public static final int FILTRATE = R.layout.dialog8;
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -166,6 +151,7 @@ public final class DialogTools extends AppCompatDialog {
         Window window = this.getWindow();
         if (window != null) {
             window.setBackgroundDrawableResource(bdr);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
             WindowManager.LayoutParams params = window.getAttributes();
             params.width = width;
             params.height = height;
@@ -191,8 +177,6 @@ public final class DialogTools extends AppCompatDialog {
 
         AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
         AppCompatAutoCompleteTextView nameView = findViewById(R.id.dialog_name);
-        if (paramView != null) paramView.setHint(hintText1);
-        if (nameView != null) nameView.setHint(hintText2);
         try {
             titleView();
             contentView();
@@ -201,7 +185,6 @@ public final class DialogTools extends AppCompatDialog {
             timingView();
             cameraView();
             qrView();
-            timeSelect();
         } catch (Exception e) {
             Log.e("dialogTools异常", String.valueOf(e.getMessage()), e);
         }
@@ -307,63 +290,6 @@ public final class DialogTools extends AppCompatDialog {
     }
 
     /**
-     * 时间选择器
-     */
-    private void timeSelect() {
-        if (layout == LayoutResId.FILTRATE) {
-            AppCompatImageButton timeStartView = findViewById(R.id.time_start);
-            AppCompatImageButton timeEndView = findViewById(R.id.time_end);
-            AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
-            AppCompatAutoCompleteTextView nameView = findViewById(R.id.dialog_name);
-            //时间选择器
-            TimePickerView startTime = new TimePickerBuilder(ct, (OnTimeSelectListener) (date, v) -> {//选中事件回调
-                paramView.setText(dateToString(date));
-            })
-                    .setType(new boolean[]{true, true, true, true, true, false})// 默认全部显示
-                    .setCancelText("取消")//取消按钮文字
-                    .setSubmitText("确认")//确认按钮文字
-                    .setContentTextSize(16)//滚轮文字大小
-                    .setTitleSize(18)//标题文字大小
-                    .setTitleText("开始时间")//标题文字
-                    .setOutSideCancelable(false)//点击屏幕，点在控件外部范围时，是否取消显示
-                    .isCyclic(true)//是否循环滚动
-                    .setTitleColor(Color.parseColor("#525252"))//标题文字颜色
-                    .setSubmitColor(Color.parseColor("#E47168"))//确定按钮文字颜色
-                    .setCancelColor(Color.parseColor("#AFAFAF"))//取消按钮文字颜色
-                    .setTitleBgColor(Color.parseColor("#FFFFFFFF"))//标题背景颜色 Night mode
-                    .setBgColor(Color.parseColor("#F6F6F6"))//滚轮背景颜色 Night mode
-                    .setLabel("年", "月", "日", "时", "分", null)//默认设置为年月日时分秒
-                    .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                    .isDialog(false)//是否显示为对话框样式
-                    .build();
-
-            TimePickerView endTime = new TimePickerBuilder(ct, (OnTimeSelectListener) (date, v) -> {//选中事件回调
-                nameView.setText(dateToString(date));
-            })
-                    .setType(new boolean[]{true, true, true, true, true, false})// 默认全部显示
-                    .setCancelText("取消")//取消按钮文字
-                    .setSubmitText("确认")//确认按钮文字
-                    .setContentTextSize(16)//滚轮文字大小
-                    .setTitleSize(18)//标题文字大小
-                    .setTitleText("结束时间")//标题文字
-                    .setOutSideCancelable(false)//点击屏幕，点在控件外部范围时，是否取消显示
-                    .isCyclic(true)//是否循环滚动
-                    .setTitleColor(Color.parseColor("#525252"))//标题文字颜色
-                    .setSubmitColor(Color.parseColor("#E47168"))//确定按钮文字颜色
-                    .setCancelColor(Color.parseColor("#AFAFAF"))//取消按钮文字颜色
-                    .setTitleBgColor(Color.parseColor("#FFFFFFFF"))//标题背景颜色 Night mode
-                    .setBgColor(Color.parseColor("#F6F6F6"))//滚轮背景颜色 Night mode
-                    .setLabel("年", "月", "日", "时", "分", null)//默认设置为年月日时分秒
-                    .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                    .isDialog(false)//是否显示为对话框样式
-                    .build();
-
-            timeStartView.setOnClickListener(v -> startTime.show());
-            timeEndView.setOnClickListener(v -> endTime.show());
-        }
-    }
-
-    /**
      * 确认按钮布局
      */
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -456,21 +382,12 @@ public final class DialogTools extends AppCompatDialog {
         if (layout == LayoutResId.INPUT_CHECK) {
             AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
             AppCompatImageView qrView = findViewById(R.id.dialog_qr);
-            if (qrView != null) qrView.setOnClickListener(v -> qrListener.qr(paramView));
+            if (qrView != null) qrView.setOnClickListener(v -> qrListener.qr(Objects.requireNonNull(paramView)));
         }
-    }
-
-    /**
-     * 时间转换字符串
-     */
-    @SuppressLint("SimpleDateFormat")
-    private String dateToString(Date date) {
-        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
     }
 
     private DialogTools(Context context, @NotNull Builder builder) {
         super(context, builder.style);
-        this.ct = context;
         this.layout = builder.layout;
         this.canceled = builder.canceled;
         this.cancelable = builder.cancelable;
@@ -514,9 +431,6 @@ public final class DialogTools extends AppCompatDialog {
         this.cdSuffix = builder.cdSuffix;
         this.datas = builder.datas;
         this.adapterListener = builder.adapterListener;
-        this.hintText1 = builder.hintText1;
-        this.hintText2 = builder.hintText2;
-
     }
 
     @NotNull
@@ -572,8 +486,6 @@ public final class DialogTools extends AppCompatDialog {
         private OnClickQrListener qrListener;
         private String[] datas;
         private CameraAdapter.OnClickCameraAdapterListener adapterListener;
-        private String hintText1 = "";
-        private String hintText2 = "";
 
         private Builder(Context context) {
             this.context = context;
@@ -1030,26 +942,6 @@ public final class DialogTools extends AppCompatDialog {
          */
         public Builder setWindowDrawable(@DrawableRes int windowDrawable) {
             this.windowDrawable = windowDrawable;
-            return newBuilder;
-        }
-
-        /**
-         * 输入框提示
-         *
-         * @param hintText1 内容1
-         */
-        public Builder setHintText1(String hintText1) {
-            this.hintText1 = hintText1;
-            return newBuilder;
-        }
-
-        /**
-         * 输入框提示
-         *
-         * @param hintText2 内容2
-         */
-        public Builder setHintText2(String hintText2) {
-            this.hintText2 = hintText2;
             return newBuilder;
         }
 
