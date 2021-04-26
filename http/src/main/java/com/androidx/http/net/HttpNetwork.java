@@ -29,8 +29,10 @@ public final class HttpNetwork implements IHttpNetwork {
     private static final int ALIVE = 30;// 接池的连接活跃时间（默认设置半小时）
     private final StringBuffer param = new StringBuffer();
     private static final HttpNetwork instance = Singleton.INSTANCE;
+    private final Request.Builder request;
 
     private HttpNetwork() {
+        request = new Request.Builder();
     }
 
     @Contract(pure = true)
@@ -93,8 +95,7 @@ public final class HttpNetwork implements IHttpNetwork {
                 i++;
             }
         }
-        return new Request.Builder()
-                .get()
+        return request.get()
                 .url(url + param.toString())
                 .build();
     }
@@ -108,8 +109,7 @@ public final class HttpNetwork implements IHttpNetwork {
         for (String key : map.keySet()) {
             formBody.add(key, Objects.requireNonNull(map.get(key)).toString());
         }
-        return new Request.Builder()
-                .post(formBody.build())
+        return request.post(formBody.build())
                 .url(url)
                 .build();
     }
@@ -119,17 +119,9 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull Request postRequest(String url, JSONObject json) {
-        try {
-            return new Request.Builder()
-                    .post(RequestBody.create(json.toString(), JSON))
-                    .url(url)
-                    .build();
-        } catch (Exception e) {
-            return new Request.Builder()
-                    .post(RequestBody.create(json.toString(), JSON))
-                    .url(url)
-                    .build();
-        }
+        return request.post(RequestBody.create(json.toString(), JSON))
+                .url(url)
+                .build();
     }
 
     /**
@@ -162,8 +154,7 @@ public final class HttpNetwork implements IHttpNetwork {
                 i++;
             }
         }
-        return new Request.Builder()
-                .delete()
+        return request.delete()
                 .url(url + param.toString())
                 .build();
     }
@@ -173,17 +164,9 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull Request deleteRequest(String url, JSONObject json) {
-        try {
-            return new Request.Builder()
-                    .delete(RequestBody.create(json.toString(), null))
-                    .url(url)
-                    .build();
-        } catch (Exception e) {
-            return new Request.Builder()
-                    .delete(RequestBody.create(json.toString(), null))
-                    .url(url)
-                    .build();
-        }
+        return request.delete(RequestBody.create(json.toString(), null))
+                .url(url)
+                .build();
     }
 
     /**
@@ -192,39 +175,19 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull Request formRequest(String url, JSONObject json) {
-        try {
-            return new Request.Builder()
-                    .post(new FormBody.Builder()
-                            .add(JSON_KEY, json.toString())
-                            .build())
-                    .url(url)
-                    .build();
-        } catch (Exception e) {
-            return new Request.Builder()
-                    .post(new FormBody.Builder()
-                            .add(JSON_KEY, json.toString())
-                            .build())
-                    .url(url)
-                    .build();
-        }
+        return request.post(new FormBody.Builder().add(JSON_KEY, json.toString()).build())
+                .url(url)
+                .build();
     }
 
     /**
-     * 登录
+     * protobuf 数据传输
      */
     @Override
     public @NotNull Request postRequestProto(String url, byte[] bytes) {
-        try {
-            return new Request.Builder()
-                    .post(RequestBody.create(bytes, PROTO))
-                    .url(url)
-                    .build();
-        } catch (Exception e) {
-            return new Request.Builder()
-                    .post(RequestBody.create(bytes, PROTO))
-                    .url(url)
-                    .build();
-        }
+        return request.post(RequestBody.create(bytes, PROTO))
+                .url(url)
+                .build();
     }
 
     private static final class Singleton {

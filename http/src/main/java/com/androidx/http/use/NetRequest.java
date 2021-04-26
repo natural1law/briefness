@@ -1,5 +1,6 @@
 package com.androidx.http.use;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -13,10 +14,10 @@ import com.androidx.http.api.NetHttp;
 import com.androidx.http.module.MsgModule;
 import com.androidx.http.net.WebSocketRequest;
 import com.androidx.http.net.listener.BytesCallback;
-import com.androidx.http.net.listener.StringCallback;
 import com.androidx.http.net.listener.Enqueue;
 import com.androidx.http.net.listener.LoginCallback;
 import com.androidx.http.net.listener.MsgCallback;
+import com.androidx.http.net.listener.StringCallback;
 
 import org.json.JSONObject;
 
@@ -36,7 +37,13 @@ import static android.provider.Telephony.Carriers.USER;
 import static android.provider.Telephony.Mms.Addr.ADDRESS;
 import static android.provider.Telephony.Mms.Addr.TYPE;
 import static android.provider.Telephony.Mms.Part.NAME;
-import static com.androidx.http.use.IMApp.appThis;
+import static com.androidx.http.api.NetHttp.DEL_JSON;
+import static com.androidx.http.api.NetHttp.DEL_MAP;
+import static com.androidx.http.api.NetHttp.FROM_JSON;
+import static com.androidx.http.api.NetHttp.GET_MAP;
+import static com.androidx.http.api.NetHttp.POST_BYTES;
+import static com.androidx.http.api.NetHttp.POST_JSON;
+import static com.androidx.http.api.NetHttp.POST_MAP;
 
 public final class NetRequest {
 
@@ -258,7 +265,7 @@ public final class NetRequest {
             bundle.putString(NAME, project);
             bundle.putLong(TYPE, reconnectInterval);
             bundle.putBoolean(AUTHORITY, isHttps);
-            appThis.startService(aThis, LoginServer.class, bundle);
+            aThis.startService(new Intent(aThis, LoginServer.class).putExtras(bundle));
         } catch (Exception e) {
             Log.e(TAG + "启动异常：", String.valueOf(e.getMessage()));
         }
@@ -269,7 +276,7 @@ public final class NetRequest {
      */
     public void stop() {
         try {
-            appThis.stopService(aThis, LoginServer.class);
+            aThis.stopService(new Intent(aThis, LoginServer.class));
         } catch (Exception e) {
             Log.e(TAG + "销毁异常：", String.valueOf(e.getMessage()));
         }
@@ -321,17 +328,17 @@ public final class NetRequest {
     /**
      * http发送请求
      *
-     * @param host     服务器IP地址
-     * @param port     服务器端口
-     * @param suffix   路径后缀
-     * @param data     发送数据
+     * @param host           服务器IP地址
+     * @param port           服务器端口
+     * @param suffix         路径后缀
+     * @param data           发送数据
      * @param stringCallback 结果回调
      */
     public static void sendMapGet(String host, String port, String suffix, Map<String, Object> data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHost(host, port)
                 .setUrlSuffix(suffix)
-                .setMode(1)
+                .setMode(GET_MAP)
                 .setMap(data)
                 .setCallback(stringCallback)
                 .build();
@@ -340,16 +347,16 @@ public final class NetRequest {
     /**
      * https发送请求
      *
-     * @param host     服务器IP地址
-     * @param suffix   路径后缀
-     * @param data     发送数据
+     * @param host           服务器IP地址
+     * @param suffix         路径后缀
+     * @param data           发送数据
      * @param stringCallback 结果回调
      */
     public static void sendMapGet(String host, String suffix, Map<String, Object> data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHosts(host)
                 .setUrlSuffix(suffix)
-                .setMode(1)
+                .setMode(GET_MAP)
                 .setMap(data)
                 .setCallback(stringCallback)
                 .build();
@@ -358,17 +365,17 @@ public final class NetRequest {
     /**
      * http发送请求
      *
-     * @param host     服务器IP地址
-     * @param port     服务器端口
-     * @param suffix   路径后缀
-     * @param data     发送数据
+     * @param host           服务器IP地址
+     * @param port           服务器端口
+     * @param suffix         路径后缀
+     * @param data           发送数据
      * @param stringCallback 结果回调
      */
     public static void sendJsonPost(String host, String port, String suffix, JSONObject data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHost(host, port)
                 .setUrlSuffix(suffix)
-                .setMode(2)
+                .setMode(POST_JSON)
                 .setJson(data)
                 .setCallback(stringCallback)
                 .build();
@@ -377,16 +384,16 @@ public final class NetRequest {
     /**
      * https发送请求
      *
-     * @param host     服务器IP地址
-     * @param suffix   路径后缀
-     * @param data     发送数据
+     * @param host           服务器IP地址
+     * @param suffix         路径后缀
+     * @param data           发送数据
      * @param stringCallback 结果回调
      */
     public static void sendJsonPost(String host, String suffix, JSONObject data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHosts(host)
                 .setUrlSuffix(suffix)
-                .setMode(2)
+                .setMode(POST_JSON)
                 .setJson(data)
                 .setCallback(stringCallback)
                 .build();
@@ -395,17 +402,17 @@ public final class NetRequest {
     /**
      * http发送请求
      *
-     * @param host     服务器IP地址
-     * @param port     服务器端口
-     * @param suffix   路径后缀
-     * @param data     发送数据
+     * @param host           服务器IP地址
+     * @param port           服务器端口
+     * @param suffix         路径后缀
+     * @param data           发送数据
      * @param stringCallback 结果回调
      */
     public static void sendMapPost(String host, String port, String suffix, Map<String, Object> data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHost(host, port)
                 .setUrlSuffix(suffix)
-                .setMode(3)
+                .setMode(POST_MAP)
                 .setMap(data)
                 .setCallback(stringCallback)
                 .build();
@@ -414,16 +421,16 @@ public final class NetRequest {
     /**
      * https发送请求
      *
-     * @param host     服务器IP地址
-     * @param suffix   路径后缀
-     * @param data     发送数据
+     * @param host           服务器IP地址
+     * @param suffix         路径后缀
+     * @param data           发送数据
      * @param stringCallback 结果回调
      */
     public static void sendMapPost(String host, String suffix, Map<String, Object> data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHosts(host)
                 .setUrlSuffix(suffix)
-                .setMode(3)
+                .setMode(POST_MAP)
                 .setMap(data)
                 .setCallback(stringCallback)
                 .build();
@@ -432,17 +439,17 @@ public final class NetRequest {
     /**
      * http发送请求
      *
-     * @param host     服务器IP地址
-     * @param port     服务器端口
-     * @param suffix   路径后缀
-     * @param data     发送数据
+     * @param host          服务器IP地址
+     * @param port          服务器端口
+     * @param suffix        路径后缀
+     * @param data          发送数据
      * @param bytesCallback 结果回调
      */
     public static void sendBytes(String host, String port, String suffix, byte[] data, BytesCallback bytesCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHost(host, port)
                 .setUrlSuffix(suffix)
-                .setMode(4)
+                .setMode(POST_BYTES)
                 .setBytes(data)
                 .setCallback(bytesCallback)
                 .build();
@@ -451,16 +458,16 @@ public final class NetRequest {
     /**
      * https发送请求
      *
-     * @param host     服务器IP地址
-     * @param suffix   路径后缀
-     * @param data     发送数据
+     * @param host           服务器IP地址
+     * @param suffix         路径后缀
+     * @param data           发送数据
      * @param stringCallback 结果回调
      */
     public static void sendBytes(String host, String suffix, byte[] data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHosts(host)
                 .setUrlSuffix(suffix)
-                .setMode(4)
+                .setMode(POST_BYTES)
                 .setBytes(data)
                 .setCallback(stringCallback)
                 .build();
@@ -469,17 +476,17 @@ public final class NetRequest {
     /**
      * http发送请求
      *
-     * @param host     服务器IP地址
-     * @param port     服务器端口
-     * @param suffix   路径后缀
-     * @param data     发送数据
+     * @param host           服务器IP地址
+     * @param port           服务器端口
+     * @param suffix         路径后缀
+     * @param data           发送数据
      * @param stringCallback 结果回调
      */
     public static void sendMapDelete(String host, String port, String suffix, Map<String, Object> data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHost(host, port)
                 .setUrlSuffix(suffix)
-                .setMode(5)
+                .setMode(DEL_MAP)
                 .setMap(data)
                 .setCallback(stringCallback)
                 .build();
@@ -488,16 +495,16 @@ public final class NetRequest {
     /**
      * https发送请求
      *
-     * @param host     服务器IP地址
-     * @param suffix   路径后缀
-     * @param data     发送数据
+     * @param host           服务器IP地址
+     * @param suffix         路径后缀
+     * @param data           发送数据
      * @param stringCallback 结果回调
      */
     public static void sendMapDelete(String host, String suffix, Map<String, Object> data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHosts(host)
                 .setUrlSuffix(suffix)
-                .setMode(5)
+                .setMode(DEL_MAP)
                 .setMap(data)
                 .setCallback(stringCallback)
                 .build();
@@ -506,17 +513,17 @@ public final class NetRequest {
     /**
      * http发送请求
      *
-     * @param host     服务器IP地址
-     * @param port     服务器端口
-     * @param suffix   路径后缀
-     * @param data     发送数据
+     * @param host           服务器IP地址
+     * @param port           服务器端口
+     * @param suffix         路径后缀
+     * @param data           发送数据
      * @param stringCallback 结果回调
      */
     public static void sendJsonDelete(String host, String port, String suffix, JSONObject data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHost(host, port)
                 .setUrlSuffix(suffix)
-                .setMode(6)
+                .setMode(DEL_JSON)
                 .setJson(data)
                 .setCallback(stringCallback)
                 .build();
@@ -525,16 +532,16 @@ public final class NetRequest {
     /**
      * https发送请求
      *
-     * @param host     服务器IP地址
-     * @param suffix   路径后缀
-     * @param data     发送数据
+     * @param host           服务器IP地址
+     * @param suffix         路径后缀
+     * @param data           发送数据
      * @param stringCallback 结果回调
      */
     public static void sendJsonDelete(String host, String suffix, JSONObject data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHosts(host)
                 .setUrlSuffix(suffix)
-                .setMode(6)
+                .setMode(DEL_JSON)
                 .setJson(data)
                 .setCallback(stringCallback)
                 .build();
@@ -543,17 +550,17 @@ public final class NetRequest {
     /**
      * http发送请求
      *
-     * @param host     服务器IP地址
-     * @param port     服务器端口
-     * @param suffix   路径后缀
-     * @param data     发送数据
+     * @param host           服务器IP地址
+     * @param port           服务器端口
+     * @param suffix         路径后缀
+     * @param data           发送数据
      * @param stringCallback 结果回调
      */
     public static void sendJsonFrom(String host, String port, String suffix, JSONObject data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHost(host, port)
                 .setUrlSuffix(suffix)
-                .setMode(7)
+                .setMode(FROM_JSON)
                 .setJson(data)
                 .setCallback(stringCallback)
                 .build();
@@ -562,16 +569,16 @@ public final class NetRequest {
     /**
      * https发送请求
      *
-     * @param host     服务器IP地址
-     * @param suffix   路径后缀
-     * @param data     发送数据
+     * @param host           服务器IP地址
+     * @param suffix         路径后缀
+     * @param data           发送数据
      * @param stringCallback 结果回调
      */
     public static void sendJsonFrom(String host, String suffix, JSONObject data, StringCallback stringCallback) {
         Objects.requireNonNull(NetHttp.Companion.builder())
                 .setHosts(host)
                 .setUrlSuffix(suffix)
-                .setMode(7)
+                .setMode(FROM_JSON)
                 .setJson(data)
                 .setCallback(stringCallback)
                 .build();

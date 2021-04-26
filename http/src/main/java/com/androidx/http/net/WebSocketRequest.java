@@ -20,6 +20,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -178,7 +179,7 @@ public final class WebSocketRequest implements Enqueue {
 //                    webSocket.close(CHECK_CLOSE, "signCheckError");
 //                    return;
 //                }
-                switch (res.getMsg()) {
+                switch (Objects.requireNonNull(res.getMsg())) {
                     case "success":
                         try {
                             Log.i("connection", "建立连接");

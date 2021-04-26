@@ -69,7 +69,7 @@ public final class HttpRequest1 implements HttpRequestListener {
         httpNetwork.getClient().newCall(httpNetwork.postRequestProto(url, bytes)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                handler.sendMessage(handler.obtainMessage(-2, new MsgModule(e.getMessage().getBytes(), callBack)));
+                handler.sendMessage(handler.obtainMessage(-2, new MsgModule(Objects.requireNonNull(e.getMessage()).getBytes(), callBack)));
                 // 如果超时并未超过指定次数，则重新连接
                 if (e instanceof SocketTimeoutException && currentConnect < maxAnewCount) {
                     currentConnect++;
