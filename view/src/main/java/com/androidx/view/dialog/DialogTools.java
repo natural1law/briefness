@@ -103,6 +103,9 @@ public final class DialogTools extends AppCompatDialog {
     private final String cdPrefix;
     private final String cdSuffix;
 
+    private final String hintText1;
+    private final String hintText2;
+
     /**
      * 布局文件
      */
@@ -177,6 +180,8 @@ public final class DialogTools extends AppCompatDialog {
 
         AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
         AppCompatAutoCompleteTextView nameView = findViewById(R.id.dialog_name);
+        if (paramView != null) paramView.setHint(hintText1);
+        if (nameView != null) nameView.setHint(hintText2);
         try {
             titleView();
             contentView();
@@ -382,7 +387,8 @@ public final class DialogTools extends AppCompatDialog {
         if (layout == LayoutResId.INPUT_CHECK) {
             AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
             AppCompatImageView qrView = findViewById(R.id.dialog_qr);
-            if (qrView != null) qrView.setOnClickListener(v -> qrListener.qr(Objects.requireNonNull(paramView)));
+            if (qrView != null)
+                qrView.setOnClickListener(v -> qrListener.qr(Objects.requireNonNull(paramView)));
         }
     }
 
@@ -431,6 +437,8 @@ public final class DialogTools extends AppCompatDialog {
         this.cdSuffix = builder.cdSuffix;
         this.datas = builder.datas;
         this.adapterListener = builder.adapterListener;
+        this.hintText1 = builder.hintText1;
+        this.hintText2 = builder.hintText2;
     }
 
     @NotNull
@@ -486,6 +494,8 @@ public final class DialogTools extends AppCompatDialog {
         private OnClickQrListener qrListener;
         private String[] datas;
         private CameraAdapter.OnClickCameraAdapterListener adapterListener;
+        private String hintText1;
+        private String hintText2;
 
         private Builder(Context context) {
             this.context = context;
@@ -943,6 +953,14 @@ public final class DialogTools extends AppCompatDialog {
         public Builder setWindowDrawable(@DrawableRes int windowDrawable) {
             this.windowDrawable = windowDrawable;
             return newBuilder;
+        }
+
+        public void setHintText1(String hintText1) {
+            this.hintText1 = hintText1;
+        }
+
+        public void setHintText2(String hintText2) {
+            this.hintText2 = hintText2;
         }
 
         @NotNull
