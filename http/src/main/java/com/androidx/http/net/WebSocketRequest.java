@@ -12,7 +12,6 @@ import com.androidx.http.net.listener.Enqueue;
 import com.androidx.http.net.listener.LoginCallback;
 import com.androidx.http.net.listener.MsgCallback;
 import com.androidx.http.net.module.DataModule;
-import com.androidx.reduce.tools.Secure;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.protobuf.InvalidProtocolBufferException;
@@ -241,10 +240,6 @@ public final class WebSocketRequest implements Enqueue {
     @SuppressLint("LongLogTag")
     private static void init() {
         try {
-            String key = Secure.AES.key();
-            String uid = Secure.RSA.encryptByPublicKey(key, publicKey());
-            String user = Secure.AES.encrypt(key, username);
-            String pass = Secure.AES.encrypt(key, password);
             OkHttpClient client = HttpNetwork.builder().getClient();
             ExecutorService server = client.dispatcher().executorService();
             if (server.isShutdown()) {
@@ -252,9 +247,9 @@ public final class WebSocketRequest implements Enqueue {
             }
             lock.lockInterruptibly();
             if (isHttps) {
-                okWebSocket = client.newWebSocket(new Request.Builder().url(hosts(host, port) + init(uid, user, pass, project)).build(), WebSocketHolder.build());
+                okWebSocket = client.newWebSocket(new Request.Builder().url(hosts(host, port) + init(publicKey(), username, password, project)).build(), WebSocketHolder.build());
             } else {
-                okWebSocket = client.newWebSocket(new Request.Builder().url(host(host, port) + init(uid, user, pass, project)).build(), WebSocketHolder.build());
+                okWebSocket = client.newWebSocket(new Request.Builder().url(host(host, port) + init(publicKey(), username, password, project)).build(), WebSocketHolder.build());
             }
         } catch (Exception e) {
             Log.e("webSocketRequestException", String.valueOf(e.getMessage()));
