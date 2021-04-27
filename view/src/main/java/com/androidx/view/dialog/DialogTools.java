@@ -955,12 +955,14 @@ public final class DialogTools extends AppCompatDialog {
             return newBuilder;
         }
 
-        public void setHintText1(String hintText1) {
+        public Builder setHintText1(String hintText1) {
             this.hintText1 = hintText1;
+            return newBuilder;
         }
 
-        public void setHintText2(String hintText2) {
+        public Builder setHintText2(String hintText2) {
             this.hintText2 = hintText2;
+            return newBuilder;
         }
 
         @NotNull
