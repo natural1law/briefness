@@ -25,12 +25,12 @@ import java.util.Map;
 public abstract class BaseFragment extends Fragment {
 
     private volatile View rootView;
-    private BytesDataListener bytesDataListener;
+    public BytesDataListener bytesDataListener;
     public StringDataListener stringDataListener;
-    private ObjectDataListener objectDataListener;
-    private JsonDataListener jsonDataListener;
-    private ListDataListener listDataListener;
-    private MapDataListener mapDataListener;
+    public ObjectDataListener objectDataListener;
+    public JsonDataListener jsonDataListener;
+    public ListDataListener listDataListener;
+    public MapDataListener mapDataListener;
 
     protected View setRootView(LayoutInflater inflater, ViewGroup container, @LayoutRes int layoutId) {
         if (rootView == null) {

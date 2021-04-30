@@ -61,9 +61,9 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation project(path: ':view')
-//    implementation project(path: ':http')
-//    implementation project(path: ':chart')
-//    implementation project(path: ':reduce')
+    implementation project(path: ':reduce')
+    implementation project(path: ':http')
+    implementation project(path: ':chart')
 //    implementation(name: 'view', ext: 'aar')
 //    implementation(name: 'reduce', ext: 'aar')
     //noinspection GradleDependency
