@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingDefaultResource">
+
+    <item
+        android:id="@+id/first"
+        android:icon="@drawable/nav_icon1"
+        android:title="首页" />
+
+    <item
+        android:id="@+id/second"
+        android:icon="@drawable/nav_icon4"
+        android:title="我的"
+        tools:ignore="HardcodedText" />
+
+</menu>

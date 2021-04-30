@@ -5,23 +5,37 @@ plugins {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.androidx.briefness"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
         versionName "2.0"
-
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            minifyEnabled true
+            shrinkResources true
+            multiDexEnabled true
+            proguardFiles 'proguard-rules.pro'
         }
+//
+//        debug {
+//            minifyEnabled true
+//            shrinkResources true
+//            multiDexEnabled true
+//            proguardFiles 'proguard-rules.pro'
+//        }
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
+        maxProcessCount 8
+        preDexLibraries = true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -30,23 +44,33 @@ android {
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = '1.8'
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+        maven { url 'https://jitpack.io' }
     }
+
 }
 
 dependencies {
     //noinspection DifferentStdlibGradleVersion
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-//    implementation project(path: ':fold')
+    implementation project(path: ':view')
 //    implementation project(path: ':http')
 //    implementation project(path: ':chart')
 //    implementation project(path: ':reduce')
-    testImplementation 'junit:junit:4.13.1'
+//    implementation(name: 'view', ext: 'aar')
+//    implementation(name: 'reduce', ext: 'aar')
+    //noinspection GradleDependency
+    testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    // bindView
+    implementation 'com.jakewharton:butterknife:10.2.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.1'
 }

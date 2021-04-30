@@ -1,7 +1,6 @@
 package com.androidx.view.bar;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -11,11 +10,14 @@ import android.view.ViewGroup;
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
+import androidx.annotation.IntRange;
+import androidx.annotation.IntegerRes;
 import androidx.annotation.MenuRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -23,86 +25,168 @@ import com.androidx.view.R;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
  * 底部导航栏
  *
  * @author 李玄道
- * @date 2020/06/29
+ * @date 2021/04/29
  */
-@SuppressWarnings("ALL")
 public final class NavigationBar {
 
-    private int menu;
-    private List<Integer> menuIds;
-    private int frameBackgroundColor;
-    private int navBackgroundColor;
-    private int navItemTextColor;
-
+    /**
+     * 基础参数
+     */
+    private final int menu;
     private AppCompatActivity aThis;
-    private Fragment currentFragment;//当前碎片
-
+    private FragmentActivity fThis;
+    private final int fbc;
+    private final int nbc;
+    private final int itc;
+    private int[] items;
+    private final int[] space;
     private List<Fragment> fragments;
-
+    private FragmentTransaction sf;
+    /**
+     * 基础布局
+     */
+    private Fragment cf;//当前碎片
     public BottomNavigationView navigationView;
     private LinearLayoutCompat navigationLayout;
     private FragmentContainerView fragmentLayout;
 
-    private NavigationBar(NewBuilder builder) {
-        try {
-            this.aThis = builder.aThis;
-            this.currentFragment = new Fragment();
-            this.fragments = builder.fragments;
-            this.menu = builder.menu;
-            this.menuIds = builder.menuIds;
-            this.navItemTextColor = builder.navItemTextColor;
-            this.frameBackgroundColor = builder.frameBackgroundColor;
-            this.navBackgroundColor = builder.navigationBackgroundColor;
-            this.navigationView = aThis.findViewById(R.id.navigation_view);
-            this.navigationLayout = aThis.findViewById(R.id.navigation_layout);
-            this.fragmentLayout = aThis.findViewById(R.id.standard_frame);
-            initView();
-            adjustNavigationIcoSize(navigationView);
-            for (Fragment fragment : fragments) {
-                fragmentManager(fragment);
-            }
-        } catch (Exception e) {
-            Log.e("NavigationBar", String.valueOf(e.getMessage()));
+    @SuppressLint("NonConstantResourceId")
+    private final BottomNavigationView.OnNavigationItemSelectedListener selectedListener = item -> {
+        switch (fragments.size()) {
+            case 2:
+                if (items[0] == item.getItemId()) {
+                    switchFragment(fragments.get(0)).commit();
+                } else if (items[1] == item.getItemId()) {
+                    switchFragment(fragments.get(1)).commit();
+                }
+                return true;
+            case 3:
+                if (items[0] == item.getItemId()) {
+                    switchFragment(fragments.get(0)).commit();
+                } else if (items[1] == item.getItemId()) {
+                    switchFragment(fragments.get(1)).commit();
+                } else if (items[2] == item.getItemId()) {
+                    switchFragment(fragments.get(2)).commit();
+                }
+                return true;
+            case 4:
+                if (items[0] == item.getItemId()) {
+                    switchFragment(fragments.get(0)).commit();
+                } else if (items[1] == item.getItemId()) {
+                    switchFragment(fragments.get(1)).commit();
+                } else if (items[2] == item.getItemId()) {
+                    switchFragment(fragments.get(2)).commit();
+                } else if (items[3] == item.getItemId()) {
+                    switchFragment(fragments.get(3)).commit();
+                }
+                return true;
+            case 5:
+                if (items[0] == item.getItemId()) {
+                    switchFragment(fragments.get(0)).commit();
+                } else if (items[1] == item.getItemId()) {
+                    switchFragment(fragments.get(1)).commit();
+                } else if (items[2] == item.getItemId()) {
+                    switchFragment(fragments.get(2)).commit();
+                } else if (items[3] == item.getItemId()) {
+                    switchFragment(fragments.get(3)).commit();
+                } else if (items[4] == item.getItemId()) {
+                    switchFragment(fragments.get(4)).commit();
+                }
+                return true;
+            default:
+                return false;
         }
-    }
+    };
 
-    @SuppressLint("ResourceType")
+    /**
+     * 初始化布局
+     */
     private void initView() {
+        if (fragments.size() < 2 || fragments.size() > 5) {
+            navigationLayout.setVisibility(View.GONE);
+            Log.e("selectedListener异常", "条目最小长度支持2，条目最大长度支持5");
+            return;
+        }
+        if (items.length < 2 || items.length > 5) {
+            navigationLayout.setVisibility(View.GONE);
+            Log.e("selectedListener异常", "条目最小长度支持2，条目最大长度支持5");
+            return;
+        }
         navigationView.inflateMenu(menu);
         navigationView.setItemIconTintList(null);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            navigationView.setItemTextColor(aThis.getResources().getColorStateList(navItemTextColor, aThis.getTheme()));
+        if (aThis != null) {
+            navigationView.setItemTextColor(aThis.getResources().getColorStateList(itc, aThis.getTheme()));
             navigationView.setBackgroundColor(aThis.getResources().getColor(R.color.transparent, aThis.getTheme()));
-            navigationLayout.setBackgroundColor(aThis.getResources().getColor(navBackgroundColor, aThis.getTheme()));
-            fragmentLayout.setBackgroundColor(aThis.getResources().getColor(frameBackgroundColor, aThis.getTheme()));
-        } else {
-            navigationView.setItemTextColor(aThis.getResources().getColorStateList(navItemTextColor));
-            navigationView.setBackgroundColor(aThis.getResources().getColor(R.color.transparent));
-            navigationLayout.setBackgroundColor(aThis.getResources().getColor(navBackgroundColor));
-            fragmentLayout.setBackgroundColor(aThis.getResources().getColor(frameBackgroundColor));
+            navigationLayout.setBackgroundColor(aThis.getResources().getColor(nbc, aThis.getTheme()));
+            fragmentLayout.setBackgroundColor(aThis.getResources().getColor(fbc, aThis.getTheme()));
         }
+        if (fThis != null) {
+            navigationView.setItemTextColor(fThis.getResources().getColorStateList(itc, fThis.getTheme()));
+            navigationView.setBackgroundColor(fThis.getResources().getColor(R.color.transparent, fThis.getTheme()));
+            navigationLayout.setBackgroundColor(fThis.getResources().getColor(nbc, fThis.getTheme()));
+            fragmentLayout.setBackgroundColor(fThis.getResources().getColor(fbc, fThis.getTheme()));
+        }
+        adjustNavigationIcoSize(navigationView);
         navigationView.setOnNavigationItemSelectedListener(selectedListener);
     }
 
-    private void fragmentManager(Fragment fragment) {
-        try {
-            FragmentTransaction transaction = aThis.getSupportFragmentManager().beginTransaction();
-            if (!fragment.isAdded()) {
-                transaction.hide(currentFragment).add(R.id.standard_frame, fragment).commit();
-            } else {
-                transaction.hide(currentFragment).show(fragment).commit();
+    /**
+     * 初始化数据
+     */
+    private void initData() {
+        fragments.forEach(fragment -> {
+            if (fragment != fragments.get(0)) {
+                sf = switchFragment(fragment);
+                if (sf != null) sf.commit();
             }
-            currentFragment = fragment;
+        });
+        sf = switchFragment(fragments.get(0));
+        if (sf != null) sf.commit();
+    }
+
+    /**
+     * 加载布局
+     */
+    private FragmentTransaction switchFragment(Fragment targetFragment) {
+        try {
+            FragmentTransaction transaction;
+            if (aThis != null) {
+                transaction = aThis.getSupportFragmentManager().beginTransaction();
+                if (!targetFragment.isAdded()) {
+                    if (cf != null) transaction.hide(cf);
+                    transaction.add(fragmentLayout.getId(), targetFragment, targetFragment.getClass().getName());
+                } else {
+                    transaction.hide(cf).show(targetFragment);
+                }
+                cf = targetFragment;
+                return transaction;
+            } else if (fThis != null) {
+                transaction = fThis.getSupportFragmentManager().beginTransaction();
+                if (!targetFragment.isAdded()) {
+                    if (cf != null) transaction.hide(cf);
+                    transaction.add(fragmentLayout.getId(), targetFragment, targetFragment.getClass().getName());
+                } else {
+                    transaction.hide(cf).show(targetFragment);
+                }
+                cf = targetFragment;
+                return transaction;
+            } else {
+                return null;
+            }
         } catch (Exception e) {
-            Log.e("NavigationBar", String.valueOf(e.getMessage()));
+            Log.e("switchFragment异常", e.getMessage(), e);
+            return null;
         }
     }
 
@@ -115,155 +199,162 @@ public final class NavigationBar {
             for (int i = 0; i < menuView.getChildCount(); i++) {
                 View iconView = menuView.getChildAt(i).findViewById(R.id.icon);
                 ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
-                DisplayMetrics displayMetrics = aThis.getResources().getDisplayMetrics();
-                layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, displayMetrics);
-                layoutParams.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 25, displayMetrics);
-                iconView.setLayoutParams(layoutParams);
+                if (aThis != null) {
+                    DisplayMetrics displayMetrics = aThis.getResources().getDisplayMetrics();
+                    layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, space[0], displayMetrics);
+                    layoutParams.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, space[1], displayMetrics);
+                    iconView.setLayoutParams(layoutParams);
+                }
+                if (fThis != null) {
+                    DisplayMetrics displayMetrics = fThis.getResources().getDisplayMetrics();
+                    layoutParams.height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, space[0], displayMetrics);
+                    layoutParams.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, space[1], displayMetrics);
+                    iconView.setLayoutParams(layoutParams);
+                }
+
             }
         } catch (Exception e) {
             Log.e("NavigationBar", String.valueOf(e.getMessage()));
         }
     }
 
-    private final BottomNavigationView.OnNavigationItemSelectedListener selectedListener = menuItem -> {
-        int itemId = menuItem.getItemId();
-        if (fragments.size() == 2) {
-            if (itemId == menuIds.get(0)) {
-                fragmentManager(fragments.get(0));
-                return true;
-            } else if (itemId == menuIds.get(1)) {
-                fragmentManager(fragments.get(1));
-                return true;
-            } else {
-                return false;
-            }
-        } else if (fragments.size() == 3) {
-            if (itemId == menuIds.get(0)) {
-                fragmentManager(fragments.get(0));
-                return true;
-            } else if (itemId == menuIds.get(1)) {
-                fragmentManager(fragments.get(1));
-                return true;
-            } else if (itemId == menuIds.get(2)) {
-                fragmentManager(fragments.get(2));
-                return true;
-            } else {
-                return false;
-            }
-        } else if (fragments.size() == 4) {
-            if (itemId == menuIds.get(0)) {
-                fragmentManager(fragments.get(0));
-                return true;
-            } else if (itemId == menuIds.get(1)) {
-                fragmentManager(fragments.get(1));
-                return true;
-            } else if (itemId == menuIds.get(2)) {
-                fragmentManager(fragments.get(2));
-                return true;
-            } else if (itemId == menuIds.get(3)) {
-                fragmentManager(fragments.get(3));
-                return true;
-            } else {
-                return false;
-            }
-        } else if (fragments.size() == 5) {
-            if (itemId == menuIds.get(0)) {
-                fragmentManager(fragments.get(0));
-                return true;
-            } else if (itemId == menuIds.get(1)) {
-                fragmentManager(fragments.get(1));
-                return true;
-            } else if (itemId == menuIds.get(2)) {
-                fragmentManager(fragments.get(2));
-                return true;
-            } else if (itemId == menuIds.get(3)) {
-                fragmentManager(fragments.get(3));
-                return true;
-            } else if (itemId == menuIds.get(4)) {
-                fragmentManager(fragments.get(4));
-                return true;
-            } else {
-                return false;
-            }
+    private NavigationBar(NewBuilder builder) {
+        if (builder.obj instanceof AppCompatActivity) {
+            this.aThis = (AppCompatActivity) builder.obj;
+            this.navigationView = aThis.findViewById(R.id.nav_view);
+            this.navigationLayout = aThis.findViewById(R.id.nav_layout);
+            this.fragmentLayout = aThis.findViewById(R.id.nav_frame);
+        } else if (builder.obj instanceof FragmentActivity) {
+            this.fThis = (FragmentActivity) builder.obj;
+            this.navigationView = fThis.findViewById(R.id.nav_view);
+            this.navigationLayout = fThis.findViewById(R.id.nav_layout);
+            this.fragmentLayout = fThis.findViewById(R.id.nav_frame);
         } else {
-            return false;
+            Log.e("异常", "请填写正确activity对象");
         }
-    };
+        this.menu = builder.menu;
+        this.cf = new Fragment();
+        this.fragments = new ArrayList<>(builder.fragments);
+        this.items = builder.items;
+        this.fbc = builder.frameBackgroundColor;
+        this.nbc = builder.navigationBackgroundColor;
+        this.itc = builder.navItemTextColor;
+        this.space = builder.space;
+        initData();
+        initView();
+    }
 
     public static final class NewBuilder {
 
+        private final Object obj;
         private final NewBuilder builder;
-        private final AppCompatActivity aThis;
-        private final List<Fragment> fragments = new ArrayList<>();
-        private int menu = R.menu.nav_menu_default;
-        private final List<Integer> menuIds = new ArrayList<>();
+        private int menu = R.menu.nav_menu;
         private int navItemTextColor = R.drawable.pagination_selector_tab_color;
-        private int navigationBackgroundColor = R.color.transparent;
         private int frameBackgroundColor = R.color.transparent;
+        private int navigationBackgroundColor = R.color.transparent;
+        private final List<Fragment> fragments = new LinkedList<>();
+        private int[] items;
+        private int[] space = {25, 25};
 
-        private NewBuilder(@NonNull AppCompatActivity obj) {
-            this.aThis = obj;
+        /**
+         * @param obj activity对象
+         */
+        private NewBuilder(@NonNull Object obj) {
+            this.obj = obj;
             this.builder = this;
         }
 
+        /**
+         * 添加菜单
+         */
         public NewBuilder setMenu(@MenuRes int menu) {
             this.menu = menu;
             return builder;
         }
 
-        public NewBuilder setMenuIds(@IdRes Integer... menuIds) {
-            //默认值
-            Integer[] ids = {R.id.second, R.id.thirdly, R.id.fourthly, R.id.first};
-            this.menuIds.addAll(Arrays.asList(ids));
-            if (menuIds.length < 2) {
-                Log.e("NavigationBar", "menuIds长度不能小于2");
-                return builder;
-            } else if (menuIds.length > 5) {
-                Log.e("NavigationBar", "menuIds长度不能大于5");
-                return builder;
-            } else {
-                this.menuIds.clear();
-                this.menuIds.addAll(Arrays.asList(menuIds));
-                return builder;
-            }
+        /**
+         * 设置添加菜单条目
+         */
+        public NewBuilder setAddMenuItem(@IdRes int... item) {
+            items = item;
+            return builder;
         }
 
+        /**
+         * 添加fragment对象
+         */
+        public NewBuilder setAddFragment(Fragment fragment) {
+            fragments.add(fragment);
+            return builder;
+        }
+
+        /**
+         * 移除fragment对象
+         */
+        public NewBuilder setDelFragment(Fragment fragment) {
+            fragments.remove(fragment);
+            return builder;
+        }
+
+        /**
+         * 移除fragment对象
+         */
+        public NewBuilder setDelFragment(@IntegerRes int position) {
+            fragments.remove(position);
+            return builder;
+        }
+
+        /**
+         * 清空fragment对象
+         */
+        public NewBuilder setClearFragment() {
+            fragments.clear();
+            return builder;
+        }
+
+        /**
+         * 设置条目文字颜色
+         */
         public NewBuilder setItemTextColor(@DrawableRes int itemTextColor) {
             this.navItemTextColor = itemTextColor;
             return builder;
         }
 
+        /**
+         * 设置底部导航栏背景颜色
+         */
         public NewBuilder setBackgroundColor(@ColorRes int backgroundColor) {
             this.navigationBackgroundColor = backgroundColor;
             return builder;
         }
 
+        /**
+         * 设置背景颜色
+         */
         public NewBuilder setFrameBackgroundColor(@ColorRes int frameBackgroundColor) {
             this.frameBackgroundColor = frameBackgroundColor;
             return builder;
         }
 
-        public NewBuilder setFragments(@NonNull Fragment... fragment) {
-            if (fragment.length < 2) {
-                Log.e("NavigationBar", "fragment长度不能小于2");
-                return builder;
-            } else if (fragment.length > 5) {
-                Log.e("NavigationBar", "fragment长度不能大于5");
-                return builder;
-            } else {
-                this.fragments.addAll(Arrays.asList(fragment));
-                return builder;
-            }
+        public NewBuilder setSpace(@IntRange(from = 0, to = 30) int... space) {
+            this.space = space;
+            return builder;
         }
 
+        @NotNull
+        @Contract(" -> new")
+        @SuppressWarnings("UnusedReturnValue")
         public NavigationBar build() {
             synchronized (NavigationBar.class) {
                 return new NavigationBar(builder);
             }
         }
+
     }
 
-    public static NewBuilder builder(AppCompatActivity aThis) {
+    @NotNull
+    @Contract("_ -> new")
+    public static NewBuilder builder(Object aThis) {
         synchronized (NewBuilder.class) {
             return new NewBuilder(aThis);
         }
