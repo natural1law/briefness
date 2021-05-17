@@ -50,6 +50,7 @@ public final class ScanActivity extends AppCompatActivity implements QRCodeView.
         getWindow().setFlags(FLAG_FULLSCREEN, FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         getWindow().setBackgroundDrawable(null);
+
         @LayoutRes
         int layout = getIntent().getIntExtra(LAYOUT_UI, 0);
         if (layout == 0) {
