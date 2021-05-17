@@ -9,6 +9,7 @@ import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.KeyEvent;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +40,7 @@ public final class ScanActivity extends AppCompatActivity implements QRCodeView.
 
     private ZXingView zxView;
     private AppCompatImageView zxPhotoView;
+    private AppCompatImageView zxReturn;
     private final ScanActivity aThis = this;
 
     @Override
@@ -48,10 +50,12 @@ public final class ScanActivity extends AppCompatActivity implements QRCodeView.
         getWindow().setBackgroundDrawable(null);
         setContentView(R.layout.activity_scan);
         zxView = findViewById(R.id.zx_view);
+        zxReturn = findViewById(R.id.zx_return);
         zxPhotoView = findViewById(R.id.zx_photo);
         zxView.setDelegate(this);
         zxView.changeToScanQRCodeStyle(); // 切换成扫描二维码样式
         zxView.setType(BarcodeType.ALL, null); // 识别所有类型的码
+        zxReturn.setOnClickListener(v -> finish());
         photoView();
     }
 
@@ -66,6 +70,16 @@ public final class ScanActivity extends AppCompatActivity implements QRCodeView.
     public void onStop() {
         zxView.stopCamera(); // 关闭摄像头预览，并且隐藏扫描框
         super.onStop();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
+            zxReturn.performClick();
+            return true;
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
     }
 
     @Override

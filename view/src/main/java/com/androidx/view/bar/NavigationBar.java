@@ -31,6 +31,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 底部导航栏
@@ -66,42 +67,42 @@ public final class NavigationBar {
         switch (fragments.size()) {
             case 2:
                 if (items[0] == item.getItemId()) {
-                    switchFragment(fragments.get(0)).commit();
+                    Objects.requireNonNull(switchFragment(fragments.get(0))).commit();
                 } else if (items[1] == item.getItemId()) {
-                    switchFragment(fragments.get(1)).commit();
+                    Objects.requireNonNull(switchFragment(fragments.get(1))).commit();
                 }
                 return true;
             case 3:
                 if (items[0] == item.getItemId()) {
-                    switchFragment(fragments.get(0)).commit();
+                    Objects.requireNonNull(switchFragment(fragments.get(0))).commit();
                 } else if (items[1] == item.getItemId()) {
-                    switchFragment(fragments.get(1)).commit();
+                    Objects.requireNonNull(switchFragment(fragments.get(1))).commit();
                 } else if (items[2] == item.getItemId()) {
-                    switchFragment(fragments.get(2)).commit();
+                    Objects.requireNonNull(switchFragment(fragments.get(2))).commit();
                 }
                 return true;
             case 4:
                 if (items[0] == item.getItemId()) {
-                    switchFragment(fragments.get(0)).commit();
+                    Objects.requireNonNull(switchFragment(fragments.get(0))).commit();
                 } else if (items[1] == item.getItemId()) {
-                    switchFragment(fragments.get(1)).commit();
+                    Objects.requireNonNull(switchFragment(fragments.get(1))).commit();
                 } else if (items[2] == item.getItemId()) {
-                    switchFragment(fragments.get(2)).commit();
+                    Objects.requireNonNull(switchFragment(fragments.get(2))).commit();
                 } else if (items[3] == item.getItemId()) {
-                    switchFragment(fragments.get(3)).commit();
+                    Objects.requireNonNull(switchFragment(fragments.get(3))).commit();
                 }
                 return true;
             case 5:
                 if (items[0] == item.getItemId()) {
-                    switchFragment(fragments.get(0)).commit();
+                    Objects.requireNonNull(switchFragment(fragments.get(0))).commit();
                 } else if (items[1] == item.getItemId()) {
-                    switchFragment(fragments.get(1)).commit();
+                    Objects.requireNonNull(switchFragment(fragments.get(1))).commit();
                 } else if (items[2] == item.getItemId()) {
-                    switchFragment(fragments.get(2)).commit();
+                    Objects.requireNonNull(switchFragment(fragments.get(2))).commit();
                 } else if (items[3] == item.getItemId()) {
-                    switchFragment(fragments.get(3)).commit();
+                    Objects.requireNonNull(switchFragment(fragments.get(3))).commit();
                 } else if (items[4] == item.getItemId()) {
-                    switchFragment(fragments.get(4)).commit();
+                    Objects.requireNonNull(switchFragment(fragments.get(4))).commit();
                 }
                 return true;
             default:
@@ -197,7 +198,7 @@ public final class NavigationBar {
         try {
             BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);
             for (int i = 0; i < menuView.getChildCount(); i++) {
-                View iconView = menuView.getChildAt(i).findViewById(R.id.icon);
+                View iconView = menuView.getChildAt(i).findViewById(android.R.id.icon);
                 ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
                 if (aThis != null) {
                     DisplayMetrics displayMetrics = aThis.getResources().getDisplayMetrics();
@@ -240,8 +241,8 @@ public final class NavigationBar {
         this.nbc = builder.navigationBackgroundColor;
         this.itc = builder.navItemTextColor;
         this.space = builder.space;
-        initData();
         initView();
+        initData();
     }
 
     public static final class NewBuilder {
