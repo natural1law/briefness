@@ -11,6 +11,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -37,6 +38,7 @@ public final class ScanActivity extends AppCompatActivity implements QRCodeView.
     public static final int REQUEST_CODE = 88;//请求码
     public static final int RESULT_CODE = 99;//返回码
     public static final String RESULT_KEY = "QR";//返回值
+    public static final String LAYOUT_UI = "ui";//加载布局
 
     private ZXingView zxView;
     private AppCompatImageView zxPhotoView;
@@ -48,7 +50,13 @@ public final class ScanActivity extends AppCompatActivity implements QRCodeView.
         getWindow().setFlags(FLAG_FULLSCREEN, FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         getWindow().setBackgroundDrawable(null);
-        setContentView(R.layout.activity_scan);
+        @LayoutRes
+        int layout = getIntent().getIntExtra(LAYOUT_UI, 0);
+        if (layout == 0) {
+            setContentView(R.layout.activity_scan);
+        } else {
+            setContentView(layout);
+        }
         zxView = findViewById(R.id.zx_view);
         zxReturn = findViewById(R.id.zx_return);
         zxPhotoView = findViewById(R.id.zx_photo);
