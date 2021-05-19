@@ -33,4 +33,23 @@ public final class Convert {
         }
 
     }
+
+    public static final class Date {
+
+        private Date() {
+        }
+
+        /**
+         * @param mss 毫秒
+         */
+        public static String formatDuring(long mss) {
+            long days = mss / (1000 * 60 * 60 * 24);
+            long hours = (mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
+            long minutes = (mss % (1000 * 60 * 60)) / (1000 * 60);
+            long seconds = (mss % (1000 * 60)) / 1000;
+            return days + " 天 " + hours + " 时 " + minutes + " 分 " + seconds + " 秒 ";
+        }
+
+    }
+
 }

@@ -11,7 +11,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        minSdkVersion  24
+        minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
         versionName "2.0"
@@ -90,6 +90,7 @@ android {
             version "3.10.2"
         }
     }
+    ndkVersion '21.3.6528147'
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
@@ -110,8 +111,8 @@ dependencies {
     api 'com.squareup.okhttp3:logging-interceptor:+'
     api 'org.conscrypt:conscrypt-android:+'
 
-    api 'com.google.protobuf:protoc:+'
-    api 'com.google.protobuf:protobuf-java:+'
+    api 'com.google.protobuf:protoc:3.16.0'
+    api 'com.google.protobuf:protobuf-java:3.16.0'
 
     api 'com.google.code.gson:gson:+'
 
@@ -120,11 +121,11 @@ dependencies {
 protobuf {
     //配置protobuf编译器
     protoc {
-        artifact = 'com.google.protobuf:protoc:3.13.0'
+        artifact = 'com.google.protobuf:protoc:3.16.0'
     }
     plugins {
         javalite {
-            artifact = 'com.google.protobuf:protoc-gen-javalite:3.13.0'
+            artifact = 'com.google.protobuf:protoc-gen-javalite:3.16.0'
         }
     }
     //这里配置生成目录，编译后会在build的目录下生成对应的java文件
