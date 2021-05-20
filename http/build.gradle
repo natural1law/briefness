@@ -71,9 +71,6 @@ android {
     }
 
     repositories {
-        flatDir {
-            dirs 'libs'
-        }
         maven { url 'https://jitpack.io' }
     }
 
@@ -90,7 +87,6 @@ android {
             version "3.10.2"
         }
     }
-    ndkVersion '21.3.6528147'
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
