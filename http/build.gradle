@@ -71,9 +71,6 @@ android {
     }
 
     repositories {
-        flatDir {
-            dirs 'libs'
-        }
         maven { url 'https://jitpack.io' }
     }
 
@@ -87,11 +84,9 @@ android {
     externalNativeBuild {
         cmake {
             path "src/main/jni/CMakeLists.txt"
-            version "3.10.2"
+            version "3.18.1"
         }
     }
-
-    ndkVersion '21.4.7075529'
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"

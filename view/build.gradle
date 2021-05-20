@@ -35,9 +35,6 @@ android {
         preDexLibraries = false
     }
     repositories {
-        flatDir {
-            dirs 'libs'
-        }
         maven { url 'https://jitpack.io' }
     }
     sourceSets {

@@ -45,9 +45,6 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8
     }
     repositories {
-        flatDir {
-            dirs 'libs'
-        }
         maven { url 'https://jitpack.io' }
     }
 
