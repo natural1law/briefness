@@ -59,6 +59,7 @@ public final class DialogTools extends AppCompatDialog {
     private final int animations;
     private final boolean canceled;
     private final boolean cancelable;
+    private final boolean lockage;
     private final OnEventTriggerListener listener;
     private final OnClickQrListener qrListener;
     private final CameraAdapter.OnClickCameraAdapterListener adapterListener;
@@ -186,6 +187,7 @@ public final class DialogTools extends AppCompatDialog {
             titleView();
             contentView();
             affirmView();
+            affirmTestView();
             quitView();
             timingView();
             cameraView();
@@ -298,52 +300,66 @@ public final class DialogTools extends AppCompatDialog {
      * 确认按钮布局
      */
     @SuppressLint("UseCompatLoadingForDrawables")
-    private void affirmView() {
-        AppCompatTextView affirmView = findViewById(R.id.dialog_affirm);
-        AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
-        AppCompatAutoCompleteTextView nameView = findViewById(R.id.dialog_name);
-        if (affirmView != null) {
-            if (affirmText != null) {
-                affirmView.setText(affirmText);
-            }
-            if (affirmSize != -1) {
-                affirmView.setTextSize(affirmSize);
-            }
-            if (backDrawableAffirm != -1) {
-                affirmView.setBackgroundDrawable(getContext().getResources().getDrawable(backDrawableAffirm, getContext().getTheme()));
-            }
-            if (affirmTextStyle != -1) {
-                affirmView.setTypeface(Typeface.SANS_SERIF, affirmTextStyle);
-            } else {
-                affirmView.setTypeface(Typeface.DEFAULT);
-            }
-            if (affirmColorId != -1) {
-                affirmView.setTextColor(getContext().getResources().getColor(affirmColorId, getContext().getTheme()));
-            } else {
-                affirmView.setTextColor(affirmColor);
-            }
-            if (listener != null) {
-                affirmView.setOnClickListener(v -> listener.ok(this));
-                if (paramView != null && !paramView.getText().toString().equals("")) {
-                    String param = paramView.getText().toString().trim();
+    private void affirmTestView() {
+        if (!lockage) {
+            AppCompatTextView affirmView = findViewById(R.id.dialog_affirm);
+            AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
+            AppCompatAutoCompleteTextView nameView = findViewById(R.id.dialog_name);
+            if (affirmView != null) {
+                if (affirmText != null) {
+                    affirmView.setText(affirmText);
+                }
+                if (affirmSize != -1) {
+                    affirmView.setTextSize(affirmSize);
+                }
+                if (backDrawableAffirm != -1) {
+                    affirmView.setBackgroundDrawable(getContext().getResources().getDrawable(backDrawableAffirm, getContext().getTheme()));
+                }
+                if (affirmTextStyle != -1) {
+                    affirmView.setTypeface(Typeface.SANS_SERIF, affirmTextStyle);
+                } else {
+                    affirmView.setTypeface(Typeface.DEFAULT);
+                }
+                if (affirmColorId != -1) {
+                    affirmView.setTextColor(getContext().getResources().getColor(affirmColorId, getContext().getTheme()));
+                } else {
+                    affirmView.setTextColor(affirmColor);
+                }
+                if (listener != null) {
+                    affirmView.setOnClickListener(v -> listener.ok(this));
+                    if (paramView != null && !paramView.getText().toString().equals("")) {
+                        String param = paramView.getText().toString().trim();
+                        affirmView.setOnClickListener(v -> {
+                            listener.value(param);
+                            paramView.setText("");
+                        });
+                    }
+                }
+
+                if (qrListener != null) {
                     affirmView.setOnClickListener(v -> {
-                        listener.value(param);
-                        paramView.setText("");
+                        if (paramView != null && nameView != null) {
+                            String var1 = paramView.getText().toString().trim();
+                            String var2 = nameView.getText().toString().trim();
+                            qrListener.callbackValue(this, var1, var2);
+                            paramView.setText("");
+                        } else {
+                            qrListener.callbackValue(this, "", "");
+                        }
                     });
                 }
             }
+        }
+    }
 
-            if (qrListener != null) {
-                affirmView.setOnClickListener(v -> {
-                    if (paramView != null && nameView != null) {
-                        String var1 = paramView.getText().toString().trim();
-                        String var2 = nameView.getText().toString().trim();
-                        qrListener.callbackValue(this, var1, var2);
-                        paramView.setText("");
-                    } else {
-                        qrListener.callbackValue(this, "", "");
-                    }
-                });
+    /**
+     *
+     */
+    public void affirmView() {
+        if (lockage) {
+            AppCompatImageView affirmView = findViewById(R.id.dialog_affirm);
+            if (listener != null && affirmView != null) {
+                affirmView.setOnClickListener(v -> listener.ok(this));
             }
         }
     }
@@ -439,6 +455,7 @@ public final class DialogTools extends AppCompatDialog {
         this.adapterListener = builder.adapterListener;
         this.hintText1 = builder.hintText1;
         this.hintText2 = builder.hintText2;
+        this.lockage = builder.lockage;
     }
 
     @NotNull
@@ -496,6 +513,7 @@ public final class DialogTools extends AppCompatDialog {
         private CameraAdapter.OnClickCameraAdapterListener adapterListener;
         private String hintText1;
         private String hintText2;
+        private boolean lockage = false;
 
         private Builder(Context context) {
             this.context = context;
@@ -965,12 +983,21 @@ public final class DialogTools extends AppCompatDialog {
             return newBuilder;
         }
 
+        /**
+         * 图形点击事件
+         */
+        public Builder isLockage(boolean lockage) {
+            this.lockage = lockage;
+            return newBuilder;
+        }
+
         @NotNull
         public DialogTools build() {
             synchronized (DialogTools.class) {
                 return new DialogTools(context, newBuilder);
             }
         }
+
     }
 
     /**
