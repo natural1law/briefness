@@ -357,9 +357,10 @@ public final class DialogTools extends AppCompatDialog {
      */
     public void affirmView() {
         if (lockage) {
+            AppCompatTextView contentView = findViewById(R.id.dialog_content);
             AppCompatImageView affirmView = findViewById(R.id.dialog_affirm);
             if (listener != null && affirmView != null) {
-                affirmView.setOnClickListener(v -> listener.ok(this, affirmView));
+                affirmView.setOnClickListener(v -> listener.ok(this, affirmView, contentView));
             }
         }
     }
@@ -1007,7 +1008,7 @@ public final class DialogTools extends AppCompatDialog {
 
         void ok(DialogTools dialog);
 
-        default void ok(DialogTools dialog, AppCompatImageView view) {
+        default void ok(DialogTools dialog, AppCompatImageView view, AppCompatTextView contentView) {
 
         }
 
