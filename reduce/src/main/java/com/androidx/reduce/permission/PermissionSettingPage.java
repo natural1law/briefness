@@ -1,11 +1,13 @@
 package com.androidx.reduce.permission;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.PowerManager;
 import android.provider.Settings;
 
 /**
@@ -55,6 +57,26 @@ public class PermissionSettingPage {
         }
     }
 
+    @SuppressLint("BatteryLife")
+    public static void start(Context context) {
+        if (!isIgnoringBatteryOptimizations(context)) {
+            Intent intent1 = new Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS);
+            intent1.setData(Uri.parse("package:" + context.getPackageName()));
+        }
+    }
+
+    /**
+     * 判断我们的应用是否在白名单中
+     */
+    private static boolean isIgnoringBatteryOptimizations(Context context) {
+        boolean isIgnoring = false;
+        PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        if (powerManager != null) {
+            isIgnoring = powerManager.isIgnoringBatteryOptimizations(context.getPackageName());
+        }
+        return isIgnoring;
+    }
+
     private static Intent google(Context context) {
         Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         intent.setData(Uri.fromParts("package", context.getPackageName(), null));
@@ -68,6 +90,8 @@ public class PermissionSettingPage {
         intent.setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.addviewmonitor.AddViewMonitorActivity"));
         if (hasIntent(context, intent)) return intent;
         intent.setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.notificationmanager.ui.NotificationManagmentActivity"));
+        if (hasIntent(context, intent)) return intent;
+        intent.setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.appcontrol.activity.StartupAppControlActivity"));
         return intent;
     }
 
@@ -75,14 +99,13 @@ public class PermissionSettingPage {
         Intent intent = new Intent("miui.intent.action.APP_PERM_EDITOR");
         intent.putExtra("extra_pkgname", context.getPackageName());
         if (hasIntent(context, intent)) return intent;
-
         intent.setPackage("com.miui.securitycenter");
         if (hasIntent(context, intent)) return intent;
-
         intent.setClassName("com.miui.securitycenter", "com.miui.permcenter.permissions.AppPermissionsEditorActivity");
         if (hasIntent(context, intent)) return intent;
-
         intent.setClassName("com.miui.securitycenter", "com.miui.permcenter.permissions.PermissionsEditorActivity");
+        if (hasIntent(context, intent)) return intent;
+        intent.setClassName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity");
         return intent;
     }
 
@@ -91,11 +114,11 @@ public class PermissionSettingPage {
         intent.putExtra("packageName", context.getPackageName());
         intent.setClassName("com.color.safecenter", "com.color.safecenter.permission.floatwindow.FloatWindowListActivity");
         if (hasIntent(context, intent)) return intent;
-
         intent.setClassName("com.coloros.safecenter", "com.coloros.safecenter.sysfloatwindow.FloatWindowListActivity");
         if (hasIntent(context, intent)) return intent;
-
         intent.setClassName("com.oppo.safe", "com.oppo.safe.permission.PermissionAppListActivity");
+        if (hasIntent(context, intent)) return intent;
+        intent.setClassName("com.oppo.safe", "com.oppo.safe.permission.startup.StartupAppListActivity");
         return intent;
     }
 
@@ -104,8 +127,9 @@ public class PermissionSettingPage {
         intent.setClassName("com.iqoo.secure", "com.iqoo.secure.ui.phoneoptimize.FloatWindowManager");
         intent.putExtra("packagename", context.getPackageName());
         if (hasIntent(context, intent)) return intent;
-
         intent.setComponent(new ComponentName("com.iqoo.secure", "com.iqoo.secure.safeguard.SoftPermissionDetailActivity"));
+        if (hasIntent(context, intent)) return intent;
+        intent.setComponent(new ComponentName("com.iqoo.secure", "com.iqoo.secure.safaguard.PurviewTabActivity"));
         return intent;
     }
 
@@ -113,9 +137,12 @@ public class PermissionSettingPage {
         Intent intent = new Intent("com.meizu.safe.security.SHOW_APPSEC");
         intent.putExtra("packageName", context.getPackageName());
         intent.setComponent(new ComponentName("com.meizu.safe", "com.meizu.safe.security.AppSecActivity"));
+        if (hasIntent(context, intent)) return intent;
+        intent.setComponent(new ComponentName("com.meizu.safe", "com.meizu.safe.permission.SmartBGActivity"));
         return intent;
     }
 
+    @SuppressLint("QueryPermissionsNeeded")
     private static boolean hasIntent(Context context, Intent intent) {
         return context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
     }

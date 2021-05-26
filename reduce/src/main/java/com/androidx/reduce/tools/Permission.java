@@ -140,6 +140,10 @@ public class Permission implements NextAction {
         PermissionSettingPage.start(context, newTask);
     }
 
+    public static void openWhitelist(Context context) {
+        PermissionSettingPage.start(context);
+    }
+
     /**
      * 开始申请权限
      */

@@ -25,6 +25,7 @@ import static android.Manifest.permission.RECEIVE_MMS;
 import static android.Manifest.permission.RECEIVE_SMS;
 import static android.Manifest.permission.RECEIVE_WAP_PUSH;
 import static android.Manifest.permission.RECORD_AUDIO;
+import static android.Manifest.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS;
 import static android.Manifest.permission.SEND_SMS;
 import static android.Manifest.permission.USE_SIP;
 import static android.Manifest.permission.WRITE_CALENDAR;
@@ -123,6 +124,13 @@ public final class PermissionParam {
             Manifest.permission.BLUETOOTH,
             BLUETOOTH_ADMIN,
             BLUETOOTH_PRIVILEGED
+    };
+
+    /**
+     * 后台运行白名单权限
+     */
+    public static final String[] WHITELIST = {
+            REQUEST_IGNORE_BATTERY_OPTIMIZATIONS
     };
 
     private PermissionParam() {
