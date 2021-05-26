@@ -118,7 +118,7 @@ public class PermissionSettingPage {
         if (hasIntent(context, intent)) return intent;
         intent.setClassName("com.oppo.safe", "com.oppo.safe.permission.PermissionAppListActivity");
         if (hasIntent(context, intent)) return intent;
-        intent.setClassName("com.oppo.safe", "com.oppo.safe.permission.startup.StartupAppListActivity");
+        intent.setClassName("com.coloros.oppoguardelf", "com.coloros.powermanager.fuelgaue.PowerUsageModelActivity");
         return intent;
     }
 
@@ -129,7 +129,7 @@ public class PermissionSettingPage {
         if (hasIntent(context, intent)) return intent;
         intent.setComponent(new ComponentName("com.iqoo.secure", "com.iqoo.secure.safeguard.SoftPermissionDetailActivity"));
         if (hasIntent(context, intent)) return intent;
-        intent.setComponent(new ComponentName("com.iqoo.secure", "com.iqoo.secure.safaguard.PurviewTabActivity"));
+        intent.setComponent(new ComponentName("com.iqoo.secure", "com.iqoo.secure.ui.phoneoptimize.AddWhiteListActivity"));
         return intent;
     }
 
