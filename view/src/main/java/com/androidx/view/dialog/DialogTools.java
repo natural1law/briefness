@@ -27,7 +27,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.androidx.reduce.tools.MicroCache;
 import com.androidx.view.R;
 import com.androidx.view.dialog.adapter.CameraAdapter;
 import com.zyao89.view.zloading.ZLoadingTextView;
@@ -334,7 +333,7 @@ public final class DialogTools extends AppCompatDialog {
                 if (paramView != null) {
                     String param = paramView.getText().toString().trim();
                     affirmView.setOnClickListener(v -> {
-                        MicroCache.builder(getContext()).setApply("param", param);
+                        listener.ok(this, param);
                         paramView.setText("");
                     });
                 } else {
@@ -1022,6 +1021,10 @@ public final class DialogTools extends AppCompatDialog {
     public interface OnEventTriggerListener {
 
         void ok(DialogTools dialog);
+
+        default void ok(DialogTools dialog, String param) {
+
+        }
 
         default void on(DialogTools dialog, AppCompatImageView view, AppCompatTextView contentView) {
 
