@@ -360,7 +360,7 @@ public final class DialogTools extends AppCompatDialog {
             AppCompatTextView contentView = findViewById(R.id.dialog_content);
             AppCompatImageView quitView = findViewById(R.id.dialog_quit);
             if (listener != null && quitView != null) {
-                quitView.setOnClickListener(v -> listener.ok(this, quitView, contentView));
+                quitView.setOnClickListener(v -> listener.on(this, quitView, contentView));
             }
         }
     }
@@ -1008,7 +1008,7 @@ public final class DialogTools extends AppCompatDialog {
 
         void ok(DialogTools dialog);
 
-        default void ok(DialogTools dialog, AppCompatImageView view, AppCompatTextView contentView) {
+        default void on(DialogTools dialog, AppCompatImageView view, AppCompatTextView contentView) {
 
         }
 
