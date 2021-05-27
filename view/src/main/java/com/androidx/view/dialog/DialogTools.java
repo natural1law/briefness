@@ -330,13 +330,14 @@ public final class DialogTools extends AppCompatDialog {
                 affirmView.setTextColor(affirmColor);
             }
             if (listener != null) {
-                affirmView.setOnClickListener(v -> listener.ok(this));
-                if (paramView != null && !paramView.getText().toString().equals("")) {
+                if (paramView != null) {
                     String param = paramView.getText().toString().trim();
                     affirmView.setOnClickListener(v -> {
                         listener.value(param);
                         paramView.setText("");
                     });
+                } else {
+                    affirmView.setOnClickListener(v -> listener.ok(this));
                 }
             }
 
