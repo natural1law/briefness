@@ -188,9 +188,12 @@ public final class DialogTools extends AppCompatDialog {
         try {
             titleView();
             contentView();
-            affirmView();
+            if (lockage) {
+                customView();
+            } else {
+                quitView();
+            }
             affirmTestView();
-            quitView();
             timingView();
             cameraView();
             qrView();
@@ -355,15 +358,13 @@ public final class DialogTools extends AppCompatDialog {
     }
 
     /**
-     *
+     * 自定义
      */
-    public void affirmView() {
-        if (lockage) {
-            AppCompatTextView contentView = findViewById(R.id.dialog_content);
-            AppCompatImageView quitView = findViewById(customId);
-            if (listener != null && quitView != null) {
-                quitView.setOnClickListener(v -> listener.on(this, quitView, contentView));
-            }
+    public void customView() {
+        AppCompatTextView contentView = findViewById(R.id.dialog_content);
+        AppCompatImageView quitView = findViewById(customId);
+        if (listener != null && quitView != null) {
+            quitView.setOnClickListener(v -> listener.on(this, quitView, contentView));
         }
     }
 
