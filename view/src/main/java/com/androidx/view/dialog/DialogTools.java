@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
+import androidx.annotation.IdRes;
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -97,6 +98,7 @@ public final class DialogTools extends AppCompatDialog {
     private final int quitColorId;
     private final int quitTextStyle;
     private final int backDrawableQuit;
+    private final int customId;
     /**
      * 倒计时模块参数
      */
@@ -358,7 +360,7 @@ public final class DialogTools extends AppCompatDialog {
     public void affirmView() {
         if (lockage) {
             AppCompatTextView contentView = findViewById(R.id.dialog_content);
-            AppCompatImageView quitView = findViewById(R.id.dialog_quit);
+            AppCompatImageView quitView = findViewById(customId);
             if (listener != null && quitView != null) {
                 quitView.setOnClickListener(v -> listener.on(this, quitView, contentView));
             }
@@ -457,6 +459,7 @@ public final class DialogTools extends AppCompatDialog {
         this.hintText1 = builder.hintText1;
         this.hintText2 = builder.hintText2;
         this.lockage = builder.lockage;
+        this.customId = builder.customId;
     }
 
     @NotNull
@@ -515,6 +518,7 @@ public final class DialogTools extends AppCompatDialog {
         private String hintText1;
         private String hintText2;
         private boolean lockage = false;
+        private int customId;
 
         private Builder(Context context) {
             this.context = context;
@@ -989,6 +993,16 @@ public final class DialogTools extends AppCompatDialog {
          */
         public Builder isLockage(boolean lockage) {
             this.lockage = lockage;
+            return newBuilder;
+        }
+
+        /**
+         * 自定义图形Id
+         *
+         * @param customId 布局ID
+         */
+        public Builder setCustomId(@IdRes int customId) {
+            if (lockage) this.customId = customId;
             return newBuilder;
         }
 
