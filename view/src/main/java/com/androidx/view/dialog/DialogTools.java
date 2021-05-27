@@ -306,53 +306,51 @@ public final class DialogTools extends AppCompatDialog {
      */
     @SuppressLint("UseCompatLoadingForDrawables")
     private void affirmTestView() {
-        if (!lockage) {
-            AppCompatTextView affirmView = findViewById(R.id.dialog_affirm);
-            AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
-            AppCompatAutoCompleteTextView nameView = findViewById(R.id.dialog_name);
-            if (affirmView != null) {
-                if (affirmText != null) {
-                    affirmView.setText(affirmText);
-                }
-                if (affirmSize != -1) {
-                    affirmView.setTextSize(affirmSize);
-                }
-                if (backDrawableAffirm != -1) {
-                    affirmView.setBackgroundDrawable(getContext().getResources().getDrawable(backDrawableAffirm, getContext().getTheme()));
-                }
-                if (affirmTextStyle != -1) {
-                    affirmView.setTypeface(Typeface.SANS_SERIF, affirmTextStyle);
-                } else {
-                    affirmView.setTypeface(Typeface.DEFAULT);
-                }
-                if (affirmColorId != -1) {
-                    affirmView.setTextColor(getContext().getResources().getColor(affirmColorId, getContext().getTheme()));
-                } else {
-                    affirmView.setTextColor(affirmColor);
-                }
-                if (listener != null) {
-                    affirmView.setOnClickListener(v -> listener.ok(this));
-                    if (paramView != null && !paramView.getText().toString().equals("")) {
-                        String param = paramView.getText().toString().trim();
-                        affirmView.setOnClickListener(v -> {
-                            listener.value(param);
-                            paramView.setText("");
-                        });
-                    }
-                }
-
-                if (qrListener != null) {
+        AppCompatTextView affirmView = findViewById(R.id.dialog_affirm);
+        AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
+        AppCompatAutoCompleteTextView nameView = findViewById(R.id.dialog_name);
+        if (affirmView != null) {
+            if (affirmText != null) {
+                affirmView.setText(affirmText);
+            }
+            if (affirmSize != -1) {
+                affirmView.setTextSize(affirmSize);
+            }
+            if (backDrawableAffirm != -1) {
+                affirmView.setBackgroundDrawable(getContext().getResources().getDrawable(backDrawableAffirm, getContext().getTheme()));
+            }
+            if (affirmTextStyle != -1) {
+                affirmView.setTypeface(Typeface.SANS_SERIF, affirmTextStyle);
+            } else {
+                affirmView.setTypeface(Typeface.DEFAULT);
+            }
+            if (affirmColorId != -1) {
+                affirmView.setTextColor(getContext().getResources().getColor(affirmColorId, getContext().getTheme()));
+            } else {
+                affirmView.setTextColor(affirmColor);
+            }
+            if (listener != null) {
+                affirmView.setOnClickListener(v -> listener.ok(this));
+                if (paramView != null && !paramView.getText().toString().equals("")) {
+                    String param = paramView.getText().toString().trim();
                     affirmView.setOnClickListener(v -> {
-                        if (paramView != null && nameView != null) {
-                            String var1 = paramView.getText().toString().trim();
-                            String var2 = nameView.getText().toString().trim();
-                            qrListener.callbackValue(this, var1, var2);
-                            paramView.setText("");
-                        } else {
-                            qrListener.callbackValue(this, "", "");
-                        }
+                        listener.value(param);
+                        paramView.setText("");
                     });
                 }
+            }
+
+            if (qrListener != null) {
+                affirmView.setOnClickListener(v -> {
+                    if (paramView != null && nameView != null) {
+                        String var1 = paramView.getText().toString().trim();
+                        String var2 = nameView.getText().toString().trim();
+                        qrListener.callbackValue(this, var1, var2);
+                        paramView.setText("");
+                    } else {
+                        qrListener.callbackValue(this, "", "");
+                    }
+                });
             }
         }
     }
