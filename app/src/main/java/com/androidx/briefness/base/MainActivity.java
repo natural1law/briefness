@@ -7,8 +7,8 @@ import android.util.Log;
 import androidx.fragment.app.FragmentActivity;
 
 import com.androidx.briefness.R;
-import com.androidx.briefness.homepage.fragment.HomePageFrag;
-import com.androidx.briefness.mypage.fragment.MyPageFrag;
+import com.androidx.briefness.base.fragment.HomePageFrag;
+import com.androidx.briefness.base.fragment.MyPageFrag;
 import com.androidx.view.bar.NavigationBar;
 
 import butterknife.ButterKnife;

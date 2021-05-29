@@ -1,4 +1,4 @@
-package com.androidx.briefness.homepage.fragment;
+package com.androidx.briefness.base.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidx.briefness.R;
+import com.androidx.briefness.homepage.activity.DialogActivity;
 import com.androidx.briefness.homepage.activity.MsgShowActivity;
 import com.androidx.briefness.homepage.adapter.HomepageAdapter;
 import com.androidx.view.bar.BaseFragment;
@@ -48,6 +49,8 @@ public final class HomePageFrag extends BaseFragment {
     private Unbinder unbinder;
     private HomepageAdapter adapter;
     private final List<String> list = new ArrayList<>();
+    private final Bundle bundle = new Bundle();
+    private final String[] arr = {"Toast功能展示", "dialog功能展示"};
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -92,7 +95,6 @@ public final class HomePageFrag extends BaseFragment {
     }
 
     private void initData() {
-        String[] arr = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"};
         Collections.addAll(list, arr);
         adapter.addData(list);
     }
@@ -101,9 +103,11 @@ public final class HomePageFrag extends BaseFragment {
         adapter.setListener(position -> {
             if (list.isEmpty()) return;
             if (list.get(position).equals(list.get(0))) {
-                appThis.startActivity(fThis, MsgShowActivity.class);
+                bundle.putString(getResources().getString(R.string.title), list.get(position));
+                appThis.startActivity(fThis, MsgShowActivity.class, bundle);
             } else if (list.get(position).equals(list.get(1))) {
-                toasts.setMsg(list.get(1)).showInfo();
+                bundle.putString(getResources().getString(R.string.title), list.get(position));
+                appThis.startActivity(fThis, DialogActivity.class, bundle);
             } else if (list.get(position).equals(list.get(2))) {
                 toasts.setMsg(list.get(2)).showInfo();
             } else if (list.get(position).equals(list.get(3))) {

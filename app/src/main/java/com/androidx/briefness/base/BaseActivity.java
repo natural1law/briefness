@@ -6,7 +6,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MotionEvent;
@@ -121,26 +120,4 @@ public abstract class BaseActivity extends AppCompatActivity {
         return super.dispatchTouchEvent(ev);
     }
 
-    /**
-     * 判断点击状态
-     *
-     * @param flag 状态
-     */
-    public void isState(boolean flag, View... views) {
-        try {
-            if (views == null) {
-                return;
-            }
-            for (View view : views) {
-                view.setEnabled(flag);
-                view.setClickable(flag);
-                view.setFocusable(flag);
-                view.setLongClickable(flag);
-                view.setContextClickable(flag);
-                view.setFocusableInTouchMode(flag);
-            }
-        } catch (Exception e) {
-            Log.e("判断点击状态异常", String.valueOf(e.getMessage()));
-        }
-    }
 }

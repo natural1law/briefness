@@ -1,4 +1,4 @@
-package com.androidx.briefness.mypage.fragment;
+package com.androidx.briefness.base.fragment;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

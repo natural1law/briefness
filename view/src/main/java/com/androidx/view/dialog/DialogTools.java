@@ -65,24 +65,27 @@ public final class DialogTools extends AppCompatDialog {
     private final OnClickQrListener qrListener;
     private final CameraAdapter.OnClickCameraAdapterListener adapterListener;
     /**
-     * 内容模块参数
-     */
-    private final String contentText;
-    private final int contentSize;
-    private final int contentColor;
-    private final int contentColorId;
-    private final int contentTextStyle;
-    /**
      * 标题模块参数
      */
+    private final int titleId;
     private final String titleText;
     private final int titleSize;
     private final int titleColor;
     private final int titleColorId;
     private final int titleTextStyle;
     /**
+     * 内容模块参数
+     */
+    private final int contentId;
+    private final String contentText;
+    private final int contentSize;
+    private final int contentColor;
+    private final int contentColorId;
+    private final int contentTextStyle;
+    /**
      * 确认按钮模块参数
      */
+    private final int affirmId;
     private final String affirmText;
     private final int affirmSize;
     private final int affirmColor;
@@ -92,13 +95,13 @@ public final class DialogTools extends AppCompatDialog {
     /**
      * 取消按钮模块参数
      */
+    private final int quitId;
     private final String quitText;
     private final int quitSize;
     private final int quitColor;
     private final int quitColorId;
     private final int quitTextStyle;
     private final int backDrawableQuit;
-    private final int customId;
     /**
      * 倒计时模块参数
      */
@@ -204,10 +207,36 @@ public final class DialogTools extends AppCompatDialog {
     }
 
     /**
+     * 标题布局
+     */
+    private void titleView() {
+        AppCompatTextView titleView = findViewById(titleId);
+        if (titleView != null) {
+            if (titleText != null) {
+                titleView.setText(titleText);
+            }
+            if (titleColor != -1) {
+                titleView.setTextColor(titleColor);
+            }
+            if (titleSize != -1) {
+                titleView.setTextSize(titleSize);
+            }
+            if (titleTextStyle != -1) {
+                titleView.setTypeface(Typeface.SANS_SERIF, titleTextStyle);
+            } else {
+                titleView.setTypeface(Typeface.DEFAULT);
+            }
+            if (titleColorId != -1) {
+                titleView.setTextColor(getContext().getResources().getColor(titleColorId, getContext().getTheme()));
+            }
+        }
+    }
+
+    /**
      * 内容布局
      */
     private void contentView() {
-        AppCompatTextView contentView = findViewById(R.id.dialog_content);
+        AppCompatTextView contentView = findViewById(contentId);
         if (contentView != null) {
             if (contentText != null) {
                 contentView.setText(contentText);
@@ -230,32 +259,6 @@ public final class DialogTools extends AppCompatDialog {
             }
             if (height != -1) {
                 contentView.setHeight(height);
-            }
-        }
-    }
-
-    /**
-     * 标题布局
-     */
-    private void titleView() {
-        AppCompatTextView titleView = findViewById(R.id.dialog_title);
-        if (titleView != null) {
-            if (titleText != null) {
-                titleView.setText(titleText);
-            }
-            if (titleColor != -1) {
-                titleView.setTextColor(titleColor);
-            }
-            if (titleSize != -1) {
-                titleView.setTextSize(titleSize);
-            }
-            if (titleTextStyle != -1) {
-                titleView.setTypeface(Typeface.SANS_SERIF, titleTextStyle);
-            } else {
-                titleView.setTypeface(Typeface.DEFAULT);
-            }
-            if (titleColorId != -1) {
-                titleView.setTextColor(getContext().getResources().getColor(titleColorId, getContext().getTheme()));
             }
         }
     }
@@ -306,7 +309,7 @@ public final class DialogTools extends AppCompatDialog {
      */
     @SuppressLint("UseCompatLoadingForDrawables")
     private void affirmTestView() {
-        AppCompatTextView affirmView = findViewById(R.id.dialog_affirm);
+        AppCompatTextView affirmView = findViewById(affirmId);
         AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
         AppCompatAutoCompleteTextView nameView = findViewById(R.id.dialog_name);
         if (affirmView != null) {
@@ -331,8 +334,8 @@ public final class DialogTools extends AppCompatDialog {
             }
             if (listener != null) {
                 if (paramView != null) {
-                    String param = paramView.getText().toString().trim();
                     affirmView.setOnClickListener(v -> {
+                        String param = paramView.getText().toString().trim();
                         listener.ok(this, param);
                         paramView.setText("");
                     });
@@ -360,8 +363,8 @@ public final class DialogTools extends AppCompatDialog {
      * 自定义
      */
     public void customView() {
-        AppCompatTextView contentView = findViewById(R.id.dialog_content);
-        AppCompatImageView quitView = findViewById(customId);
+        AppCompatTextView contentView = findViewById(contentId);
+        AppCompatImageView quitView = findViewById(quitId);
         if (listener != null && quitView != null) {
             quitView.setOnClickListener(v -> listener.on(this, quitView, contentView));
         }
@@ -372,7 +375,7 @@ public final class DialogTools extends AppCompatDialog {
      */
     @SuppressLint("UseCompatLoadingForDrawables")
     private void quitView() {
-        AppCompatTextView quitView = findViewById(R.id.dialog_quit);
+        AppCompatTextView quitView = findViewById(quitId);
         if (quitView != null) {
             if (quitText != null) {
                 quitView.setText(quitText);
@@ -459,7 +462,10 @@ public final class DialogTools extends AppCompatDialog {
         this.hintText1 = builder.hintText1;
         this.hintText2 = builder.hintText2;
         this.lockage = builder.lockage;
-        this.customId = builder.customId;
+        this.titleId = builder.titleId;
+        this.contentId = builder.contentId;
+        this.affirmId = builder.affirmId;
+        this.quitId = builder.quitId;
     }
 
     @NotNull
@@ -518,7 +524,10 @@ public final class DialogTools extends AppCompatDialog {
         private String hintText1;
         private String hintText2;
         private boolean lockage = false;
-        private int customId;
+        private int titleId = R.id.dialog_title;
+        private int contentId = R.id.dialog_content;
+        private int affirmId = R.id.dialog_affirm;
+        private int quitId = R.id.dialog_quit;
 
         private Builder(Context context) {
             this.context = context;
@@ -996,13 +1005,23 @@ public final class DialogTools extends AppCompatDialog {
             return newBuilder;
         }
 
-        /**
-         * 自定义图形Id
-         *
-         * @param customId 布局ID
-         */
-        public Builder setCustomId(@IdRes int customId) {
-            if (lockage) this.customId = customId;
+        public Builder setTitleId(@IdRes int titleId) {
+            if (lockage) this.titleId = titleId;
+            return newBuilder;
+        }
+
+        public Builder setContentId(@IdRes int contentId) {
+            if (lockage) this.contentId = contentId;
+            return newBuilder;
+        }
+
+        public Builder setAffirmId(@IdRes int affirmId) {
+            if (lockage) this.affirmId = affirmId;
+            return newBuilder;
+        }
+
+        public Builder setQuitId(@IdRes int quitId) {
+            if (lockage) this.quitId = quitId;
             return newBuilder;
         }
 
@@ -1023,7 +1042,7 @@ public final class DialogTools extends AppCompatDialog {
         void ok(DialogTools dialog);
 
         default void ok(DialogTools dialog, String param) {
-
+            Log.i("确认参数", param);
         }
 
         default void on(DialogTools dialog, AppCompatImageView view, AppCompatTextView contentView) {

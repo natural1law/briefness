@@ -22,5 +22,7 @@
         </activity>
         <!--Toast功能展示-->
         <activity android:name=".homepage.activity.MsgShowActivity" />
+        <!--dialog弹窗展示-->
+        <activity android:name=".homepage.activity.DialogActivity" />
     </application>
 </manifest>

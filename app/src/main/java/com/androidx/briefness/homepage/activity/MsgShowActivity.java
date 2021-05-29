@@ -45,7 +45,8 @@ public final class MsgShowActivity extends BaseActivity {
         titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
         titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));
         imageView.setVisibility(View.VISIBLE);
-        titleView.setText("Toast显示功能");
+        imageView.setColorFilter(R.color.black);
+        titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
     }
 
     @Override
