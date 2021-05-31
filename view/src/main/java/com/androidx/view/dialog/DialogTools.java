@@ -64,6 +64,7 @@ public final class DialogTools extends AppCompatDialog {
     private final boolean canceled;
     private final boolean cancelable;
     private final OnEventTriggerListener listener;
+    private final OnClickCodeListener codeListener;
     private final OnClickQrListener qrListener;
     private final CameraAdapter.OnClickCameraAdapterListener adapterListener;
     /**
@@ -344,21 +345,7 @@ public final class DialogTools extends AppCompatDialog {
                 affirmView.setTextColor(affirmColor);
             }
             if (listener != null) {
-                if (verificationView != null && paramView != null) {
-                    captcha.into(verificationView);
-                    code = captcha.getCode();
-                    verificationView.setOnClickListener(v -> {
-                        captcha.into(verificationView);
-                        code = captcha.getCode();
-                    });
-                    affirmView.setOnClickListener(v -> {
-                        String param = paramView.getText().toString().trim();
-                        code = captcha.getCode();
-                        listener.ok(this, param, code);
-                        captcha.into(verificationView);
-                        paramView.setText("");
-                    });
-                } else if (paramView != null) {
+                if (paramView != null) {
                     affirmView.setOnClickListener(v -> {
                         String param = paramView.getText().toString().trim();
                         listener.ok(this, param);
@@ -381,6 +368,24 @@ public final class DialogTools extends AppCompatDialog {
                     }
                 });
             }
+
+            if (codeListener != null) {
+                if (verificationView != null && paramView != null) {
+                    captcha.into(verificationView);
+                    code = captcha.getCode();
+                    verificationView.setOnClickListener(v -> {
+                        captcha.into(verificationView);
+                        code = captcha.getCode();
+                    });
+                    affirmView.setOnClickListener(v -> {
+                        String param = paramView.getText().toString().trim();
+                        codeListener.ok(this, param, code);
+                        captcha.into(verificationView);
+                        code = captcha.getCode();
+                        paramView.setText("");
+                    });
+                }
+            }
         }
     }
 
@@ -390,6 +395,7 @@ public final class DialogTools extends AppCompatDialog {
     @SuppressLint("UseCompatLoadingForDrawables")
     private void quitView() {
         AppCompatTextView quitView = findViewById(quitId);
+        AppCompatAutoCompleteTextView paramView = findViewById(paramId);
         if (quitView != null) {
             if (quitText != null) {
                 quitView.setText(quitText);
@@ -411,14 +417,20 @@ public final class DialogTools extends AppCompatDialog {
                 quitView.setBackgroundDrawable(getContext().getResources().getDrawable(backDrawableQuit, getContext().getTheme()));
             }
             if (listener != null) {
-                quitView.setOnClickListener(v -> {
-                    if (verificationView != null) captcha.into(verificationView);
-                    code = captcha.getCode();
-                    listener.no(this);
-                });
+                quitView.setOnClickListener(v -> listener.no(this));
             }
             if (qrListener != null) {
                 quitView.setOnClickListener(v -> qrListener.no(this));
+            }
+            if (codeListener != null) {
+                quitView.setOnClickListener(v -> {
+                    if (verificationView != null) {
+                        captcha.into(verificationView);
+                        code = captcha.getCode();
+                    }
+                    codeListener.no(this);
+                    if (paramView != null) paramView.setText("");
+                });
             }
         }
     }
@@ -471,6 +483,7 @@ public final class DialogTools extends AppCompatDialog {
         this.quitTextStyle = builder.quitTextStyle;
         this.backDrawableQuit = builder.backDrawableQuit;
         this.listener = builder.listener;
+        this.codeListener = builder.codeListener;
         this.qrListener = builder.qrListener;
         this.totalTime = builder.totalTime;
         this.cdPrefix = builder.cdPrefix;
@@ -538,6 +551,7 @@ public final class DialogTools extends AppCompatDialog {
         private int quitTextStyle = -1;
         private int backDrawableQuit = -1;
         private OnEventTriggerListener listener;
+        private OnClickCodeListener codeListener;
         private OnClickQrListener qrListener;
         private String[] datas;
         private CameraAdapter.OnClickCameraAdapterListener adapterListener;
@@ -935,6 +949,16 @@ public final class DialogTools extends AppCompatDialog {
         }
 
         /**
+         * 确认按钮或取消按钮触发事件的实现
+         *
+         * @param codeListener 事件
+         */
+        public Builder setListener(OnClickCodeListener codeListener) {
+            this.codeListener = codeListener;
+            return newBuilder;
+        }
+
+        /**
          * 倒计时（引入相应布局文件totalTime>0开启）
          *
          * @param totalTime 总时长
@@ -1074,9 +1098,6 @@ public final class DialogTools extends AppCompatDialog {
 
         }
 
-        default void ok(DialogTools dialog, String param, String code) {
-
-        }
 
         default void no(DialogTools dialog) {
             dialog.cancel();
@@ -1098,4 +1119,15 @@ public final class DialogTools extends AppCompatDialog {
             dialog.cancel();
         }
     }
+
+    public interface OnClickCodeListener {
+
+        void ok(DialogTools dialog, String param, String code);
+
+        default void no(DialogTools dialog) {
+            dialog.cancel();
+        }
+
+    }
+
 }

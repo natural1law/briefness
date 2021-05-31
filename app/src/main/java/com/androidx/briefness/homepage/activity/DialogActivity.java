@@ -1,4 +1,4 @@
- package com.androidx.briefness.homepage.activity;
+package com.androidx.briefness.homepage.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
 import com.androidx.reduce.tools.Idle;
+import com.androidx.reduce.tools.Toasts;
 import com.androidx.view.dialog.DialogTools;
 
 import butterknife.BindView;
@@ -83,15 +84,15 @@ public final class DialogActivity extends BaseActivity {
                 .setAffirmColorId(R.color.white)
                 .setCanceled(false)
                 .setCancelable(false)
-                .setListener(new DialogTools.OnEventTriggerListener() {
+                .setListener((DialogTools.OnClickCodeListener) (dialog, param, code) -> {
+                    if (code == null) {
+                        Toasts.builder(aThis).setMsg("请点击右方按钮获取验证码").showInfo();
+                    } else if (param.equals("")) {
+                        Toasts.builder(aThis).setMsg("请输入验证码").showWarning();
+                    } else if (!param.equalsIgnoreCase(code)) {
+                        Toasts.builder(aThis).setMsg("请输入正确的验证码").showError();
+                    } else {
 
-                    @Override
-                    public void ok(DialogTools dialog) {
-
-                    }
-
-                    @Override
-                    public void ok(DialogTools dialog, String param, String code) {
                         dialog.cancel();
                     }
                 })
