@@ -346,12 +346,14 @@ public final class DialogTools extends AppCompatDialog {
             if (listener != null) {
                 if (verificationView != null && paramView != null) {
                     captcha.into(verificationView);
+                    code = captcha.getCode();
                     verificationView.setOnClickListener(v -> {
                         captcha.into(verificationView);
                         code = captcha.getCode();
                     });
                     affirmView.setOnClickListener(v -> {
                         String param = paramView.getText().toString().trim();
+                        code = captcha.getCode();
                         listener.ok(this, param, code);
                         captcha.into(verificationView);
                         paramView.setText("");
@@ -411,6 +413,7 @@ public final class DialogTools extends AppCompatDialog {
             if (listener != null) {
                 quitView.setOnClickListener(v -> {
                     if (verificationView != null) captcha.into(verificationView);
+                    code = captcha.getCode();
                     listener.no(this);
                 });
             }
