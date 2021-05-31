@@ -27,6 +27,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidx.reduce.tools.Captcha;
 import com.androidx.view.R;
 import com.androidx.view.dialog.adapter.CameraAdapter;
 import com.zyao89.view.zloading.ZLoadingTextView;
@@ -34,6 +35,8 @@ import com.zyao89.view.zloading.ZLoadingTextView;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
+
+import static com.androidx.reduce.tools.Captcha.TYPE.CHARS;
 
 /**
  * @author 李玄道
@@ -60,7 +63,6 @@ public final class DialogTools extends AppCompatDialog {
     private final int animations;
     private final boolean canceled;
     private final boolean cancelable;
-    private final boolean lockage;
     private final OnEventTriggerListener listener;
     private final OnClickQrListener qrListener;
     private final CameraAdapter.OnClickCameraAdapterListener adapterListener;
@@ -112,6 +114,13 @@ public final class DialogTools extends AppCompatDialog {
     private final String hintText1;
     private final String hintText2;
 
+    private final int paramId;
+    private final int nameId;
+    private final int verificationCodeId;
+    private final Captcha captcha = Captcha.build().type(CHARS).backColor(R.color.iru);
+    private String code;
+    private AppCompatImageView verificationView;
+
     /**
      * 布局文件
      */
@@ -148,6 +157,10 @@ public final class DialogTools extends AppCompatDialog {
          * 消息输入提示窗
          */
         public static final int INPUT_CHECK = R.layout.dialog7;
+        /**
+         * 验证码提示窗
+         */
+        public static final int VERIFICATION_CODE = R.layout.dialog9;
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -184,18 +197,15 @@ public final class DialogTools extends AppCompatDialog {
             layout.setLayoutParams(lp);
         }
 
-        AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
-        AppCompatAutoCompleteTextView nameView = findViewById(R.id.dialog_name);
+
+        AppCompatAutoCompleteTextView paramView = findViewById(paramId);
+        AppCompatAutoCompleteTextView nameView = findViewById(nameId);
         if (paramView != null) paramView.setHint(hintText1);
         if (nameView != null) nameView.setHint(hintText2);
         try {
             titleView();
             contentView();
-            if (lockage) {
-                customView();
-            } else {
-                quitView();
-            }
+            quitView();
             affirmTestView();
             timingView();
             cameraView();
@@ -310,8 +320,9 @@ public final class DialogTools extends AppCompatDialog {
     @SuppressLint("UseCompatLoadingForDrawables")
     private void affirmTestView() {
         AppCompatTextView affirmView = findViewById(affirmId);
-        AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
-        AppCompatAutoCompleteTextView nameView = findViewById(R.id.dialog_name);
+        AppCompatAutoCompleteTextView paramView = findViewById(paramId);
+        AppCompatAutoCompleteTextView nameView = findViewById(nameId);
+        verificationView = findViewById(verificationCodeId);
         if (affirmView != null) {
             if (affirmText != null) {
                 affirmView.setText(affirmText);
@@ -333,7 +344,19 @@ public final class DialogTools extends AppCompatDialog {
                 affirmView.setTextColor(affirmColor);
             }
             if (listener != null) {
-                if (paramView != null) {
+                if (verificationView != null && paramView != null) {
+                    captcha.into(verificationView);
+                    verificationView.setOnClickListener(v -> {
+                        captcha.into(verificationView);
+                        code = captcha.getCode();
+                    });
+                    affirmView.setOnClickListener(v -> {
+                        String param = paramView.getText().toString().trim();
+                        listener.ok(this, param, code);
+                        captcha.into(verificationView);
+                        paramView.setText("");
+                    });
+                } else if (paramView != null) {
                     affirmView.setOnClickListener(v -> {
                         String param = paramView.getText().toString().trim();
                         listener.ok(this, param);
@@ -356,17 +379,6 @@ public final class DialogTools extends AppCompatDialog {
                     }
                 });
             }
-        }
-    }
-
-    /**
-     * 自定义
-     */
-    public void customView() {
-        AppCompatTextView contentView = findViewById(contentId);
-        AppCompatImageView quitView = findViewById(quitId);
-        if (listener != null && quitView != null) {
-            quitView.setOnClickListener(v -> listener.on(this, quitView, contentView));
         }
     }
 
@@ -397,7 +409,10 @@ public final class DialogTools extends AppCompatDialog {
                 quitView.setBackgroundDrawable(getContext().getResources().getDrawable(backDrawableQuit, getContext().getTheme()));
             }
             if (listener != null) {
-                quitView.setOnClickListener(v -> listener.no(this));
+                quitView.setOnClickListener(v -> {
+                    if (verificationView != null) captcha.into(verificationView);
+                    listener.no(this);
+                });
             }
             if (qrListener != null) {
                 quitView.setOnClickListener(v -> qrListener.no(this));
@@ -407,7 +422,7 @@ public final class DialogTools extends AppCompatDialog {
 
     private void qrView() {
         if (layout == LayoutResId.INPUT_CHECK) {
-            AppCompatAutoCompleteTextView paramView = findViewById(R.id.dialog_param);
+            AppCompatAutoCompleteTextView paramView = findViewById(paramId);
             AppCompatImageView qrView = findViewById(R.id.dialog_qr);
             if (qrView != null)
                 qrView.setOnClickListener(v -> qrListener.qr(Objects.requireNonNull(paramView)));
@@ -461,11 +476,13 @@ public final class DialogTools extends AppCompatDialog {
         this.adapterListener = builder.adapterListener;
         this.hintText1 = builder.hintText1;
         this.hintText2 = builder.hintText2;
-        this.lockage = builder.lockage;
         this.titleId = builder.titleId;
         this.contentId = builder.contentId;
         this.affirmId = builder.affirmId;
         this.quitId = builder.quitId;
+        this.verificationCodeId = builder.verificationCodeId;
+        this.paramId = builder.paramId;
+        this.nameId = builder.nameId;
     }
 
     @NotNull
@@ -523,11 +540,13 @@ public final class DialogTools extends AppCompatDialog {
         private CameraAdapter.OnClickCameraAdapterListener adapterListener;
         private String hintText1;
         private String hintText2;
-        private boolean lockage = false;
         private int titleId = R.id.dialog_title;
         private int contentId = R.id.dialog_content;
         private int affirmId = R.id.dialog_affirm;
         private int quitId = R.id.dialog_quit;
+        private int verificationCodeId = R.id.dialog_verification;
+        private int paramId = R.id.dialog_param;
+        private int nameId = R.id.dialog_name;
 
         private Builder(Context context) {
             this.context = context;
@@ -997,31 +1016,38 @@ public final class DialogTools extends AppCompatDialog {
             return newBuilder;
         }
 
-        /**
-         * 图形点击事件
-         */
-        public Builder isLockage(boolean lockage) {
-            this.lockage = lockage;
-            return newBuilder;
-        }
-
         public Builder setTitleId(@IdRes int titleId) {
-            if (lockage) this.titleId = titleId;
+            this.titleId = titleId;
             return newBuilder;
         }
 
         public Builder setContentId(@IdRes int contentId) {
-            if (lockage) this.contentId = contentId;
+            this.contentId = contentId;
             return newBuilder;
         }
 
         public Builder setAffirmId(@IdRes int affirmId) {
-            if (lockage) this.affirmId = affirmId;
+            this.affirmId = affirmId;
             return newBuilder;
         }
 
         public Builder setQuitId(@IdRes int quitId) {
-            if (lockage) this.quitId = quitId;
+            this.quitId = quitId;
+            return newBuilder;
+        }
+
+        public Builder setVerificationCodeId(@IdRes int verificationCodeId) {
+            this.verificationCodeId = verificationCodeId;
+            return newBuilder;
+        }
+
+        public Builder setParamId(@IdRes int paramId) {
+            this.paramId = paramId;
+            return newBuilder;
+        }
+
+        public Builder setNameId(@IdRes int nameId) {
+            this.nameId = nameId;
             return newBuilder;
         }
 
@@ -1042,10 +1068,10 @@ public final class DialogTools extends AppCompatDialog {
         void ok(DialogTools dialog);
 
         default void ok(DialogTools dialog, String param) {
-            Log.i("确认参数", param);
+
         }
 
-        default void on(DialogTools dialog, AppCompatImageView view, AppCompatTextView contentView) {
+        default void ok(DialogTools dialog, String param, String code) {
 
         }
 

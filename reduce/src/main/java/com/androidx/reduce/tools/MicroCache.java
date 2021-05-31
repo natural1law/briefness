@@ -26,6 +26,7 @@ public final class MicroCache {
 
     private SharedPreferences sp;
     private static volatile MicroCache mc;
+    private final Message msg = new Handler(Looper.getMainLooper()).obtainMessage();
 
     private MicroCache(Context context) {
         if (context != null) {
@@ -84,29 +85,53 @@ public final class MicroCache {
         sp.edit().putBoolean(key, value).commit();
     }
 
-    public Object getValue(String key) {
+    public MicroCache getValue(String key) {
         try {
-            if (getAll().isEmpty()) {
-                return "";
-            }
-            Message message = new Handler(Looper.getMainLooper()).obtainMessage();
+            if (getAll().isEmpty()) return this;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 getAll().forEach((key1, value) -> {
-                    if (Objects.equals(key, key1)) message.obj = value;
+                    if (Objects.equals(key, key1)) msg.obj = value;
                 });
             } else {
                 for (String key1 : getAll().keySet()) {
-                    if (Objects.equals(key, key1)) message.obj = getAll().get(key1);
+                    if (Objects.equals(key, key1)) msg.obj = getAll().get(key1);
                 }
             }
-            return message.obj == null ? "" : message.obj;
+            return this;
         } catch (Exception e) {
             Log.e("MicroCache异常", String.valueOf(e.getMessage()));
-            return "";
+            return this;
         }
     }
 
-    public Map<String, ?> getAll() { return sp.getAll() == null ? new WeakHashMap<>() : sp.getAll(); }
+    public String toString() {
+        if (msg.obj == null) return "";
+        return msg.obj instanceof String ? String.valueOf(msg.obj) : "";
+    }
+
+    public int toInt() {
+        if (msg.obj == null) return 0;
+        return msg.obj instanceof Integer ? Integer.parseInt(msg.obj.toString()) : 0;
+    }
+
+    public long toLong() {
+        if (msg.obj == null) return 0;
+        return msg.obj instanceof Long ? Long.parseLong(msg.obj.toString()) : 0;
+    }
+
+    public float toFloat() {
+        if (msg.obj == null) return 0;
+        return msg.obj instanceof Float ? Float.parseFloat(msg.obj.toString()) : 0.0f;
+    }
+
+    public boolean toBoolean() {
+        if (msg.obj == null) return false;
+        return msg.obj instanceof Boolean && Boolean.parseBoolean(msg.obj.toString());
+    }
+
+    public Map<String, ?> getAll() {
+        return sp.getAll() == null ? new WeakHashMap<>() : sp.getAll();
+    }
 
     public void clearApply(String key) {
         sp.edit().remove(key).apply();
