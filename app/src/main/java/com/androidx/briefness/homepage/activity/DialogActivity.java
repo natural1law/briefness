@@ -97,22 +97,6 @@ public final class DialogActivity extends BaseActivity {
                     }
                 })
                 .build();
-//
-//        dialog.views.forEach(view -> {
-//            if (view instanceof AppCompatImageView) {
-//                verificationView = (AppCompatImageView) view;
-//            }
-//            if (view instanceof AppCompatTextView) {
-//                contentView = (AppCompatTextView) view;
-//            }
-//        });
-//
-//        verificationView.setOnClickListener(v -> {
-//            captcha.into(verificationView);
-//            code = captcha.getCode();
-//            contentView.setText(code);
-//        });
-
     }
 
     @OnClick(R.id.activity_dialog)
