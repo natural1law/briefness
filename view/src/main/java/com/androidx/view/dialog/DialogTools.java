@@ -117,7 +117,7 @@ public final class DialogTools extends AppCompatDialog {
     private final int paramId;
     private final int nameId;
     private final int verificationCodeId;
-    private final Captcha captcha = Captcha.build().type(CHARS).backColor(R.color.iru);
+    private final Captcha captcha = Captcha.build().type(CHARS).backColor(171);
     private String code;
     private AppCompatImageView verificationView;
 

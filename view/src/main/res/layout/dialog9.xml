@@ -45,12 +45,10 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/dialog_verification"
-            android:layout_width="100dp"
+            android:layout_width="120dp"
             android:layout_marginStart="10dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_height="50dp"
+            android:layout_height="60dp"
             android:background="@drawable/border_dialog_cue" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
