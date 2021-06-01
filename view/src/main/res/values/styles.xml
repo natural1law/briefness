@@ -4,7 +4,7 @@
         <item name="android:textSize">14sp</item>
     </style>
 
-    <style name="dialogStyle" parent="android:style/Theme.Dialog">
+    <style name="dialogStyle" parent="Theme.AppCompat.Dialog">
         <!--无标题-->
         <item name="android:windowNoTitle">true</item>
         <!--浮动-->
@@ -16,9 +16,9 @@
         <!--动画-->
         <item name="android:windowAnimationStyle">@style/animation</item>
         <!--当前背景颜色-->
-        <item name="android:background">@android:color/transparent</item>
+        <item name="android:background">@color/transparent</item>
         <!--系统背景颜色-->
-        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowBackground">@color/transparent</item>
     </style>
 
     <style name="animation">

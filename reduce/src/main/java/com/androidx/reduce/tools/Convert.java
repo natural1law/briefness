@@ -52,4 +52,28 @@ public final class Convert {
 
     }
 
+    public static final class Ary {
+
+        private Ary() {
+        }
+
+        /**
+         * 转二进制
+         *
+         * @param value 需要转换的值
+         * @return 八位二进制
+         */
+        public strictfp static <T> String toBinary(T value) {
+            byte b = Byte.parseByte(String.valueOf(value));
+            return String.valueOf((b & 128) == 0 ? 0 : (b & 128) >> 7) +
+                    ((b & 64) == 0 ? 0 : (b & 64) >> 6) +
+                    ((b & 32) == 0 ? 0 : (b & 32) >> 5) +
+                    ((b & 16) == 0 ? 0 : (b & 16) >> 4) +
+                    ((b & 8) == 0 ? 0 : (b & 8) >> 3) +
+                    ((b & 4) == 0 ? 0 : (b & 4) >> 2) +
+                    ((b & 2) == 0 ? 0 : (b & 2) >> 1) +
+                    (b & 1);
+        }
+    }
+
 }
