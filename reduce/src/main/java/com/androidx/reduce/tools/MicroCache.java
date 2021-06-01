@@ -29,18 +29,12 @@ public final class MicroCache {
     private final Message msg = new Handler(Looper.getMainLooper()).obtainMessage();
 
     private MicroCache(Context context) {
-        if (context != null) {
-            sp = context.getSharedPreferences("MicroCache", Activity.MODE_PRIVATE);
-        }
+        if (context != null) sp = context.getSharedPreferences("MicroCache", Activity.MODE_PRIVATE);
     }
 
     public static MicroCache builder(Context context) {
-        if (mc == null) {
-            synchronized (MicroCache.class) {
-                if (mc == null) {
-                    mc = new MicroCache(context);
-                }
-            }
+        if (mc == null) synchronized (MicroCache.class) {
+            if (mc == null) mc = new MicroCache(context);
         }
         return mc;
     }
@@ -99,14 +93,13 @@ public final class MicroCache {
             }
             return this;
         } catch (Exception e) {
-            Log.e("MicroCache异常", String.valueOf(e.getMessage()));
+            Log.e("MicroCache异常", String.valueOf(e.getMessage()), e);
             return this;
         }
     }
 
     public String toString() {
-        if (msg.obj == null) return "";
-        return msg.obj instanceof String ? String.valueOf(msg.obj) : "";
+        return msg.obj == null ? "" : String.valueOf(msg.obj);
     }
 
     public int toInt() {

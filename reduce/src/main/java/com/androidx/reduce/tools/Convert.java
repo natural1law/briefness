@@ -1,5 +1,8 @@
 package com.androidx.reduce.tools;
 
+import android.icu.math.BigDecimal;
+import android.util.Log;
+
 /**
  * 转换工具
  */
@@ -8,6 +11,9 @@ public final class Convert {
     private Convert() {
     }
 
+    /**
+     * 颜色转换类
+     */
     public static final class Color {
 
         private Color() {
@@ -34,6 +40,9 @@ public final class Convert {
 
     }
 
+    /**
+     * 时间转换类
+     */
     public static final class Date {
 
         private Date() {
@@ -52,6 +61,9 @@ public final class Convert {
 
     }
 
+    /**
+     * 进制转换类
+     */
     public static final class Ary {
 
         private Ary() {
@@ -64,15 +76,71 @@ public final class Convert {
          * @return 八位二进制
          */
         public strictfp static <T> String toBinary(T value) {
-            byte b = Byte.parseByte(String.valueOf(value));
-            return String.valueOf((b & 128) == 0 ? 0 : (b & 128) >> 7) +
-                    ((b & 64) == 0 ? 0 : (b & 64) >> 6) +
-                    ((b & 32) == 0 ? 0 : (b & 32) >> 5) +
-                    ((b & 16) == 0 ? 0 : (b & 16) >> 4) +
-                    ((b & 8) == 0 ? 0 : (b & 8) >> 3) +
-                    ((b & 4) == 0 ? 0 : (b & 4) >> 2) +
-                    ((b & 2) == 0 ? 0 : (b & 2) >> 1) +
-                    (b & 1);
+            try {
+                byte b = Byte.parseByte(Convert.Scm.build().to(value).sInt());
+                return String.valueOf((b & 128) == 0 ? 0 : (b & 128) >> 7) +
+                        ((b & 64) == 0 ? 0 : (b & 64) >> 6) +
+                        ((b & 32) == 0 ? 0 : (b & 32) >> 5) +
+                        ((b & 16) == 0 ? 0 : (b & 16) >> 4) +
+                        ((b & 8) == 0 ? 0 : (b & 8) >> 3) +
+                        ((b & 4) == 0 ? 0 : (b & 4) >> 2) +
+                        ((b & 2) == 0 ? 0 : (b & 2) >> 1) +
+                        (b & 1);
+            } catch (Exception e) {
+                Log.e("转二进制异常", e.getMessage(), e);
+                return "";
+            }
+        }
+    }
+
+    /**
+     * 科学计算法转换
+     * Scientific Computing Method
+     */
+    public static final class Scm {
+
+        private BigDecimal bd;
+
+        private Scm() {
+        }
+
+        public static Scm build() {
+            synchronized (Scm.class) {
+                return new Scm();
+            }
+        }
+
+        public <T> Scm to(T value) {
+            bd = new BigDecimal(String.valueOf(value)).setScale(0, BigDecimal.ROUND_HALF_UP);
+            return this;
+        }
+
+        public String string() {
+            return bd.unscaledValue().toString();
+        }
+
+        public String sInt() {
+            return String.valueOf(bd.unscaledValue().intValue());
+        }
+
+        public int Int() {
+            return bd.unscaledValue().intValue();
+        }
+
+        public String sDouble() {
+            return String.valueOf(bd.unscaledValue().doubleValue());
+        }
+
+        public double Double() {
+            return bd.unscaledValue().doubleValue();
+        }
+
+        public String sLong() {
+            return String.valueOf(bd.unscaledValue().longValue());
+        }
+
+        public String sByte() {
+            return String.valueOf(bd.unscaledValue().byteValue());
         }
     }
 
