@@ -64,6 +64,7 @@ public final class DialogTools extends AppCompatDialog {
     private final boolean canceled;
     private final boolean cancelable;
     private final OnEventTriggerListener listener;
+    private final OnClickParamListener paramListener;
     private final OnClickCodeListener codeListener;
     private final OnClickQrListener qrListener;
     private final CameraAdapter.OnClickCameraAdapterListener adapterListener;
@@ -178,18 +179,13 @@ public final class DialogTools extends AppCompatDialog {
             WindowManager.LayoutParams params = window.getAttributes();
             params.width = width;
             params.height = height;
-            if (gravity != -1) {
-                params.gravity = gravity;
-            }
+            if (gravity != -1) params.gravity = gravity;
             window.setWindowAnimations(animations);
-
         }
 
         View layout = findViewById(R.id.dialog_frame);
         if (layout != null) {
-            if (windowColor != -1) {
-                layout.setBackgroundColor(windowColor);
-            }
+            if (windowColor != -1) layout.setBackgroundColor(windowColor);
             if (windowDrawable != -1) {
                 layout.setBackground(getContext().getResources().getDrawable(windowDrawable, getContext().getTheme()));
             }
@@ -223,20 +219,11 @@ public final class DialogTools extends AppCompatDialog {
     private void titleView() {
         AppCompatTextView titleView = findViewById(titleId);
         if (titleView != null) {
-            if (titleText != null) {
-                titleView.setText(titleText);
-            }
-            if (titleColor != -1) {
-                titleView.setTextColor(titleColor);
-            }
-            if (titleSize != -1) {
-                titleView.setTextSize(titleSize);
-            }
-            if (titleTextStyle != -1) {
-                titleView.setTypeface(Typeface.SANS_SERIF, titleTextStyle);
-            } else {
-                titleView.setTypeface(Typeface.DEFAULT);
-            }
+            if (titleText != null) titleView.setText(titleText);
+            if (titleColor != -1) titleView.setTextColor(titleColor);
+            if (titleSize != -1) titleView.setTextSize(titleSize);
+            if (titleTextStyle != -1) titleView.setTypeface(Typeface.SANS_SERIF, titleTextStyle);
+            else titleView.setTypeface(Typeface.DEFAULT);
             if (titleColorId != -1) {
                 titleView.setTextColor(getContext().getResources().getColor(titleColorId, getContext().getTheme()));
             }
@@ -249,28 +236,16 @@ public final class DialogTools extends AppCompatDialog {
     private void contentView() {
         AppCompatTextView contentView = findViewById(contentId);
         if (contentView != null) {
-            if (contentText != null) {
-                contentView.setText(contentText);
-            }
-            if (contentSize != -1) {
-                contentView.setTextSize(contentSize);
-            }
-            if (contentTextStyle != -1) {
+            if (contentText != null) contentView.setText(contentText);
+            if (contentSize != -1) contentView.setTextSize(contentSize);
+            if (contentTextStyle != -1)
                 contentView.setTypeface(Typeface.SANS_SERIF, contentTextStyle);
-            } else {
-                contentView.setTypeface(Typeface.DEFAULT);
-            }
+            else contentView.setTypeface(Typeface.DEFAULT);
             if (contentColorId != -1) {
                 contentView.setTextColor(getContext().getResources().getColor(contentColorId, getContext().getTheme()));
-            } else {
-                contentView.setTextColor(contentColor);
-            }
-            if (width != -1) {
-                contentView.setWidth(width);
-            }
-            if (height != -1) {
-                contentView.setHeight(height);
-            }
+            } else contentView.setTextColor(contentColor);
+            if (width != -1) contentView.setWidth(width);
+            if (height != -1) contentView.setHeight(height);
         }
     }
 
@@ -325,36 +300,17 @@ public final class DialogTools extends AppCompatDialog {
         AppCompatAutoCompleteTextView nameView = findViewById(nameId);
         verificationView = findViewById(verificationCodeId);
         if (affirmView != null) {
-            if (affirmText != null) {
-                affirmView.setText(affirmText);
-            }
-            if (affirmSize != -1) {
-                affirmView.setTextSize(affirmSize);
-            }
+            if (affirmText != null) affirmView.setText(affirmText);
+            if (affirmSize != -1) affirmView.setTextSize(affirmSize);
             if (backDrawableAffirm != -1) {
                 affirmView.setBackgroundDrawable(getContext().getResources().getDrawable(backDrawableAffirm, getContext().getTheme()));
             }
-            if (affirmTextStyle != -1) {
-                affirmView.setTypeface(Typeface.SANS_SERIF, affirmTextStyle);
-            } else {
-                affirmView.setTypeface(Typeface.DEFAULT);
-            }
+            if (affirmTextStyle != -1) affirmView.setTypeface(Typeface.SANS_SERIF, affirmTextStyle);
+            else affirmView.setTypeface(Typeface.DEFAULT);
             if (affirmColorId != -1) {
                 affirmView.setTextColor(getContext().getResources().getColor(affirmColorId, getContext().getTheme()));
-            } else {
-                affirmView.setTextColor(affirmColor);
-            }
-            if (listener != null) {
-                if (paramView != null) {
-                    affirmView.setOnClickListener(v -> {
-                        String param = paramView.getText().toString().trim();
-                        listener.ok(this, param);
-                        paramView.setText("");
-                    });
-                } else {
-                    affirmView.setOnClickListener(v -> listener.ok(this));
-                }
-            }
+            } else affirmView.setTextColor(affirmColor);
+            if (listener != null) affirmView.setOnClickListener(v -> listener.ok(this));
 
             if (qrListener != null) {
                 affirmView.setOnClickListener(v -> {
@@ -386,6 +342,14 @@ public final class DialogTools extends AppCompatDialog {
                     });
                 }
             }
+
+            if (paramListener != null && paramView != null) {
+                affirmView.setOnClickListener(v -> {
+                    String param = paramView.getText().toString().trim();
+                    paramListener.ok(this, param);
+                    paramView.setText("");
+                });
+            }
         }
     }
 
@@ -397,31 +361,19 @@ public final class DialogTools extends AppCompatDialog {
         AppCompatTextView quitView = findViewById(quitId);
         AppCompatAutoCompleteTextView paramView = findViewById(paramId);
         if (quitView != null) {
-            if (quitText != null) {
-                quitView.setText(quitText);
-            }
-            if (quitSize != -1) {
-                quitView.setTextSize(quitSize);
-            }
-            if (quitTextStyle != -1) {
-                quitView.setTypeface(Typeface.SANS_SERIF, quitTextStyle);
-            } else {
-                quitView.setTypeface(Typeface.DEFAULT);
-            }
+            if (quitText != null) quitView.setText(quitText);
+            if (quitSize != -1) quitView.setTextSize(quitSize);
+            if (quitTextStyle != -1) quitView.setTypeface(Typeface.SANS_SERIF, quitTextStyle);
+            else quitView.setTypeface(Typeface.DEFAULT);
             if (quitColorId != -1) {
                 quitView.setTextColor(getContext().getResources().getColor(quitColorId, getContext().getTheme()));
-            } else {
-                quitView.setTextColor(quitColor);
-            }
+            } else quitView.setTextColor(quitColor);
             if (backDrawableQuit != -1) {
                 quitView.setBackgroundDrawable(getContext().getResources().getDrawable(backDrawableQuit, getContext().getTheme()));
             }
-            if (listener != null) {
-                quitView.setOnClickListener(v -> listener.no(this));
-            }
-            if (qrListener != null) {
-                quitView.setOnClickListener(v -> qrListener.no(this));
-            }
+            if (listener != null) quitView.setOnClickListener(v -> listener.no(this));
+            if (qrListener != null) quitView.setOnClickListener(v -> qrListener.no(this));
+            if (paramListener != null) quitView.setOnClickListener(v -> paramListener.no(this));
             if (codeListener != null) {
                 quitView.setOnClickListener(v -> {
                     if (verificationView != null) {
@@ -483,6 +435,7 @@ public final class DialogTools extends AppCompatDialog {
         this.quitTextStyle = builder.quitTextStyle;
         this.backDrawableQuit = builder.backDrawableQuit;
         this.listener = builder.listener;
+        this.paramListener = builder.paramListener;
         this.codeListener = builder.codeListener;
         this.qrListener = builder.qrListener;
         this.totalTime = builder.totalTime;
@@ -551,6 +504,7 @@ public final class DialogTools extends AppCompatDialog {
         private int quitTextStyle = -1;
         private int backDrawableQuit = -1;
         private OnEventTriggerListener listener;
+        private OnClickParamListener paramListener;
         private OnClickCodeListener codeListener;
         private OnClickQrListener qrListener;
         private String[] datas;
@@ -938,6 +892,11 @@ public final class DialogTools extends AppCompatDialog {
             return newBuilder;
         }
 
+        public Builder setListener(OnClickParamListener paramListener) {
+            this.paramListener = paramListener;
+            return newBuilder;
+        }
+
         /**
          * 确认按钮或取消按钮触发事件的实现
          *
@@ -1094,10 +1053,6 @@ public final class DialogTools extends AppCompatDialog {
 
         void ok(DialogTools dialog);
 
-        default void ok(DialogTools dialog, String param) {
-
-        }
-
 
         default void no(DialogTools dialog) {
             dialog.cancel();
@@ -1128,6 +1083,14 @@ public final class DialogTools extends AppCompatDialog {
             dialog.cancel();
         }
 
+    }
+
+    public interface OnClickParamListener {
+        void ok(DialogTools dialog, String param);
+
+        default void no(DialogTools dialog) {
+            dialog.cancel();
+        }
     }
 
 }

@@ -32,7 +32,7 @@ public final class PermissionRequestFragment extends Fragment implements Runnabl
     private int mRequestCode;
     private PermissionRequestListener mPermissionRequestListener;
     private HashMap<String, GrantResult> mPermissionGrantMap = new HashMap<>();
-    private RequestCodeGenerater mRequestCodeGenerater = new RequestCodeGenerater();
+    private final RequestCodeGenerater mRequestCodeGenerater = new RequestCodeGenerater();
 
 
     /**

@@ -1,11 +1,13 @@
 <component name="ProjectDictionaryState">
   <dictionary name="administered">
     <words>
+      <w>alnum</w>
       <w>astrict</w>
       <w>datas</w>
       <w>lockage</w>
       <w>meid</w>
       <w>protobuf</w>
+      <w>zabcdefghijklmnopqrstuvwxyz</w>
     </words>
   </dictionary>
 </component>

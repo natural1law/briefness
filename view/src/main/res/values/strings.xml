@@ -4,4 +4,5 @@
     <string name="secondName">联系人</string>
     <string name="thirdlyName">发现</string>
     <string name="fourthlyName">我的</string>
+    <string name="alnum">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890</string>
 </resources>
