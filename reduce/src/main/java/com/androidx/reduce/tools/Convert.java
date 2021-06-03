@@ -1,13 +1,22 @@
 package com.androidx.reduce.tools;
 
+import android.annotation.SuppressLint;
 import android.icu.math.BigDecimal;
 import android.util.Log;
+
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 转换工具
  */
 public final class Convert {
 
+    @Contract(pure = true)
     private Convert() {
     }
 
@@ -16,13 +25,14 @@ public final class Convert {
      */
     public static final class Color {
 
+        @Contract(pure = true)
         private Color() {
         }
 
         /**
          * 16进制颜色值转换
          */
-        public static String toHexEncoding(int color) {
+        public static @NotNull String toHexEncoding(int color) {
             String R, G, B;
             StringBuilder sb = new StringBuilder();
             R = Integer.toHexString(android.graphics.Color.red(color));
@@ -43,20 +53,57 @@ public final class Convert {
     /**
      * 时间转换类
      */
-    public static final class Date {
+    public static final class Timestamp {
 
-        private Date() {
+        @Contract(pure = true)
+        private Timestamp() {
         }
 
         /**
          * @param mss 毫秒
          */
-        public static String formatDuring(long mss) {
+        @Contract(pure = true)
+        public static @NotNull String formatDuring(long mss) {
             long days = mss / (1000 * 60 * 60 * 24);
             long hours = (mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
             long minutes = (mss % (1000 * 60 * 60)) / (1000 * 60);
             long seconds = (mss % (1000 * 60)) / 1000;
             return days + " 天 " + hours + " 时 " + minutes + " 分 " + seconds + " 秒 ";
+        }
+
+        /**
+         * 转换Date类型
+         */
+        @SuppressLint("SimpleDateFormat")
+        public static Date toDate(String datetime, String format) {
+            try {
+                return new SimpleDateFormat(format).parse(datetime);
+            } catch (ParseException e) {
+                return null;
+            }
+        }
+
+        /**
+         * 日期时间格式类型转换
+         *
+         * @param datetime 日期时间戳
+         * @param format   现在的日期时间格式
+         */
+        @SuppressLint("SimpleDateFormat")
+        public static <T>String refining(T datetime, String format) {
+            return new SimpleDateFormat(format).format(datetime);
+        }
+
+        /**
+         * 日期时间格式类型转换
+         *
+         * @param pastFormat 之前的日期时间格式
+         * @param nowFormat  现在的日期时间格式
+         */
+        @SuppressLint("SimpleDateFormat")
+        public static String refining(String datetime, String pastFormat, String nowFormat) {
+            Date d1 = toDate(datetime, pastFormat);
+            return (d1 == null) ? "" : new SimpleDateFormat(nowFormat).format(d1);
         }
 
     }
@@ -66,6 +113,7 @@ public final class Convert {
      */
     public static final class Ary {
 
+        @Contract(pure = true)
         private Ary() {
         }
 
@@ -75,9 +123,9 @@ public final class Convert {
          * @param value 需要转换的值
          * @return 八位二进制
          */
-        public strictfp static <T> String toBinary(T value) {
+        public strictfp static <T> @NotNull String toBinary(T value) {
             try {
-                byte b = Byte.parseByte(Convert.Scm.build().to(value).sInt());
+                byte b = Byte.parseByte(Convert.Scm.build().set(value).tosInt());
                 return String.valueOf((b & 128) == 0 ? 0 : (b & 128) >> 7) +
                         ((b & 64) == 0 ? 0 : (b & 64) >> 6) +
                         ((b & 32) == 0 ? 0 : (b & 32) >> 5) +
@@ -101,46 +149,57 @@ public final class Convert {
 
         private BigDecimal bd;
 
+        @Contract(pure = true)
         private Scm() {
         }
 
-        public static Scm build() {
+        @Contract(value = " -> new", pure = true)
+        public static @NotNull Scm build() {
             synchronized (Scm.class) {
                 return new Scm();
             }
         }
 
-        public <T> Scm to(T value) {
+        @Contract("_ -> this")
+        public <T> Scm set(T value) {
             bd = new BigDecimal(String.valueOf(value)).setScale(0, BigDecimal.ROUND_HALF_UP);
             return this;
         }
 
-        public String string() {
+        public @NotNull String toString() {
             return bd.unscaledValue().toString();
         }
 
-        public String sInt() {
+        public @NotNull String tosInt() {
             return String.valueOf(bd.unscaledValue().intValue());
         }
 
-        public int Int() {
-            return bd.unscaledValue().intValue();
-        }
-
-        public String sDouble() {
+        public @NotNull String tosDouble() {
             return String.valueOf(bd.unscaledValue().doubleValue());
         }
 
-        public double Double() {
-            return bd.unscaledValue().doubleValue();
-        }
-
-        public String sLong() {
+        public @NotNull String tosLong() {
             return String.valueOf(bd.unscaledValue().longValue());
         }
 
-        public String sByte() {
+        public @NotNull String tosByte() {
             return String.valueOf(bd.unscaledValue().byteValue());
+        }
+
+        public int toInt() {
+            return bd.unscaledValue().intValue();
+        }
+
+        public long toLong() {
+            return bd.unscaledValue().longValue();
+        }
+
+        public byte toByte() {
+            return bd.unscaledValue().byteValue();
+        }
+
+        public double toDouble() {
+            return bd.unscaledValue().doubleValue();
         }
     }
 

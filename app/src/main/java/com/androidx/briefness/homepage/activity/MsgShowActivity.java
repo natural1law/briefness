@@ -2,6 +2,7 @@ package com.androidx.briefness.homepage.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -13,6 +14,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
+import com.androidx.reduce.tools.Convert;
 import com.androidx.reduce.tools.Idle;
 
 import butterknife.BindView;
@@ -47,6 +49,7 @@ public final class MsgShowActivity extends BaseActivity {
         imageView.setVisibility(View.VISIBLE);
         imageView.setColorFilter(R.color.black);
         titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
+        initView();
     }
 
     @Override
@@ -63,5 +66,10 @@ public final class MsgShowActivity extends BaseActivity {
     @OnClick(R.id.title_return_image)
     public void imageReturn() {
         if (Idle.isClick()) finish();
+    }
+
+    private void initView() {
+        String s = Convert.Timestamp.refining("2020/05/05 00:00:00", "yyyy-MM-dd HH:mm:ss");
+        Log.i("时间", s);
     }
 }

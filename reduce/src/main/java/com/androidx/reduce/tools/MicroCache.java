@@ -43,6 +43,10 @@ public final class MicroCache {
         sp.edit().putString(key, value).apply();
     }
 
+    public void setApply(String key, Object value) {
+        sp.edit().putString(key, String.valueOf(value)).apply();
+    }
+
     public void setApply(String key, int value) {
         sp.edit().putInt(key, value).apply();
     }
@@ -61,6 +65,10 @@ public final class MicroCache {
 
     public void setCommit(String key, String value) {
         sp.edit().putString(key, value).commit();
+    }
+
+    public void setCommit(String key, Object value) {
+        sp.edit().putString(key, String.valueOf(value)).commit();
     }
 
     public void setCommit(String key, int value) {

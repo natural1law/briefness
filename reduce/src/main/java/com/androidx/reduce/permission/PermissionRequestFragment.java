@@ -28,6 +28,7 @@ import static android.Manifest.permission.SYSTEM_ALERT_WINDOW;
  * @createTime: 2018/10/25
  */
 
+@SuppressWarnings("deprecation")
 public final class PermissionRequestFragment extends Fragment implements Runnable {
     private int mRequestCode;
     private PermissionRequestListener mPermissionRequestListener;
