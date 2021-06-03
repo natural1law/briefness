@@ -90,8 +90,13 @@ public final class Convert {
          * @param format   现在的日期时间格式
          */
         @SuppressLint("SimpleDateFormat")
-        public static <T>String refining(T datetime, String format) {
-            return new SimpleDateFormat(format).format(datetime);
+        public static <T> String refining(T datetime, String format) {
+            try {
+                return new SimpleDateFormat(format).format(datetime);
+            } catch (Exception e) {
+                return e.getMessage();
+            }
+
         }
 
         /**
