@@ -31,12 +31,15 @@ import com.androidx.reduce.tools.Captcha;
 import com.androidx.view.R;
 import com.androidx.view.dialog.adapter.CameraAdapter;
 import com.zyao89.view.zloading.ZLoadingTextView;
+import com.zyao89.view.zloading.ZLoadingView;
+import com.zyao89.view.zloading.Z_TYPE;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Objects;
 
 import static com.androidx.reduce.tools.Captcha.TYPE.CHARS;
+import static com.zyao89.view.zloading.Z_TYPE.CIRCLE;
 
 /**
  * @author 李玄道
@@ -112,6 +115,12 @@ public final class DialogTools extends AppCompatDialog {
     private final int totalTime;
     private final String cdPrefix;
     private final String cdSuffix;
+    /**
+     * 加载动画参数
+     */
+    private final Z_TYPE loadingType;
+    private final int loadingTime;
+    private final int loadingColor;
 
     private final String hintText1;
     private final String hintText2;
@@ -163,6 +172,10 @@ public final class DialogTools extends AppCompatDialog {
          * 验证码提示窗
          */
         public static final int VERIFICATION_CODE = R.layout.dialog9;
+        /**
+         * 加载动画提示窗
+         */
+        public static final int LOADING = R.layout.dialog10;
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -175,7 +188,6 @@ public final class DialogTools extends AppCompatDialog {
         Window window = this.getWindow();
         if (window != null) {
             window.setBackgroundDrawableResource(bdr);
-            window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
             WindowManager.LayoutParams params = window.getAttributes();
             params.width = width;
             params.height = height;
@@ -207,6 +219,7 @@ public final class DialogTools extends AppCompatDialog {
             timingView();
             cameraView();
             qrView();
+            loading();
         } catch (Exception e) {
             Log.e("dialogTools异常", String.valueOf(e.getMessage()), e);
         }
@@ -396,6 +409,14 @@ public final class DialogTools extends AppCompatDialog {
         }
     }
 
+    private void loading() {
+        ZLoadingView loadingView = findViewById(R.id.dialog_animation);
+        if (loadingView != null) {
+            loadingView.setLoadingBuilder(loadingType, loadingTime);
+            loadingView.setColorFilter(getContext().getResources().getColor(loadingColor, getContext().getTheme()));
+        }
+    }
+
     private DialogTools(Context context, @NotNull Builder builder) {
         super(context, builder.style);
         this.layout = builder.layout;
@@ -443,6 +464,9 @@ public final class DialogTools extends AppCompatDialog {
         this.cdSuffix = builder.cdSuffix;
         this.datas = builder.datas;
         this.adapterListener = builder.adapterListener;
+        this.loadingType = builder.loadingType;
+        this.loadingTime = builder.loadingTime;
+        this.loadingColor = builder.loadingColor;
         this.hintText1 = builder.hintText1;
         this.hintText2 = builder.hintText2;
         this.titleId = builder.titleId;
@@ -509,6 +533,9 @@ public final class DialogTools extends AppCompatDialog {
         private OnClickQrListener qrListener;
         private String[] datas;
         private CameraAdapter.OnClickCameraAdapterListener adapterListener;
+        private Z_TYPE loadingType = CIRCLE;
+        private int loadingTime = 2;
+        private int loadingColor = R.color.code;
         private String hintText1;
         private String hintText2;
         private int titleId = R.id.dialog_title;
@@ -979,6 +1006,21 @@ public final class DialogTools extends AppCompatDialog {
          */
         public Builder setWindowColor(@ColorRes int windowColor) {
             this.windowColor = windowColor;
+            return newBuilder;
+        }
+
+        public Builder setLoadingType(Z_TYPE loadingType) {
+            this.loadingType = loadingType;
+            return newBuilder;
+        }
+
+        public Builder setLoadingTime(@Size int loadingTime) {
+            this.loadingTime = loadingTime;
+            return newBuilder;
+        }
+
+        public Builder setLoadingColor(@ColorRes int loadingColor) {
+            this.loadingColor = loadingColor;
             return newBuilder;
         }
 

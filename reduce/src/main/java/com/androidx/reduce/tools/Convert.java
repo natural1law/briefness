@@ -100,6 +100,22 @@ public final class Convert {
         }
 
         /**
+         * 日期时间格式类型转换(10时间戳位转换)
+         *
+         * @param datetime 日期时间戳
+         * @param format   现在的日期时间格式
+         */
+        @SuppressLint("SimpleDateFormat")
+        public static <T> String cover(T datetime, String format) {
+            try {
+                return new SimpleDateFormat(format).format(new Date(Long.parseLong(datetime + "000")));
+            } catch (Exception e) {
+                return e.getMessage();
+            }
+
+        }
+
+        /**
          * 日期时间格式类型转换
          *
          * @param pastFormat 之前的日期时间格式

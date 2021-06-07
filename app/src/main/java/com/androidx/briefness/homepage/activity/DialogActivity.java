@@ -22,6 +22,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.androidx.briefness.base.App.appThis;
+import static com.androidx.view.dialog.DialogTools.LayoutResId.LOADING;
 import static com.androidx.view.dialog.DialogTools.LayoutResId.VERIFICATION_CODE;
 
 @SuppressLint("NonConstantResourceId")
@@ -37,6 +39,7 @@ public final class DialogActivity extends BaseActivity {
     private final AppCompatActivity aThis = this;
     private Unbinder unbinder;
     private DialogTools dialog;
+    private DialogTools dialog1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +64,7 @@ public final class DialogActivity extends BaseActivity {
         super.onDestroy();
         unbinder.unbind();
         if (dialog != null) dialog.dismiss();
+        if (dialog1 != null) dialog1.dismiss();
     }
 
     @OnClick(R.id.title_return_image)
@@ -97,11 +101,24 @@ public final class DialogActivity extends BaseActivity {
                     }
                 })
                 .build();
+
+        dialog1 = DialogTools.builder(aThis)
+                .setLayout(LOADING)
+                .setCanceled(false)
+                .setCancelable(false)
+                .build();
+
+        appThis.delayLoading(() -> dialog1.cancel(), 5000);
     }
 
     @OnClick(R.id.activity_dialog)
     public void dialog() {
         dialog.show();
+    }
+
+    @OnClick(R.id.activity_dialog1)
+    public void dialog1() {
+        dialog1.show();
     }
 
 }
