@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * 转换工具
@@ -84,7 +85,7 @@ public final class Convert {
         }
 
         /**
-         * 日期时间格式类型转换
+         * 将时间戳转成日期时间格式
          *
          * @param datetime 日期时间戳
          * @param format   现在的日期时间格式
@@ -113,6 +114,14 @@ public final class Convert {
                 return e.getMessage();
             }
 
+        }
+
+        /**
+         * 将时间转换为时间戳
+         */
+        @SuppressLint("SimpleDateFormat")
+        public static <T> String changeover(T datetime, String format) {
+            return String.valueOf(Objects.requireNonNull(toDate(String.valueOf(datetime), format)).getTime());
         }
 
         /**
