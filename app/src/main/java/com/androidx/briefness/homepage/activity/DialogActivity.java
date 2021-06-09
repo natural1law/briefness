@@ -14,6 +14,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
 import com.androidx.reduce.tools.Idle;
+import com.androidx.reduce.tools.This;
 import com.androidx.reduce.tools.Toasts;
 import com.androidx.view.dialog.DialogTools;
 
@@ -22,7 +23,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-import static com.androidx.briefness.base.App.appThis;
 import static com.androidx.view.dialog.DialogTools.LayoutResId.LOADING;
 import static com.androidx.view.dialog.DialogTools.LayoutResId.VERIFICATION_CODE;
 
@@ -69,7 +69,7 @@ public final class DialogActivity extends BaseActivity {
 
     @OnClick(R.id.title_return_image)
     public void imageReturn() {
-        if (Idle.isClick()) finish();
+        if (Idle.isClick()) finishAfterTransition();
     }
 
     @SuppressLint("SetTextI18n")
@@ -108,7 +108,7 @@ public final class DialogActivity extends BaseActivity {
                 .setCancelable(false)
                 .build();
 
-        appThis.delayLoading(() -> dialog1.cancel(), 5000);
+        This.startDayle(() -> dialog1.cancel(), 5000);
     }
 
     @OnClick(R.id.activity_dialog)

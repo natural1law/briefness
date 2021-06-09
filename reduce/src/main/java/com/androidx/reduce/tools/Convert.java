@@ -17,7 +17,6 @@ import java.util.Objects;
  */
 public final class Convert {
 
-    @Contract(pure = true)
     private Convert() {
     }
 
@@ -26,7 +25,6 @@ public final class Convert {
      */
     public static final class Color {
 
-        @Contract(pure = true)
         private Color() {
         }
 
@@ -56,14 +54,12 @@ public final class Convert {
      */
     public static final class Timestamp {
 
-        @Contract(pure = true)
         private Timestamp() {
         }
 
         /**
          * @param mss 毫秒
          */
-        @Contract(pure = true)
         public static @NotNull String formatDuring(long mss) {
             long days = mss / (1000 * 60 * 60 * 24);
             long hours = (mss % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
@@ -143,7 +139,6 @@ public final class Convert {
      */
     public static final class Ary {
 
-        @Contract(pure = true)
         private Ary() {
         }
 
@@ -153,7 +148,7 @@ public final class Convert {
          * @param value 需要转换的值
          * @return 八位二进制
          */
-        public strictfp static <T> @NotNull String toBinary(T value) {
+        public strictfp static <T> String toBinary(T value) {
             try {
                 byte b = Byte.parseByte(Convert.Scm.build().set(value).tosInt());
                 return String.valueOf((b & 128) == 0 ? 0 : (b & 128) >> 7) +
@@ -179,7 +174,6 @@ public final class Convert {
 
         private BigDecimal bd;
 
-        @Contract(pure = true)
         private Scm() {
         }
 
@@ -190,7 +184,6 @@ public final class Convert {
             }
         }
 
-        @Contract("_ -> this")
         public <T> Scm set(T value) {
             bd = new BigDecimal(String.valueOf(value)).setScale(0, BigDecimal.ROUND_HALF_UP);
             return this;

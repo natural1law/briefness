@@ -11,7 +11,6 @@ import android.widget.FrameLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +18,7 @@ import com.androidx.briefness.R;
 import com.androidx.briefness.homepage.activity.DialogActivity;
 import com.androidx.briefness.homepage.activity.MsgShowActivity;
 import com.androidx.briefness.homepage.adapter.HomepageAdapter;
+import com.androidx.reduce.tools.This;
 import com.androidx.view.bar.BaseFragment;
 
 import java.util.ArrayList;
@@ -28,9 +28,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-import static com.androidx.briefness.base.App.appThis;
-import static com.androidx.briefness.base.App.toasts;
 
 /**
  * @date 2021/04/30
@@ -45,17 +42,18 @@ public final class HomePageFrag extends BaseFragment {
     @BindView(R.id.homepage_rv)
     public RecyclerView homepageRv;
 
-    private FragmentActivity fThis;
+    private Context c;
     private Unbinder unbinder;
     private HomepageAdapter adapter;
     private final List<String> list = new ArrayList<>();
     private final Bundle bundle = new Bundle();
     private final String[] arr = {"Toast功能展示", "dialog功能展示"};
+    private Runnable run;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.fThis = (FragmentActivity) context;
+        this.c = context;
     }
 
     @Override
@@ -82,14 +80,15 @@ public final class HomePageFrag extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        if (run != null) This.destroy(run);
     }
 
     private void initView() {
-        titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, fThis.getTheme()));
-        titleView.setTextColor(getResources().getColor(R.color.black1, fThis.getTheme()));
+        titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, c.getTheme()));
+        titleView.setTextColor(getResources().getColor(R.color.black1, c.getTheme()));
         titleView.setText("目录");
 
-        homepageRv.setLayoutManager(new LinearLayoutManager(fThis));
+        homepageRv.setLayoutManager(new LinearLayoutManager(c));
         homepageRv.setAdapter(adapter = new HomepageAdapter());
 
     }
@@ -104,36 +103,36 @@ public final class HomePageFrag extends BaseFragment {
             if (list.isEmpty()) return;
             if (list.get(position).equals(list.get(0))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
-                appThis.startActivity(fThis, MsgShowActivity.class, bundle);
+                This.start(run = This.activity(c, MsgShowActivity.class, bundle));
             } else if (list.get(position).equals(list.get(1))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
-                appThis.startActivity(fThis, DialogActivity.class, bundle);
+                This.start(run = This.activity(c, DialogActivity.class, bundle));
             } else if (list.get(position).equals(list.get(2))) {
-                toasts.setMsg(list.get(2)).showInfo();
+                bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(3))) {
-                toasts.setMsg(list.get(3)).showInfo();
+                bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(4))) {
-                toasts.setMsg(list.get(4)).showInfo();
+                bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(5))) {
-                toasts.setMsg(list.get(5)).showInfo();
+                bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(6))) {
-                toasts.setMsg(list.get(6)).showInfo();
+                bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(7))) {
-                toasts.setMsg(list.get(7)).showInfo();
+                bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(8))) {
-                toasts.setMsg(list.get(8)).showInfo();
+                bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(9))) {
-                toasts.setMsg(list.get(9)).showInfo();
+                bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(10))) {
-                toasts.setMsg(list.get(10)).showInfo();
+                bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(11))) {
-                toasts.setMsg(list.get(11)).showInfo();
+                bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(12))) {
-                toasts.setMsg(list.get(12)).showInfo();
+                bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(13))) {
-                toasts.setMsg(list.get(13)).showInfo();
+                bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(14))) {
-                toasts.setMsg(list.get(14)).showInfo();
+                bundle.putString(getResources().getString(R.string.title), list.get(position));
             }
         });
     }

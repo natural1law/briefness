@@ -121,6 +121,8 @@ public final class DialogTools extends AppCompatDialog {
     private final Z_TYPE loadingType;
     private final int loadingTime;
     private final int loadingColor;
+    private final String loadingText;
+    private final int loadingTextColor;
 
     private final String hintText1;
     private final String hintText2;
@@ -411,10 +413,16 @@ public final class DialogTools extends AppCompatDialog {
 
     private void loading() {
         ZLoadingView loadingView = findViewById(R.id.dialog_animation);
+        ZLoadingTextView loadingTextView = findViewById(R.id.dialog_timing_animation);
         if (loadingView != null) {
             loadingView.setLoadingBuilder(loadingType, loadingTime);
             loadingView.setColorFilter(getContext().getResources().getColor(loadingColor, getContext().getTheme()));
         }
+        if (loadingTextView != null) {
+            loadingTextView.setText(loadingText);
+            loadingTextView.setColorFilter(getContext().getResources().getColor(loadingTextColor, getContext().getTheme()));
+        }
+
     }
 
     private DialogTools(Context context, @NotNull Builder builder) {
@@ -467,6 +475,8 @@ public final class DialogTools extends AppCompatDialog {
         this.loadingType = builder.loadingType;
         this.loadingTime = builder.loadingTime;
         this.loadingColor = builder.loadingColor;
+        this.loadingText = builder.loadingText;
+        this.loadingTextColor = builder.loadingTextColor;
         this.hintText1 = builder.hintText1;
         this.hintText2 = builder.hintText2;
         this.titleId = builder.titleId;
@@ -536,6 +546,8 @@ public final class DialogTools extends AppCompatDialog {
         private Z_TYPE loadingType = CIRCLE;
         private int loadingTime = 2;
         private int loadingColor = R.color.code;
+        private String loadingText = "正在加载...";
+        private int loadingTextColor = R.color.code;
         private String hintText1;
         private String hintText2;
         private int titleId = R.id.dialog_title;
@@ -1009,18 +1021,53 @@ public final class DialogTools extends AppCompatDialog {
             return newBuilder;
         }
 
+        /**
+         * 设置加载动画类型
+         *
+         * @param loadingType 动画类型
+         */
         public Builder setLoadingType(Z_TYPE loadingType) {
             this.loadingType = loadingType;
             return newBuilder;
         }
 
+        /**
+         * 设置加载动画时间
+         *
+         * @param loadingTime 动画时间
+         */
         public Builder setLoadingTime(@Size int loadingTime) {
             this.loadingTime = loadingTime;
             return newBuilder;
         }
 
+        /**
+         * 设置加载动画颜色
+         *
+         * @param loadingColor 动画颜色
+         */
         public Builder setLoadingColor(@ColorRes int loadingColor) {
             this.loadingColor = loadingColor;
+            return newBuilder;
+        }
+
+        /**
+         * 设置动画文字
+         *
+         * @param loadingText 动画文字
+         */
+        public Builder setLoadingText(@NotNull String loadingText) {
+            this.loadingText = loadingText;
+            return newBuilder;
+        }
+
+        /**
+         * 设置加载文字颜色
+         *
+         * @param loadingTextColor 加载文字颜色
+         */
+        public Builder setLoadingTextColor(@ColorRes int loadingTextColor) {
+            this.loadingTextColor = loadingTextColor;
             return newBuilder;
         }
 
