@@ -78,7 +78,7 @@ public final class Storage {
          * @param files [0]-文件夹名字 [1]-文件名 [2]-文件后缀
          * @return 文件保存地址
          */
-        private static String save(String... files) {
+        public static String save(String... files) {
             if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
                 String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + files[0] + "/";
                 File file = new File(rootDir);

@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.RadioGroup;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
@@ -23,6 +24,7 @@ import androidx.annotation.StyleRes;
 import androidx.appcompat.app.AppCompatDialog;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatRadioButton;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -51,6 +53,7 @@ public final class DialogTools extends AppCompatDialog {
     /**
      * 基础参数
      */
+    int i = 0;
     private final int bdr;
     private final String[] datas;
     private final int left;
@@ -70,6 +73,7 @@ public final class DialogTools extends AppCompatDialog {
     private final OnClickParamListener paramListener;
     private final OnClickCodeListener codeListener;
     private final OnClickQrListener qrListener;
+    private final OnClickRadioListener radioListener;
     private final CameraAdapter.OnClickCameraAdapterListener adapterListener;
     /**
      * 标题模块参数
@@ -178,6 +182,10 @@ public final class DialogTools extends AppCompatDialog {
          * 加载动画提示窗
          */
         public static final int LOADING = R.layout.dialog10;
+        /**
+         * 单选提示窗
+         */
+        public static final int RADIO = R.layout.dialog11;
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -365,6 +373,36 @@ public final class DialogTools extends AppCompatDialog {
                     paramView.setText("");
                 });
             }
+
+            if (layout == LayoutResId.RADIO) {
+                RadioGroup groupView = findViewById(R.id.dialog_group);
+                AppCompatRadioButton writeView = findViewById(R.id.dialog_write);
+                AppCompatRadioButton readView = findViewById(R.id.dialog_read);
+                if (groupView != null) {
+                    groupView.setOnCheckedChangeListener((group, checkedId) -> {
+                        if (writeView != null && checkedId == writeView.getId()) {
+                            if (writeView.isChecked()) {
+                                i = 1;
+                            } else {
+                                i = 0;
+                            }
+                        } else if (readView != null && checkedId == readView.getId()) {
+                            if (readView.isChecked()) {
+                                i = 0;
+                            } else {
+                                i = 1;
+                            }
+                        }
+                    });
+                }
+                if (radioListener != null && paramView != null) {
+                    affirmView.setOnClickListener(v -> {
+                        String param = paramView.getText().toString().trim();
+                        radioListener.ok(this, param, String.valueOf(i));
+                        paramView.setText("");
+                    });
+                }
+            }
         }
     }
 
@@ -389,6 +427,7 @@ public final class DialogTools extends AppCompatDialog {
             if (listener != null) quitView.setOnClickListener(v -> listener.no(this));
             if (qrListener != null) quitView.setOnClickListener(v -> qrListener.no(this));
             if (paramListener != null) quitView.setOnClickListener(v -> paramListener.no(this));
+            if (radioListener != null) quitView.setOnClickListener(v -> radioListener.no(this));
             if (codeListener != null) {
                 quitView.setOnClickListener(v -> {
                     if (verificationView != null) {
@@ -402,6 +441,9 @@ public final class DialogTools extends AppCompatDialog {
         }
     }
 
+    /**
+     * 二维码扫描
+     */
     private void qrView() {
         if (layout == LayoutResId.INPUT_CHECK) {
             AppCompatAutoCompleteTextView paramView = findViewById(paramId);
@@ -411,6 +453,9 @@ public final class DialogTools extends AppCompatDialog {
         }
     }
 
+    /**
+     * 加载动画
+     */
     private void loading() {
         ZLoadingView loadingView = findViewById(R.id.dialog_animation);
         ZLoadingTextView loadingTextView = findViewById(R.id.dialog_timing_animation);
@@ -422,7 +467,6 @@ public final class DialogTools extends AppCompatDialog {
             loadingTextView.setText(loadingText);
             loadingTextView.setColorFilter(getContext().getResources().getColor(loadingTextColor, getContext().getTheme()));
         }
-
     }
 
     private DialogTools(Context context, @NotNull Builder builder) {
@@ -467,6 +511,7 @@ public final class DialogTools extends AppCompatDialog {
         this.paramListener = builder.paramListener;
         this.codeListener = builder.codeListener;
         this.qrListener = builder.qrListener;
+        this.radioListener = builder.radioListener;
         this.totalTime = builder.totalTime;
         this.cdPrefix = builder.cdPrefix;
         this.cdSuffix = builder.cdSuffix;
@@ -541,6 +586,7 @@ public final class DialogTools extends AppCompatDialog {
         private OnClickParamListener paramListener;
         private OnClickCodeListener codeListener;
         private OnClickQrListener qrListener;
+        private OnClickRadioListener radioListener;
         private String[] datas;
         private CameraAdapter.OnClickCameraAdapterListener adapterListener;
         private Z_TYPE loadingType = CIRCLE;
@@ -949,6 +995,16 @@ public final class DialogTools extends AppCompatDialog {
         /**
          * 确认按钮或取消按钮触发事件的实现
          *
+         * @param listener 事件
+         */
+        public Builder setListener(OnClickRadioListener listener) {
+            this.radioListener = listener;
+            return newBuilder;
+        }
+
+        /**
+         * 确认按钮或取消按钮触发事件的实现
+         *
          * @param codeListener 事件
          */
         public Builder setListener(OnClickCodeListener codeListener) {
@@ -1176,6 +1232,14 @@ public final class DialogTools extends AppCompatDialog {
 
     public interface OnClickParamListener {
         void ok(DialogTools dialog, String param);
+
+        default void no(DialogTools dialog) {
+            dialog.cancel();
+        }
+    }
+
+    public interface OnClickRadioListener {
+        void ok(DialogTools dialog, String param, String radio);
 
         default void no(DialogTools dialog) {
             dialog.cancel();

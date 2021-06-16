@@ -2,6 +2,7 @@ package com.androidx.briefness.homepage.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -14,7 +15,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
 import com.androidx.reduce.tools.Idle;
-import com.androidx.reduce.tools.This;
 import com.androidx.reduce.tools.Toasts;
 import com.androidx.view.dialog.DialogTools;
 
@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-import static com.androidx.view.dialog.DialogTools.LayoutResId.LOADING;
+import static com.androidx.view.dialog.DialogTools.LayoutResId.RADIO;
 import static com.androidx.view.dialog.DialogTools.LayoutResId.VERIFICATION_CODE;
 
 @SuppressLint("NonConstantResourceId")
@@ -38,8 +38,6 @@ public final class DialogActivity extends BaseActivity {
 
     private final AppCompatActivity aThis = this;
     private Unbinder unbinder;
-    private DialogTools dialog;
-    private DialogTools dialog1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,8 +61,6 @@ public final class DialogActivity extends BaseActivity {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
-        if (dialog != null) dialog.dismiss();
-        if (dialog1 != null) dialog1.dismiss();
     }
 
     @OnClick(R.id.title_return_image)
@@ -79,7 +75,11 @@ public final class DialogActivity extends BaseActivity {
         imageView.setVisibility(View.VISIBLE);
         imageView.setColorFilter(R.color.black);
         titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
-        dialog = DialogTools.builder(aThis)
+    }
+
+    @OnClick(R.id.activity_dialog)
+    public void dialog() {
+        DialogTools.builder(aThis)
                 .setLayout(VERIFICATION_CODE)
                 .setContentId(R.id.dialog_content)
                 .setTitleText("远程生效验证")
@@ -96,29 +96,27 @@ public final class DialogActivity extends BaseActivity {
                     } else if (!param.equalsIgnoreCase(code)) {
                         Toasts.builder(aThis).setMsg("请输入正确的验证码").showError();
                     } else {
-
                         dialog.cancel();
                     }
                 })
-                .build();
-
-        dialog1 = DialogTools.builder(aThis)
-                .setLayout(LOADING)
-                .setCanceled(false)
-                .setCancelable(false)
-                .build();
-
-        This.startDayle(() -> dialog1.cancel(), 5000);
-    }
-
-    @OnClick(R.id.activity_dialog)
-    public void dialog() {
-        dialog.show();
+                .build()
+                .show();
     }
 
     @OnClick(R.id.activity_dialog1)
     public void dialog1() {
-        dialog1.show();
+        DialogTools.builder(aThis)
+                .setLayout(RADIO)
+                .setTitleText("分享")
+                .setCanceled(false)
+                .setCancelable(false)
+                .setHintText1("请输入分享人的手机号")
+                .setAffirmColorId(R.color.white)
+                .setListener((DialogTools.OnClickRadioListener) (dialog, param, radio) -> {
+                    Log.i("分享数据", param + " / " + radio);
+                })
+                .build()
+                .show();
     }
 
 }

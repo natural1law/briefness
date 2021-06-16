@@ -27,7 +27,7 @@ public final class This {
     private This() {
     }
 
-    public static void startDayle(Runnable run, long t) {
+    public static void startDelay(Runnable run, long t) {
         handler.postDelayed(run, t);
     }
 
