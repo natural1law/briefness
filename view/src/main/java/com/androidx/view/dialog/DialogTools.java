@@ -868,7 +868,7 @@ public final class DialogTools extends AppCompatDialog {
             if (affirmColor.contains("#")) {
                 this.affirmColor = Color.parseColor(affirmColor);
             } else {
-                this.affirmColor = Color.parseColor("#" + titleColor);
+                this.affirmColor = Color.parseColor("#" + affirmColor);
             }
             return newBuilder;
         }
@@ -932,7 +932,7 @@ public final class DialogTools extends AppCompatDialog {
             if (quitColor.contains("#")) {
                 this.quitColor = Color.parseColor(quitColor);
             } else {
-                this.quitColor = Color.parseColor("#" + titleColor);
+                this.quitColor = Color.parseColor("#" + quitColor);
             }
             return newBuilder;
         }
