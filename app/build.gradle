@@ -12,7 +12,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
-        versionName "2.3.9"
+        versionName "2.4.0"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -58,7 +58,6 @@ dependencies {
     implementation project(path: ':view')
     implementation project(path: ':reduce')
     implementation project(path: ':http')
-    implementation project(path: ':chart')
 //    implementation(name: 'view', ext: 'aar')
 //    implementation(name: 'reduce', ext: 'aar')
     //noinspection GradleDependency
