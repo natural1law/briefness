@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
@@ -36,8 +35,8 @@ public final class DialogActivity extends BaseActivity {
     @BindView(R.id.title_text)
     public AppCompatTextView titleView;
 
-    private final AppCompatActivity aThis = this;
     private Unbinder unbinder;
+    private final DialogActivity aThis = this;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

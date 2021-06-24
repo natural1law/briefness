@@ -54,18 +54,18 @@ public final class CountDown extends CountDownTimer {
     @SuppressLint("SetTextI18n")
     public void onTick(long millisUntilFinished) {
         //防止计时过程中重复点击
-        if (view instanceof Button) {
-            ((Button) view).setClickable(false);
-            ((Button) view).setText(prefixWordage + (millisUntilFinished / 1000) + suffixWordage);
-        } else if (view instanceof TextView) {
-            ((TextView) view).setClickable(false);
-            ((TextView) view).setText(prefixWordage + (millisUntilFinished / 1000) + suffixWordage);
-        } else if (view instanceof AppCompatButton) {
+        if (view instanceof AppCompatButton) {
             ((AppCompatButton) view).setClickable(false);
             ((AppCompatButton) view).setText(prefixWordage + (millisUntilFinished / 1000) + suffixWordage);
         } else if (view instanceof AppCompatTextView) {
             ((AppCompatTextView) view).setClickable(false);
             ((AppCompatTextView) view).setText(prefixWordage + (millisUntilFinished / 1000) + suffixWordage);
+        } else if (view instanceof Button) {
+            ((Button) view).setClickable(false);
+            ((Button) view).setText(prefixWordage + (millisUntilFinished / 1000) + suffixWordage);
+        } else if (view instanceof TextView) {
+            ((TextView) view).setClickable(false);
+            ((TextView) view).setText(prefixWordage + (millisUntilFinished / 1000) + suffixWordage);
         } else {
             Log.e("倒计时工具类", "布局控件不匹配");
         }
@@ -73,18 +73,18 @@ public final class CountDown extends CountDownTimer {
 
     @Override
     public void onFinish() {
-        if (view instanceof Button) {
-            ((Button) view).setClickable(true);
-            ((Button) view).setText(finishWordage);
-        } else if (view instanceof TextView) {
-            ((TextView) view).setClickable(true);
-            ((TextView) view).setText(finishWordage);
-        } else if (view instanceof AppCompatButton) {
+        if (view instanceof AppCompatButton) {
             ((AppCompatButton) view).setClickable(true);
             ((AppCompatButton) view).setText(finishWordage);
+        } else if (view instanceof Button) {
+            ((Button) view).setClickable(true);
+            ((Button) view).setText(finishWordage);
         } else if (view instanceof AppCompatTextView) {
             ((AppCompatTextView) view).setClickable(true);
             ((AppCompatTextView) view).setText(finishWordage);
+        } else if (view instanceof TextView) {
+            ((TextView) view).setClickable(true);
+            ((TextView) view).setText(finishWordage);
         } else {
             Log.e("倒计时工具类", "布局控件不匹配");
         }

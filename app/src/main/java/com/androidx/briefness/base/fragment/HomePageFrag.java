@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidx.briefness.R;
 import com.androidx.briefness.homepage.activity.DialogActivity;
+import com.androidx.briefness.homepage.activity.EchartsActivity;
 import com.androidx.briefness.homepage.activity.MsgShowActivity;
 import com.androidx.briefness.homepage.adapter.HomepageAdapter;
 import com.androidx.reduce.tools.This;
@@ -47,7 +48,7 @@ public final class HomePageFrag extends BaseFragment {
     private HomepageAdapter adapter;
     private final List<String> list = new ArrayList<>();
     private final Bundle bundle = new Bundle();
-    private final String[] arr = {"Toast功能展示", "dialog功能展示"};
+    private final String[] arr = {"Toast功能展示", "dialog功能展示", "图表功能展示"};
     private Runnable run;
 
     @Override
@@ -109,6 +110,7 @@ public final class HomePageFrag extends BaseFragment {
                 This.start(run = This.activity(c, DialogActivity.class, bundle));
             } else if (list.get(position).equals(list.get(2))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
+                This.start(run = This.activity(c, EchartsActivity.class, bundle));
             } else if (list.get(position).equals(list.get(3))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(4))) {

@@ -58,6 +58,7 @@ dependencies {
     implementation project(path: ':view')
     implementation project(path: ':reduce')
     implementation project(path: ':http')
+    implementation project(path: ':echarts')
 //    implementation(name: 'view', ext: 'aar')
 //    implementation(name: 'reduce', ext: 'aar')
     //noinspection GradleDependency

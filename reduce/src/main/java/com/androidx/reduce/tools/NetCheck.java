@@ -5,7 +5,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 
 import java.lang.ref.WeakReference;
 import java.net.Inet4Address;
@@ -129,13 +128,8 @@ public final class NetCheck {
         try {
             ConnectivityManager manager = (ConnectivityManager) wrContext.get().getSystemService(Context.CONNECTIVITY_SERVICE);
             if (manager != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    NetworkInfo networkInfo = manager.getNetworkInfo(manager.getActiveNetwork());
-                    return networkInfo != null ? networkInfo.getType() : -1;
-                } else {
-                    NetworkInfo info = manager.getActiveNetworkInfo();
-                    return info != null ? info.getType() : -1;
-                }
+                NetworkInfo networkInfo = manager.getNetworkInfo(manager.getActiveNetwork());
+                return networkInfo != null ? networkInfo.getType() : -1;
             } else {
                 return -1;
             }
