@@ -17,7 +17,12 @@
   
   > 修订版本 2.4.0
   * @日期: 2021/06/30
-  * @声明: 1.删除第三方AAChartCore，使用更轻量更便捷的AgentWeb+百度echarts（js）框架组合开发，2.代码优化，2.已知bug修复
+  * @声明: 1.删除第三方AAChartCore，使用更轻量更便捷的AgentWeb+百度echarts（js）框架组合开发。2.代码优化。2.已知bug修复。4.删除获取动态权限，推荐使用
+    ```
+    implementation "com.github.permissions-dispatcher:permissionsdispatcher:4.8.0"
+    annotationProcessor "com.github.permissions-dispatcher:permissionsdispatcher-processor:4.8.0"
+    ```
+    具体使用请搜索https://github.com/permissions-dispatcher/PermissionsDispatcher很方便
 
   > 修订版本 2.3.9
   * @日期: 2021/06/18
