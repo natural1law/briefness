@@ -205,6 +205,14 @@ public abstract class BaseWebActivity extends AppCompatActivity {
     }
 
     /**
+     * 开始加载
+     */
+    public void setStart(String url, String suffix) {
+        if (url == null || suffix == null) Log.e("开始加载", "参数为空");
+        agentWeb.getUrlLoader().loadUrl(url + suffix);
+    }
+
+    /**
      * 重新加载
      */
     public void setReload() {
