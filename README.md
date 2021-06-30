@@ -6,12 +6,12 @@
 
 ### 使用依赖
   * ![](https://jitpack.io/v/natural1law/briefness.svg "")
-  * **implementation 'com.github.natural1law.briefness:versionCode'**
+  ```
+    implementation 'com.github.natural1law.briefness:versionCode'
+  ```
 
 ### 工具使用
-  ```
-    暂不介绍，目前由作者自己使用，待项目稳定后在做介绍
-  ```
+  * **暂不介绍，目前由作者自己使用，待项目稳定后在做介绍**
 
 ### 更新日志
   
