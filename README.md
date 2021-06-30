@@ -6,15 +6,24 @@
 
 ### 使用依赖
   * ![](https://jitpack.io/v/natural1law/briefness.svg "")
-  * **implementation 'com.github.natural1law.briefness:versionCode'**
+  ```
+    implementation 'com.github.natural1law.briefness:versionCode'
+  ```
 
 ### 工具使用
-  ```
-    暂不介绍，目前由作者自己使用，待项目稳定后在做介绍
-  ```
+  * **暂不介绍，目前由作者自己使用，待项目稳定后在做介绍**
 
 ### 更新日志
   
+  > 修订版本 2.4.1
+  * @日期: 2021/06/30
+  * @声明: 1.删除第三方AAChartCore，使用更轻量更便捷的AgentWeb+百度echarts（js）框架组合开发。2.代码优化。2.已知bug修复。4.删除获取动态权限，推荐使用
+    ```
+    implementation "com.github.permissions-dispatcher:permissionsdispatcher:4.8.0"
+    annotationProcessor "com.github.permissions-dispatcher:permissionsdispatcher-processor:4.8.0"
+    ```
+    具体使用请搜索https://github.com/permissions-dispatcher/PermissionsDispatcher 很方便
+
   > 修订版本 2.3.9
   * @日期: 2021/06/18
   * @声明: 新增浮动菜单
