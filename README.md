@@ -22,7 +22,7 @@
     implementation "com.github.permissions-dispatcher:permissionsdispatcher:4.8.0"
     annotationProcessor "com.github.permissions-dispatcher:permissionsdispatcher-processor:4.8.0"
     ```
-    具体使用请搜索https://github.com/permissions-dispatcher/PermissionsDispatcher很方便
+    具体使用请搜索https://github.com/permissions-dispatcher/PermissionsDispatcher 很方便
 
   > 修订版本 2.3.9
   * @日期: 2021/06/18
