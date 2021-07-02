@@ -1,4 +1,4 @@
-package com.androidx.reduce.intertaces;
+package com.androidx.view.screen.intertaces;
 
 public interface ScreenCallbackListener {
     void onSuccess(String fileUrl);

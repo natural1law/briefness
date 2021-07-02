@@ -1,4 +1,4 @@
-package com.androidx.reduce.views;
+package com.androidx.view.screen;
 
 import android.Manifest;
 import android.app.Activity;
@@ -18,10 +18,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.androidx.reduce.intertaces.NotificationListener;
-import com.androidx.reduce.intertaces.ScreenCallbackListener;
-import com.androidx.reduce.mix_interfaces.ScreenListener;
-import com.androidx.reduce.service.ScreenService;
+import com.androidx.view.screen.intertaces.NotificationListener;
+import com.androidx.view.screen.intertaces.ScreenCallbackListener;
+import com.androidx.view.screen.intertaces.ScreenListener;
+import com.androidx.view.screen.intertaces.ScreenService;
 
 /**
  * 屏幕录制

@@ -28,18 +28,10 @@ public final class Toasts {
     }
 
     public static Toasts builder(Context context) {
-        try {
-            if (instance == null) {
-                synchronized (Toasts.class) {
-                    if (instance == null) {
-                        instance = new Toasts(context);
-                    }
-                }
-            }
-            return instance;
-        } catch (Exception e) {
-            return new Toasts(context);
+        if (instance == null) synchronized (Toasts.class) {
+            if (instance == null) instance = new Toasts(context);
         }
+        return instance;
     }
 
     /**

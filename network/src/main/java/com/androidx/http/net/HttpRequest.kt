@@ -7,10 +7,10 @@ import com.androidx.http.net.listener.BytesCallback
 import com.androidx.http.net.listener.HttpRequestListener
 import com.androidx.http.net.listener.StringCallback
 import com.androidx.http.net.module.MsgModule
+import com.google.gson.JsonObject
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
-import org.json.JSONObject
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.util.*
@@ -19,7 +19,8 @@ class HttpRequest : HttpRequestListener {
 
     private var currentConnect = 0
     private val httpNetwork: IHttpNetwork = HttpNetwork.builder()
-    private val handler = Handler(Looper.getMainLooper(), Handler.Callback label@{ message: Message ->
+    private val handler =
+        Handler(Looper.getMainLooper(), Handler.Callback label@{ message: Message ->
             val msg = message.obj as MsgModule
             when (message.what) {
                 -2 -> {
@@ -68,11 +69,9 @@ class HttpRequest : HttpRequestListener {
             @Throws(IOException::class)
             override fun onResponse(call: Call, response: Response) {
                 handler.sendMessage(
-                    handler.obtainMessage(
-                        0, MsgModule(
-                            Objects.requireNonNull(response.body)!!.string(),
-                            callBack!!
-                        )
+                    handler.obtainMessage(0, response.body?.let {
+                        MsgModule(it.string(), callBack!!)
+                    }
                     )
                 )
             }
@@ -106,10 +105,9 @@ class HttpRequest : HttpRequestListener {
                 @Throws(IOException::class)
                 override fun onResponse(call: Call, response: Response) {
                     handler.sendMessage(
-                        handler.obtainMessage(
-                            1, MsgModule(
-                                Objects.requireNonNull(response.body)!!.bytes(), callBack!!
-                            )
+                        handler.obtainMessage(1, response.body?.let {
+                            MsgModule(it.bytes(), callBack!!)
+                        }
                         )
                     )
                 }
@@ -143,10 +141,9 @@ class HttpRequest : HttpRequestListener {
                 @Throws(IOException::class)
                 override fun onResponse(call: Call, response: Response) {
                     handler.sendMessage(
-                        handler.obtainMessage(
-                            0, MsgModule(
-                                Objects.requireNonNull(response.body)!!.string(), callBack!!
-                            )
+                        handler.obtainMessage(0, response.body?.let {
+                            MsgModule(it.string(), callBack!!)
+                        }
                         )
                     )
                 }
@@ -155,7 +152,7 @@ class HttpRequest : HttpRequestListener {
 
     override fun postRequest(
         url: String?,
-        json: JSONObject?,
+        json: JsonObject?,
         maxAnewCount: Int,
         callBack: StringCallback?
     ) {
@@ -180,10 +177,9 @@ class HttpRequest : HttpRequestListener {
                 @Throws(IOException::class)
                 override fun onResponse(call: Call, response: Response) {
                     handler.sendMessage(
-                        handler.obtainMessage(
-                            0, MsgModule(
-                                Objects.requireNonNull(response.body)!!.string(), callBack!!
-                            )
+                        handler.obtainMessage(0, response.body?.let {
+                            MsgModule(it.string(), callBack!!)
+                        }
                         )
                     )
                 }
@@ -192,7 +188,7 @@ class HttpRequest : HttpRequestListener {
 
     override fun deleteRequest(
         url: String?,
-        json: JSONObject?,
+        json: JsonObject?,
         maxAnewCount: Int,
         callBack: StringCallback?
     ) {
@@ -217,10 +213,9 @@ class HttpRequest : HttpRequestListener {
                 @Throws(IOException::class)
                 override fun onResponse(call: Call, response: Response) {
                     handler.sendMessage(
-                        handler.obtainMessage(
-                            0, MsgModule(
-                                Objects.requireNonNull(response.body)!!.string(), callBack!!
-                            )
+                        handler.obtainMessage(0, response.body?.let {
+                            MsgModule(it.string(), callBack!!)
+                        }
                         )
                     )
                 }
@@ -254,10 +249,9 @@ class HttpRequest : HttpRequestListener {
                 @Throws(IOException::class)
                 override fun onResponse(call: Call, response: Response) {
                     handler.sendMessage(
-                        handler.obtainMessage(
-                            0, MsgModule(
-                                Objects.requireNonNull(response.body)!!.string(), callBack!!
-                            )
+                        handler.obtainMessage(0, response.body?.let {
+                            MsgModule(it.string(), callBack!!)
+                        }
                         )
                     )
                 }
@@ -266,7 +260,7 @@ class HttpRequest : HttpRequestListener {
 
     override fun formRequest(
         url: String?,
-        json: JSONObject?,
+        json: JsonObject?,
         maxAnewCount: Int,
         callBack: StringCallback?
     ) {
@@ -291,10 +285,9 @@ class HttpRequest : HttpRequestListener {
                 @Throws(IOException::class)
                 override fun onResponse(call: Call, response: Response) {
                     handler.sendMessage(
-                        handler.obtainMessage(
-                            0, MsgModule(
-                                Objects.requireNonNull(response.body)!!.string(), callBack!!
-                            )
+                        handler.obtainMessage(0, response.body?.let {
+                            MsgModule(it.string(), callBack!!)
+                        }
                         )
                     )
                 }

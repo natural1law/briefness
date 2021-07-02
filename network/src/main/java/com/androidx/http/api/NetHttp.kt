@@ -2,11 +2,12 @@
 
 package com.androidx.http.api
 
+import android.net.Uri
 import com.androidx.http.net.HttpRequest
 import com.androidx.http.net.listener.BytesCallback
 import com.androidx.http.net.listener.HttpRequestListener
 import com.androidx.http.net.listener.StringCallback
-import org.json.JSONObject
+import com.google.gson.JsonObject
 import java.util.concurrent.ConcurrentHashMap
 
 class NetHttp private constructor() {
@@ -41,7 +42,7 @@ class NetHttp private constructor() {
         internal var host: String? = null
         internal var mode: Int? = 0
         internal var map: Map<String, Any> = ConcurrentHashMap()
-        internal var json = JSONObject()
+        internal var json = JsonObject()
         internal var bytes: ByteArray? = null
         internal var stringCallback: StringCallback? = null
         internal var bytesCallback: BytesCallback? = null
@@ -51,13 +52,9 @@ class NetHttp private constructor() {
             return builder
         }
 
-        fun setHost(host: String?, port: String?): Builder {
-            this.host = host?.let { port?.let { it1 -> host(it, it1) } }
-            return builder
-        }
-
-        fun setHosts(host: String?): Builder {
-            this.host = host?.let { hosts(it) }
+        fun setHosts(uri: Uri): Builder {
+            if (uri.port == -1) this.host = uri.host?.let { hosts(it) }
+            else this.host = uri.host?.let { host(it, uri.port.toString()) }
             return builder
         }
 
@@ -76,7 +73,7 @@ class NetHttp private constructor() {
             return builder
         }
 
-        fun setJson(json: JSONObject): Builder {
+        fun setJson(json: JsonObject): Builder {
             this.json = json
             return builder
         }

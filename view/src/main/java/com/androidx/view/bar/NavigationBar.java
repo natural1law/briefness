@@ -24,6 +24,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.androidx.view.R;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -63,7 +64,7 @@ public final class NavigationBar {
     private FragmentContainerView fragmentLayout;
 
     @SuppressLint("NonConstantResourceId")
-    private final BottomNavigationView.OnNavigationItemSelectedListener selectedListener = item -> {
+    private final NavigationBarView.OnItemSelectedListener selectedListener = item -> {
         switch (fragments.size()) {
             case 2:
                 if (items[0] == item.getItemId()) {
@@ -139,7 +140,8 @@ public final class NavigationBar {
             fragmentLayout.setBackgroundColor(fThis.getResources().getColor(fbc, fThis.getTheme()));
         }
         adjustNavigationIcoSize(navigationView);
-        navigationView.setOnNavigationItemSelectedListener(selectedListener);
+        navigationView.setItemHorizontalTranslationEnabled(true);
+        navigationView.setOnItemSelectedListener(selectedListener);
     }
 
     /**
@@ -198,7 +200,7 @@ public final class NavigationBar {
         try {
             BottomNavigationMenuView menuView = (BottomNavigationMenuView) navigation.getChildAt(0);
             for (int i = 0; i < menuView.getChildCount(); i++) {
-                View iconView = menuView.getChildAt(i).findViewById(android.R.id.icon);
+                View iconView = menuView.getChildAt(i);
                 ViewGroup.LayoutParams layoutParams = iconView.getLayoutParams();
                 if (aThis != null) {
                     DisplayMetrics displayMetrics = aThis.getResources().getDisplayMetrics();
@@ -212,10 +214,9 @@ public final class NavigationBar {
                     layoutParams.width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, space[1], displayMetrics);
                     iconView.setLayoutParams(layoutParams);
                 }
-
             }
         } catch (Exception e) {
-            Log.e("NavigationBar", String.valueOf(e.getMessage()));
+            Log.e("NavigationBar", String.valueOf(e.getMessage()), e);
         }
     }
 

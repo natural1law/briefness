@@ -1,8 +1,11 @@
 package com.androidx.http.net;
 
+import android.net.Uri;
+
+import com.google.gson.JsonObject;
+
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -41,7 +44,8 @@ public final class HttpNetwork implements IHttpNetwork {
     }
 
     @Override
-    public @NotNull OkHttpClient getClient() {
+    public @NotNull
+    OkHttpClient getClient() {
         OkHttpClient.Builder client = new OkHttpClient.Builder()
                 .dns(new HttpDns())
                 .retryOnConnectionFailure(true)//错误重连
@@ -69,7 +73,8 @@ public final class HttpNetwork implements IHttpNetwork {
      * 异步/发起get请求(map接收方式)
      */
     @Override
-    public @NotNull Request getRequest(String url, Map<String, Object> map) {
+    public @NotNull
+    Request getRequest(String url, Map<String, Object> map) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             final int[] p = {0};
             param.setLength(p[0]);
@@ -96,7 +101,7 @@ public final class HttpNetwork implements IHttpNetwork {
             }
         }
         return request.get()
-                .url(url + param.toString())
+                .url(Uri.decode(url).replace("null", "") + param.toString())
                 .build();
     }
 
@@ -104,13 +109,14 @@ public final class HttpNetwork implements IHttpNetwork {
      * 异步/发起post请求(map接收方式)
      */
     @Override
-    public @NotNull Request postRequest(String url, Map<String, Object> map) {
+    public @NotNull
+    Request postRequest(String url, Map<String, Object> map) {
         FormBody.Builder formBody = new FormBody.Builder();
         for (String key : map.keySet()) {
             formBody.add(key, Objects.requireNonNull(map.get(key)).toString());
         }
         return request.post(formBody.build())
-                .url(url)
+                .url(Uri.decode(url).replace("null", ""))
                 .build();
     }
 
@@ -118,9 +124,10 @@ public final class HttpNetwork implements IHttpNetwork {
      * 异步/发起post请求(json接收方式)
      */
     @Override
-    public @NotNull Request postRequest(String url, JSONObject json) {
+    public @NotNull
+    Request postRequest(String url, JsonObject json) {
         return request.post(RequestBody.create(json.toString(), JSON))
-                .url(url)
+                .url(Uri.decode(url).replace("null", ""))
                 .build();
     }
 
@@ -128,7 +135,8 @@ public final class HttpNetwork implements IHttpNetwork {
      * 异步/发起delete请求(map接收方式)
      */
     @Override
-    public @NotNull Request deleteRequest(String url, Map<String, Object> map) {
+    public @NotNull
+    Request deleteRequest(String url, Map<String, Object> map) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             final int[] p = {0};
             param.setLength(p[0]);
@@ -155,7 +163,7 @@ public final class HttpNetwork implements IHttpNetwork {
             }
         }
         return request.delete()
-                .url(url + param.toString())
+                .url(Uri.decode(url).replace("null", "") + param.toString())
                 .build();
     }
 
@@ -163,9 +171,10 @@ public final class HttpNetwork implements IHttpNetwork {
      * 异步/发起delete请求(json接收方式)
      */
     @Override
-    public @NotNull Request deleteRequest(String url, JSONObject json) {
+    public @NotNull
+    Request deleteRequest(String url, JsonObject json) {
         return request.delete(RequestBody.create(json.toString(), null))
-                .url(url)
+                .url(Uri.decode(url).replace("null", ""))
                 .build();
     }
 
@@ -174,9 +183,10 @@ public final class HttpNetwork implements IHttpNetwork {
      * 表单形式
      */
     @Override
-    public @NotNull Request formRequest(String url, JSONObject json) {
+    public @NotNull
+    Request formRequest(String url, JsonObject json) {
         return request.post(new FormBody.Builder().add(JSON_KEY, json.toString()).build())
-                .url(url)
+                .url(Uri.decode(url).replace("null", ""))
                 .build();
     }
 
@@ -184,9 +194,10 @@ public final class HttpNetwork implements IHttpNetwork {
      * protobuf 数据传输
      */
     @Override
-    public @NotNull Request postRequestProto(String url, byte[] bytes) {
+    public @NotNull
+    Request postRequestProto(String url, byte[] bytes) {
         return request.post(RequestBody.create(bytes, PROTO))
-                .url(url)
+                .url(Uri.decode(url).replace("null", ""))
                 .build();
     }
 

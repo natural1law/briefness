@@ -22,10 +22,10 @@ public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        unbinder = ButterKnife.bind(aThis);
         try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_main);
+            unbinder = ButterKnife.bind(aThis);
             //底部导航栏
             NavigationBar.builder(aThis)
                     .setMenu(R.menu.nav_menu_default)
@@ -44,5 +44,6 @@ public class MainActivity extends FragmentActivity {
         super.onDestroy();
         unbinder.unbind();
     }
+
 
 }

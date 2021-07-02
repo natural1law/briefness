@@ -1,4 +1,4 @@
-package com.androidx.reduce.intertaces;
+package com.androidx.view.screen.intertaces;
 
 import android.app.Notification;
 

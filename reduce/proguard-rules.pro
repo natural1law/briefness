@@ -97,12 +97,3 @@
 -keep public class * extends android.preference.Preference
 -keep public class * extends android.view.View
 # 保留类不被混淆
--keep public class android.widget.*
--keep public class com.androidx.reduce.dialog.*{*;}
--keep public class com.androidx.reduce.moudle.*{*;}
--keep public class com.androidx.reduce.views.*{*;}
--keep public class com.androidx.reduce.tools.*{*;}
--keep public class com.androidx.reduce.intertaces.*{*;}
--keep public class com.androidx.reduce.service.*{*;}
--keep public class com.androidx.reduce.statics.*{*;}
--keep public class com.androidx.view.base.*{*;}

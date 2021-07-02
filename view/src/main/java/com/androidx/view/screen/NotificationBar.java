@@ -1,4 +1,4 @@
-package com.androidx.reduce.views;
+package com.androidx.view.screen;
 
 import android.annotation.TargetApi;
 import android.app.NotificationChannel;

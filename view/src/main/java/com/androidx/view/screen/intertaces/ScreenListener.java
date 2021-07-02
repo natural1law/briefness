@@ -1,12 +1,9 @@
-package com.androidx.reduce.mix_interfaces;
+package com.androidx.view.screen.intertaces;
 
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.util.DisplayMetrics;
-
-import com.androidx.reduce.intertaces.NotificationListener;
-import com.androidx.reduce.intertaces.ScreenCallbackListener;
 
 /**
  * @date 2020/06/15

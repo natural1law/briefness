@@ -1,4 +1,4 @@
-package com.androidx.reduce.views;
+package com.androidx.view.scroll;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -18,7 +18,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.ColorInt;
 
-import com.androidx.reduce.R;
+import com.androidx.view.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,14 +78,14 @@ public final class ScrollTextView extends SurfaceView implements SurfaceHolder.C
         surfaceHolder.addCallback(this);
         paint = new Paint();
         TypedArray arr = getContext().obtainStyledAttributes(attrs, R.styleable.ScrollTextView);
-        clickEnable = arr.getBoolean(R.styleable.ScrollTextView_clickEnable, clickEnable);
-        isHorizontal = arr.getBoolean(R.styleable.ScrollTextView_isHorizontal, isHorizontal);
-        speed = arr.getInteger(R.styleable.ScrollTextView_speed, speed);
-        text = arr.getString(R.styleable.ScrollTextView_text);
-        textColor = arr.getColor(R.styleable.ScrollTextView_text_color, Color.BLACK);
-        textSize = arr.getDimension(R.styleable.ScrollTextView_text_size, textSize);
-        needScrollTimes = arr.getInteger(R.styleable.ScrollTextView_times, Integer.MAX_VALUE);
-        isScrollForever = arr.getBoolean(R.styleable.ScrollTextView_isScrollForever, true);
+        clickEnable = arr.getBoolean(R.styleable.ScrollTextView_stv_clickEnable, clickEnable);
+        isHorizontal = arr.getBoolean(R.styleable.ScrollTextView_stv_isHorizontal, isHorizontal);
+        speed = arr.getInteger(R.styleable.ScrollTextView_stv_speed, speed);
+        text = arr.getString(R.styleable.ScrollTextView_stv_text);
+        textColor = arr.getColor(R.styleable.ScrollTextView_stv_text_color, Color.BLACK);
+        textSize = arr.getDimension(R.styleable.ScrollTextView_stv_text_size, textSize);
+        needScrollTimes = arr.getInteger(R.styleable.ScrollTextView_stv_times, Integer.MAX_VALUE);
+        isScrollForever = arr.getBoolean(R.styleable.ScrollTextView_stv_isScrollForever, true);
 
         paint.setColor(textColor);
         paint.setTextSize(textSize);

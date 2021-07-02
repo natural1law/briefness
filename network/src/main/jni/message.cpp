@@ -11,13 +11,11 @@ Java_com_androidx_http_api_NetHttp_00024Builder_host(JNIEnv *env, jobject /* thi
 
     jstring head = env->NewStringUTF("http://");
     jstring colon = env->NewStringUTF(":");
-    jstring slash = env->NewStringUTF("/");
     jobject str1 = env->CallObjectMethod(head, concat_methodID, host);
     jobject str2 = env->CallObjectMethod(str1, concat_methodID, colon);
     jobject str3 = env->CallObjectMethod(str2, concat_methodID, port);
-    jobject str4 = env->CallObjectMethod(str3, concat_methodID, slash);
 
-    const char *chars = env->GetStringUTFChars((jstring) str4, nullptr);
+    const char *chars = env->GetStringUTFChars((jstring) str3, nullptr);
     env->DeleteLocalRef(head);
     env->ReleaseStringUTFChars((jstring) str1, chars);
     return env->NewStringUTF(chars);
@@ -31,10 +29,8 @@ Java_com_androidx_http_api_NetHttp_00024Builder_hosts(JNIEnv *env, jobject /* th
     jmethodID concat_methodID = env->GetMethodID(String_clazz, "concat",
                                                  "(Ljava/lang/String;)Ljava/lang/String;");
     jstring head = env->NewStringUTF("https://");
-    jstring slash = env->NewStringUTF("/");
     jobject str1 = env->CallObjectMethod(head, concat_methodID, host);
-    jobject str2 = env->CallObjectMethod(str1, concat_methodID, slash);
-    const char *chars = env->GetStringUTFChars((jstring) str2, nullptr);
+    const char *chars = env->GetStringUTFChars((jstring) str1, nullptr);
     env->DeleteLocalRef(head);
     env->ReleaseStringUTFChars((jstring) str1, chars);
     return env->NewStringUTF(chars);
@@ -50,13 +46,11 @@ Java_com_androidx_http_net_WebSocketRequest_hosts(JNIEnv *env, jclass /* this */
 
     jstring head = env->NewStringUTF("https://");
     jstring colon = env->NewStringUTF(":");
-    jstring slash = env->NewStringUTF("/");
     jobject str1 = env->CallObjectMethod(head, concat_methodID, host);
     jobject str2 = env->CallObjectMethod(str1, concat_methodID, colon);
     jobject str3 = env->CallObjectMethod(str2, concat_methodID, port);
-    jobject str4 = env->CallObjectMethod(str3, concat_methodID, slash);
 
-    const char *chars = env->GetStringUTFChars((jstring) str4, nullptr);
+    const char *chars = env->GetStringUTFChars((jstring) str3, nullptr);
     env->DeleteLocalRef(head);
     env->ReleaseStringUTFChars((jstring) str1, chars);
     return env->NewStringUTF(chars);
@@ -72,13 +66,11 @@ Java_com_androidx_http_net_WebSocketRequest_host(JNIEnv *env, jclass  /* this */
 
     jstring head = env->NewStringUTF("http://");
     jstring colon = env->NewStringUTF(":");
-    jstring slash = env->NewStringUTF("/");
     jobject str1 = env->CallObjectMethod(head, concat_methodID, host);
     jobject str2 = env->CallObjectMethod(str1, concat_methodID, colon);
     jobject str3 = env->CallObjectMethod(str2, concat_methodID, port);
-    jobject str4 = env->CallObjectMethod(str3, concat_methodID, slash);
 
-    const char *chars = env->GetStringUTFChars((jstring) str4, nullptr);
+    const char *chars = env->GetStringUTFChars((jstring) str3, nullptr);
     env->DeleteLocalRef(head);
     env->ReleaseStringUTFChars((jstring) str1, chars);
     return env->NewStringUTF(chars);

@@ -7,9 +7,9 @@ import com.androidx.http.net.listener.BytesCallback;
 import com.androidx.http.net.listener.HttpRequestListener;
 import com.androidx.http.net.listener.StringCallback;
 import com.androidx.http.net.module.MsgModule;
+import com.google.gson.JsonObject;
 
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
@@ -105,7 +105,7 @@ public final class HttpRequest1 implements HttpRequestListener {
     }
 
     @Override
-    public void postRequest(String url, JSONObject json, int maxAnewCount, StringCallback callBack) {
+    public void postRequest(String url, JsonObject json, int maxAnewCount, StringCallback callBack) {
         httpNetwork.getClient().newCall(httpNetwork.postRequest(url, json)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -125,7 +125,7 @@ public final class HttpRequest1 implements HttpRequestListener {
     }
 
     @Override
-    public void deleteRequest(String url, JSONObject json, int maxAnewCount, StringCallback callBack) {
+    public void deleteRequest(String url, JsonObject json, int maxAnewCount, StringCallback callBack) {
         httpNetwork.getClient().newCall(httpNetwork.deleteRequest(url, json)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
@@ -165,7 +165,7 @@ public final class HttpRequest1 implements HttpRequestListener {
     }
 
     @Override
-    public void formRequest(String url, JSONObject json, int maxAnewCount, StringCallback callBack) {
+    public void formRequest(String url, JsonObject json, int maxAnewCount, StringCallback callBack) {
         httpNetwork.getClient().newCall(httpNetwork.formRequest(url, json)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {

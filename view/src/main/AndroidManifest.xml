@@ -1,14 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.androidx.view">
 
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- 网络状态 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 网络权限 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" /><!--前台服务-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 读取权限 -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" /> <!-- 写入权限 -->
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- 允许访问摄像头进行拍照 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- 允许麦克风 -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" /><!--修改音频设置-->
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" /><!--悬浮窗权限-->
 
-    <application>
+    <application android:allowBackup="true">
         <!--扫码-->
         <activity
             android:name=".scan.ScanActivity"
             android:screenOrientation="portrait" />
-    </application>
 
+        <service
+            android:name=".screen.intertaces.ScreenService"
+            android:foregroundServiceType="mediaProjection" />
+    </application>
 </manifest>

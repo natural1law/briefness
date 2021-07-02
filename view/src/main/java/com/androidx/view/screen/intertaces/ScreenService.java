@@ -1,4 +1,4 @@
-package com.androidx.reduce.service;
+package com.androidx.view.screen.intertaces;
 
 import android.app.Service;
 import android.content.Context;
@@ -16,14 +16,11 @@ import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
-import com.androidx.reduce.intertaces.NotificationListener;
-import com.androidx.reduce.intertaces.ScreenCallbackListener;
-import com.androidx.reduce.mix_interfaces.ScreenListener;
 import com.androidx.reduce.tools.Storage;
 
 import org.jetbrains.annotations.NotNull;
 
-import static com.androidx.reduce.views.ScreenRecording.REQUEST_CODE;
+import static com.androidx.view.screen.ScreenRecording.REQUEST_CODE;
 
 /**
  * 录屏服务
