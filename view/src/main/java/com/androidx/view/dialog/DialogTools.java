@@ -129,10 +129,12 @@ public final class DialogTools extends AppCompatDialog {
     private final String hintText1;
     private final String hintText2;
     private final String hintText3;
+    private final String hintText4;
 
     private final int paramId;
     private final int nameId;
     private final int codeId;
+    private final int addressId;
     private final int verificationCodeId;
     private final Captcha captcha = Captcha.build().type(CHARS).backColor(171);
     private String code;
@@ -219,6 +221,7 @@ public final class DialogTools extends AppCompatDialog {
         AppCompatAutoCompleteTextView paramView = findViewById(paramId);
         AppCompatAutoCompleteTextView nameView = findViewById(nameId);
         AppCompatAutoCompleteTextView codeView = findViewById(codeId);
+        AppCompatAutoCompleteTextView addressView = findViewById(addressId);
         if (paramView != null) {
             paramView.setHint(hintText1);
             paramView.setHintTextColor(getContext().getResources().getColor(R.color.hint, getContext().getTheme()));
@@ -227,9 +230,13 @@ public final class DialogTools extends AppCompatDialog {
             nameView.setHint(hintText2);
             nameView.setHintTextColor(getContext().getResources().getColor(R.color.hint, getContext().getTheme()));
         }
-        if (codeView != null){
+        if (codeView != null) {
             codeView.setHint(hintText3);
             codeView.setHintTextColor(getContext().getResources().getColor(R.color.hint, getContext().getTheme()));
+        }
+        if (addressView != null) {
+            addressView.setHint(hintText4);
+            addressView.setHintTextColor(getContext().getResources().getColor(R.color.hint, getContext().getTheme()));
         }
 
         try {
@@ -333,6 +340,7 @@ public final class DialogTools extends AppCompatDialog {
         AppCompatAutoCompleteTextView paramView = findViewById(paramId);
         AppCompatAutoCompleteTextView nameView = findViewById(nameId);
         AppCompatAutoCompleteTextView codeView = findViewById(codeId);
+        AppCompatAutoCompleteTextView addressView = findViewById(addressId);
         verificationView = findViewById(verificationCodeId);
         if (affirmView != null) {
             if (affirmText != null) affirmView.setText(affirmText);
@@ -349,14 +357,15 @@ public final class DialogTools extends AppCompatDialog {
 
             if (qrListener != null) {
                 affirmView.setOnClickListener(v -> {
-                    if (paramView != null && nameView != null && codeView != null) {
+                    if (paramView != null && nameView != null && codeView != null && addressView != null) {
                         String var1 = paramView.getText().toString().trim();
                         String var2 = nameView.getText().toString().trim();
-                        String var3 = codeView.getText().toString().trim();
-                        qrListener.callbackValue(this, var1, var2, var3);
+                        String var3 = addressView.getText().toString().trim();
+                        String var4 = codeView.getText().toString().trim();
+                        qrListener.callbackValue(this, var1, var2, var3, var4);
                         paramView.setText("");
                     } else {
-                        qrListener.callbackValue(this, "", "", "");
+                        qrListener.callbackValue(this, "", "", "", "");
                     }
                 });
             }
@@ -540,6 +549,7 @@ public final class DialogTools extends AppCompatDialog {
         this.hintText1 = builder.hintText1;
         this.hintText2 = builder.hintText2;
         this.hintText3 = builder.hintText3;
+        this.hintText4 = builder.hintText4;
         this.titleId = builder.titleId;
         this.contentId = builder.contentId;
         this.affirmId = builder.affirmId;
@@ -548,6 +558,7 @@ public final class DialogTools extends AppCompatDialog {
         this.paramId = builder.paramId;
         this.nameId = builder.nameId;
         this.codeId = builder.codeId;
+        this.addressId = builder.addressId;
     }
 
     @NotNull
@@ -614,6 +625,7 @@ public final class DialogTools extends AppCompatDialog {
         private String hintText1;
         private String hintText2;
         private String hintText3;
+        private String hintText4;
         private int titleId = R.id.dialog_title;
         private int contentId = R.id.dialog_content;
         private int affirmId = R.id.dialog_affirm;
@@ -622,6 +634,7 @@ public final class DialogTools extends AppCompatDialog {
         private int paramId = R.id.dialog_param;
         private int nameId = R.id.dialog_name;
         private int codeId = R.id.dialog_code;
+        private int addressId = R.id.dialog_address;
 
         private Builder(Context context) {
             this.context = context;
@@ -1171,6 +1184,11 @@ public final class DialogTools extends AppCompatDialog {
             return newBuilder;
         }
 
+        public Builder setHintText4(String hintText4) {
+            this.hintText4 = hintText4;
+            return newBuilder;
+        }
+
         public Builder setTitleId(@IdRes int titleId) {
             this.titleId = titleId;
             return newBuilder;
@@ -1211,6 +1229,11 @@ public final class DialogTools extends AppCompatDialog {
             return newBuilder;
         }
 
+        public Builder setAddressId(int addressId) {
+            this.addressId = addressId;
+            return newBuilder;
+        }
+
         @NotNull
         public DialogTools build() {
             synchronized (DialogTools.class) {
@@ -1245,8 +1268,9 @@ public final class DialogTools extends AppCompatDialog {
          * @param var1 编码
          * @param var2 名称
          * @param var3 验证码
+         * @param var4 详细地址
          */
-        void callbackValue(DialogTools dialog, String var1, String var2, String var3);
+        void callbackValue(DialogTools dialog, String var1, String var2, String var3, String var4);
 
         default void no(DialogTools dialog) {
             dialog.cancel();

@@ -79,11 +79,29 @@
         android:textSize="14sp"
         tools:ignore="HardcodedText,RtlSymmetry" />
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+        android:id="@+id/dialog_address"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="190dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/border"
+        android:gravity="center_vertical"
+        android:hint="请输入"
+        android:inputType="textFilter"
+        android:maxLength="14"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:textColor="#282222"
+        android:textSize="14sp"
+        tools:ignore="HardcodedText,RtlSymmetry" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="250dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/border"
@@ -98,7 +116,7 @@
             android:gravity="center_vertical"
             android:hint="请输入"
             android:inputType="number"
-            android:maxLength="14"
+            android:maxLength="6"
             android:paddingStart="20dp"
             android:paddingEnd="20dp"
             android:textColor="#282222"
@@ -125,7 +143,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_gravity="bottom"
-        android:layout_marginTop="250dp"
+        android:layout_marginTop="310dp"
         android:layout_marginBottom="10dp"
         android:gravity="center"
         android:orientation="horizontal"

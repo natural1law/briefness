@@ -130,11 +130,11 @@ public final class DialogActivity extends BaseActivity {
                 .setHintText1("请输入烤房编号")
                 .setHintText2("请输入烤房名称")
                 .setHintText3("请输入验证码")
+                .setHintText4("请输入详细地址（道路、街道、楼号）")
                 .setAffirmText("提交")
                 .setAffirmColorId(R.color.white)
                 .setQuitColorId(R.color.black)
                 .setQuitText("取消")
-//                .setDimension(-1, -1)
                 .setCanceled(false)
                 .setCancelable(false)
                 .setListener(new DialogTools.OnClickQrListener() {
@@ -150,7 +150,7 @@ public final class DialogActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void callbackValue(DialogTools dialog, String var1, String var2, String var3) {
+                    public void callbackValue(DialogTools dialog, String var1, String var2, String var3, String var4) {
                         if (var1.equals("")) {
                             toasts.setMsg("请输入设备编码").showWarning();
                         } else if (var1.length() != 14) {
@@ -158,6 +158,8 @@ public final class DialogActivity extends BaseActivity {
                         } else if (var2.equals("")) {
                             toasts.setMsg("请输入设备名称").showWarning();
                         } else if (var3.equals("")) {
+                            toasts.setMsg("请输入详细地址").showWarning();
+                        } else if (var4.equals("")) {
                             toasts.setMsg("请输入手机验证码").showWarning();
                         } else {
                             toasts.setMsg("提交成功").showSuccess();
