@@ -145,7 +145,7 @@ public final class DialogActivity extends BaseActivity {
                     }
 
                     @Override
-                    public void code() {
+                    public void code(AppCompatTextView getCodeView) {
                         toasts.setMsg("获取验证码成功").showSuccess();
                     }
 

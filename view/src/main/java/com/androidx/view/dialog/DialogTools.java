@@ -473,7 +473,7 @@ public final class DialogTools extends AppCompatDialog {
             AppCompatTextView getCodeView = findViewById(R.id.dialog_get_code);
             assert paramView != null;
             if (qrView != null) qrView.setOnClickListener(v -> qrListener.qr(paramView));
-            if (getCodeView != null) getCodeView.setOnClickListener(v -> qrListener.code());
+            if (getCodeView != null) getCodeView.setOnClickListener(v -> qrListener.code(getCodeView));
         }
     }
 
@@ -1261,7 +1261,7 @@ public final class DialogTools extends AppCompatDialog {
             paramView.setText("");
         }
 
-        default void code() {
+        default void code(AppCompatTextView getCodeView) {
         }
 
         /**
