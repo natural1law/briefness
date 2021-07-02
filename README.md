@@ -7,23 +7,23 @@
 ### 使用依赖
   * ![](https://jitpack.io/v/natural1law/briefness.svg "")
   ```
-    implementation 'com.github.natural1law.briefness:2.4.2'
+    implementation 'com.github.natural1law.briefness:2.4.3'
   ```
   * 分支-网络请求
   ```
-  implementation 'com.github.natural1law.briefness.network:2.4.2'
+  implementation 'com.github.natural1law.briefness.network:2.4.3'
   ```
   * 分支-常用工具
   ```
-  implementation 'com.github.natural1law.briefness.reduce:2.4.2'
+  implementation 'com.github.natural1law.briefness.reduce:2.4.3'
   ```
   * 分支-图表统计
   ```
-  implementation 'com.github.natural1law.briefness.echarts:2.4.2'
+  implementation 'com.github.natural1law.briefness.echarts:2.4.3'
   ```
   * 分支-视图布局
   ```
-  implementation 'com.github.natural1law.briefness.view:2.4.2'
+  implementation 'com.github.natural1law.briefness.view:2.4.3'
   ```
 
 ### 工具使用
