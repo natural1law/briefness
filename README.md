@@ -7,7 +7,7 @@
 ### 使用依赖
   * ![](https://jitpack.io/v/natural1law/briefness.svg "")
   ```
-    implementation 'com.github.natural1law.briefness:versionCode'
+    implementation 'com.github.natural1law.briefness:2.4.2'
   ```
 
 ### 工具使用
