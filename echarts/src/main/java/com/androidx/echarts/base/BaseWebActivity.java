@@ -25,6 +25,8 @@ import com.just.agentweb.AgentWeb;
 import com.just.agentweb.WebChromeClient;
 import com.just.agentweb.WebViewClient;
 
+import java.util.Map;
+
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static com.just.agentweb.AgentWeb.SecurityType.STRICT_CHECK;
 import static com.just.agentweb.DefaultWebClient.OpenOtherPageWays.ASK;
@@ -190,10 +192,15 @@ public abstract class BaseWebActivity extends AppCompatActivity {
                 .ready()
                 .get();
         WebSettings setting = agentWeb.getAgentWebSettings().getWebSettings();
-        setting.setJavaScriptEnabled(true);
-        setting.setJavaScriptCanOpenWindowsAutomatically(true);
         setting.setSupportZoom(false);
+        setting.setUseWideViewPort(true);
+        setting.setDatabaseEnabled(true);
+        setting.setJavaScriptEnabled(true);
+        setting.setDomStorageEnabled(true);
+        setting.setLoadWithOverviewMode(true);
         setting.setDisplayZoomControls(false);
+        setting.setLoadWithOverviewMode(true);
+        setting.setJavaScriptCanOpenWindowsAutomatically(true);
         return this;
     }
 
@@ -210,6 +217,16 @@ public abstract class BaseWebActivity extends AppCompatActivity {
     public void setStart(String url, String suffix) {
         if (url == null || suffix == null) Log.e("开始加载", "参数为空");
         agentWeb.getUrlLoader().loadUrl(url + suffix);
+    }
+
+    /**
+     * 开始加载
+     *
+     * @param map 请求头信息
+     */
+    public void setStart(String url, Map<String, String> map) {
+        if (url == null || map == null) Log.e("开始加载", "参数为空");
+        agentWeb.getUrlLoader().loadUrl(url, map);
     }
 
     /**

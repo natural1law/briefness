@@ -8,22 +8,27 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
 import com.androidx.reduce.tools.Idle;
+import com.androidx.reduce.tools.This;
 import com.androidx.reduce.tools.Toasts;
 import com.androidx.view.dialog.DialogTools;
+import com.androidx.view.scan.ScanActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.androidx.briefness.base.App.toasts;
 import static com.androidx.view.dialog.DialogTools.LayoutResId.RADIO;
 import static com.androidx.view.dialog.DialogTools.LayoutResId.VERIFICATION_CODE;
+import static com.androidx.view.scan.ScanActivity.REQUEST_CODE;
 
 @SuppressLint("NonConstantResourceId")
 public final class DialogActivity extends BaseActivity {
@@ -111,8 +116,53 @@ public final class DialogActivity extends BaseActivity {
                 .setCancelable(false)
                 .setHintText1("请输入分享人的手机号")
                 .setAffirmColorId(R.color.white)
-                .setListener((DialogTools.OnClickRadioListener) (dialog, param, radio) -> {
-                    Log.i("分享数据", param + " / " + radio);
+                .setListener((DialogTools.OnClickRadioListener) (dialog, param, radio) -> Log.i("分享数据", param + " / " + radio))
+                .build()
+                .show();
+    }
+
+    @OnClick(R.id.activity_dialog2)
+    public void dialog2() {
+        DialogTools.builder(aThis)
+                .setLayout(DialogTools.LayoutResId.INPUT_CHECK)
+                .setStyle(R.style.dialogStyle)
+                .setTitleText("添加烤房设备")
+                .setHintText1("请输入烤房编号")
+                .setHintText2("请输入烤房名称")
+                .setHintText3("请输入验证码")
+                .setAffirmText("提交")
+                .setAffirmColorId(R.color.white)
+                .setQuitColorId(R.color.black)
+                .setQuitText("取消")
+//                .setDimension(-1, -1)
+                .setCanceled(false)
+                .setCancelable(false)
+                .setListener(new DialogTools.OnClickQrListener() {
+
+                    @Override
+                    public void qr(AppCompatAutoCompleteTextView paramView) {
+                        This.start(This.resultActivity(aThis, ScanActivity.class, REQUEST_CODE));
+                    }
+
+                    @Override
+                    public void code() {
+                        toasts.setMsg("获取验证码成功").showSuccess();
+                    }
+
+                    @Override
+                    public void callbackValue(DialogTools dialog, String var1, String var2, String var3) {
+                        if (var1.equals("")) {
+                            toasts.setMsg("请输入设备编码").showWarning();
+                        } else if (var1.length() != 14) {
+                            toasts.setMsg("请输入正确的设备编码").showWarning();
+                        } else if (var2.equals("")) {
+                            toasts.setMsg("请输入设备名称").showWarning();
+                        } else if (var3.equals("")) {
+                            toasts.setMsg("请输入手机验证码").showWarning();
+                        } else {
+                            toasts.setMsg("提交成功").showSuccess();
+                        }
+                    }
                 })
                 .build()
                 .show();

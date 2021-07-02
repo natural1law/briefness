@@ -38,8 +38,6 @@ import com.zyao89.view.zloading.Z_TYPE;
 
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Objects;
-
 import static com.androidx.reduce.tools.Captcha.TYPE.CHARS;
 import static com.zyao89.view.zloading.Z_TYPE.CIRCLE;
 
@@ -130,9 +128,11 @@ public final class DialogTools extends AppCompatDialog {
 
     private final String hintText1;
     private final String hintText2;
+    private final String hintText3;
 
     private final int paramId;
     private final int nameId;
+    private final int codeId;
     private final int verificationCodeId;
     private final Captcha captcha = Captcha.build().type(CHARS).backColor(171);
     private String code;
@@ -216,11 +216,22 @@ public final class DialogTools extends AppCompatDialog {
             layout.setLayoutParams(lp);
         }
 
-
         AppCompatAutoCompleteTextView paramView = findViewById(paramId);
         AppCompatAutoCompleteTextView nameView = findViewById(nameId);
-        if (paramView != null) paramView.setHint(hintText1);
-        if (nameView != null) nameView.setHint(hintText2);
+        AppCompatAutoCompleteTextView codeView = findViewById(codeId);
+        if (paramView != null) {
+            paramView.setHint(hintText1);
+            paramView.setHintTextColor(getContext().getResources().getColor(R.color.hint, getContext().getTheme()));
+        }
+        if (nameView != null) {
+            nameView.setHint(hintText2);
+            nameView.setHintTextColor(getContext().getResources().getColor(R.color.hint, getContext().getTheme()));
+        }
+        if (codeView != null){
+            codeView.setHint(hintText3);
+            codeView.setHintTextColor(getContext().getResources().getColor(R.color.hint, getContext().getTheme()));
+        }
+
         try {
             titleView();
             contentView();
@@ -267,8 +278,8 @@ public final class DialogTools extends AppCompatDialog {
             if (contentColorId != -1) {
                 contentView.setTextColor(getContext().getResources().getColor(contentColorId, getContext().getTheme()));
             } else contentView.setTextColor(contentColor);
-            if (width != -1) contentView.setWidth(width);
-            if (height != -1) contentView.setHeight(height);
+//            if (width != -1) contentView.setWidth(width);
+//            if (height != -1) contentView.setHeight(height);
         }
     }
 
@@ -321,6 +332,7 @@ public final class DialogTools extends AppCompatDialog {
         AppCompatTextView affirmView = findViewById(affirmId);
         AppCompatAutoCompleteTextView paramView = findViewById(paramId);
         AppCompatAutoCompleteTextView nameView = findViewById(nameId);
+        AppCompatAutoCompleteTextView codeView = findViewById(codeId);
         verificationView = findViewById(verificationCodeId);
         if (affirmView != null) {
             if (affirmText != null) affirmView.setText(affirmText);
@@ -337,13 +349,14 @@ public final class DialogTools extends AppCompatDialog {
 
             if (qrListener != null) {
                 affirmView.setOnClickListener(v -> {
-                    if (paramView != null && nameView != null) {
+                    if (paramView != null && nameView != null && codeView != null) {
                         String var1 = paramView.getText().toString().trim();
                         String var2 = nameView.getText().toString().trim();
-                        qrListener.callbackValue(this, var1, var2);
+                        String var3 = codeView.getText().toString().trim();
+                        qrListener.callbackValue(this, var1, var2, var3);
                         paramView.setText("");
                     } else {
-                        qrListener.callbackValue(this, "", "");
+                        qrListener.callbackValue(this, "", "", "");
                     }
                 });
             }
@@ -448,8 +461,10 @@ public final class DialogTools extends AppCompatDialog {
         if (layout == LayoutResId.INPUT_CHECK) {
             AppCompatAutoCompleteTextView paramView = findViewById(paramId);
             AppCompatImageView qrView = findViewById(R.id.dialog_qr);
-            if (qrView != null)
-                qrView.setOnClickListener(v -> qrListener.qr(Objects.requireNonNull(paramView)));
+            AppCompatTextView getCodeView = findViewById(R.id.dialog_get_code);
+            assert paramView != null;
+            if (qrView != null) qrView.setOnClickListener(v -> qrListener.qr(paramView));
+            if (getCodeView != null) getCodeView.setOnClickListener(v -> qrListener.code());
         }
     }
 
@@ -524,6 +539,7 @@ public final class DialogTools extends AppCompatDialog {
         this.loadingTextColor = builder.loadingTextColor;
         this.hintText1 = builder.hintText1;
         this.hintText2 = builder.hintText2;
+        this.hintText3 = builder.hintText3;
         this.titleId = builder.titleId;
         this.contentId = builder.contentId;
         this.affirmId = builder.affirmId;
@@ -531,6 +547,7 @@ public final class DialogTools extends AppCompatDialog {
         this.verificationCodeId = builder.verificationCodeId;
         this.paramId = builder.paramId;
         this.nameId = builder.nameId;
+        this.codeId = builder.codeId;
     }
 
     @NotNull
@@ -596,6 +613,7 @@ public final class DialogTools extends AppCompatDialog {
         private int loadingTextColor = R.color.code;
         private String hintText1;
         private String hintText2;
+        private String hintText3;
         private int titleId = R.id.dialog_title;
         private int contentId = R.id.dialog_content;
         private int affirmId = R.id.dialog_affirm;
@@ -603,6 +621,7 @@ public final class DialogTools extends AppCompatDialog {
         private int verificationCodeId = R.id.dialog_verification;
         private int paramId = R.id.dialog_param;
         private int nameId = R.id.dialog_name;
+        private int codeId = R.id.dialog_code;
 
         private Builder(Context context) {
             this.context = context;
@@ -1147,6 +1166,11 @@ public final class DialogTools extends AppCompatDialog {
             return newBuilder;
         }
 
+        public Builder setHintText3(String hintText3) {
+            this.hintText3 = hintText3;
+            return newBuilder;
+        }
+
         public Builder setTitleId(@IdRes int titleId) {
             this.titleId = titleId;
             return newBuilder;
@@ -1182,6 +1206,11 @@ public final class DialogTools extends AppCompatDialog {
             return newBuilder;
         }
 
+        public Builder setCodeId(int codeId) {
+            this.codeId = codeId;
+            return newBuilder;
+        }
+
         @NotNull
         public DialogTools build() {
             synchronized (DialogTools.class) {
@@ -1209,11 +1238,15 @@ public final class DialogTools extends AppCompatDialog {
             paramView.setText("");
         }
 
+        default void code() {
+        }
+
         /**
-         * @param var1 烤房编码
-         * @param var2 烤房名称
+         * @param var1 编码
+         * @param var2 名称
+         * @param var3 验证码
          */
-        void callbackValue(DialogTools dialog, String var1, String var2);
+        void callbackValue(DialogTools dialog, String var1, String var2, String var3);
 
         default void no(DialogTools dialog) {
             dialog.cancel();
