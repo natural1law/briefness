@@ -57,7 +57,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation project(path: ':view')
     implementation project(path: ':reduce')
-    implementation project(path: ':http')
+    implementation project(path: ':network')
     implementation project(path: ':echarts')
 //    implementation(name: 'view', ext: 'aar')
 //    implementation(name: 'reduce', ext: 'aar')

@@ -1,6 +1,6 @@
 include ':app'
 include ':echarts'
-include ':http'
+include ':network'
 include ':view'
 include ':reduce'
 rootProject.name = "briefness"

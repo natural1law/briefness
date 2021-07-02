@@ -151,17 +151,12 @@ public final class DialogActivity extends BaseActivity {
 
                     @Override
                     public void callbackValue(DialogTools dialog, String var1, String var2, String var3, String var4) {
-                        if (var1.equals("")) {
-                            toasts.setMsg("请输入设备编码").showWarning();
-                        } else if (var1.length() != 14) {
-                            toasts.setMsg("请输入正确的设备编码").showWarning();
-                        } else if (var2.equals("")) {
-                            toasts.setMsg("请输入设备名称").showWarning();
-                        } else if (var3.equals("")) {
-                            toasts.setMsg("请输入详细地址").showWarning();
-                        } else if (var4.equals("")) {
-                            toasts.setMsg("请输入手机验证码").showWarning();
-                        } else {
+                        if (var1.equals("")) toasts.setMsg("请输入设备编码").showWarning();
+                        else if (var1.length() != 14) toasts.setMsg("请输入正确的设备编码").showWarning();
+                        else if (var2.equals("")) toasts.setMsg("请输入设备名称").showWarning();
+                        else if (var3.equals("")) toasts.setMsg("请输入详细地址").showWarning();
+                        else if (var4.equals("")) toasts.setMsg("请输入手机验证码").showWarning();
+                        else {
                             toasts.setMsg("提交成功").showSuccess();
                         }
                     }

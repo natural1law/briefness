@@ -12,7 +12,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/echarts" />
-            <option value="$PROJECT_DIR$/http" />
+            <option value="$PROJECT_DIR$/network" />
             <option value="$PROJECT_DIR$/reduce" />
             <option value="$PROJECT_DIR$/view" />
           </set>
