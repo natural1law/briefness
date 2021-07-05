@@ -97,4 +97,4 @@
 -keep public class * extends android.preference.Preference
 -keep public class * extends android.view.View
 # 保留类不被混淆
--keep public class com.androidx.reduce.tools.**{**;}
+-keep public class com.androidx.reduce.tools.**{*;}
