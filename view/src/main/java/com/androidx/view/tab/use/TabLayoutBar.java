@@ -273,7 +273,7 @@ public class TabLayoutBar implements Parcelable {
             return builder;
         }
 
-        public Builder setTitles(String[] titles) {
+        public Builder setTitles(String... titles) {
             if (titles == null) {
                 Log.e("参数异常", "titles can not be empty");
                 return builder;
@@ -282,7 +282,7 @@ public class TabLayoutBar implements Parcelable {
             return builder;
         }
 
-        public Builder setFragments(Fragment[] fragments) {
+        public Builder setFragments(Fragment... fragments) {
             if (fragments == null) {
                 Log.e("参数异常", "fragments can not be empty");
                 return builder;

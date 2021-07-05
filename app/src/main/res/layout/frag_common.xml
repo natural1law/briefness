@@ -1,0 +1,134 @@
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#eeeeee"
+    android:orientation="vertical"
+    android:scrollbars="none">
+
+    <com.androidx.view.tab.layout.CommonTabLayout
+        android:id="@+id/common1"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:background="#ffffff"
+        tl:tl_iconHeight="23dp"
+        tl:tl_iconWidth="23dp"
+        tl:tl_indicator_color="#2C97DE"
+        tl:tl_indicator_height="0dp"
+        tl:tl_textSelectColor="#2C97DE"
+        tl:tl_textUnselectColor="#66000000"
+        tl:tl_textsize="12sp"
+        tl:tl_underline_color="#DDDDDD"
+        tl:tl_underline_height="1dp" />
+
+    <com.androidx.view.tab.layout.CommonTabLayout
+        android:id="@+id/common2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ffffff"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        tl:tl_indicator_color="#2C97DE"
+        tl:tl_textSelectColor="#2C97DE"
+        tl:tl_textUnselectColor="#66000000"
+        tl:tl_underline_color="#DDDDDD"
+        tl:tl_underline_height="1dp" />
+
+    <com.androidx.view.tab.layout.CommonTabLayout
+        android:id="@+id/common3"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#ffffff"
+        tl:tl_iconGravity="LEFT"
+        tl:tl_iconHeight="18dp"
+        tl:tl_iconMargin="5dp"
+        tl:tl_iconWidth="18dp"
+        tl:tl_indicator_bounce_enable="false"
+        tl:tl_indicator_color="#2C97DE"
+        tl:tl_indicator_gravity="BOTTOM"
+        tl:tl_textSelectColor="#2C97DE"
+        tl:tl_textUnselectColor="#66000000"
+        tl:tl_textsize="15sp"
+        tl:tl_underline_color="#DDDDDD"
+        tl:tl_underline_gravity="BOTTOM"
+        tl:tl_underline_height="1dp" />
+
+    <com.androidx.view.tab.layout.CommonTabLayout
+        android:id="@+id/common4"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#F6CE59"
+        tl:tl_iconVisible="false"
+        tl:tl_indicator_width="10dp"
+        tl:tl_textBold="SELECT"
+        tl:tl_textsize="14sp" />
+
+    <com.androidx.view.tab.layout.CommonTabLayout
+        android:id="@+id/common5"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#EC7263"
+        tl:tl_iconVisible="false"
+        tl:tl_indicator_corner_radius="2dp"
+        tl:tl_indicator_height="4dp"
+        tl:tl_indicator_width="4dp"
+        tl:tl_textBold="BOTH"
+        tl:tl_textsize="14sp" />
+
+    <com.androidx.view.tab.layout.CommonTabLayout
+        android:id="@+id/common6"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#57385C"
+        tl:tl_iconVisible="false"
+        tl:tl_indicator_corner_radius="1.5dp"
+        tl:tl_indicator_height="3dp"
+        tl:tl_indicator_width="10dp"
+        tl:tl_textsize="14sp" />
+
+    <com.androidx.view.tab.layout.CommonTabLayout
+        android:id="@+id/common7"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#E45171"
+        tl:tl_iconVisible="false"
+        tl:tl_indicator_color="#eeeeee"
+        tl:tl_indicator_corner_radius="1.5dp"
+        tl:tl_indicator_height="3dp"
+        tl:tl_indicator_style="TRIANGLE"
+        tl:tl_indicator_width="10dp"
+        tl:tl_textsize="14sp" />
+
+    <com.androidx.view.tab.layout.CommonTabLayout
+        android:id="@+id/common8"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#6D8FB0"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        tl:tl_iconVisible="false"
+        tl:tl_indicator_margin_left="5dp"
+        tl:tl_indicator_margin_right="5dp"
+        tl:tl_indicator_style="BLOCK"
+        tl:tl_textsize="14sp" />
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/common_vp2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <FrameLayout
+            android:id="@+id/common_fl"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.appcompat.widget.LinearLayoutCompat>

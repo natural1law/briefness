@@ -30,5 +30,7 @@
             tools:ignore="LockedOrientationActivity" />
         <!--图表功能展示-->
         <activity android:name=".homepage.activity.EchartsActivity" />
+        <!--Tab导航栏功能展示-->
+        <activity android:name=".homepage.activity.TabActivity" />
     </application>
 </manifest>

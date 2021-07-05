@@ -20,7 +20,7 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="40dp"
         android:background="@drawable/border"
-        android:text="远程生效"
+        android:text="验证码"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_layout"

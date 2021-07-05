@@ -86,7 +86,7 @@ public final class DialogActivity extends BaseActivity {
         DialogTools.builder(aThis)
                 .setLayout(VERIFICATION_CODE)
                 .setContentId(R.id.dialog_content)
-                .setTitleText("远程生效验证")
+                .setTitleText("验证码")
                 .setAffirmText("提交")
                 .setQuitColorId(R.color.irs)
                 .setAffirmColorId(R.color.white)

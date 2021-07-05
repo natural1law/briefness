@@ -285,8 +285,8 @@ public final class DialogTools extends AppCompatDialog {
             if (contentColorId != -1) {
                 contentView.setTextColor(getContext().getResources().getColor(contentColorId, getContext().getTheme()));
             } else contentView.setTextColor(contentColor);
-//            if (width != -1) contentView.setWidth(width);
-//            if (height != -1) contentView.setHeight(height);
+            if (width != -1) contentView.setWidth(width);
+            if (height != -1) contentView.setHeight(height);
         }
     }
 
