@@ -25,7 +25,6 @@ import java.security.Signature;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Random;
 
 import javax.crypto.Cipher;
@@ -40,6 +39,7 @@ public final class Secure {
     public static final class MD5 {
 
         private static char[] hexDigits = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+        private static final String MD5 = "MD5";
 
         private MD5() {
         }
@@ -57,11 +57,11 @@ public final class Secure {
                     sb.append("0");
                 }
             }
-            String salt = sb.toString();
-            password = md5Hex(password + salt);
+            String salt = sb.toString() + System.currentTimeMillis();
+            password = String.valueOf(md5Hex(password + salt));
             char[] cs = new char[48];
             for (int i = 0; i < 48; i += 3) {
-                cs[i] = Objects.requireNonNull(password).charAt(i / 3 * 2);
+                cs[i] = password.charAt(i / 3 * 2);
                 char c = salt.charAt(i / 3);
                 cs[i + 1] = c;
                 cs[i + 2] = password.charAt(i / 3 * 2 + 1);
@@ -74,7 +74,7 @@ public final class Secure {
          */
         private static String md5Hex(String src) {
             try {
-                MessageDigest md5 = MessageDigest.getInstance("MD5");
+                MessageDigest md5 = MessageDigest.getInstance(MD5);
                 byte[] bs = md5.digest(src.getBytes());
                 // 把密文转换成十六进制的字符串形式
                 int j = bs.length;
@@ -94,17 +94,17 @@ public final class Secure {
         /**
          * 校验密码是否正确
          */
-        public static boolean verify(String password, String md5) {
+        public static boolean verify(String cleartext, String ciphertext) {
             try {
                 char[] cs1 = new char[32];
                 char[] cs2 = new char[16];
                 for (int i = 0; i < 48; i += 3) {
-                    cs1[i / 3 * 2] = md5.charAt(i);
-                    cs1[i / 3 * 2 + 1] = md5.charAt(i + 2);
-                    cs2[i / 3] = md5.charAt(i + 1);
+                    cs1[i / 3 * 2] = ciphertext.charAt(i);
+                    cs1[i / 3 * 2 + 1] = ciphertext.charAt(i + 2);
+                    cs2[i / 3] = ciphertext.charAt(i + 1);
                 }
-                String salt = new String(cs2);
-                return Objects.requireNonNull(md5Hex(password + salt)).equals(new String(cs1));
+                String salt = new String(cs2) + System.currentTimeMillis();
+                return String.valueOf(md5Hex(cleartext + salt)).equals(new String(cs1));
             } catch (Exception e) {
                 Log.e("校验密码异常", String.valueOf(e.getMessage()));
                 return false;
@@ -707,6 +707,7 @@ public final class Secure {
     }
 
     public static final class RSA {
+
         private RSA() {
         }
 
@@ -740,43 +741,29 @@ public final class Secure {
         /**
          * 用私钥对信息生成数字签名
          *
-         * @param data       数据
+         * @param data       明文
          * @param privateKey 私钥(BASE64编码)
          */
-        public static String sign(String data, String privateKey) {
-            String sign = null;
-            try {
-                final byte[] dataBytes = data.getBytes(StandardCharsets.UTF_8);
-                final PrivateKey key = getPrivateKey(decode(privateKey));
-                final byte[] signBytes = sign(dataBytes, key);
-                sign = encode(signBytes);
-            } catch (Exception e) {
-                Log.e("数字签名异常", String.valueOf(e.getMessage()));
-            }
-            return sign;
+        public static String sign(String ciphertext, String privateKey) {
+            final byte[] dataBytes = String.valueOf(ciphertext).getBytes(StandardCharsets.UTF_8);
+            return encode(sign(dataBytes, getPrivateKey(decode(privateKey))));
         }
 
         /**
          * 校验数字签名
          *
-         * @param data      数据
+         * @param data      已加密的数据
          * @param publicKey 公钥(BASE64编码)
          * @param sign      数字签名(BASE64编码)
          */
-        public static boolean verify(String data, String publicKey, String sign) {
-            boolean verify = false;
+        public static boolean verify(String ciphertext, String publicKey, String sign) {
             try {
-                final byte[] dataBytes = data.getBytes(StandardCharsets.UTF_8);
+                final byte[] dataBytes = ciphertext.getBytes(StandardCharsets.UTF_8);
                 final PublicKey key = getPublicKey(decode(publicKey));
-                final byte[] signBytes = decode(sign);
-                final Signature signature = Signature.getInstance(SING);
-                signature.initVerify(key);
-                signature.update(dataBytes);
-                verify = signature.verify(signBytes);
+                return verify(dataBytes, key, decode(sign));
             } catch (Exception e) {
-                Log.e("校验数字签名异常", String.valueOf(e.getMessage()));
+                return false;
             }
-            return verify;
         }
 
 
@@ -822,16 +809,15 @@ public final class Secure {
          * @return BASE64编码的加密数据
          */
         public static String encryptByPrivateKey(String data, String privateKey) {
-            String encryptData = null;
             try {
                 final byte[] dataBytes = data.getBytes(StandardCharsets.UTF_8);
                 PrivateKey key = getPrivateKey(decode(privateKey));
                 final byte[] encryptDataBytes = encryptByPrivateKey(dataBytes, key);
-                encryptData = encode(encryptDataBytes);
+                return encode(encryptDataBytes);
             } catch (Exception e) {
-                Log.e("私钥加密异常", String.valueOf(e.getMessage()));
+                Log.e("私钥加密异常", String.valueOf(e.getMessage()), e);
+                return null;
             }
-            return encryptData;
         }
 
         /**
@@ -886,10 +872,15 @@ public final class Secure {
         /**
          * 获取私钥
          */
-        private static PrivateKey getPrivateKey(byte[] keyBytes) throws Exception {
-            final PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(keyBytes);
-            final KeyFactory keyFactory = KeyFactory.getInstance(RSA);
-            return keyFactory.generatePrivate(pkcs8EncodedKeySpec);
+        private static PrivateKey getPrivateKey(byte[] keyBytes) {
+            try {
+                final KeyFactory keyFactory;
+                final PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(keyBytes);
+                keyFactory = KeyFactory.getInstance(RSA);
+                return keyFactory.generatePrivate(pkcs8EncodedKeySpec);
+            } catch (Exception e) {
+                return null;
+            }
         }
 
         /**
@@ -898,11 +889,16 @@ public final class Secure {
          * @param data       数据
          * @param privateKey 私钥
          */
-        private static byte[] sign(byte[] data, PrivateKey privateKey) throws Exception {
-            final Signature signature = Signature.getInstance(SING);
-            signature.initSign(privateKey);
-            signature.update(data);
-            return signature.sign();
+        private static byte[] sign(byte[] data, PrivateKey privateKey) {
+            try {
+                final Signature signature;
+                signature = Signature.getInstance(SING);
+                signature.initSign(privateKey);
+                signature.update(data);
+                return signature.sign();
+            } catch (Exception e) {
+                return null;
+            }
         }
 
         /**
@@ -1289,17 +1285,17 @@ public final class Secure {
 
     public static final class Base64 {
         /**
-         * 将图片转换成Base64编码
+         * Base64编码
          *
-         * @param imgPath 图片文件地址
+         * @param cleartext 明文
          */
-        public static String encode(String imgPath) {
+        public static String encode(String cleartext) {
             // 将图片文件转化为字节数组字符串，并对其进行Base64编码处理
             InputStream in = null;
             byte[] data = null;
             // 读取图片字节数组
             try {
-                in = new FileInputStream(imgPath);
+                in = new FileInputStream(cleartext);
                 data = new byte[in.available()];
                 in.read(data);
                 in.close();
@@ -1310,13 +1306,13 @@ public final class Secure {
         }
 
         /**
-         * base64字符串转化成图片
+         * base64解码
          *
-         * @param imgStr 图片base64字符串
+         * @param ciphertext 密文
          */
-        public static byte[] decode(String imgStr) {
+        public static byte[] decode(String ciphertext) {
             // Base64解码
-            byte[] b = android.util.Base64.decode(imgStr, DEFAULT);
+            byte[] b = android.util.Base64.decode(ciphertext, DEFAULT);
             for (int i = 0; i < b.length; ++i) {
                 if (b[i] < 0) {// 调整异常数据
                     b[i] += 256;
@@ -1328,12 +1324,14 @@ public final class Secure {
 
     public static final class SHA1 {
 
-        public static String key(Context context) {
+        private static String SHA1 = "SHA1";
+
+        public static String app(Context context) {
             try {
                 @SuppressLint("PackageManagerGetSignatures")
                 PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
                 byte[] cert = info.signatures[0].toByteArray();
-                MessageDigest md = MessageDigest.getInstance("SHA1");
+                MessageDigest md = MessageDigest.getInstance(SHA1);
                 byte[] publicKey = md.digest(cert);
                 StringBuilder hexString = new StringBuilder();
                 for (byte aPublicKey : publicKey) {
@@ -1347,8 +1345,35 @@ public final class Secure {
                 return result.substring(0, result.length() - 1);
             } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
                 e.printStackTrace();
+                return null;
             }
-            return null;
+        }
+
+        public static String getSecurityAppKey() {
+            return "";
+        }
+//    使用方法按照getSecurityAppKey方法使用，将要加密的字串写到encryptToSHA中即可！
+
+        public static String encrypt(String cleartext) {
+            try {
+                MessageDigest alga = MessageDigest.getInstance(SHA1);
+                alga.update(cleartext.getBytes());
+                return byte2hex(alga.digest());
+            } catch (NoSuchAlgorithmException e) {
+                Log.e("SHA1加密异常", e.getMessage(), e);
+                return null;
+            }
+        }
+
+        private static String byte2hex(byte[] b) {
+            String hs = "";
+            String stmp = "";
+            for (int n = 0; n < b.length; n++) {
+                stmp = (Integer.toHexString(b[n] & 0XFF));
+                if (stmp.length() == 1) hs = hs + "0" + stmp;
+                else hs = hs + stmp;
+            }
+            return hs;
         }
 
     }

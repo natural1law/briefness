@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * @date 2021/02/19
- * @see CountDownTimer 倒计时工具类
+ * @see CountDown 倒计时工具类
  */
 public final class CountDown extends CountDownTimer {
 

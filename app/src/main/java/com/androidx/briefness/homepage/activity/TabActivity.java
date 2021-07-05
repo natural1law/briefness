@@ -28,6 +28,7 @@ import butterknife.Unbinder;
 
 /**
  * Tab导航栏功能展示
+ *
  * @date 2021/07/02
  */
 @SuppressLint("NonConstantResourceId")
@@ -98,13 +99,15 @@ public class TabActivity extends AppCompatActivity {
         tabView.execute();
     }
 
-    public static class OneFragment extends Fragment{
+    public static class OneFragment extends Fragment {
 
     }
-    public static class TowFragment extends Fragment{
+
+    public static class TowFragment extends Fragment {
 
     }
-    public static class ThreeFragment extends Fragment{
+
+    public static class ThreeFragment extends Fragment {
 
     }
 

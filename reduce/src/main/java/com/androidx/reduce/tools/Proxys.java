@@ -1,31 +1,31 @@
 package com.androidx.reduce.tools;
 
+import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
-public final class Proxys {
+public final class Proxys<O> {
 
-    private final Object target;
+    private final ClassLoader cl;
+    private final Class<?>[] c;
+    private volatile O o;
 
-    private Proxys(Object target) {
-        this.target = target;
+    private final InvocationHandler ih = (proxy, method, args) -> method.invoke(o, args);
+
+    @SuppressWarnings("unchecked")
+    protected <T> Proxys(T target) {
+        this.o = (O) target;
+        cl = target.getClass().getClassLoader();
+        c = target.getClass().getInterfaces();
     }
 
-    public static Proxys build(Object target) {
-        try {
-            return new Proxys(target);
-        } catch (Exception e) {
-            synchronized (Proxys.class) {
-                return new Proxys(target);
-            }
+    public static <T> Proxys<T> build(T target) {
+        synchronized (Proxys.class) {
+            return new Proxys<>(target);
         }
     }
 
-    public Object getProxy() {
-        try {
-            return Proxy.newProxyInstance(target.getClass().getClassLoader(), target.getClass().getInterfaces(), (o, method, objects) -> method.invoke(target, objects));
-        } catch (Exception e) {
-            return e.getMessage();
-        }
+    @SuppressWarnings("unchecked")
+    public O getProxy() {
+        return (O) Proxy.newProxyInstance(cl, c, ih);
     }
-
 }

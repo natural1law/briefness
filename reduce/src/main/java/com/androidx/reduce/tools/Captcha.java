@@ -26,8 +26,8 @@ import java.util.Random;
 public class Captcha {
 
     public static Captcha build() {
-        if (rxCaptcha == null) {
-            rxCaptcha = new Captcha();
+        if (rxCaptcha == null) synchronized (Captcha.class) {
+            if (rxCaptcha == null) rxCaptcha = new Captcha();
         }
         return rxCaptcha;
     }
@@ -47,7 +47,7 @@ public class Captcha {
             'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
             'X', 'Y', 'Z'};
 
-    private static Captcha rxCaptcha;
+    private static volatile Captcha rxCaptcha;
 
     private TYPE type = TYPE.CHARS;
 
@@ -64,8 +64,8 @@ public class Captcha {
     }
 
     public static Captcha getInstance(TYPE types) {
-        if (rxCaptcha == null) {
-            rxCaptcha = new Captcha(types);
+        if (rxCaptcha == null) synchronized (Captcha.class) {
+            if (rxCaptcha == null) rxCaptcha = new Captcha(types);
         }
         return rxCaptcha;
     }

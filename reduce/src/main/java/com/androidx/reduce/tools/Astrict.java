@@ -1,8 +1,6 @@
 package com.androidx.reduce.tools;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
@@ -10,10 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 /**
  * 输入和屏幕适配限制
@@ -23,14 +18,12 @@ public final class Astrict {
     private Astrict() {
     }
 
-    private static volatile Astrict instance = SingletonHolder.INSTANCE;
-
     private static final class SingletonHolder {
         private static final Astrict INSTANCE = new Astrict();
     }
 
     public static Astrict get() {
-        return instance;
+        return SingletonHolder.INSTANCE;
     }
 
     public void isBuyPrice(AppCompatEditText text) {
@@ -103,21 +96,6 @@ public final class Astrict {
                     || !(event.getY() > top) || !(event.getY() < bottom);
         }
         return false;
-    }
-
-    public boolean isPermission(AppCompatActivity aThis) {
-        if ((ContextCompat.checkSelfPermission(aThis, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
-                && (ContextCompat.checkSelfPermission(aThis, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED)
-                && (ContextCompat.checkSelfPermission(aThis, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)) {
-            // 检查该权限是否已经获取
-            String camera = Manifest.permission.CAMERA;
-            String recordAudio = Manifest.permission.RECORD_AUDIO;
-            String storage = Manifest.permission.WRITE_EXTERNAL_STORAGE;
-            ActivityCompat.requestPermissions(aThis, new String[]{camera, recordAudio, storage}, 888);
-            return false;
-        } else {
-            return true;
-        }
     }
 
     public int vector(Context context) {
