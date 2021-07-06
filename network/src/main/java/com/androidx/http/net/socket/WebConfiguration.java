@@ -4,8 +4,8 @@ import android.net.Uri;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import okhttp3.Request;
 
@@ -15,7 +15,7 @@ import okhttp3.Request;
 public class WebConfiguration {
 
     private static final StringBuffer PARAM = new StringBuffer();
-    private static final Map<String, Object> MAP = new ConcurrentHashMap<>();
+    private static final Map<String, Object> MAP = new LinkedHashMap<>();
     private static Request.Builder request;
 
     private static Uri uri;
@@ -35,12 +35,7 @@ public class WebConfiguration {
         final int[] p = {0};
         PARAM.setLength(p[0]);
         MAP.forEach((key, value) -> {
-            if (p[0] == 0) {
-                PARAM.append("?");
-            } else {
-                PARAM.append("&");
-            }
-            PARAM.append(key).append("=").append(value);
+            PARAM.append("/").append(value);
             p[0]++;
         });
         try {

@@ -6,11 +6,6 @@ import okio.ByteString;
 public interface Enqueue {
 
     /**
-     * 启动
-     */
-    void start();
-
-    /**
      * 发送
      *
      * @return 成功/失败

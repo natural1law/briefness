@@ -34,10 +34,6 @@ class NetHttp private constructor() {
 
     class Builder internal constructor() {
 
-        init {
-            System.loadLibrary("message")
-        }
-
         private val builder: Builder = this
         internal var maxAnewCount: Int? = 3
         internal var host: Uri? = null

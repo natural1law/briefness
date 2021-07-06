@@ -112,9 +112,7 @@ public class TabActivity extends AppCompatActivity {
         Map<String, Object> map = new ConcurrentHashMap<>();
         map.put("user", "张三");
         map.put("pass", "123123");
-        map.put("code", "111111");
-        Enqueue enqueue = NetRequest.initWebSocket("http://192.168.1.133:9966/android/control/", map);
-        enqueue.start();
+        Enqueue enqueue = NetRequest.initWebSocket("http://192.168.1.133:9966/android/control", map);
         enqueue.setActionListener(new ActionListener() {
             @Override
             public void online(String user) {
@@ -126,14 +124,12 @@ public class TabActivity extends AppCompatActivity {
                 Log.i("离线", user);
             }
         });
-        enqueue.send(0, "123".getBytes());
         enqueue.setLoginCallback(() -> Log.i("登录", "成功"));
         enqueue.setMsgCallback((type, msg, bs) -> {
             if (type == 0) {
                 Log.i("消息", msg);
             }
         });
-        enqueue.close();
 
     }
 

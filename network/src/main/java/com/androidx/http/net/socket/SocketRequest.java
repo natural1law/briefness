@@ -44,6 +44,11 @@ public final class SocketRequest implements Enqueue {
     private static LoginCallback loginCallback;//登录回调
     private static MsgCallback msgCallback;//消息回调
 
+    public SocketRequest() {
+        lock = new ReentrantLock();
+        handler.post(run);
+    }
+
     private static final Runnable run = SocketRequest::init;
 
     private static final WebSocketListener webSocketListener = new WebSocketListener() {
@@ -111,12 +116,6 @@ public final class SocketRequest implements Enqueue {
     };
 
     @Override
-    public void start() {
-        lock = new ReentrantLock();
-        handler.post(run);
-    }
-
-    @Override
     public boolean send(int type, byte[] msg) {
         return sendMessage(MessageModule.MsgRequest.newBuilder()
                 .setType(type)
@@ -173,6 +172,7 @@ public final class SocketRequest implements Enqueue {
                 server.shutdown();
             }
             lock.lockInterruptibly();
+            Log.i("请求参数", String.valueOf(WebConfiguration.getRequest()));
             okWebSocket = client.newWebSocket(WebConfiguration.getRequest(), webSocketListener);
         } catch (Exception e) {
             Log.e("SocketRequest异常", e.getMessage(), e);
