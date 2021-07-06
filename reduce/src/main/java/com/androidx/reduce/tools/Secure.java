@@ -47,7 +47,7 @@ public final class Secure {
         /**
          * 生成含有随机盐的MD5密码
          */
-        public static String encrypt(String password) {
+        public static String encrypt(String cleartext) {
             Random r = new Random();
             StringBuilder sb = new StringBuilder(64);
             sb.append(r.nextInt(99999999)).append(r.nextInt(99999999));
@@ -58,13 +58,13 @@ public final class Secure {
                 }
             }
             String salt = sb.toString() + System.currentTimeMillis();
-            password = String.valueOf(md5Hex(password + salt));
+            cleartext = String.valueOf(md5Hex(cleartext + salt));
             char[] cs = new char[48];
             for (int i = 0; i < 48; i += 3) {
-                cs[i] = password.charAt(i / 3 * 2);
+                cs[i] = cleartext.charAt(i / 3 * 2);
                 char c = salt.charAt(i / 3);
                 cs[i + 1] = c;
-                cs[i + 2] = password.charAt(i / 3 * 2 + 1);
+                cs[i + 2] = cleartext.charAt(i / 3 * 2 + 1);
             }
             return new String(cs);
         }
@@ -156,12 +156,12 @@ public final class Secure {
         /*
          * AES解密
          */
-        public static String decrypt(String key, String encrypted) {
-            if (TextUtils.isEmpty(encrypted)) {
-                return encrypted;
+        public static String decrypt(String key, String ciphertext) {
+            if (TextUtils.isEmpty(ciphertext)) {
+                return ciphertext;
             }
             try {
-                byte[] enc = parseHexStr2bytes(encrypted);
+                byte[] enc = parseHexStr2bytes(ciphertext);
                 byte[] result = decrypt(key, enc);
                 return new String(result);
             } catch (Exception e) {
@@ -172,23 +172,23 @@ public final class Secure {
         /*
          * 加密
          */
-        private static byte[] encrypt(String key, byte[] clear) throws Exception {
+        private static byte[] encrypt(String key, byte[] cleartext) throws Exception {
             byte[] rawKey = RawSha1PRNGKey.deriveInsecureKey(key.getBytes());
             SecretKeySpec keySpec = new SecretKeySpec(rawKey, AES);
             Cipher cipher = Cipher.getInstance(CBC);
             cipher.init(Cipher.ENCRYPT_MODE, keySpec, new IvParameterSpec(new byte[cipher.getBlockSize()]));
-            return cipher.doFinal(clear);
+            return cipher.doFinal(cleartext);
         }
 
         /*
          * 解密
          */
-        private static byte[] decrypt(String key, byte[] encrypted) throws Exception {
+        private static byte[] decrypt(String key, byte[] ciphertext) throws Exception {
             byte[] rawKey = RawSha1PRNGKey.deriveInsecureKey(key.getBytes());
             SecretKeySpec keySpec = new SecretKeySpec(rawKey, AES);
             Cipher cipher = Cipher.getInstance(CBC);
             cipher.init(Cipher.DECRYPT_MODE, keySpec, new IvParameterSpec(new byte[cipher.getBlockSize()]));
-            return cipher.doFinal(encrypted);
+            return cipher.doFinal(ciphertext);
         }
 
         /**
@@ -774,10 +774,10 @@ public final class Secure {
          * @param publicKey 公钥
          * @param signBytes 数字签名
          */
-        private static boolean verify(byte[] data, PublicKey publicKey, byte[] signBytes) throws Exception {
+        private static boolean verify(byte[] ciphertext, PublicKey publicKey, byte[] signBytes) throws Exception {
             final Signature signature = Signature.getInstance(SING);
             signature.initVerify(publicKey);
-            signature.update(data);
+            signature.update(ciphertext);
             return signature.verify(signBytes);
         }
 
@@ -788,10 +788,10 @@ public final class Secure {
          * @param publicKey 公钥(BASE64编码)
          * @return BASE64编码的加密数据
          */
-        public static String encryptByPublicKey(String data, String publicKey) {
+        public static String encryptByPublicKey(String cleartext, String publicKey) {
             String encryptData = null;
             try {
-                final byte[] dataBytes = data.getBytes(StandardCharsets.UTF_8);
+                final byte[] dataBytes = cleartext.getBytes(StandardCharsets.UTF_8);
                 PublicKey key = getPublicKey(decode(publicKey));
                 final byte[] encryptDataBytes = encryptByPublicKey(dataBytes, key);
                 encryptData = encode(encryptDataBytes);
@@ -808,9 +808,9 @@ public final class Secure {
          * @param privateKey 私钥(BASE64编码)
          * @return BASE64编码的加密数据
          */
-        public static String encryptByPrivateKey(String data, String privateKey) {
+        public static String encryptByPrivateKey(String cleartext, String privateKey) {
             try {
-                final byte[] dataBytes = data.getBytes(StandardCharsets.UTF_8);
+                final byte[] dataBytes = cleartext.getBytes(StandardCharsets.UTF_8);
                 PrivateKey key = getPrivateKey(decode(privateKey));
                 final byte[] encryptDataBytes = encryptByPrivateKey(dataBytes, key);
                 return encode(encryptDataBytes);
@@ -827,10 +827,10 @@ public final class Secure {
          * @param publicKey     公钥(BASE64编码)
          * @return 私钥加密前的数据
          */
-        public static String decryptByPublicKey(String encryptedData, String publicKey) {
+        public static String decryptByPublicKey(String ciphertext, String publicKey) {
             String data = null;
             try {
-                final byte[] dataBytes = decode(encryptedData);
+                final byte[] dataBytes = decode(ciphertext);
                 PublicKey key = getPublicKey(decode(publicKey));
                 final byte[] decryptDataBytes = decryptByPublicKey(dataBytes, key);
                 data = new String(decryptDataBytes, StandardCharsets.UTF_8);
@@ -847,10 +847,10 @@ public final class Secure {
          * @param privateKey    私钥(BASE64编码)
          * @return 公钥加密前的数据
          */
-        public static String decryptByPrivateKey(String encryptedData, String privateKey) {
+        public static String decryptByPrivateKey(String ciphertext, String privateKey) {
             String data = null;
             try {
-                final byte[] dataBytes = decode(encryptedData);
+                final byte[] dataBytes = decode(ciphertext);
                 PrivateKey key = getPrivateKey(decode(privateKey));
                 final byte[] decryptDataBytes = decryptByPrivateKey(dataBytes, key);
                 data = new String(decryptDataBytes, StandardCharsets.UTF_8);

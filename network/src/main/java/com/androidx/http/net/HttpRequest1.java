@@ -1,5 +1,6 @@
 package com.androidx.http.net;
 
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -12,6 +13,7 @@ import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.util.Map;
 import java.util.Objects;
@@ -45,8 +47,8 @@ public final class HttpRequest1 implements HttpRequestListener {
     });
 
     @Override
-    public void getRequest(String url, Map<String, Object> map, int maxAnewCount, StringCallback callBack) {
-        httpNetwork.getClient().newCall(httpNetwork.getRequest(url, map)).enqueue(new okhttp3.Callback() {
+    public void getRequest(Uri uri, Map<String, Object> map, int maxAnewCount, StringCallback callBack) throws MalformedURLException {
+        httpNetwork.getClient().newCall(httpNetwork.getRequest(uri, map)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 handler.sendMessage(handler.obtainMessage(-1, new MsgModule(e.getMessage() == null ? "" : e.getMessage(), callBack)));
@@ -65,8 +67,8 @@ public final class HttpRequest1 implements HttpRequestListener {
     }
 
     @Override
-    public void postRequestProto(String url, byte[] bytes, int maxAnewCount, BytesCallback callBack) {
-        httpNetwork.getClient().newCall(httpNetwork.postRequestProto(url, bytes)).enqueue(new okhttp3.Callback() {
+    public void postRequestProto(Uri uri, byte[] bytes, int maxAnewCount, BytesCallback callBack) throws MalformedURLException {
+        httpNetwork.getClient().newCall(httpNetwork.postRequestProto(uri, bytes)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 handler.sendMessage(handler.obtainMessage(-2, new MsgModule(Objects.requireNonNull(e.getMessage()).getBytes(), callBack)));
@@ -85,8 +87,8 @@ public final class HttpRequest1 implements HttpRequestListener {
     }
 
     @Override
-    public void postRequest(String url, Map<String, Object> map, int maxAnewCount, StringCallback callBack) {
-        httpNetwork.getClient().newCall(httpNetwork.postRequest(url, map)).enqueue(new okhttp3.Callback() {
+    public void postRequest(Uri uri, Map<String, Object> map, int maxAnewCount, StringCallback callBack) throws MalformedURLException {
+        httpNetwork.getClient().newCall(httpNetwork.postRequest(uri, map)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 handler.sendMessage(handler.obtainMessage(-1, new MsgModule(e.getMessage() == null ? "" : e.getMessage(), callBack)));
@@ -105,8 +107,8 @@ public final class HttpRequest1 implements HttpRequestListener {
     }
 
     @Override
-    public void postRequest(String url, JsonObject json, int maxAnewCount, StringCallback callBack) {
-        httpNetwork.getClient().newCall(httpNetwork.postRequest(url, json)).enqueue(new okhttp3.Callback() {
+    public void postRequest(Uri uri, JsonObject json, int maxAnewCount, StringCallback callBack) throws MalformedURLException {
+        httpNetwork.getClient().newCall(httpNetwork.postRequest(uri, json)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 handler.sendMessage(handler.obtainMessage(-1, new MsgModule(e.getMessage() == null ? "" : e.getMessage(), callBack)));
@@ -125,8 +127,8 @@ public final class HttpRequest1 implements HttpRequestListener {
     }
 
     @Override
-    public void deleteRequest(String url, JsonObject json, int maxAnewCount, StringCallback callBack) {
-        httpNetwork.getClient().newCall(httpNetwork.deleteRequest(url, json)).enqueue(new okhttp3.Callback() {
+    public void deleteRequest(Uri uri, JsonObject json, int maxAnewCount, StringCallback callBack) throws MalformedURLException {
+        httpNetwork.getClient().newCall(httpNetwork.deleteRequest(uri, json)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 handler.sendMessage(handler.obtainMessage(-1, new MsgModule(e.getMessage() == null ? "" : e.getMessage(), callBack)));
@@ -145,8 +147,8 @@ public final class HttpRequest1 implements HttpRequestListener {
     }
 
     @Override
-    public void deleteRequest(String url, Map<String, Object> map, int maxAnewCount, StringCallback callBack) {
-        httpNetwork.getClient().newCall(httpNetwork.deleteRequest(url, map)).enqueue(new okhttp3.Callback() {
+    public void deleteRequest(Uri uri, Map<String, Object> map, int maxAnewCount, StringCallback callBack) throws MalformedURLException {
+        httpNetwork.getClient().newCall(httpNetwork.deleteRequest(uri, map)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 handler.sendMessage(handler.obtainMessage(-1, new MsgModule(e.getMessage() == null ? "" : e.getMessage(), callBack)));
@@ -165,8 +167,8 @@ public final class HttpRequest1 implements HttpRequestListener {
     }
 
     @Override
-    public void formRequest(String url, JsonObject json, int maxAnewCount, StringCallback callBack) {
-        httpNetwork.getClient().newCall(httpNetwork.formRequest(url, json)).enqueue(new okhttp3.Callback() {
+    public void formRequest(Uri uri, String key, JsonObject json, int maxAnewCount, StringCallback callBack) throws MalformedURLException {
+        httpNetwork.getClient().newCall(httpNetwork.formRequest(uri, key, json)).enqueue(new okhttp3.Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 handler.sendMessage(handler.obtainMessage(-1, new MsgModule(e.getMessage() == null ? "" : e.getMessage(), callBack)));
@@ -182,6 +184,11 @@ public final class HttpRequest1 implements HttpRequestListener {
                 handler.sendMessage(handler.obtainMessage(0, new MsgModule(Objects.requireNonNull(response.body()).string(), callBack)));
             }
         });
+    }
+
+    @Override
+    public void setHeader(Map<String, String> header) {
+        httpNetwork.setHeader(header);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.androidx.http.net
 
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
@@ -44,12 +45,12 @@ class HttpRequest : HttpRequestListener {
         })
 
     override fun getRequest(
-        url: String?,
+        uri: Uri?,
         map: MutableMap<String, Any>?,
         maxAnewCount: Int,
         callBack: StringCallback?
     ) {
-        httpNetwork.client.newCall(httpNetwork.getRequest(url, map)).enqueue(object : Callback {
+        httpNetwork.client.newCall(httpNetwork.getRequest(uri, map)).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 handler.sendMessage(
                     handler.obtainMessage(
@@ -79,12 +80,12 @@ class HttpRequest : HttpRequestListener {
     }
 
     override fun postRequestProto(
-        url: String?,
+        uri: Uri?,
         bytes: ByteArray?,
         maxAnewCount: Int,
         callBack: BytesCallback?
     ) {
-        httpNetwork.client.newCall(httpNetwork.postRequestProto(url, bytes))
+        httpNetwork.client.newCall(httpNetwork.postRequestProto(uri, bytes))
             .enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     handler.sendMessage(
@@ -115,12 +116,12 @@ class HttpRequest : HttpRequestListener {
     }
 
     override fun postRequest(
-        url: String?,
+        uri: Uri?,
         map: MutableMap<String, Any>?,
         maxAnewCount: Int,
         callBack: StringCallback?
     ) {
-        httpNetwork.client.newCall(httpNetwork.postRequest(url, map))
+        httpNetwork.client.newCall(httpNetwork.postRequest(uri, map))
             .enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     handler.sendMessage(
@@ -151,12 +152,12 @@ class HttpRequest : HttpRequestListener {
     }
 
     override fun postRequest(
-        url: String?,
+        uri: Uri?,
         json: JsonObject?,
         maxAnewCount: Int,
         callBack: StringCallback?
     ) {
-        httpNetwork.client.newCall(httpNetwork.postRequest(url, json))
+        httpNetwork.client.newCall(httpNetwork.postRequest(uri, json))
             .enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     handler.sendMessage(
@@ -187,12 +188,12 @@ class HttpRequest : HttpRequestListener {
     }
 
     override fun deleteRequest(
-        url: String?,
+        uri: Uri?,
         json: JsonObject?,
         maxAnewCount: Int,
         callBack: StringCallback?
     ) {
-        httpNetwork.client.newCall(httpNetwork.deleteRequest(url, json))
+        httpNetwork.client.newCall(httpNetwork.deleteRequest(uri, json))
             .enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     handler.sendMessage(
@@ -223,12 +224,12 @@ class HttpRequest : HttpRequestListener {
     }
 
     override fun deleteRequest(
-        url: String?,
+        uri: Uri?,
         map: MutableMap<String, Any>?,
         maxAnewCount: Int,
         callBack: StringCallback?
     ) {
-        httpNetwork.client.newCall(httpNetwork.deleteRequest(url, map))
+        httpNetwork.client.newCall(httpNetwork.deleteRequest(uri, map))
             .enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     handler.sendMessage(
@@ -259,12 +260,13 @@ class HttpRequest : HttpRequestListener {
     }
 
     override fun formRequest(
-        url: String?,
+        uri: Uri?,
+        key: String?,
         json: JsonObject?,
         maxAnewCount: Int,
         callBack: StringCallback?
     ) {
-        httpNetwork.client.newCall(httpNetwork.formRequest(url, json))
+        httpNetwork.client.newCall(httpNetwork.formRequest(uri, key, json))
             .enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     handler.sendMessage(
@@ -292,5 +294,9 @@ class HttpRequest : HttpRequestListener {
                     )
                 }
             })
+    }
+
+    override fun setHeader(header: Map<String?, String?>?) {
+        httpNetwork.setHeader(header)
     }
 }

@@ -7,9 +7,12 @@ import com.google.gson.JsonObject;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.ConnectionPool;
@@ -25,7 +28,6 @@ public final class HttpNetwork implements IHttpNetwork {
 
     private static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
     private static final MediaType PROTO = MediaType.parse("application/x-protobuf");
-    private static final String JSON_KEY = "params";//json数据的key值
     private static final int TIMEOUT = 180;// 超时时间
     private static final int INTERVAL = 10;// ping帧心跳间隔
     private static final int MAX_CONN_COUNT = 50;// 最大连接池
@@ -33,6 +35,7 @@ public final class HttpNetwork implements IHttpNetwork {
     private final StringBuffer param = new StringBuffer();
     private static final HttpNetwork instance = Singleton.INSTANCE;
     private final Request.Builder request;
+    private Map<String, String> header = new ConcurrentHashMap<>();
 
     private HttpNetwork() {
         request = new Request.Builder();
@@ -54,8 +57,7 @@ public final class HttpNetwork implements IHttpNetwork {
                 .connectTimeout(TIMEOUT, TimeUnit.SECONDS)//设置超时时间(单位秒)
                 .readTimeout(TIMEOUT, TimeUnit.SECONDS)//设置读取超时时间(单位秒)
                 .writeTimeout(TIMEOUT, TimeUnit.SECONDS)//设置写入超时时间(单位秒)
-                .addInterceptor(OkHttpInterceptor.newInstance())//拦截器
-                .addNetworkInterceptor(OkHttpInterceptor.newInstance())
+                .addNetworkInterceptor(OkHttpInterceptor.newInstance(header))//网络拦截器
                 .connectionPool(new ConnectionPool(MAX_CONN_COUNT, ALIVE, TimeUnit.MINUTES))//创建连接池
                 .hostnameVerifier((hostname, session) -> hostname.equalsIgnoreCase(session.getPeerHost()))//IP主机校验
                 .sslSocketFactory(Objects.requireNonNull(TrustManagers.newInstance().createSSLSocketFactory()), TrustManagers.newInstance());//内置证书校验
@@ -74,7 +76,7 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull
-    Request getRequest(String url, Map<String, Object> map) {
+    Request getRequest(Uri uri, Map<String, Object> map) throws MalformedURLException {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             final int[] p = {0};
             param.setLength(p[0]);
@@ -101,7 +103,7 @@ public final class HttpNetwork implements IHttpNetwork {
             }
         }
         return request.get()
-                .url(Uri.decode(url).replace("null", "") + param.toString())
+                .url(new URL(Uri.decode(uri.toString()) + param))
                 .build();
     }
 
@@ -110,13 +112,13 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull
-    Request postRequest(String url, Map<String, Object> map) {
+    Request postRequest(Uri uri, Map<String, Object> map) throws MalformedURLException {
         FormBody.Builder formBody = new FormBody.Builder();
         for (String key : map.keySet()) {
-            formBody.add(key, Objects.requireNonNull(map.get(key)).toString());
+            formBody.add(key, String.valueOf(map.get(key)));
         }
         return request.post(formBody.build())
-                .url(Uri.decode(url).replace("null", ""))
+                .url(new URL(Uri.decode(uri.toString())))
                 .build();
     }
 
@@ -125,9 +127,9 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull
-    Request postRequest(String url, JsonObject json) {
+    Request postRequest(Uri uri, JsonObject json) throws MalformedURLException {
         return request.post(RequestBody.create(json.toString(), JSON))
-                .url(Uri.decode(url).replace("null", ""))
+                .url(new URL(Uri.decode(uri.toString())))
                 .build();
     }
 
@@ -136,7 +138,7 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull
-    Request deleteRequest(String url, Map<String, Object> map) {
+    Request deleteRequest(Uri uri, Map<String, Object> map) throws MalformedURLException {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             final int[] p = {0};
             param.setLength(p[0]);
@@ -163,7 +165,7 @@ public final class HttpNetwork implements IHttpNetwork {
             }
         }
         return request.delete()
-                .url(Uri.decode(url).replace("null", "") + param.toString())
+                .url(new URL(Uri.decode(uri.toString()) + param))
                 .build();
     }
 
@@ -172,9 +174,9 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull
-    Request deleteRequest(String url, JsonObject json) {
+    Request deleteRequest(Uri uri, JsonObject json) throws MalformedURLException {
         return request.delete(RequestBody.create(json.toString(), null))
-                .url(Uri.decode(url).replace("null", ""))
+                .url(new URL(Uri.decode(uri.toString())))
                 .build();
     }
 
@@ -184,9 +186,9 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull
-    Request formRequest(String url, JsonObject json) {
-        return request.post(new FormBody.Builder().add(JSON_KEY, json.toString()).build())
-                .url(Uri.decode(url).replace("null", ""))
+    Request formRequest(Uri uri, String key, JsonObject json) throws MalformedURLException {
+        return request.post(new FormBody.Builder().add(key, json.toString()).build())
+                .url(new URL(Uri.decode(uri.toString())))
                 .build();
     }
 
@@ -195,10 +197,18 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull
-    Request postRequestProto(String url, byte[] bytes) {
+    Request postRequestProto(Uri uri, byte[] bytes) throws MalformedURLException {
         return request.post(RequestBody.create(bytes, PROTO))
-                .url(Uri.decode(url).replace("null", ""))
+                .url(new URL(Uri.decode(uri.toString())))
                 .build();
+    }
+
+    /**
+     * 设置请求头
+     */
+    @Override
+    public void setHeader(Map<String, String> header) {
+        this.header = header;
     }
 
     private static final class Singleton {

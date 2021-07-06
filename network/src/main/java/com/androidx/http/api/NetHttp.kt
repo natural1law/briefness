@@ -25,6 +25,11 @@ class NetHttp private constructor() {
         fun builder(): Builder {
             synchronized(Builder::class.java) { return instance }
         }
+
+        fun setHeader(header: Map<String?, String?>?) {
+            HttpRequest().setHeader(header)
+        }
+
     }
 
     class Builder internal constructor() {
@@ -33,14 +38,11 @@ class NetHttp private constructor() {
             System.loadLibrary("message")
         }
 
-        private external fun host(host: String, port: String): String?
-        private external fun hosts(host: String): String?
-
         private val builder: Builder = this
         internal var maxAnewCount: Int? = 3
-        internal var urlSuffix: String? = null
-        internal var host: String? = null
+        internal var host: Uri? = null
         internal var mode: Int? = 0
+        internal var key: String? = ""
         internal var map: Map<String, Any> = ConcurrentHashMap()
         internal var json = JsonObject()
         internal var bytes: ByteArray? = null
@@ -53,13 +55,7 @@ class NetHttp private constructor() {
         }
 
         fun setHosts(uri: Uri): Builder {
-            if (uri.port == -1) this.host = uri.host?.let { hosts(it) }
-            else this.host = uri.host?.let { host(it, uri.port.toString()) }
-            return builder
-        }
-
-        fun setUrlSuffix(urlSuffix: String?): Builder {
-            this.urlSuffix = urlSuffix
+            this.host = uri
             return builder
         }
 
@@ -99,7 +95,7 @@ class NetHttp private constructor() {
 
     }
 
-    private fun init(builder: Builder, url: String?, requestListener: HttpRequestListener) {
+    private fun init(builder: Builder, url: Uri?, requestListener: HttpRequestListener) {
         when (builder.mode) {
             GET_MAP -> requestListener.getRequest(
                 url,
@@ -133,6 +129,7 @@ class NetHttp private constructor() {
             )
             FROM_JSON -> requestListener.formRequest(
                 url,
+                builder.key,
                 builder.json,
                 builder.maxAnewCount!!,
                 builder.stringCallback
@@ -147,8 +144,7 @@ class NetHttp private constructor() {
     }
 
     private constructor(b: Builder) : this() {
-        val url = b.host + b.urlSuffix
-        init(b, url, HttpRequest())
+        init(b, b.host, HttpRequest())
     }
 
     private object SingletonHolder {

@@ -2,6 +2,7 @@ package com.androidx.briefness.homepage.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -17,9 +18,15 @@ import com.androidx.briefness.R;
 import com.androidx.briefness.homepage.fragment.tab.CommonFragment;
 import com.androidx.briefness.homepage.fragment.tab.SegmentFragment;
 import com.androidx.briefness.homepage.fragment.tab.SlidingFragment;
+import com.androidx.http.net.listener.ActionListener;
+import com.androidx.http.net.listener.Enqueue;
+import com.androidx.http.use.NetRequest;
 import com.androidx.reduce.tools.Idle;
 import com.androidx.view.tab.layout.SegmentTabLayout;
 import com.androidx.view.tab.use.TabLayoutBar;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,10 +59,14 @@ public class TabActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tab);
-        unbinder = ButterKnife.bind(aThis);
-        initView();
+        try {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_tab);
+            unbinder = ButterKnife.bind(aThis);
+            initView();
+        } catch (Exception e) {
+            Log.e("Tab导航异常", e.getMessage(), e);
+        }
     }
 
     @Override
@@ -97,6 +108,33 @@ public class TabActivity extends AppCompatActivity {
                 .initBuild();
 
         tabView.execute();
+
+        Map<String, Object> map = new ConcurrentHashMap<>();
+        map.put("user", "张三");
+        map.put("pass", "123123");
+        map.put("code", "111111");
+        Enqueue enqueue = NetRequest.initWebSocket("http://192.168.1.133:9966/android/control/", map);
+        enqueue.start();
+        enqueue.setActionListener(new ActionListener() {
+            @Override
+            public void online(String user) {
+                Log.i("在线", user);
+            }
+
+            @Override
+            public void offline(String user) {
+                Log.i("离线", user);
+            }
+        });
+        enqueue.send(0, "123".getBytes());
+        enqueue.setLoginCallback(() -> Log.i("登录", "成功"));
+        enqueue.setMsgCallback((type, msg, bs) -> {
+            if (type == 0) {
+                Log.i("消息", msg);
+            }
+        });
+        enqueue.close();
+
     }
 
     public static class OneFragment extends Fragment {

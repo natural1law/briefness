@@ -1,7 +1,10 @@
 package com.androidx.http.net;
 
+import android.net.Uri;
+
 import com.google.gson.JsonObject;
 
+import java.net.MalformedURLException;
 import java.util.Map;
 
 import okhttp3.OkHttpClient;
@@ -11,18 +14,20 @@ interface IHttpNetwork {
 
     OkHttpClient getClient();
 
-    Request getRequest(String url, Map<String, Object> map);
+    Request getRequest(Uri url, Map<String, Object> map) throws MalformedURLException;
 
-    Request postRequest(String url, Map<String, Object> map);
+    Request postRequest(Uri url, Map<String, Object> map) throws MalformedURLException;
 
-    Request postRequest(String url, JsonObject json);
+    Request postRequest(Uri url, JsonObject json) throws MalformedURLException;
 
-    Request deleteRequest(String url, Map<String, Object> map);
+    Request deleteRequest(Uri url, Map<String, Object> map) throws MalformedURLException;
 
-    Request deleteRequest(String url, JsonObject json);
+    Request deleteRequest(Uri url, JsonObject json) throws MalformedURLException;
 
-    Request formRequest(String url, JsonObject json);
+    Request formRequest(Uri url, String key, JsonObject json) throws MalformedURLException;
 
-    Request postRequestProto(String url, byte[] bytes);
+    Request postRequestProto(Uri url, byte[] bytes) throws MalformedURLException;
+
+    void setHeader(Map<String, String> header);
 
 }

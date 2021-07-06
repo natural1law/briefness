@@ -97,7 +97,6 @@
 -keep public class * extends android.view.View
 # 保留类不被混淆
 -keep public class com.androidx.http.module.*{*;}
--keep public class com.androidx.http.utils.*{*;}
 -keep public class com.androidx.http.use.*{*;}
 -keep public class com.androidx.http.net.listener.*{*;}
 

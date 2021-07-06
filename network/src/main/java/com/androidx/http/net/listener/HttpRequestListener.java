@@ -1,23 +1,27 @@
 package com.androidx.http.net.listener;
 
+import android.net.Uri;
+
 import com.google.gson.JsonObject;
 
+import java.net.MalformedURLException;
 import java.util.Map;
 
 public interface HttpRequestListener {
 
-    void getRequest(String url, Map<String, Object> map, int maxAnewCount, StringCallback stringCallback);
+    void getRequest(Uri url, Map<String, Object> map, int maxAnewCount, StringCallback stringCallback) throws MalformedURLException;
 
-    void postRequestProto(String url, byte[] bytes, int maxAnewCount, BytesCallback callBack);
+    void postRequestProto(Uri url, byte[] bytes, int maxAnewCount, BytesCallback callBack) throws MalformedURLException;
 
-    void postRequest(String url, Map<String, Object> map, int maxAnewCount, StringCallback callBack);
+    void postRequest(Uri url, Map<String, Object> map, int maxAnewCount, StringCallback callBack) throws MalformedURLException;
 
-    void postRequest(String url, JsonObject json, int maxAnewCount, StringCallback callBack);
+    void postRequest(Uri url, JsonObject json, int maxAnewCount, StringCallback callBack) throws MalformedURLException;
 
-    void deleteRequest(String url, JsonObject json, int maxAnewCount, StringCallback callBack);
+    void deleteRequest(Uri url, JsonObject json, int maxAnewCount, StringCallback callBack) throws MalformedURLException;
 
-    void deleteRequest(String url, Map<String, Object> map, int maxAnewCount, StringCallback callBack);
+    void deleteRequest(Uri url, Map<String, Object> map, int maxAnewCount, StringCallback callBack) throws MalformedURLException;
 
-    void formRequest(String url, JsonObject json, int maxAnewCount, StringCallback callBack);
+    void formRequest(Uri url, String key, JsonObject json, int maxAnewCount, StringCallback callBack) throws MalformedURLException;
 
+    void setHeader(Map<String, String> header);
 }
