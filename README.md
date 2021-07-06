@@ -7,23 +7,23 @@
 ### 使用依赖
   * ![](https://jitpack.io/v/natural1law/briefness.svg "")
   ```
-    implementation 'com.github.natural1law.briefness:2.4.5'
+    implementation 'com.github.natural1law.briefness:2.4.11'
   ```
   * 分支-网络请求
   ```
-  implementation 'com.github.natural1law.briefness.network:2.4.5'
+  implementation 'com.github.natural1law.briefness.network:2.4.11'
   ```
   * 分支-常用工具
   ```
-  implementation 'com.github.natural1law.briefness.reduce:2.4.5'
+  implementation 'com.github.natural1law.briefness.reduce:2.4.11'
   ```
   * 分支-图表统计
   ```
-  implementation 'com.github.natural1law.briefness.echarts:2.4.5'
+  implementation 'com.github.natural1law.briefness.echarts:2.4.11'
   ```
   * 分支-视图布局
   ```
-  implementation 'com.github.natural1law.briefness.view:2.4.5'
+  implementation 'com.github.natural1law.briefness.view:2.4.11'
   ```
 
 ### 工具使用
@@ -31,8 +31,8 @@
 
 ### 更新日志
   
-  > 修订版本 2.4.5
-  * @日期: 2021/07/05
+  > 修订版本 2.4.11
+  * @日期: 2021/07/06
   * @声明: 1.删除第三方AAChartCore，使用更轻量更便捷的AgentWeb+百度echarts（js）框架组合开发。2.代码优化。3.已知bug修复。4.删除获取动态权限，推荐使用
     ```
     implementation "com.github.permissions-dispatcher:permissionsdispatcher:4.8.0"
