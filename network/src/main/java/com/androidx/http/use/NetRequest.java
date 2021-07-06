@@ -3,6 +3,7 @@ package com.androidx.http.use;
 import android.net.Uri;
 
 import com.androidx.http.api.NetHttp;
+import com.androidx.http.net.Configuration;
 import com.androidx.http.net.listener.BytesCallback;
 import com.androidx.http.net.listener.Enqueue;
 import com.androidx.http.net.listener.StringCallback;
@@ -24,13 +25,35 @@ import static com.androidx.http.api.NetHttp.POST_MAP;
 public final class NetRequest {
 
     /**
+     * 设置请求头
+     */
+    public static void setHeader(Map<String, String> header) {
+        Configuration.setHeaders(header);
+    }
+
+    /**
+     * 设置状态
+     *
+     * @param success    成功状态key
+     * @param connect    连接状态key
+     * @param disconnect 断开状态key
+     */
+    public void setResState(String success, String connect, String disconnect) {
+        WebConfiguration.statebuilder()
+                .setSuccess(success)
+                .setConnect(connect)
+                .setDisconnect(disconnect)
+                .build();
+    }
+
+    /**
      * 初始化webSocket
      *
      * @param url   请求地址
      * @param param 请求参数
      */
     public static Enqueue initWebSocket(String url, Map<String, Object> param) {
-        return initWebSocket(url, param, 10);//默认十秒间隔
+        return initWebSocket(url, param, 10);//默认重连十秒间隔
     }
 
     /**
@@ -51,13 +74,6 @@ public final class NetRequest {
     }
 
     /**
-     * 设置请求头
-     */
-    public static void setHeader(Map<String, String> header) {
-        NetHttp.Companion.setHeader(header);
-    }
-
-    /**
      * Map发送get请求
      *
      * @param url            请求地址
@@ -72,7 +88,6 @@ public final class NetRequest {
                 .setCallback(stringCallback)
                 .build();
     }
-
 
     /**
      * json发送post请求

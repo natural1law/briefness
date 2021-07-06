@@ -13,9 +13,11 @@ import okhttp3.Response;
 public final class OkHttpInterceptor implements Interceptor {
 
     private static volatile OkHttpInterceptor okHttpInterceptor;
-    private static Map<String, String> headers = new ConcurrentHashMap<>();
+    private final Map<String, String> headers = new ConcurrentHashMap<>();
 
     private OkHttpInterceptor() {
+        headers.clear();
+        headers.putAll(Configuration.getHeaders());
     }
 
     private static final class SingletonHolder {
@@ -26,8 +28,7 @@ public final class OkHttpInterceptor implements Interceptor {
     }
 
     @SuppressWarnings("WeakerAccess")
-    protected static OkHttpInterceptor newInstance(Map<String, String> header) {
-        headers = header;
+    protected static OkHttpInterceptor newInstance() {
         if (okHttpInterceptor == null) {
             synchronized (OkHttpInterceptor.class) {
                 if (okHttpInterceptor == null) {

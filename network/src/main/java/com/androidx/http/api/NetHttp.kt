@@ -26,10 +26,6 @@ class NetHttp private constructor() {
             synchronized(Builder::class.java) { return instance }
         }
 
-        fun setHeader(header: Map<String?, String?>?) {
-            HttpRequest().setHeader(header)
-        }
-
     }
 
     class Builder internal constructor() {

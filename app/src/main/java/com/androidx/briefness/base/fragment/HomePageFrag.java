@@ -18,6 +18,7 @@ import com.androidx.briefness.R;
 import com.androidx.briefness.homepage.activity.DialogActivity;
 import com.androidx.briefness.homepage.activity.EchartsActivity;
 import com.androidx.briefness.homepage.activity.MsgShowActivity;
+import com.androidx.briefness.homepage.activity.NetworkRequestActivity;
 import com.androidx.briefness.homepage.activity.TabActivity;
 import com.androidx.briefness.homepage.adapter.HomepageAdapter;
 import com.androidx.reduce.tools.This;
@@ -49,7 +50,7 @@ public final class HomePageFrag extends BaseFragment {
     private HomepageAdapter adapter;
     private final List<String> list = new ArrayList<>();
     private final Bundle bundle = new Bundle();
-    private final String[] arr = {"Toast功能展示", "dialog功能展示", "图表功能展示", "Tab导航栏功能展示"};
+    private final String[] arr = {"Toast功能演示", "dialog功能演示", "图表功能演示", "Tab导航栏功能演示", "网络请求接口演示"};
     private Runnable run;
 
     @Override
@@ -117,6 +118,7 @@ public final class HomePageFrag extends BaseFragment {
                 This.start(run = This.activity(c, TabActivity.class, bundle));
             } else if (list.get(position).equals(list.get(4))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
+                This.start(run = This.activity(c, NetworkRequestActivity.class, bundle));
             } else if (list.get(position).equals(list.get(5))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(6))) {

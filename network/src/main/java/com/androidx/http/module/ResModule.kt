@@ -31,6 +31,10 @@ data class ResModule(
         `in`.readUTF()
     }
 
+    override fun toString(): String {
+        return "ResModule(msg=$msg, user=$user)"
+    }
+
     companion object CREATOR : Parcelable.Creator<ResModule> {
         override fun createFromParcel(parcel: Parcel): ResModule {
             return ResModule(parcel)
@@ -40,5 +44,6 @@ data class ResModule(
             return arrayOfNulls(size)
         }
     }
+
 
 }

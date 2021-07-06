@@ -18,15 +18,9 @@ import com.androidx.briefness.R;
 import com.androidx.briefness.homepage.fragment.tab.CommonFragment;
 import com.androidx.briefness.homepage.fragment.tab.SegmentFragment;
 import com.androidx.briefness.homepage.fragment.tab.SlidingFragment;
-import com.androidx.http.net.listener.ActionListener;
-import com.androidx.http.net.listener.Enqueue;
-import com.androidx.http.use.NetRequest;
 import com.androidx.reduce.tools.Idle;
 import com.androidx.view.tab.layout.SegmentTabLayout;
 import com.androidx.view.tab.use.TabLayoutBar;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -108,28 +102,6 @@ public class TabActivity extends AppCompatActivity {
                 .initBuild();
 
         tabView.execute();
-
-        Map<String, Object> map = new ConcurrentHashMap<>();
-        map.put("user", "张三");
-        map.put("pass", "123123");
-        Enqueue enqueue = NetRequest.initWebSocket("http://192.168.1.133:9966/android/control", map);
-        enqueue.setActionListener(new ActionListener() {
-            @Override
-            public void online(String user) {
-                Log.i("在线", user);
-            }
-
-            @Override
-            public void offline(String user) {
-                Log.i("离线", user);
-            }
-        });
-        enqueue.setLoginCallback(() -> Log.i("登录", "成功"));
-        enqueue.setMsgCallback((type, msg, bs) -> {
-            if (type == 0) {
-                Log.i("消息", msg);
-            }
-        });
 
     }
 

@@ -12,7 +12,6 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.ConnectionPool;
@@ -35,7 +34,6 @@ public final class HttpNetwork implements IHttpNetwork {
     private final StringBuffer param = new StringBuffer();
     private static final HttpNetwork instance = Singleton.INSTANCE;
     private final Request.Builder request;
-    private Map<String, String> header = new ConcurrentHashMap<>();
 
     private HttpNetwork() {
         request = new Request.Builder();
@@ -57,7 +55,7 @@ public final class HttpNetwork implements IHttpNetwork {
                 .connectTimeout(TIMEOUT, TimeUnit.SECONDS)//设置超时时间(单位秒)
                 .readTimeout(TIMEOUT, TimeUnit.SECONDS)//设置读取超时时间(单位秒)
                 .writeTimeout(TIMEOUT, TimeUnit.SECONDS)//设置写入超时时间(单位秒)
-                .addNetworkInterceptor(OkHttpInterceptor.newInstance(header))//网络拦截器
+                .addNetworkInterceptor(OkHttpInterceptor.newInstance())//网络拦截器
                 .connectionPool(new ConnectionPool(MAX_CONN_COUNT, ALIVE, TimeUnit.MINUTES))//创建连接池
                 .hostnameVerifier((hostname, session) -> hostname.equalsIgnoreCase(session.getPeerHost()))//IP主机校验
                 .sslSocketFactory(Objects.requireNonNull(TrustManagers.newInstance().createSSLSocketFactory()), TrustManagers.newInstance());//内置证书校验
@@ -201,14 +199,6 @@ public final class HttpNetwork implements IHttpNetwork {
         return request.post(RequestBody.create(bytes, PROTO))
                 .url(new URL(Uri.decode(uri.toString())))
                 .build();
-    }
-
-    /**
-     * 设置请求头
-     */
-    @Override
-    public void setHeader(Map<String, String> header) {
-        this.header = header;
     }
 
     private static final class Singleton {

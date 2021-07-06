@@ -3,6 +3,7 @@ package com.androidx.http.net.module
 import android.os.Parcel
 import android.os.Parcelable
 import com.androidx.http.base.BaseBean
+import com.androidx.http.net.listener.ActionListener
 import com.androidx.http.net.listener.LoginCallback
 import com.androidx.http.net.listener.MsgCallback
 import okio.ByteString
@@ -13,9 +14,11 @@ import java.io.ObjectOutput
 class DataModule() : BaseBean() {
 
     lateinit var msg: String
+    lateinit var user: String
     lateinit var bytes: ByteString
     lateinit var loginCallback: LoginCallback //登录回调
     lateinit var msgCallback: MsgCallback//消息回调
+    lateinit var actionListener: ActionListener//用户动作
 
     constructor(parcel: Parcel) : this() {
         parcel.readString()!!
@@ -30,6 +33,11 @@ class DataModule() : BaseBean() {
         this.loginCallback = loginCallback
     }
 
+    constructor(user: String, actionListener: ActionListener) : this() {
+        this.user = user
+        this.actionListener = actionListener
+    }
+
     constructor(bytes: ByteString, msgCallback: MsgCallback) : this() {
         this.bytes = bytes
         this.msgCallback = msgCallback
@@ -41,14 +49,18 @@ class DataModule() : BaseBean() {
 
     override fun writeExternal(out: ObjectOutput?) {
         out!!.writeUTF(msg)
+        out.writeUTF(user)
         out.write(bytes.toByteArray())
         out.writeObject(loginCallback)
         out.writeObject(msgCallback)
+        out.writeObject(actionListener)
     }
 
     override fun readExternal(`in`: ObjectInput?) {
         `in`!!.readUTF()
+        `in`.readUTF()
         `in`.read(bytes.toByteArray())
+        `in`.readObject()
         `in`.readObject()
         `in`.readObject()
     }

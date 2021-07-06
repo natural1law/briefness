@@ -1,6 +1,8 @@
 package com.androidx.http.net.socket;
 
 import android.annotation.SuppressLint;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
@@ -14,6 +16,7 @@ import com.androidx.http.net.listener.MsgCallback;
 import com.androidx.http.net.module.DataModule;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,9 +31,6 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
-import static com.androidx.http.net.socket.WebHandler.actionListener;
-import static com.androidx.http.net.socket.WebHandler.handler;
-
 public final class SocketRequest implements Enqueue {
 
     private static final String FAIL_MSG = "服务器连接已断开";//连接异常消息
@@ -43,6 +43,7 @@ public final class SocketRequest implements Enqueue {
     private boolean isSend = false;//发送状态
     private static LoginCallback loginCallback;//登录回调
     private static MsgCallback msgCallback;//消息回调
+    public static ActionListener actionListener;//用户状态
 
     public SocketRequest() {
         lock = new ReentrantLock();
@@ -76,31 +77,27 @@ public final class SocketRequest implements Enqueue {
         public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
             ResModule res = new Gson().fromJson(text, new TypeToken<ResModule>() {
             }.getType());
-            switch (String.valueOf(res.getMsg())) {
-                case "success":
-                    Message message1 = handler.obtainMessage();
-                    message1.what = 0;
-                    message1.obj = new DataModule(loginCallback);
-                    handler.sendMessage(message1);
-                    break;
-                case "connect":
-                    Message message3 = handler.obtainMessage();
-                    message3.what = 2;
-                    message3.obj = res.getUser();
-                    handler.sendMessage(message3);
-                    break;
-                case "disconnect":
-                    Message message4 = handler.obtainMessage();
-                    message4.what = 3;
-                    message4.obj = res.getUser();
-                    handler.sendMessage(message4);
-                    break;
-                default:
-                    webSocket.close(NORMAL_CLOSE, "close");
-                    Message message2 = handler.obtainMessage();
-                    message2.what = -1;
-                    message2.obj = new DataModule(text, loginCallback);
-                    handler.sendMessage(message2);
+            if (String.valueOf(res.getMsg()).equals(WebConfiguration.getSuccess())) {
+                Message message1 = handler.obtainMessage();
+                message1.what = 0;
+                message1.obj = new DataModule(loginCallback);
+                handler.sendMessage(message1);
+            } else if (String.valueOf(res.getMsg()).equals(WebConfiguration.getConnect())) {
+                Message message3 = handler.obtainMessage();
+                message3.what = 2;
+                message3.obj = new DataModule(String.valueOf(res.getUser()), actionListener);
+                handler.sendMessage(message3);
+            } else if (String.valueOf(res.getMsg()).equals(WebConfiguration.getDisconnect())) {
+                Message message4 = handler.obtainMessage();
+                message4.what = 3;
+                message4.obj = new DataModule(String.valueOf(res.getUser()), actionListener);
+                handler.sendMessage(message4);
+            } else {
+                webSocket.close(NORMAL_CLOSE, "close");
+                Message message2 = handler.obtainMessage();
+                message2.what = -1;
+                message2.obj = new DataModule(text, loginCallback);
+                handler.sendMessage(message2);
             }
         }
 
@@ -172,7 +169,6 @@ public final class SocketRequest implements Enqueue {
                 server.shutdown();
             }
             lock.lockInterruptibly();
-            Log.i("请求参数", String.valueOf(WebConfiguration.getRequest()));
             okWebSocket = client.newWebSocket(WebConfiguration.getRequest(), webSocketListener);
         } catch (Exception e) {
             Log.e("SocketRequest异常", e.getMessage(), e);
@@ -183,14 +179,9 @@ public final class SocketRequest implements Enqueue {
 
     private boolean sendMessage(Object msg) {
         if (okWebSocket != null) {
-            if (msg instanceof byte[]) {
-                isSend = okWebSocket.send(ByteString.of((byte[]) msg));
-            } else if (msg instanceof ByteString) {
-                isSend = okWebSocket.send((ByteString) msg);
-            }
-            if (!isSend) {
-                reconnect();
-            }
+            if (msg instanceof byte[]) isSend = okWebSocket.send(ByteString.of((byte[]) msg));
+            else if (msg instanceof ByteString) isSend = okWebSocket.send((ByteString) msg);
+            if (!isSend) reconnect();
         }
         return isSend;
     }
@@ -209,4 +200,51 @@ public final class SocketRequest implements Enqueue {
     private static void occlude() {
         handler.removeCallbacks(run);
     }
+
+    public static final Handler handler = new Handler(Looper.getMainLooper(), message -> {
+        try {
+            DataModule data = (DataModule) message.obj;
+            if (message.what == -1) {
+                try {
+                    data.getLoginCallback().onFailure(data.getMsg());
+                    return false;
+                } catch (Exception e) {
+                    return false;
+                }
+            } else if (message.what == -2) {
+                try {
+                    data.getLoginCallback().onFailure(data.getMsg());
+                    return false;
+                } catch (Exception e) {
+                    return false;
+                }
+            } else if (message.what == 0) {
+                try {
+                    data.getLoginCallback().onSuccess();
+                    return false;
+                } catch (Exception e) {
+                    return false;
+                }
+            } else if (message.what == 1) {
+                try {
+                    MessageModule.MsgResponse response = MessageModule.MsgResponse.parseFrom(data.getBytes().toByteArray());
+                    data.getMsgCallback().message(response.getCode(), response.getMsg(), response.getData());
+                } catch (InvalidProtocolBufferException e) {
+                    Log.e("callbackException", String.valueOf(e.getMessage()));
+                }
+                return false;
+            } else if (message.what == 2) {
+                data.getActionListener().online(data.getUser());
+                return false;
+            } else if (message.what == 3) {
+                data.getActionListener().offline(data.getUser());
+                return false;
+            } else {
+                return false;
+            }
+        } catch (Exception e) {
+            return false;
+        }
+    });
+
 }

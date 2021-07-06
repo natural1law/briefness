@@ -296,7 +296,4 @@ class HttpRequest : HttpRequestListener {
             })
     }
 
-    override fun setHeader(header: Map<String?, String?>?) {
-        httpNetwork.setHeader(header)
-    }
 }

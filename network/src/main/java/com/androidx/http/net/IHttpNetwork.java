@@ -28,6 +28,4 @@ interface IHttpNetwork {
 
     Request postRequestProto(Uri url, byte[] bytes) throws MalformedURLException;
 
-    void setHeader(Map<String, String> header);
-
 }

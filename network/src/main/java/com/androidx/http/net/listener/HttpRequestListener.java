@@ -23,5 +23,4 @@ public interface HttpRequestListener {
 
     void formRequest(Uri url, String key, JsonObject json, int maxAnewCount, StringCallback callBack) throws MalformedURLException;
 
-    void setHeader(Map<String, String> header);
 }

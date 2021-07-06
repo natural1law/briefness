@@ -20,15 +20,32 @@ public class WebConfiguration {
 
     private static Uri uri;
     private static long reconnectInterval;
-    private final Builder builder;
+    private Builder builder;
+    private static StateBuilder stateBuilder;
 
     private WebConfiguration(Builder builder) {
         this.builder = builder;
         request = new Request.Builder();
     }
 
+    private WebConfiguration(StateBuilder builder) {
+        stateBuilder = builder;
+    }
+
     protected static long getReconnectInterval() {
         return reconnectInterval;
+    }
+
+    protected static String getSuccess() {
+        return stateBuilder.success;
+    }
+
+    protected static String getConnect() {
+        return stateBuilder.connect;
+    }
+
+    protected static String getDisconnect() {
+        return stateBuilder.disconnect;
     }
 
     protected static Request getRequest() {
@@ -56,6 +73,7 @@ public class WebConfiguration {
         MAP.putAll(builder.map);
     }
 
+
     public static final class Builder {
 
         private final Builder builder;
@@ -64,9 +82,9 @@ public class WebConfiguration {
             this.builder = this;
         }
 
-        private Uri uri;//
+        private Uri uri;
         private long reconnectInterval;
-        private Map<String, Object> map;//
+        private Map<String, Object> map;
 
         /**
          * 访问地址
@@ -106,7 +124,44 @@ public class WebConfiguration {
         }
     }
 
+    public static final class StateBuilder {
+
+        private final StateBuilder builder;
+        private String success = "success";
+        private String connect = "connect";
+        private String disconnect = "disconnect";
+
+        private StateBuilder() {
+            this.builder = this;
+        }
+
+        public StateBuilder setSuccess(String success) {
+            this.success = success;
+            return builder;
+        }
+
+        public StateBuilder setConnect(String connect) {
+            this.connect = connect;
+            return builder;
+        }
+
+        public StateBuilder setDisconnect(String disconnect) {
+            this.disconnect = disconnect;
+            return builder;
+        }
+
+        public WebConfiguration build() {
+            synchronized (WebConfiguration.class) {
+                return new WebConfiguration(builder);
+            }
+        }
+    }
+
     public static Builder builder() {
         return new Builder();
+    }
+
+    public static StateBuilder statebuilder() {
+        return new StateBuilder();
     }
 }
