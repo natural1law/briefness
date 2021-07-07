@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Objects;
 
 /**
  * 转换工具
@@ -91,7 +90,7 @@ public final class Convert {
             try {
                 return new SimpleDateFormat(format).parse(datetime);
             } catch (ParseException e) {
-                return null;
+                return new Date();
             }
         }
 
@@ -104,11 +103,11 @@ public final class Convert {
         @SuppressLint("SimpleDateFormat")
         public static <T> String refining(T datetime, String format) {
             try {
-                return new SimpleDateFormat(format).format(datetime);
+                return new SimpleDateFormat(format).format(Long.parseLong(datetime.toString()));
             } catch (Exception e) {
-                return e.getMessage();
+                Log.e("日期转换异常", e.getMessage(), e);
+                return new SimpleDateFormat(format).format(datetime);
             }
-
         }
 
         /**
@@ -132,7 +131,7 @@ public final class Convert {
          */
         @SuppressLint("SimpleDateFormat")
         public static <T> String changeover(T datetime, String format) {
-            return String.valueOf(Objects.requireNonNull(toDate(String.valueOf(datetime), format)).getTime());
+            return String.valueOf(toDate(String.valueOf(datetime), format).getTime());
         }
 
         /**
