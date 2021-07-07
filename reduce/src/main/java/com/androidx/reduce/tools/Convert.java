@@ -56,18 +56,18 @@ public final class Convert {
 
         public static final String SECOND = "ss";
         public static final String MINUTE = "mm:ss";
-        public static final String HOUR = "HH:mm:ss";
+        public static final String HOUR = "hh:mm:ss";
         public static final String DATE_SPRIT = "yyyy/MM/dd";
         public static final String DATE_WHIPPLETREE = "yyyy-MM-dd";
-        public static final String DATE_FORMAT1 = "yyyy-MM-dd HH:mm:ss";
-        public static final String DATE_FORMAT2 = "yyyy/MM/dd HH:mm:ss";
-        public static final String DATE_FORMAT3 = "yyyy年MM月dd日 HH时mm分ss秒";
-        public static final String DATE_FORMAT4 = "yyyy年MM月dd日 HH时mm分";
+        public static final String DATE_FORMAT1 = "yyyy-MM-dd hh:mm:ss";
+        public static final String DATE_FORMAT2 = "yyyy/MM/dd hh:mm:ss";
+        public static final String DATE_FORMAT3 = "yyyy年MM月dd日 hh时mm分ss秒";
+        public static final String DATE_FORMAT4 = "yyyy年MM月dd日 hh时mm分";
         public static final String DATE_FORMAT5 = "yyyy年MM月dd日";
-        public static final String DATE_FORMAT6 = "yyyy-MM-dd HH:mm";
-        public static final String DATE_FORMAT7 = "yyyy/MM/dd HH:mm";
-        public static final String DATE_FORMAT8 = "MM/dd HH:mm:ss";
-        public static final String DATE_FORMAT9 = "MM-dd HH:mm:ss";
+        public static final String DATE_FORMAT6 = "yyyy-MM-dd hh:mm";
+        public static final String DATE_FORMAT7 = "yyyy/MM/dd hh:mm";
+        public static final String DATE_FORMAT8 = "MM/dd hh:mm:ss";
+        public static final String DATE_FORMAT9 = "MM-dd hh:mm:ss";
 
         private Timestamp() {
         }
