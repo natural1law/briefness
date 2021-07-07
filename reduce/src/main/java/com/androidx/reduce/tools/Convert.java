@@ -86,9 +86,9 @@ public final class Convert {
          * 转换Date类型
          */
         @SuppressLint("SimpleDateFormat")
-        public static Date toDate(String datetime, String format) {
+        public static <D>Date toDate(D datetime, String format) {
             try {
-                return new SimpleDateFormat(format).parse(datetime);
+                return new SimpleDateFormat(format).parse(String.valueOf(datetime));
             } catch (ParseException e) {
                 return new Date();
             }
