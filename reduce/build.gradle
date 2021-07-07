@@ -13,7 +13,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
-        versionName "2.4.5"
+        versionName "2.4.12"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -45,4 +45,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     api group: 'commons-codec', name: 'commons-codec', version: '+'
     api 'com.github.GrenderG:Toasty:+'
+    //excel
+    api group: 'net.sourceforge.jexcelapi', name: 'jxl', version: '2.6.12'
 }

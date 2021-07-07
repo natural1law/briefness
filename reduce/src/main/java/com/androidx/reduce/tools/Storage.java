@@ -1,16 +1,22 @@
 package com.androidx.reduce.tools;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
@@ -19,6 +25,7 @@ import java.nio.channels.FileChannel;
 import java.util.UUID;
 
 import static android.util.Base64.DEFAULT;
+import static java.lang.Boolean.TRUE;
 
 /**
  * 存储工具
@@ -104,11 +111,8 @@ public final class Storage {
                 RandomAccessFile raf = new RandomAccessFile(save(fileName, suffix), MODE);
                 FileChannel fileChannel = raf.getChannel();
                 byte[] data = Base64.decode(img, DEFAULT);
-                for (int i = 0; i < data.length; ++i) {
-                    if (data[i] < 0) {// 调整异常数据
-                        data[i] += 256;
-                    }
-                }
+                // 调整异常数据
+                for (int i = 0; i < data.length; ++i) if (data[i] < 0) data[i] += 256;
                 FileChannel.MapMode mode = FileChannel.MapMode.READ_WRITE;
                 int size = data.length + 1;
                 MappedByteBuffer mbb = fileChannel.map(mode, POSITION, size);
@@ -121,6 +125,37 @@ public final class Storage {
                 Log.e("保存图片异常", String.valueOf(e.getMessage()));
             }
         }
+
+        @SuppressWarnings("ResultOfMethodCallIgnored")
+        public static File generatePath(String... files) {
+            try {
+                String rootDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+                File file = new File(rootDir, files[0]);
+                if (!file.exists()) if (!file.mkdirs()) file.setWritable(TRUE);
+                return new File(file.getAbsoluteFile() + "/" + files[1] + files[2]);
+            } catch (Exception e) {
+                return new File(String.valueOf(e.getMessage()));
+            }
+        }
+
+        /**
+         * 生成存储地址
+         *
+         * @param param param[0]文件目录 param[1] 文件名 param[2] 后缀
+         * @return uri
+         */
+        @RequiresApi(api = Build.VERSION_CODES.Q)
+        public static Uri generatePath(Context c, String... param) {
+            ContentResolver contentResolver = c.getContentResolver();
+            Uri uri = MediaStore.Downloads.EXTERNAL_CONTENT_URI;
+            ContentValues values = new ContentValues();
+            String path = Environment.DIRECTORY_DOWNLOADS + "/" + param[0];
+            values.put(MediaStore.Downloads.RELATIVE_PATH, path);
+            values.put(MediaStore.Downloads.DISPLAY_NAME, param[1] + "." + param[2]);
+            values.put(MediaStore.Downloads.TITLE, path);
+            return contentResolver.insert(uri, values);
+        }
+
     }
 
     /**
@@ -128,91 +163,75 @@ public final class Storage {
      */
     public static final class Cache {
 
+        public static <D> void writeFile(Context c, String fileName, D data) {
+            try {
+                write(c, fileName, data);
+            } catch (Exception e) {
+                Log.e("本地缓存写入异常", e.getMessage(), e);
+            }
+        }
+
+        public static String readFile(Context context, String fileName) {
+            if (exists(context, fileName)) {
+                try {
+                    return read(context, fileName);
+                } catch (Exception e) {
+                    Log.e("本地缓存读取异常", e.getMessage(), e);
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        }
+
         /**
          * 保存数据
          */
-        public static <T> void write(Context context, String fileName, T data) {
-            FileOutputStream out = null;
-            BufferedWriter writer = null;
-            try {
-                //设置文件名称，以及存储方式
-                out = context.openFileOutput(fileName, Context.MODE_PRIVATE);
-                //创建一个OutputStreamWriter对象，传入BufferedWriter的构造器中
-                writer = new BufferedWriter(new OutputStreamWriter(out));
-                //向文件中写入数据
-                if (data instanceof String) {
-                    writer.write(String.valueOf(data));
-                } else if (data instanceof Byte) {
-                    writer.write((Byte) data);
-                } else if (data instanceof Integer) {
-                    writer.write((Integer) data);
-                } else if (data instanceof char[]) {
-                    writer.write((char[]) data);
-                } else {
-                    Log.w("存储工具", "未匹配到数据类型");
-                }
-                out.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    if (writer != null) {
-                        writer.close();
-                    }
-                    if (out != null) {
-                        out.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        private static <D> void write(Context c, String f, D d) throws Exception {
+            //设置文件名称，以及存储方式
+            FileOutputStream out = c.openFileOutput(f, Context.MODE_PRIVATE);
+            //创建一个OutputStreamWriter对象，传入BufferedWriter的构造器中
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
+            //向文件中写入数据
+            if (d instanceof String) {
+                writer.write(String.valueOf(d));
+            } else if (d instanceof Byte) {
+                writer.write((Byte) d);
+            } else if (d instanceof Integer) {
+                writer.write((Integer) d);
+            } else if (d instanceof char[]) {
+                writer.write((char[]) d);
+            } else {
+                Log.w("存储工具", "未匹配到数据类型");
             }
+            out.flush();
+            writer.close();
+            out.close();
         }
 
         /**
          * 获取数据
          */
-        public static String read(Context context, String fileName) {
-            FileInputStream in = null;
-            BufferedReader reader = null;
+        private static String read(Context c, String f) throws Exception {
+            FileInputStream in = c.openFileInput(f);
+            //设置将要打开的存储文件名称
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             StringBuilder content = new StringBuilder();
-            try {
-                //设置将要打开的存储文件名称
-                in = context.openFileInput(fileName);
-                //FileInputStream -> InputStreamReader ->BufferedReader
-                reader = new BufferedReader(new InputStreamReader(in));
-                String line;
-                //读取每一行数据，并追加到StringBuilder对象中，直到结束
-                while ((line = reader.readLine()) != null) {
-                    content.append(line);
-                }
-            } catch (IOException e) {
-                return e.getMessage();
-            } finally {
-                try {
-                    if (reader != null) {
-                        reader.close();
-                    }
-                    if (in != null) {
-                        in.close();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-            }
+            String line;
+            while ((line = reader.readLine()) != null) content.append(line);
+            reader.close();
+            in.close();
             return content.toString();
         }
 
         /**
          * 检验文件是否存在
          */
-        public static boolean isFile(Context context, String fileName) {
+        private static boolean exists(Context c, String f) {
             boolean flag = false;
-            if (fileName != null) {
-                File file = new File(context.getFilesDir(), fileName);
-                if (file.exists()) {
-                    flag = file.delete();
-                }
+            if (f != null) {
+                File file = new File(c.getFilesDir(), f);
+                if (file.exists()) flag = file.delete();
             }
             return flag;
         }
