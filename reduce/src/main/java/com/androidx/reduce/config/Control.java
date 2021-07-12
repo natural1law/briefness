@@ -39,6 +39,8 @@ public final class Control {
 
     public static final class MD5 {
 
+        private static long timestamp = System.currentTimeMillis();
+
         private MD5() {
         }
 
@@ -55,7 +57,7 @@ public final class Control {
                     sb.append("0");
                 }
             }
-            String salt = sb.toString() + System.currentTimeMillis();
+            String salt = sb.toString() + timestamp;
             cleartext = String.valueOf(md5Hex(cleartext + salt));
             char[] cs = new char[48];
             for (int i = 0; i < 48; i += 3) {
@@ -102,7 +104,7 @@ public final class Control {
                     cs1[i / 3 * 2 + 1] = ciphertext.charAt(i + 2);
                     cs2[i / 3] = ciphertext.charAt(i + 1);
                 }
-                String salt = new String(cs2) + System.currentTimeMillis();
+                String salt = new String(cs2) + timestamp;
                 return String.valueOf(md5Hex(cleartext + salt)).equals(new String(cs1));
             } catch (Exception e) {
                 Log.e("校验MD5密码异常", String.valueOf(e.getMessage()));
