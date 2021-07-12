@@ -85,6 +85,67 @@ public final class Secure {
         }
     }
 
+    public static final class SHA224 {
+        private SHA224() {
+        }
+
+        /**
+         * 使用SHA224加密
+         *
+         * @param cleartext 明文
+         * @return 加密后的字符串
+         */
+        public static String encrypt(String cleartext) {
+            return Control.SHA1.encrypt224(cleartext);
+        }
+    }
+
+    public static final class SHA256 {
+        private SHA256() {
+        }
+
+        /**
+         * 使用SHA256加密
+         *
+         * @param cleartext 明文
+         * @return 加密后的字符串
+         */
+        public static String encrypt(String cleartext) {
+            return Control.SHA1.encrypt256(cleartext);
+        }
+    }
+
+
+    public static final class SHA384 {
+        private SHA384() {
+        }
+
+        /**
+         * 使用SHA384加密
+         *
+         * @param cleartext 明文
+         * @return 加密后的字符串
+         */
+        public static String encrypt(String cleartext) {
+            return Control.SHA1.encrypt384(cleartext);
+        }
+    }
+
+    public static final class SHA512 {
+        private SHA512() {
+        }
+
+        /**
+         * 使用SHA512加密
+         *
+         * @param cleartext 明文
+         * @return 加密后的字符串
+         */
+        public static String encrypt(String cleartext) {
+            return Control.SHA1.encrypt512(cleartext);
+        }
+    }
+
     public static final class Base64 {
         private Base64() {
         }

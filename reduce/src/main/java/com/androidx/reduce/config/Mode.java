@@ -21,4 +21,8 @@ public final class Mode {
     public static final int RSA_SIZE = 4096;//密钥长度/范围：512~2048（值越大执行越慢）
 
     public static String SHA1 = "SHA1";
+    public static String SHA224 = "SHA-224";
+    public static String SHA256 = "SHA-256";
+    public static String SHA384 = "SHA-384";
+    public static String SHA512 = "SHA-512";
 }

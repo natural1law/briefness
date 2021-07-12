@@ -655,6 +655,50 @@ public final class Control {
             }
         }
 
+        public static String encrypt224(String cleartext) {
+            try {
+                MessageDigest alga = MessageDigest.getInstance(Mode.SHA224);
+                alga.update(cleartext.getBytes());
+                return byte2hex(alga.digest());
+            } catch (Exception e) {
+                System.err.println("SHA1加密异常: " + e.getMessage());
+                return "";
+            }
+        }
+
+        public static String encrypt256(String cleartext) {
+            try {
+                MessageDigest alga = MessageDigest.getInstance(Mode.SHA256);
+                alga.update(cleartext.getBytes());
+                return byte2hex(alga.digest());
+            } catch (Exception e) {
+                System.err.println("SHA1加密异常: " + e.getMessage());
+                return "";
+            }
+        }
+
+        public static String encrypt384(String cleartext) {
+            try {
+                MessageDigest alga = MessageDigest.getInstance(Mode.SHA384);
+                alga.update(cleartext.getBytes());
+                return byte2hex(alga.digest());
+            } catch (Exception e) {
+                System.err.println("SHA1加密异常: " + e.getMessage());
+                return "";
+            }
+        }
+
+        public static String encrypt512(String cleartext) {
+            try {
+                MessageDigest alga = MessageDigest.getInstance(Mode.SHA512);
+                alga.update(cleartext.getBytes());
+                return byte2hex(alga.digest());
+            } catch (Exception e) {
+                System.err.println("SHA1加密异常: " + e.getMessage());
+                return "";
+            }
+        }
+
         private static String byte2hex(byte[] b) {
             StringBuilder hs = new StringBuilder();
             int i = 0, bLength = b.length;
