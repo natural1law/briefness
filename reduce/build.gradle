@@ -43,7 +43,6 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    api group: 'commons-codec', name: 'commons-codec', version: '+'
     api 'com.github.GrenderG:Toasty:1.5.0'
     //excel
     api group: 'net.sourceforge.jexcelapi', name: 'jxl', version: '2.6.12'

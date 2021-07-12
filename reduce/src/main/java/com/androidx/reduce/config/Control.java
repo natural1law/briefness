@@ -39,7 +39,7 @@ public final class Control {
 
     public static final class MD5 {
 
-        private static long timestamp = System.currentTimeMillis();
+        private static final long timestamp = System.currentTimeMillis();
 
         private MD5() {
         }
