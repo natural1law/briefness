@@ -16,8 +16,8 @@ public final class Mode {
     public static final String RSA = "RSA";//加密类型
     public static final String RSA_ECB = "RSA/ECB/PKCS1PADDING";//加密算法
     public static final String RSA_SING = "MD5withRSA";//签名算法
-    public static final int RSA_ENCRYPT = 245;//RSA最大加密明文大小
-    public static final int RSA_DECRYPT = 256;//RSA最大解密密文大小
+    public static final int RSA_ENCRYPT = 501;//RSA最大加密明文大小
+    public static final int RSA_DECRYPT = 512;//RSA最大解密密文大小
     public static final int RSA_SIZE = 4096;//密钥长度/范围：512~2048（值越大执行越慢）
 
     public static String SHA1 = "SHA1";
