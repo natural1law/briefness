@@ -11,7 +11,7 @@ android {
         applicationId "com.androidx.briefness"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 1
+        versionCode 2
         versionName "2.4.12"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
