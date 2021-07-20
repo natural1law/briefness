@@ -69,4 +69,5 @@ dependencies {
     // bindView
     implementation 'com.jakewharton:butterknife:10.2.3'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
+    implementation 'com.github.Justson.AgentWeb:agentweb-core:v4.1.9-androidx'
 }

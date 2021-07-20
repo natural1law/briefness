@@ -10,12 +10,14 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidx.view.R;
+import com.androidx.view.dialog.DialogTools;
 
 public final class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.HolderView> {
 
     private String[] data;
     private int textColor;
     private int textSize;
+    private DialogTools dt;
     private OnClickCameraAdapterListener listener;
 
     @NonNull
@@ -29,7 +31,9 @@ public final class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.Hold
         holder.textView.setText(data[position]);
         holder.textView.setTextColor(textColor);
         holder.textView.setTextSize(textSize);
-        holder.layoutView.setOnClickListener(v -> listener.onClick(position));
+        holder.layoutView.setOnClickListener(v -> listener.onClick(position, dt));
+        if (holder.getAdapterPosition() + 1 == data.length) holder.v.setVisibility(View.GONE);
+        else holder.v.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -50,6 +54,10 @@ public final class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.Hold
         this.textSize = textSize;
     }
 
+    public void setDt(DialogTools dt) {
+        this.dt = dt;
+    }
+
     public void setListener(OnClickCameraAdapterListener listener) {
         this.listener = listener;
     }
@@ -58,16 +66,22 @@ public final class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.Hold
 
         private final AppCompatTextView textView;
         private final LinearLayoutCompat layoutView;
+        private final View v;
 
         public HolderView(@NonNull View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.dialog_item);
             layoutView = itemView.findViewById(R.id.item_dialog_camera_layout);
+            v = itemView.findViewById(R.id.dialog_v1);
         }
 
     }
 
     public interface OnClickCameraAdapterListener {
-        void onClick(int position);
+        void onClick(int position, DialogTools dialog);
+
+        default void cancel(DialogTools dialog) {
+            dialog.cancel();
+        }
     }
 }

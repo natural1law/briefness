@@ -18,4 +18,12 @@
         android:textSize="16sp"
         tools:ignore="HardcodedText" />
 
+    <View
+        android:id="@+id/dialog_v1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="#E3E3E3" />
+
 </androidx.appcompat.widget.LinearLayoutCompat>

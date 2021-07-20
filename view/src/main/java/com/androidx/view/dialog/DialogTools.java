@@ -324,6 +324,7 @@ public final class DialogTools extends AppCompatDialog {
                 rv.setLayoutManager(new LinearLayoutManager(getContext()));
                 rv.setAdapter(adapter);
             }
+            adapter.setDt(this);
             adapter.setData(datas);
             adapter.setTextColor(contentColor);
             adapter.setTextSize(contentSize);
@@ -450,6 +451,7 @@ public final class DialogTools extends AppCompatDialog {
             if (qrListener != null) quitView.setOnClickListener(v -> qrListener.no(this));
             if (paramListener != null) quitView.setOnClickListener(v -> paramListener.no(this));
             if (radioListener != null) quitView.setOnClickListener(v -> radioListener.no(this));
+            if (adapterListener != null) quitView.setOnClickListener(v -> adapterListener.cancel(this));
             if (codeListener != null) {
                 quitView.setOnClickListener(v -> {
                     if (verificationView != null) {
@@ -473,7 +475,8 @@ public final class DialogTools extends AppCompatDialog {
             AppCompatTextView getCodeView = findViewById(R.id.dialog_get_code);
             assert paramView != null;
             if (qrView != null) qrView.setOnClickListener(v -> qrListener.qr(paramView));
-            if (getCodeView != null) getCodeView.setOnClickListener(v -> qrListener.code(getCodeView));
+            if (getCodeView != null)
+                getCodeView.setOnClickListener(v -> qrListener.code(getCodeView));
         }
     }
 
@@ -1045,6 +1048,17 @@ public final class DialogTools extends AppCompatDialog {
         }
 
         /**
+         * 添加底部弹窗按钮点击事件
+         *
+         * @param adapterListener 事件
+         * @statement layout等于CAMERA生效
+         */
+        public Builder setListener(CameraAdapter.OnClickCameraAdapterListener adapterListener) {
+            this.adapterListener = adapterListener;
+            return newBuilder;
+        }
+
+        /**
          * 倒计时（引入相应布局文件totalTime>0开启）
          *
          * @param totalTime 总时长
@@ -1085,17 +1099,6 @@ public final class DialogTools extends AppCompatDialog {
          */
         public Builder setDatas(String... datas) {
             this.datas = datas;
-            return newBuilder;
-        }
-
-        /**
-         * 添加底部弹窗按钮点击事件
-         *
-         * @param adapterListener 事件
-         * @statement layout等于CAMERA生效
-         */
-        public Builder setAdapterListener(CameraAdapter.OnClickCameraAdapterListener adapterListener) {
-            this.adapterListener = adapterListener;
             return newBuilder;
         }
 

@@ -19,6 +19,7 @@ import com.androidx.reduce.tools.Idle;
 import com.androidx.reduce.tools.This;
 import com.androidx.reduce.tools.Toasts;
 import com.androidx.view.dialog.DialogTools;
+import com.androidx.view.dialog.adapter.CameraAdapter;
 import com.androidx.view.scan.ScanActivity;
 
 import butterknife.BindView;
@@ -26,7 +27,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static android.view.Gravity.BOTTOM;
 import static com.androidx.briefness.base.App.toasts;
+import static com.androidx.view.dialog.DialogTools.LayoutResId.CAMERA;
 import static com.androidx.view.dialog.DialogTools.LayoutResId.RADIO;
 import static com.androidx.view.dialog.DialogTools.LayoutResId.VERIFICATION_CODE;
 import static com.androidx.view.scan.ScanActivity.REQUEST_CODE;
@@ -164,6 +167,23 @@ public final class DialogActivity extends BaseActivity {
                             toasts.setMsg("提交成功").showSuccess();
                         }
                     }
+                })
+                .build()
+                .show();
+    }
+
+    @OnClick(R.id.activity_dialog3)
+    public void dialog3() {
+        DialogTools.builder(aThis)
+                .setLayout(CAMERA)
+                .setQuitColorId(R.color.irs)
+                .setCanceled(false)
+                .setCancelable(false)
+                .setDatas("相机", "录像")
+                .setGravity(BOTTOM)
+                .setListener((CameraAdapter.OnClickCameraAdapterListener) (position, dialog) -> {
+                    toasts.setMsg(position).showSuccess();
+                    dialog.cancel();
                 })
                 .build()
                 .show();
