@@ -14,7 +14,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
-import com.androidx.http.net.listener.Enqueue;
 import com.androidx.reduce.tools.Idle;
 import com.androidx.reduce.tools.This;
 import com.androidx.reduce.tools.Toasts;
@@ -46,7 +45,6 @@ public final class DialogActivity extends BaseActivity {
 
     private Unbinder unbinder;
     private final DialogActivity aThis = this;
-    Enqueue enqueue;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,7 +68,6 @@ public final class DialogActivity extends BaseActivity {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
-        enqueue.close();
     }
 
     @OnClick(R.id.title_return_image)
@@ -111,7 +108,6 @@ public final class DialogActivity extends BaseActivity {
                 })
                 .build()
                 .show();
-        Log.i("发送状态", String.valueOf(enqueue.send(0, "你好".getBytes())));
     }
 
     @OnClick(R.id.activity_dialog1)

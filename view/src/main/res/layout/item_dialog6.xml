@@ -13,6 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:gravity="center"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
         android:text="照相"
         android:textColor="#006cff"
         android:textSize="16sp"
