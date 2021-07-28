@@ -5,7 +5,7 @@
   * android一些日常工具的封装、okhttp网络框架的二次封装、安全加密工具封装、布局控件等等. 目的是让开发者简单的快速的集成，减少不必要的工作量
 
 ### 使用依赖
-  * ![](https://jitpack.io/v/natural1law/briefness.svg "")
+  * 全部
   ```
     implementation 'com.github.natural1law.briefness:2.5.1'
   ```
@@ -30,4 +30,4 @@
   * **暂不介绍，目前由作者自己使用，待项目稳定后在做介绍**
 
 ### 更新日志
-  * ![](https://github.com/natural1law/briefness/blob/master/history "历史版本")
+  * ![](https://github.com/natural1law/briefness/blob/master/history.md "历史版本")
