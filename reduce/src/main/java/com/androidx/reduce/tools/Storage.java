@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
@@ -19,12 +18,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.RandomAccessFile;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.util.UUID;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
-import static android.util.Base64.DEFAULT;
 import static java.lang.Boolean.TRUE;
 
 /**
@@ -38,122 +34,213 @@ public final class Storage {
     }
 
     /**
-     * 生成文件保存url地址
-     */
-    public static String generatePath(String... files) {
-        try {
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + files[0] + "/";
-                File file = new File(rootDir);
-                if (!file.exists()) {
-                    if (!file.mkdirs()) {
-                        return "";
-                    }
-                }
-                switch (files.length) {
-                    case 1:
-                        return rootDir + UUID.randomUUID().toString().replace("-", "") + ".txt";
-                    case 2:
-                        return rootDir + UUID.randomUUID().toString().replace("-", "") + files[1];
-                    case 3:
-                        return rootDir + files[1] + files[2];
-                    default:
-                        return "";
-                }
-            } else {
-                return "";
-            }
-        } catch (Exception e) {
-            return String.valueOf(e.getMessage());
-        }
-    }
-
-    /**
      * 本地存储
      */
-    public static final class ThisLocality {
+    public static final class Locality {
 
-        private static final String MODE = "rw";
-        private static final int POSITION = 0;
+        private static final StringBuilder sb = new StringBuilder();
 
-        private ThisLocality() {
+        private Locality() {
+
         }
 
         /**
-         * 数据保存到本地储存地址
          *
-         * @param files [0]-文件夹名字 [1]-文件名 [2]-文件后缀
-         * @return 文件保存地址
          */
-        public static String save(String... files) {
-            if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-                String rootDir = Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + files[0] + "/";
-                File file = new File(rootDir);
-                if (!file.exists() && !file.mkdirs()) {
-                    return String.valueOf(false);
+        public static String generateVideoPath(String... files) {
+            try {
+                sb.delete(0, sb.length());
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath());
+                    for (String s : files) if (!s.contentEquals(".")) sb.append("/").append(s);
+                    Path path = Paths.get(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
+                    File file = Paths.get(path.getParent().toString()).toFile();
+                    if (!file.exists()) {
+                        if (!file.mkdirs()) System.out.println(file.setWritable(TRUE));
+                    }
                 } else {
-                    return rootDir + files[1] + files[2];
+                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath());
+                    for (String s : files) if (!s.contentEquals(".")) sb.append("/").append(s);
+                    File file = new File(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
+                    if (!file.exists()) {
+                        if (!file.mkdirs()) System.out.println(file.setWritable(TRUE));
+                    }
                 }
-            } else {
-                return String.valueOf(false);
+                return sb.toString();
+            } catch (Exception e) {
+                return Log.getStackTraceString(e);
             }
         }
-
         /**
-         * 将base64图片以文件形式保存到本地
          *
-         * @param img      base64图片
-         * @param fileName 文件夹名字
-         * @param suffix   文件后缀
          */
-        public static void savePicture(String img, String fileName, String suffix) {
+        public static String generatePicturesPath(String... files) {
             try {
-                RandomAccessFile raf = new RandomAccessFile(save(fileName, suffix), MODE);
-                FileChannel fileChannel = raf.getChannel();
-                byte[] data = Base64.decode(img, DEFAULT);
-                // 调整异常数据
-                for (int i = 0; i < data.length; ++i) if (data[i] < 0) data[i] += 256;
-                FileChannel.MapMode mode = FileChannel.MapMode.READ_WRITE;
-                int size = data.length + 1;
-                MappedByteBuffer mbb = fileChannel.map(mode, POSITION, size);
-                mbb.put(data);
-                mbb.flip();
-                mbb.clear();
-                fileChannel.close();
-                raf.close();
+                sb.delete(0, sb.length());
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
+                    for (String s : files) if (!s.contentEquals(".")) sb.append("/").append(s);
+                    Path path = Paths.get(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
+                    File file = Paths.get(path.getParent().toString()).toFile();
+                    if (!file.exists()) {
+                        if (!file.mkdirs()) System.out.println(file.setWritable(TRUE));
+                    }
+                } else {
+                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
+                    for (String s : files) if (!s.contentEquals(".")) sb.append("/").append(s);
+                    File file = new File(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
+                    if (!file.exists()) {
+                        if (!file.mkdirs()) System.out.println(file.setWritable(TRUE));
+                    }
+                }
+                return sb.toString();
             } catch (Exception e) {
-                Log.e("保存图片异常", String.valueOf(e.getMessage()));
+                return Log.getStackTraceString(e);
             }
         }
-
-        @SuppressWarnings("ResultOfMethodCallIgnored")
-        public static File generatePath(String... files) {
+        /**
+         *
+         */
+        public static String generateDownloadPath(String... files) {
             try {
-                String rootDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
-                File file = new File(rootDir, files[0]);
-                if (!file.exists()) if (!file.mkdirs()) file.setWritable(TRUE);
-                return new File(file.getAbsoluteFile() + "/" + files[1] + files[2]);
+                sb.delete(0, sb.length());
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
+                    for (String s : files) if (!s.contentEquals(".")) sb.append("/").append(s);
+                    Path path = Paths.get(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
+                    File file = Paths.get(path.getParent().toString()).toFile();
+                    if (!file.exists()) {
+                        if (!file.mkdirs()) System.out.println(file.setWritable(TRUE));
+                    }
+                } else {
+                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
+                    for (String s : files) if (!s.contentEquals(".")) sb.append("/").append(s);
+                    File file = new File(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
+                    if (!file.exists()) {
+                        if (!file.mkdirs()) System.out.println(file.setWritable(TRUE));
+                    }
+                }
+                return sb.toString();
             } catch (Exception e) {
-                return new File(String.valueOf(e.getMessage()));
+                return Log.getStackTraceString(e);
+            }
+        }
+        /**
+         *
+         */
+        public static String generateMusicPath(String... files) {
+            try {
+                sb.delete(0, sb.length());
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath());
+                    for (String s : files) if (!s.contentEquals(".")) sb.append("/").append(s);
+                    Path path = Paths.get(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
+                    File file = Paths.get(path.getParent().toString()).toFile();
+                    if (!file.exists()) {
+                        if (!file.mkdirs()) System.out.println(file.setWritable(TRUE));
+                    }
+                } else {
+                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath());
+                    for (String s : files) if (!s.contentEquals(".")) sb.append("/").append(s);
+                    File file = new File(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
+                    if (!file.exists()) {
+                        if (!file.mkdirs()) System.out.println(file.setWritable(TRUE));
+                    }
+                }
+                return sb.toString();
+            } catch (Exception e) {
+                return Log.getStackTraceString(e);
             }
         }
 
         /**
-         * 生成存储地址
+         * 生成存储地址(下载空间)
          *
          * @param param param[0]文件目录 param[1] 文件名 param[2] 后缀
          * @return uri
          */
         @RequiresApi(api = Build.VERSION_CODES.Q)
-        public static Uri generatePath(Context c, String... param) {
-            ContentResolver contentResolver = c.getContentResolver();
+        public static Uri generateDownLoadPath(Context c, String... param) {
+            ContentResolver cr = c.getContentResolver();
             Uri uri = MediaStore.Downloads.EXTERNAL_CONTENT_URI;
             ContentValues values = new ContentValues();
             String path = Environment.DIRECTORY_DOWNLOADS + "/" + param[0];
             values.put(MediaStore.Downloads.RELATIVE_PATH, path);
             values.put(MediaStore.Downloads.DISPLAY_NAME, param[1] + "." + param[2]);
             values.put(MediaStore.Downloads.TITLE, path);
-            return contentResolver.insert(uri, values);
+            return cr.insert(uri, values);
+        }
+
+        /**
+         * 生成存储地址(图片空间)
+         *
+         * @param param param[0]文件目录 param[1] 文件名 param[2] 后缀
+         * @return uri
+         */
+        @RequiresApi(api = Build.VERSION_CODES.Q)
+        public static Uri generatePicturesPath(Context c, String... param) {
+            ContentResolver cr = c.getContentResolver();
+            Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            ContentValues values = new ContentValues();
+            String path = Environment.DIRECTORY_PICTURES + "/" + param[0];
+            values.put(MediaStore.Images.Media.RELATIVE_PATH, path);
+            values.put(MediaStore.Images.Media.DISPLAY_NAME, param[1] + "." + param[2]);
+            values.put(MediaStore.Images.Media.TITLE, path);
+            return cr.insert(uri, values);
+        }
+
+        /**
+         * 生成存储地址(截屏空间)
+         *
+         * @param param param[0]文件目录 param[1] 文件名 param[2] 后缀
+         * @return uri
+         */
+        @RequiresApi(api = Build.VERSION_CODES.Q)
+        public static Uri generateScreenshotsPath(Context c, String... param) {
+            ContentResolver cr = c.getContentResolver();
+            Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            ContentValues values = new ContentValues();
+            String path = Environment.DIRECTORY_SCREENSHOTS + "/" + param[0];
+            values.put(MediaStore.Images.Media.RELATIVE_PATH, path);
+            values.put(MediaStore.Images.Media.DISPLAY_NAME, param[1] + "." + param[2]);
+            values.put(MediaStore.Images.Media.TITLE, path);
+            return cr.insert(uri, values);
+        }
+
+        /**
+         * 生成存储地址(视频空间)
+         *
+         * @param param param[0]文件目录 param[1] 文件名 param[2] 后缀
+         * @return uri
+         */
+        @RequiresApi(api = Build.VERSION_CODES.Q)
+        public static Uri generateVideoPath(Context c, String... param) {
+            ContentResolver cr = c.getContentResolver();
+            Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            ContentValues values = new ContentValues();
+            String path = Environment.DIRECTORY_MOVIES + "/" + param[0];
+            values.put(MediaStore.Video.Media.RELATIVE_PATH, path);
+            values.put(MediaStore.Video.Media.DISPLAY_NAME, param[1] + "." + param[2]);
+            values.put(MediaStore.Video.Media.TITLE, path);
+            return cr.insert(uri, values);
+        }
+
+        /**
+         * 生成存储地址(音频空间)
+         *
+         * @param param param[0]文件目录 param[1] 文件名 param[2] 后缀
+         * @return uri
+         */
+        @RequiresApi(api = Build.VERSION_CODES.Q)
+        public static Uri generateAudioPath(Context c, String... param) {
+            ContentResolver cr = c.getContentResolver();
+            Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            ContentValues values = new ContentValues();
+            String path = Environment.DIRECTORY_MUSIC + "/" + param[0];
+            values.put(MediaStore.Audio.Media.RELATIVE_PATH, path);
+            values.put(MediaStore.Audio.Media.DISPLAY_NAME, param[1] + "." + param[2]);
+            values.put(MediaStore.Audio.Media.TITLE, path);
+            return cr.insert(uri, values);
         }
 
     }
@@ -167,7 +254,7 @@ public final class Storage {
             try {
                 write(c, fileName, data);
             } catch (Exception e) {
-                Log.e("本地缓存写入异常", e.getMessage(), e);
+                Log.e("本地缓存写入异常", Log.getStackTraceString(e));
             }
         }
 
@@ -176,7 +263,7 @@ public final class Storage {
                 try {
                     return read(context, fileName);
                 } catch (Exception e) {
-                    Log.e("本地缓存读取异常", e.getMessage(), e);
+                    Log.e("本地缓存读取异常", Log.getStackTraceString(e));
                     return null;
                 }
             } else {

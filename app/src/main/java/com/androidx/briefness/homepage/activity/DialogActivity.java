@@ -185,4 +185,25 @@ public final class DialogActivity extends BaseActivity {
                 .show();
     }
 
+    @OnClick(R.id.activity_dialog4)
+    public void dialog4() {
+        DialogTools.builder(aThis)
+                .setLayout(DialogTools.LayoutResId.RELAX)
+                .setContentText("您要退出登录吗？")
+                .setAffirmText("确认")
+                .setAffirmColorId(R.color.white)
+                .setContentSize(20)
+                .setQuitText("取消")
+                .setQuitColorId(R.color.hint)
+                .setDimension(-1, 600)
+                .setCanceled(false)
+                .setCancelable(false)
+                .setListener(dialog -> {
+
+                    dialog.cancel();
+                })
+                .build()
+                .show();
+    }
+
 }

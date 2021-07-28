@@ -35,7 +35,7 @@ public class MainActivity extends FragmentActivity {
                     .setBackgroundColor(R.color.gray)
                     .build();
         } catch (Exception e) {
-            Log.e("MainActivity异常", e.getMessage(), e);
+            Log.e("MainActivity异常", Log.getStackTraceString(e));
         }
     }
 

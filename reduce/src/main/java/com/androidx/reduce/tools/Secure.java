@@ -153,21 +153,21 @@ public final class Secure {
         /**
          * Base64加密
          *
-         * @param cleartext 明文
+         * @param data 数据
          * @return 加密后的字符串
          */
-        public static String encode(String cleartext) {
-            return Control.Base_64.encode(cleartext);
+        public static String encode(byte[] data) {
+            return Control.Base_64.encode(data);
         }
 
         /**
          * Base64解密
          *
-         * @param cleartext 密文
+         * @param data 保存的数据
          * @return 解密后的字符串
          */
-        public static byte[] decode(String cleartext) {
-            return Control.Base_64.decode(cleartext);
+        public static byte[] decode(String data) {
+            return Control.Base_64.decode(data);
         }
     }
 

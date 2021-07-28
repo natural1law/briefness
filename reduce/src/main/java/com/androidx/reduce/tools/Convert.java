@@ -105,7 +105,7 @@ public final class Convert {
             try {
                 return new SimpleDateFormat(format).format(Long.parseLong(datetime.toString()));
             } catch (Exception e) {
-                Log.e("日期转换异常", e.getMessage(), e);
+                Log.e("日期转换异常", Log.getStackTraceString(e));
                 return new SimpleDateFormat(format).format(datetime);
             }
         }
@@ -174,7 +174,7 @@ public final class Convert {
                         ((b & 2) == 0 ? 0 : (b & 2) >> 1) +
                         (b & 1);
             } catch (Exception e) {
-                Log.e("转二进制异常", e.getMessage(), e);
+                Log.e("转二进制异常", Log.getStackTraceString(e));
                 return "";
             }
         }

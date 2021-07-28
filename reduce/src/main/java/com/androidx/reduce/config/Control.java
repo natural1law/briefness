@@ -10,8 +10,6 @@ import android.util.Base64;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -86,7 +84,7 @@ public final class Control {
                 }
                 return new String(str);
             } catch (Exception e) {
-                Log.e("MD5加密异常", e.getMessage(), e);
+                Log.e("MD5加密异常", Log.getStackTraceString(e));
                 return null;
             }
 
@@ -129,7 +127,7 @@ public final class Control {
                 localSecureRandom.nextBytes(bytes_key);
                 return toHex(bytes_key);
             } catch (Exception e) {
-                Log.e("AES生成key异常", e.getMessage(), e);
+                Log.e("AES生成key异常", Log.getStackTraceString(e));
                 return "";
             }
         }
@@ -145,7 +143,7 @@ public final class Control {
                 byte[] result = encrypt(key, cleartext.getBytes());
                 return parseBytes2Hex(result);
             } catch (Exception e) {
-                Log.e("AES加密异常", e.getMessage(), e);
+                Log.e("AES加密异常", Log.getStackTraceString(e));
                 return "";
             }
         }
@@ -160,7 +158,7 @@ public final class Control {
                 byte[] result = decrypt(key, enc);
                 return new String(result);
             } catch (Exception e) {
-                Log.e("AES解密异常", e.getMessage(), e);
+                Log.e("AES解密异常", Log.getStackTraceString(e));
                 return "";
             }
         }
@@ -286,7 +284,7 @@ public final class Control {
                 final PublicKey key = getPublicKey(decode(publicKey));
                 return verify(dataBytes, key, decode(sign));
             } catch (Exception e) {
-                Log.e("RSA签名异常", e.getMessage(), e);
+                Log.e("RSA签名异常", Log.getStackTraceString(e));
                 return false;
             }
         }
@@ -401,7 +399,7 @@ public final class Control {
                 keyFactory = KeyFactory.getInstance(Mode.RSA);
                 return keyFactory.generatePrivate(pkcs8EncodedKeySpec);
             } catch (Exception e) {
-                Log.e("RSA获取私钥异常", e.getMessage(), e);
+                Log.e("RSA获取私钥异常", Log.getStackTraceString(e));
                 return null;
             }
         }
@@ -420,7 +418,7 @@ public final class Control {
                 signature.update(data);
                 return signature.sign();
             } catch (Exception e) {
-                Log.e("RSA私钥签名异常", e.getMessage(), e);
+                Log.e("RSA私钥签名异常", Log.getStackTraceString(e));
                 return null;
             }
         }
@@ -553,7 +551,7 @@ public final class Control {
          * Base64编码数据
          */
         private static String encode(byte[] binaryData) {
-            return Base64.encodeToString(binaryData, DEFAULT);
+            return Base_64.encode(binaryData);
         }
 
         /**
@@ -562,7 +560,7 @@ public final class Control {
          * @param encoded (BASE64编码)
          */
         private static byte[] decode(String encoded) {
-            return Base64.decode(encoded, DEFAULT);
+            return Base_64.decode(encoded);
         }
 
         /**
@@ -571,7 +569,7 @@ public final class Control {
          * @return 公钥
          */
         public static String publicKey(KeyPair keyPair) {
-            return Base64.encodeToString(keyPair.getPublic().getEncoded(), DEFAULT);
+            return encode(keyPair.getPublic().getEncoded());
         }
 
         /**
@@ -580,42 +578,37 @@ public final class Control {
          * @return 私钥
          */
         public static String privateKey(KeyPair keyPair) {
-            return Base64.encodeToString(keyPair.getPrivate().getEncoded(), DEFAULT);
+            return encode(keyPair.getPrivate().getEncoded());
         }
 
     }
 
     public static final class Base_64 {
+
         /**
          * Base64编码
          *
-         * @param cleartext 明文
+         * @param data 保存地址
          */
-        @SuppressWarnings("ResultOfMethodCallIgnored")
-        public static String encode(String cleartext) {
-            try {
-                FileInputStream in = new FileInputStream(cleartext);
-                byte[] data = new byte[in.available()];
-                in.read(data);
-                in.close();
+        public static String encode(byte[] data) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                return java.util.Base64.getMimeEncoder().encodeToString(data);
+            } else {
                 return Base64.encodeToString(data, DEFAULT);
-            } catch (IOException e) {
-                Log.e("Base64编码异常", e.getMessage(), e);
-                return "";
             }
         }
 
         /**
          * base64解码
          *
-         * @param ciphertext 密文
+         * @param data 密文
          */
-        public static byte[] decode(String ciphertext) {
-            // Base64解码
-            byte[] b = Base64.decode(ciphertext, DEFAULT);
-            // 调整异常数据
-            for (int i = 0; i < b.length; ++i) if (b[i] < 0) b[i] += 256;
-            return b;
+        public static byte[] decode(String data) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                return java.util.Base64.getMimeDecoder().decode(data);
+            } else {
+                return Base64.decode(data, DEFAULT);
+            }
         }
     }
 
@@ -639,7 +632,7 @@ public final class Control {
                 String result = hexString.toString();
                 return result.substring(0, result.length() - 1);
             } catch (Exception e) {
-                Log.e("SHA1编码异常", e.getMessage(), e);
+                Log.e("SHA1编码异常", Log.getStackTraceString(e));
                 return "";
             }
         }
@@ -650,7 +643,7 @@ public final class Control {
                 alga.update(cleartext.getBytes());
                 return byte2hex(alga.digest());
             } catch (Exception e) {
-                Log.e("SHA1加密异常", e.getMessage(), e);
+                Log.e("SHA1加密异常", Log.getStackTraceString(e));
                 return "";
             }
         }

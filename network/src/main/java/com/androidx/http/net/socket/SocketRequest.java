@@ -16,7 +16,6 @@ import com.androidx.http.net.listener.MsgCallback;
 import com.androidx.http.net.module.DataModule;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.google.protobuf.InvalidProtocolBufferException;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -70,7 +69,7 @@ public final class SocketRequest implements Enqueue {
         public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
             reconnect();
             handler.sendMessage(handler.obtainMessage(-2, new DataModule(FAIL_MSG, loginCallback)));
-            Log.e("socket连接异常", t.getMessage(), t);
+            Log.e("socket连接异常", Log.getStackTraceString(t));
         }
 
         @Override
@@ -171,7 +170,7 @@ public final class SocketRequest implements Enqueue {
             lock.lockInterruptibly();
             okWebSocket = client.newWebSocket(WebConfiguration.getRequest(), webSocketListener);
         } catch (Exception e) {
-            Log.e("SocketRequest异常", e.getMessage(), e);
+            Log.e("SocketRequest异常", Log.getStackTraceString(e));
         } finally {
             lock.unlock();
         }
@@ -229,8 +228,8 @@ public final class SocketRequest implements Enqueue {
                 try {
                     MessageModule.MsgResponse response = MessageModule.MsgResponse.parseFrom(data.getBytes().toByteArray());
                     data.getMsgCallback().message(response.getCode(), response.getMsg(), response.getData());
-                } catch (InvalidProtocolBufferException e) {
-                    Log.e("callbackException", String.valueOf(e.getMessage()));
+                } catch (Exception e) {
+                    Log.e("callbackException", Log.getStackTraceString(e));
                 }
                 return false;
             } else if (message.what == 2) {

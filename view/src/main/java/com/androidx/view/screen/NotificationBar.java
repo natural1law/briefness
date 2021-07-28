@@ -1,6 +1,7 @@
 package com.androidx.view.screen;
 
 import android.annotation.TargetApi;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -119,7 +120,7 @@ public final class NotificationBar {
      * @return NotificationCompat.Builder
      */
     public NotificationCompat.Builder createSystem(String title, int smallIcon) {
-        return create(CHANNEL_ID_SYSTEM, title, smallIcon, 0);
+        return createSystem(title, smallIcon, -1);
     }
 
     /**
@@ -128,6 +129,20 @@ public final class NotificationBar {
      * @return NotificationCompat.Builder
      */
     public NotificationCompat.Builder createSystem(String title) {
-        return create(CHANNEL_ID_SYSTEM, title, 0, 0);
+        return createSystem(title, -1);
     }
+
+    /**
+     * 显示系统通知(默认)
+     */
+    public static Notification notification(Context context, String title, boolean ongoing) {
+        return NotificationBar.getInstance(context).createSystem(title)
+                .setAutoCancel(true)
+                .setOngoing(ongoing)// 常驻通知栏
+                .setTicker(title)
+                .setContentText(title)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .build();
+    }
+
 }

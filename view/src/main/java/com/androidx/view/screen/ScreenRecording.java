@@ -1,8 +1,8 @@
 package com.androidx.view.screen;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Notification;
+import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -10,18 +10,23 @@ import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.media.projection.MediaProjectionManager;
 import android.os.IBinder;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.androidx.view.screen.intertaces.NotificationListener;
+import com.androidx.view.screen.config.ScreenConfig;
 import com.androidx.view.screen.intertaces.ScreenCallbackListener;
-import com.androidx.view.screen.intertaces.ScreenListener;
-import com.androidx.view.screen.intertaces.ScreenService;
+import com.androidx.view.screen.intertaces.ScreenServiceListener;
+import com.androidx.view.screen.service.ScreenService;
+
+import java.lang.ref.WeakReference;
+
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 /**
  * 屏幕录制
@@ -30,63 +35,64 @@ import com.androidx.view.screen.intertaces.ScreenService;
  */
 public final class ScreenRecording {
 
-    private static volatile ScreenRecording instance = Singleton.INSTANCE;
-    public static final int REQUEST_CODE = 57;
+    private final WeakReference<AppCompatActivity> wrThis;
 
-    private NotificationListener notification;
-    private ScreenListener screenService;
-    private DisplayMetrics displayMetrics;
-    private ServiceConnection serviceConnection;
-    private MediaProjectionManager mediaProjectionManager;
+    private Notification notification;
+    private ScreenServiceListener serviceListener;
 
-    public static ScreenRecording build() {
-        try {
-            synchronized (ScreenRecording.class) {
-                return instance;
+    public static ScreenRecording build(AppCompatActivity activity) {
+        return new ScreenRecording(activity);
+    }
+
+    private final ServiceConnection serviceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            if (service instanceof ScreenService.ScreenBinder) {
+                serviceListener = ((ScreenService.ScreenBinder) service).builder();
             }
-        } catch (Exception e) {
-            return new ScreenRecording();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            serviceListener = null;
+        }
+    };
+
+    /**
+     * 启用屏幕截图
+     */
+    public void onStartCapture(ScreenCallbackListener callback) {
+        onStartCapture(ScreenConfig.builder().setActivity(wrThis.get()).build(), callback);
+    }
+
+    /**
+     * 启用屏幕截图
+     */
+    public void onStartCapture(ScreenConfig config, ScreenCallbackListener callback) {
+        if (serviceListener != null) {
+            serviceListener.startCapture(callback, config);
+        } else {
+            Log.e("开始屏幕录制", "服务已关闭");
         }
     }
 
     /**
-     * 启动媒体录屏服务
+     * 启用媒体录屏服务
+     * 开始屏幕录制
      */
-    public void startService(AppCompatActivity aThis) {
-        try {
-            if (mediaProjectionManager != null) {
-                return;
-            }
-            if (isPermission(aThis)) {
-                screenService = new ScreenService();
-                // 此处宽高需要获取屏幕完整宽高，否则截屏图片会有白/黑边
-                displayMetrics = aThis.getResources().getDisplayMetrics();
-                // 启动媒体投影服务
-                mediaProjectionManager = (MediaProjectionManager) aThis.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
-                if (mediaProjectionManager != null) {
-                    aThis.startActivityForResult(mediaProjectionManager.createScreenCaptureIntent(), REQUEST_CODE);
-                }
-                // 绑定服务
-                serviceConnection = new ServiceConnection() {
-                    @Override
-                    public void onServiceConnected(ComponentName name, IBinder service) {
-                        if (service instanceof ScreenService.ScreenBinder) {
-                            screenService = ((ScreenService.ScreenBinder) service).builder();
-                            screenService.setNotification(notification);
-                        }
-                    }
+    public void onStartRecording(ScreenCallbackListener callback) {
+        onStartRecording(ScreenConfig.builder().setActivity(wrThis.get()).build(), callback);
+    }
 
-                    @Override
-                    public void onServiceDisconnected(ComponentName name) {
-                        screenService = null;
-                    }
-                };
-                screenService.bindService(aThis, serviceConnection);
-            } else {
-                Toast.makeText(aThis, "请赋予权限，避免程序异常", Toast.LENGTH_SHORT).show();
-            }
-        } catch (Exception e) {
-            Log.e("绑定服务异常", String.valueOf(e.getMessage()));
+    /**
+     * 启用媒体录屏服务
+     * 开始屏幕录制
+     */
+    public void onStartRecording(ScreenConfig config, ScreenCallbackListener callback) {
+        if (serviceListener != null) {
+            serviceListener.startRecording(callback, config);
+        } else {
+            Log.e("开始屏幕录制", "服务已关闭");
         }
     }
 
@@ -95,99 +101,50 @@ public final class ScreenRecording {
      *
      * @param notification 通知
      */
-    public void setNotification(NotificationListener notification) {
+    public ScreenRecording setNotification(Notification notification) {
         this.notification = notification;
+        return this;
     }
 
     /**
-     * 停止媒体投影服务
-     *
-     * @param context context
+     * 停止录制
      */
-    public void stopService(Context context) {
+    public void onStopRecording() {
         try {
-            if (serviceConnection != null) {
-                screenService.unbindService(context, serviceConnection);
-                serviceConnection = null;
-                screenService = null;
-            }
-            if (displayMetrics != null) {
-                displayMetrics = null;
-            }
-            if (mediaProjectionManager != null) {
-                mediaProjectionManager = null;
-            }
+            if (serviceListener != null) serviceListener.stopRecording();
         } catch (Exception e) {
-            Log.e("停止媒体服务异常", String.valueOf(e.getMessage()));
+            Log.e("停止媒体服务异常", Log.getStackTraceString(e));
         }
     }
 
     /**
-     * 创建VirtualDisplay(onActivityResult中调用)
-     *
-     * @param requestCode requestCode
-     * @param resultCode  resultCode
-     * @param data        data
+     * 销毁服务
      */
-    public void createVirtualDisplay(int requestCode, int resultCode, Intent data) {
+    public void onDestroy() {
         try {
-            if (screenService == null || requestCode != REQUEST_CODE || resultCode != Activity.RESULT_OK) {
-                return;
-            }
-            screenService.createVirtualDisplay(resultCode, data, displayMetrics);
+            if (serviceListener != null) serviceListener.destroy();
+            if (serviceListener != null) wrThis.get().unbindService(serviceConnection);
+            if (serviceListener != null) serviceListener = null;
         } catch (Exception e) {
-            Log.e("创建视图异常", String.valueOf(e.getMessage()));
+            Log.e("销毁媒体服务异常", Log.getStackTraceString(e));
         }
     }
 
     /**
-     * 开始 屏幕录制
-     *
-     * @param callback callback
+     * 设置虚拟图像
      */
-    public void startMediaRecorder(ScreenCallbackListener callback) {
+    private void setVirtualDisplay(int resCode, @NonNull Intent intent) {
         try {
-            if (screenService == null) {
-                callback.onFailing("服务未初始化录制失败");
-                return;
-            }
-            screenService.startRecording(callback);
+            serviceListener.createVirtualDisplay(resCode, intent, notification);
         } catch (Exception e) {
-            Log.e("开始屏幕录制异常", String.valueOf(e.getMessage()));
+            Log.e("设置虚拟图像异常", Log.getStackTraceString(e));
         }
-    }
-
-    /**
-     * 停止 屏幕录制
-     */
-    public void stopMediaRecorder() {
-        try {
-            if (screenService == null) {
-                return;
-            }
-            screenService.stopRecording();
-        } catch (Exception e) {
-            Log.e("停止屏幕录制异常", String.valueOf(e.getMessage()));
-        }
-    }
-
-    /**
-     * 显示系统通知）
-     */
-    public Notification notification(Context context, String title, boolean ongoing, int smallIcon, int largeIcon) {
-        return NotificationBar.getInstance(context).createSystem(title, smallIcon, largeIcon)
-                .setAutoCancel(true)
-                .setOngoing(ongoing)// 常驻通知栏
-                .setTicker(title)
-                .setContentText(title)
-                .setDefaults(Notification.DEFAULT_ALL)
-                .build();
     }
 
     /**
      * 权限判断
      */
-    public boolean isPermission(AppCompatActivity aThis) {
+    private boolean isPermission(AppCompatActivity aThis) {
         try {
             if ((ContextCompat.checkSelfPermission(aThis, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED)
                     && (ContextCompat.checkSelfPermission(aThis, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED)
@@ -208,12 +165,24 @@ public final class ScreenRecording {
         }
     }
 
-    private ScreenRecording() {
+    private ScreenRecording(AppCompatActivity aThis) {
+        wrThis = new WeakReference<>(aThis);
+        try {
+            if (isPermission(aThis)) {
+                serviceListener = new ScreenService();
+                Intent intent = new Intent(wrThis.get(), ScreenService.class);
+                intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
+                wrThis.get().bindService(intent, serviceConnection, Service.BIND_AUTO_CREATE);
+                // 启动媒体投影服务
+                MediaProjectionManager mpm = (MediaProjectionManager) aThis.getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+                aThis.registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                    if (result == null || result.getData() == null) return;
+                    setVirtualDisplay(result.getResultCode(), result.getData());
+                }).launch(mpm.createScreenCaptureIntent());
+            } else Toast.makeText(aThis, "请赋予权限，避免程序异常", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Log.e("初始化服务异常", Log.getStackTraceString(e));
+        }
     }
-
-    private static final class Singleton {
-        private static final ScreenRecording INSTANCE = new ScreenRecording();
-    }
-
 
 }

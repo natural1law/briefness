@@ -11,29 +11,25 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.androidx.briefness.R;
-import com.androidx.briefness.homepage.fragment.tab.CommonFragment;
-import com.androidx.briefness.homepage.fragment.tab.SegmentFragment;
-import com.androidx.briefness.homepage.fragment.tab.SlidingFragment;
+import com.androidx.briefness.base.BaseActivity;
 import com.androidx.reduce.tools.Idle;
-import com.androidx.view.tab.layout.SegmentTabLayout;
-import com.androidx.view.tab.use.TabLayoutBar;
+import com.androidx.view.screen.NotificationBar;
+import com.androidx.view.screen.ScreenRecording;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static com.androidx.briefness.base.App.toasts;
+
 /**
- * Tab导航栏功能展示
- *
- * @date 2021/07/02
+ * @date 2021/07/22
  */
 @SuppressLint("NonConstantResourceId")
-public class TabActivity extends AppCompatActivity {
+public final class ScreenCaptureActivity extends BaseActivity {
 
     @BindView(R.id.title_layout)
     public FrameLayout titleLayout;
@@ -42,79 +38,70 @@ public class TabActivity extends AppCompatActivity {
     @BindView(R.id.title_text)
     public AppCompatTextView titleView;
 
-    @BindView(R.id.sliding)
-    public SegmentTabLayout segmentTabLayout;
-    @BindView(R.id.vp2)
-    public ViewPager2 viewPager2;
-
     private Unbinder unbinder;
-    private TabLayoutBar tabView;
-    private final TabActivity aThis = this;
+    private ScreenRecording sr;
+    private final AppCompatActivity aThis = this;
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         try {
             super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_tab);
-            unbinder = ButterKnife.bind(aThis);
             initView();
         } catch (Exception e) {
-            Log.e("Tab导航异常", Log.getStackTraceString(e));
+            Log.e("截屏异常", Log.getStackTraceString(e));
         }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0) {
-            imageView.performClick();
-            return true;
-        } else {
-            return super.onKeyDown(keyCode, event);
-        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
-        tabView.destroy();
+        sr.onDestroy();
     }
 
     @OnClick(R.id.title_return_image)
     public void imageReturn() {
-        if (Idle.isClick()) finishAfterTransition();
+        if (Idle.isClick()) finish();
     }
 
-    @SuppressLint("SetTextI18n")
     private void initView() {
+        setContentView(R.layout.activity_screen_capture);
+        unbinder = ButterKnife.bind(aThis);
         titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
         titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));
         imageView.setVisibility(View.VISIBLE);
         imageView.setColorFilter(R.color.black);
         titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
-
-        tabView = TabLayoutBar.builder()
-                .setActivity(aThis)
-                .setViewPager2(viewPager2)
-                .setTabLayout(segmentTabLayout)
-                .setTitles("Common", "Sliding", "Segment")
-                .setFragments(new CommonFragment(), new SlidingFragment(), new SegmentFragment())
-                .initBuild();
-
-        tabView.execute();
-
+        sr = ScreenRecording.build(aThis).setNotification(NotificationBar.notification(aThis, "正在使用录屏丨截屏功能", false));
     }
 
-    public static class OneFragment extends Fragment {
-
+    @OnClick(R.id.activity_dialog)
+    public void dialog() {
+        sr.onStartCapture((fileUrl, exists) -> {
+            Log.i("截图地址", fileUrl);
+            if (exists) toasts.setMsg("已将图片保存至文件管理中").showSuccess();
+            else toasts.setMsg("图片保存失败").showError();
+        });
     }
 
-    public static class TowFragment extends Fragment {
-
+    @OnClick(R.id.activity_dialog1)
+    public void dialog1() {
+        sr.onStartRecording((fileUrl, exists) -> {
+            if (exists) toasts.setMsg("已将视频保存至文件管理中").showSuccess();
+            else toasts.setMsg("图片保存失败").showError();
+            Log.i("视频地址", fileUrl);
+        });
     }
 
-    public static class ThreeFragment extends Fragment {
-
+    @OnClick(R.id.activity_dialog2)
+    public void dialog2() {
+        sr.onStopRecording();
     }
 
 }

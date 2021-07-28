@@ -49,7 +49,7 @@ public final class Excel {
             arial12format = new WritableCellFormat(arial12font);
             arial12format.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN);
         } catch (WriteException e) {
-            Log.e("excel格式异常", e.getMessage(), e);
+            Log.e("excel格式异常", Log.getStackTraceString(e));
         }
     }
 
@@ -68,7 +68,7 @@ public final class Excel {
                 sheet.addCell(new Label(i2.get(), 0, s, arial10format));
                 i2.getAndIncrement();
             } catch (WriteException e) {
-                Log.e("excel写入异常", e.getMessage(), e);
+                Log.e("excel写入异常", Log.getStackTraceString(e));
             }
         });
         for (int i = 0; i < objList.size(); i++) {
@@ -98,7 +98,7 @@ public final class Excel {
                 sheet.addCell(new Label(i.get(), 0, s, arial10format));
                 i.getAndIncrement();
             } catch (WriteException e) {
-                Log.e("excel写入异常", e.getMessage(), e);
+                Log.e("excel写入异常", Log.getStackTraceString(e));
             }
         });
         for (int i1 = 0; i1 < objList.size(); i1++) {

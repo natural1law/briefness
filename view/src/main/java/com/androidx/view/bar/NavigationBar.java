@@ -188,7 +188,7 @@ public final class NavigationBar {
                 return null;
             }
         } catch (Exception e) {
-            Log.e("switchFragment异常", e.getMessage(), e);
+            Log.e("switchFragment异常", Log.getStackTraceString(e));
             return null;
         }
     }
