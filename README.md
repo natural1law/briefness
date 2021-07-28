@@ -30,4 +30,4 @@
   * **暂不介绍，目前由作者自己使用，待项目稳定后在做介绍**
 
 ### 更新日志
-  * `[历史版本](https://github.com/natural1law/briefness/blob/master/history.md "点击查看历史版本")`
+  * [历史版本](https://github.com/natural1law/briefness/blob/master/history.md "点击查看历史版本")
