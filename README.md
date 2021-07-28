@@ -7,23 +7,23 @@
 ### 使用依赖
   * ![](https://jitpack.io/v/natural1law/briefness.svg "")
   ```
-    implementation 'com.github.natural1law.briefness:2.5.0'
+    implementation 'com.github.natural1law.briefness:2.5.1'
   ```
   * 分支-网络请求
   ```
-  implementation 'com.github.natural1law.briefness:network:2.5.0'
+  implementation 'com.github.natural1law.briefness:network:2.5.1'
   ```
   * 分支-常用工具
   ```
-  implementation 'com.github.natural1law.briefness:reduce:2.5.0'
+  implementation 'com.github.natural1law.briefness:reduce:2.5.1'
   ```
   * 分支-图表统计
   ```
-  implementation 'com.github.natural1law.briefness:echarts:2.5.0'
+  implementation 'com.github.natural1law.briefness:echarts:2.5.1'
   ```
   * 分支-视图布局
   ```
-  implementation 'com.github.natural1law.briefness:view:2.5.0'
+  implementation 'com.github.natural1law.briefness:view:2.5.1'
   ```
 
 ### 工具使用
@@ -31,7 +31,7 @@
 
 ### 更新日志
   
-  > 修订版本 2.5.0
+  > 修订版本 2.5.1
   * @日期: 2021/07/28
   * @声明: 1.优化视频录制功能、添加截图功能。2.优化代码。3.修复若干已知bug
   
