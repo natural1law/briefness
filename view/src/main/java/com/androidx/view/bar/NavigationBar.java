@@ -24,7 +24,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.androidx.view.R;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -64,7 +63,7 @@ public final class NavigationBar {
     private FragmentContainerView fragmentLayout;
 
     @SuppressLint("NonConstantResourceId")
-    private final NavigationBarView.OnItemSelectedListener selectedListener = item -> {
+    private final BottomNavigationView.OnNavigationItemSelectedListener selectedListener = item -> {
         switch (fragments.size()) {
             case 2:
                 if (items[0] == item.getItemId()) {
@@ -141,7 +140,7 @@ public final class NavigationBar {
         }
         adjustNavigationIcoSize(navigationView);
         navigationView.setItemHorizontalTranslationEnabled(true);
-        navigationView.setOnItemSelectedListener(selectedListener);
+        navigationView.setOnNavigationItemSelectedListener(selectedListener);
     }
 
     /**
