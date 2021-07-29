@@ -35,7 +35,6 @@ import static android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN;
 @SuppressWarnings({"unused", "RedundantSuppression"})
 public final class ScanActivity extends AppCompatActivity implements QRCodeView.Delegate {
 
-    public static final int REQUEST_CODE = 88;//请求码
     public static final int RESULT_CODE = 99;//返回码
     public static final String RESULT_KEY = "QR";//返回值
     public static final String LAYOUT_UI = "ui";//加载布局

@@ -22,7 +22,6 @@ import com.androidx.briefness.homepage.activity.NetworkRequestActivity;
 import com.androidx.briefness.homepage.activity.ScreenCaptureActivity;
 import com.androidx.briefness.homepage.activity.TabActivity;
 import com.androidx.briefness.homepage.adapter.HomepageAdapter;
-import com.androidx.reduce.tools.This;
 import com.androidx.view.bar.BaseFragment;
 
 import java.util.ArrayList;
@@ -32,6 +31,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
+import static com.androidx.briefness.base.App.appThis;
 
 /**
  * @date 2021/04/30
@@ -52,7 +53,6 @@ public final class HomePageFrag extends BaseFragment {
     private final List<String> list = new ArrayList<>();
     private final Bundle bundle = new Bundle();
     private final String[] arr = {"Toast功能演示", "dialog功能演示", "图表功能演示", "Tab导航栏功能演示", "网络请求接口演示", "截屏录屏功能演示"};
-    private Runnable run;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -84,7 +84,6 @@ public final class HomePageFrag extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        if (run != null) This.destroy(run);
     }
 
     private void initView() {
@@ -107,22 +106,22 @@ public final class HomePageFrag extends BaseFragment {
             if (list.isEmpty()) return;
             if (list.get(position).equals(list.get(0))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
-                This.start(run = This.activity(c, MsgShowActivity.class, bundle));
+                appThis.activity(c, MsgShowActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(1))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
-                This.start(run = This.activity(c, DialogActivity.class, bundle));
+                appThis.activity(c, DialogActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(2))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
-                This.start(run = This.activity(c, EchartsActivity.class, bundle));
+                appThis.activity(c, EchartsActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(3))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
-                This.start(run = This.activity(c, TabActivity.class, bundle));
+                appThis.activity(c, TabActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(4))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
-                This.start(run = This.activity(c, NetworkRequestActivity.class, bundle));
+                appThis.activity(c, NetworkRequestActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(5))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
-                This.start(run = This.activity(c, ScreenCaptureActivity.class, bundle));
+                appThis.activity(c, ScreenCaptureActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(6))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(7))) {

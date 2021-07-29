@@ -1,12 +1,15 @@
 package com.androidx.briefness.homepage.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -15,7 +18,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
 import com.androidx.reduce.tools.Idle;
-import com.androidx.reduce.tools.This;
 import com.androidx.reduce.tools.Toasts;
 import com.androidx.view.dialog.DialogTools;
 import com.androidx.view.dialog.adapter.CameraAdapter;
@@ -27,11 +29,12 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static android.view.Gravity.BOTTOM;
+import static com.androidx.briefness.base.App.appThis;
 import static com.androidx.briefness.base.App.toasts;
 import static com.androidx.view.dialog.DialogTools.LayoutResId.CAMERA;
 import static com.androidx.view.dialog.DialogTools.LayoutResId.RADIO;
 import static com.androidx.view.dialog.DialogTools.LayoutResId.VERIFICATION_CODE;
-import static com.androidx.view.scan.ScanActivity.REQUEST_CODE;
+import static com.androidx.view.scan.ScanActivity.RESULT_KEY;
 
 @SuppressLint("NonConstantResourceId")
 public final class DialogActivity extends BaseActivity {
@@ -45,6 +48,7 @@ public final class DialogActivity extends BaseActivity {
 
     private Unbinder unbinder;
     private final DialogActivity aThis = this;
+    private ActivityResultLauncher<Intent> launcher;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,6 +86,14 @@ public final class DialogActivity extends BaseActivity {
         imageView.setVisibility(View.VISIBLE);
         imageView.setColorFilter(R.color.black);
         titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
+
+        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+            if (result.getData() != null) {
+                Log.i("回调码", String.valueOf(result.getResultCode()));
+                Log.i("回调数据", String.valueOf(result.getData().getStringExtra(RESULT_KEY)));
+            }
+        });
+
     }
 
     @OnClick(R.id.activity_dialog)
@@ -144,7 +156,7 @@ public final class DialogActivity extends BaseActivity {
 
                     @Override
                     public void qr(AppCompatAutoCompleteTextView paramView) {
-                        This.start(This.resultActivity(aThis, ScanActivity.class, REQUEST_CODE));
+                        appThis.resultActivity(aThis, ScanActivity.class, launcher).start();
                     }
 
                     @Override
