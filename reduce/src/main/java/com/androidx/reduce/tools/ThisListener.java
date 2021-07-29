@@ -1,4 +1,4 @@
-package com.androidx.reduce.config;
+package com.androidx.reduce.tools;
 
 public interface ThisListener {
     void start();
