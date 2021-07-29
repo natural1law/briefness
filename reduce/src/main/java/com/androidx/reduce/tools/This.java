@@ -22,7 +22,14 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 @SuppressWarnings("unused")
 public final class This {
 
-    private static final Handler handler = new Handler(Looper.getMainLooper());
+    @SuppressWarnings("FieldMayBeFinal")
+    private static volatile Handler handler;
+
+    static {
+        synchronized (This.class) {
+            handler = new Handler(Looper.getMainLooper());
+        }
+    }
 
     private This() {
     }
@@ -41,6 +48,7 @@ public final class This {
 
     public static void destroy(Runnable run) {
         handler.removeCallbacks(run);
+        handler.removeCallbacksAndMessages(null);
     }
 
     public static void destroyToken(Runnable run, Object o) {

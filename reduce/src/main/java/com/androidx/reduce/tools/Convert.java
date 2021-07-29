@@ -53,11 +53,6 @@ public final class Convert {
      */
     public static final class Timestamp {
 
-        public static final String SECOND = "ss";
-        public static final String MINUTE = "mm:ss";
-        public static final String HOUR = "hh:mm:ss";
-        public static final String DATE_SPRIT = "yyyy/MM/dd";
-        public static final String DATE_WHIPPLETREE = "yyyy-MM-dd";
         public static final String DATE_FORMAT1 = "yyyy-MM-dd hh:mm:ss";
         public static final String DATE_FORMAT2 = "yyyy/MM/dd hh:mm:ss";
         public static final String DATE_FORMAT3 = "yyyy年MM月dd日 hh时mm分ss秒";
@@ -67,6 +62,17 @@ public final class Convert {
         public static final String DATE_FORMAT7 = "yyyy/MM/dd hh:mm";
         public static final String DATE_FORMAT8 = "MM/dd hh:mm:ss";
         public static final String DATE_FORMAT9 = "MM-dd hh:mm:ss";
+        public static final String DATE_FORMAT10 = "yyyy-MM-dd HH:mm:ss";
+        public static final String DATE_FORMAT11 = "yyyy/MM/dd HH:mm:ss";
+        public static final String DATE_FORMAT12 = "yyyy年MM月dd日 HH时mm分ss秒";
+        public static final String DATE_FORMAT13 = "yyyy年MM月dd日 HH时mm分";
+        public static final String DATE_FORMAT14 = "yyyy-MM-dd HH:mm";
+        public static final String DATE_FORMAT15 = "yyyy/MM/dd HH:mm";
+        public static final String DATE_FORMAT16 = "MM/dd HH:mm:ss";
+        public static final String DATE_FORMAT17 = "MM-dd HH:mm:ss";
+        public static final String DATE_FORMAT18 = "HH:mm:ss";
+        public static final String DATE_FORMAT19 = "yyyy/MM/dd";
+        public static final String DATE_FORMAT20 = "yyyy-MM-dd";
 
         private Timestamp() {
         }
@@ -86,7 +92,7 @@ public final class Convert {
          * 转换Date类型
          */
         @SuppressLint("SimpleDateFormat")
-        public static <D>Date toDate(D datetime, String format) {
+        public static <D> Date toDate(D datetime, String format) {
             try {
                 return new SimpleDateFormat(format).parse(String.valueOf(datetime));
             } catch (ParseException e) {
