@@ -1,11 +1,51 @@
 日常工具
 ======
 
-### 简单介绍
-  * android一些日常工具的封装、okhttp网络框架的二次封装、安全加密工具封装、布局控件等等. 目的是让开发者简单的快速的集成，减少不必要的工作量
+### 工具目录
+
+  * 图表统计
+  * 网络请求
+    * WebSocket长连接
+    * http/https 
+  * 正则表达式
+    * 手机号验证
+    * 汉语验证
+    * 邮箱验证
+    * 身份证验证
+    * IP验证
+    * 域名验证
+    * 邮政编码验证
+    * 密码验证（非混合）
+    * 密码验证（混合）
+    * 日期验证
+    * 时间验证
+    * 空白字符验证
+  * 安全加密
+    * MD5加随机盐、MD数据校验
+    * AES加密解密
+    * RSA加密解密、签名、校验
+    * SHA1、SHA224、SHA256、SHA384、SHA512加密
+    * Base64加密解密
+  * excel导出
+  * 生成验证码
+  * 短信倒计时
+  * 延时点击
+  * 轻量缓存
+  * 动态代理
+  * 网络状态
+  * 文件存储
+  * activirt跳转
+  * toast提示
+  * 底部导航栏
+  * 对话框
+  * 菜单框
+  * 分页列表
+  * 扫描二维码
+  * 屏幕录制和截图
+  * 头部导航栏
 
 ### 使用依赖
-  * ![](https://jitpack.io/v/natural1law/briefness.svg "")
+  * 全部
   ```
     implementation 'com.github.natural1law.briefness:2.5.1'
   ```
@@ -27,48 +67,7 @@
   ```
 
 ### 工具使用
-  * **暂不介绍，目前由作者自己使用，待项目稳定后在做介绍**
+  **`暂不介绍，目前由作者自己使用，待项目稳定后在做介绍`**
 
 ### 更新日志
-  
-  > 修订版本 2.5.1
-  * @日期: 2021/07/28
-  * @声明: 1.优化视频录制功能、添加截图功能。2.优化代码。3.修复若干已知bug
-  
-  > 修订版本 2.4.15
-  * @日期: 2021/07/12
-  * @声明: 1.删除第三方AAChartCore，使用更轻量更便捷的AgentWeb+百度echarts（js）框架组合开发。2.代码优化。3.已知bug修复。4.删除获取动态权限，推荐使用5.新增excel导出
-    ```
-    implementation "com.github.permissions-dispatcher:permissionsdispatcher:4.8.0"
-    annotationProcessor "com.github.permissions-dispatcher:permissionsdispatcher-processor:4.8.0"
-    ```
-    具体使用请搜索https://github.com/permissions-dispatcher/PermissionsDispatcher 很方便
-
-  > 修订版本 2.3.9
-  * @日期: 2021/06/18
-  * @声明: 新增浮动菜单
-  
-  > 修订版本 2.1.2
-  * @日期: 2021/03/08
-  * @声明: 代码重构、新增html风格分页工具、更新http接口调用
- 
-  > 修订版本 1.3.5.1
-  * @日期: 2021/02/22
-  * @声明: 新增轻量缓存工具（MicroCache）
-  
-  > 修订版本 1.3.4.1
-  * @日期: 2021/02/20
-  * @声明: 新增倒计时器工具（CountDown）
-  
-  > 修订版本 1.3.3.2
-  * @日期: 2021/02/18
-  * @声明: http工具优化
- 
-  > 修订版本 1.3.2
-  * @日期: 2021/01/28
-  * @声明: 1.新增权限管理、新增SHA1加密方法、部分代码优化
-
-  > 修订版本 1.2.9
-  * @日期: 2020/12/10
-  * @声明: 新增图表控件-折线图、曲线图、圆柱图、饼状图等等
-  * @解释: 此功能是参考 [AAChartCore](https://github.com/AAChartModel/AAChartCore "AAChartCore")  项目,因此项目没有java版依赖，所以封装一套使用
+  * [历史版本](https://github.com/natural1law/briefness/blob/master/HISTORY_VERSION.md "点击查看历史版本")
