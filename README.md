@@ -1,4 +1,4 @@
-日常工具
+日常工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https://jitpack.io/#natural1law/briefness)
 ======
 
 ### 工具目录
@@ -21,7 +21,7 @@
     * 时间验证
     * 空白字符验证
   * 安全加密
-    * MD5加随机盐、MD数据校验
+    * MD5加随机盐、MD5数据校验
     * AES加密解密
     * RSA加密解密、签名、校验
     * SHA1、SHA224、SHA256、SHA384、SHA512加密
@@ -47,23 +47,23 @@
 ### 使用依赖
   * 全部
   ```
-    implementation 'com.github.natural1law.briefness:2.5.1'
+    implementation 'com.github.natural1law.briefness:2.5.2'
   ```
   * 分支-网络请求
   ```
-  implementation 'com.github.natural1law.briefness:network:2.5.1'
+  implementation 'com.github.natural1law.briefness:network:2.5.2'
   ```
   * 分支-常用工具
   ```
-  implementation 'com.github.natural1law.briefness:reduce:2.5.1'
+  implementation 'com.github.natural1law.briefness:reduce:2.5.2'
   ```
   * 分支-图表统计
   ```
-  implementation 'com.github.natural1law.briefness:echarts:2.5.1'
+  implementation 'com.github.natural1law.briefness:echarts:2.5.2'
   ```
   * 分支-视图布局
   ```
-  implementation 'com.github.natural1law.briefness:view:2.5.1'
+  implementation 'com.github.natural1law.briefness:view:2.5.2'
   ```
 
 ### 工具使用
