@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.androidx.reduce.listener.ToastListener;
@@ -25,6 +26,7 @@ public final class Toasts implements ToastListener {
     private int duration;
     private Drawable icon;
     private boolean withIcon;
+    private boolean debug = false;
 
     private Toasts(Context context) {
         this.wrc = new WeakReference<>(context);
@@ -35,6 +37,111 @@ public final class Toasts implements ToastListener {
             if (instance == null) instance = new Toasts(context);
         }
         return instance;
+    }
+
+    /**
+     * debug调试
+     *
+     * @param state true--启动debug，false--关闭debug
+     */
+    public void isDebug(boolean state) {
+        this.debug = state;
+    }
+
+    /**
+     * 模式D
+     *
+     * @param mark 标记
+     * @param msg  内容
+     */
+    public <V, M> void d(V mark, M msg) {
+        if (debug) {
+            if (msg instanceof Throwable) {
+                Log.d(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
+            } else {
+                Log.d(String.valueOf(mark), String.valueOf(msg));
+            }
+        }
+    }
+
+    /**
+     * 模式D
+     *
+     * @param mark 标记
+     * @param msg  内容
+     */
+    public <V, M> void i(V mark, M msg) {
+        if (debug) {
+            if (msg instanceof Throwable) {
+                Log.i(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
+            } else {
+                Log.i(String.valueOf(mark), String.valueOf(msg));
+            }
+        }
+    }
+
+    /**
+     * 模式W
+     *
+     * @param mark 标记
+     * @param msg  内容
+     */
+    public <V, M> void w(V mark, M msg) {
+        if (debug) {
+            if (msg instanceof Throwable) {
+                Log.w(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
+            } else {
+                Log.w(String.valueOf(mark), String.valueOf(msg));
+            }
+        }
+    }
+
+    /**
+     * 模式E
+     *
+     * @param mark 标记
+     * @param msg  内容
+     */
+    public <V, M> void e(V mark, M msg) {
+        if (debug) {
+            if (msg instanceof Throwable) {
+                Log.e(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
+            } else {
+                Log.e(String.valueOf(mark), String.valueOf(msg));
+            }
+        }
+    }
+
+    /**
+     * 模式V
+     *
+     * @param mark 标记
+     * @param msg  内容
+     */
+    public <V, M> void v(V mark, M msg) {
+        if (debug) {
+            if (msg instanceof Throwable) {
+                Log.v(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
+            } else {
+                Log.v(String.valueOf(mark), String.valueOf(msg));
+            }
+        }
+    }
+
+    /**
+     * 模式WTF
+     *
+     * @param mark 标记
+     * @param msg  内容
+     */
+    public <V, M> void wtf(V mark, M msg) {
+        if (debug) {
+            if (msg instanceof Throwable) {
+                Log.wtf(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
+            } else {
+                Log.wtf(String.valueOf(mark), String.valueOf(msg));
+            }
+        }
     }
 
     /**
