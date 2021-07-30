@@ -211,7 +211,7 @@ public final class DialogActivity extends BaseActivity {
                 .setCanceled(false)
                 .setCancelable(false)
                 .setListener(dialog -> {
-
+                    Toasts.builder(aThis).showError();
                     dialog.cancel();
                 })
                 .build()

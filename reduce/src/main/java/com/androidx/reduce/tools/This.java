@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
+import com.androidx.reduce.listener.ThisListener;
+
 import static android.content.Context.BIND_AUTO_CREATE;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
