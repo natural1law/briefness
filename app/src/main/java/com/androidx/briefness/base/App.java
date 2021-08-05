@@ -14,7 +14,7 @@ public class App extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        toasts = Toasts.builder(base);
+        toasts = Toasts.builder(base).isDebug(true);
         appThis = This.build();
     }
 }

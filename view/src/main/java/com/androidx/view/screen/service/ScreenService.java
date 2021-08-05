@@ -1,5 +1,8 @@
 package com.androidx.view.screen.service;
 
+import static java.lang.Boolean.TRUE;
+
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
@@ -33,8 +36,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import static java.lang.Boolean.TRUE;
 
 public class ScreenService extends Service implements ScreenServiceListener {
 
@@ -124,6 +125,7 @@ public class ScreenService extends Service implements ScreenServiceListener {
     /**
      * 创建 屏幕截图
      */
+    @SuppressLint("WrongConstant")
     private void createImageReader(ScreenConfig config) {
         int w = config.getBasicsWidth();
         int h = config.getBasicsHeight();
@@ -185,6 +187,7 @@ public class ScreenService extends Service implements ScreenServiceListener {
     /**
      * 创建 媒体录制
      */
+    @SuppressLint("WrongConstant")
     private MediaRecorder createMediaRecorder(ScreenConfig config) throws IOException {
         // 调用顺序不能乱
         MediaRecorder mediaRecorder = new MediaRecorder();

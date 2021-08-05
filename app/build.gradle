@@ -4,15 +4,15 @@ plugins {
 }
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 31
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "com.androidx.briefness"
         minSdkVersion 24
-        targetSdkVersion 30
+        targetSdkVersion 31
         versionCode 2
-        versionName "2.5.0"
+        versionName "2.5.5"
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -36,6 +36,12 @@ android {
         javaMaxHeapSize "4g"
         maxProcessCount 8
         preDexLibraries = true
+    }
+    signingConfigs {
+        config {
+            enableV3Signing true
+            enableV4Signing true
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

@@ -37,16 +37,16 @@ public interface Enqueue {
     /**
      * 在线/离线
      */
-    void setActionListener(ActionListener listener);
+    void setActionListener(ActionListener listener) throws Exception;
 
     /**
      * 消息回调
      */
-    void setMsgCallback(MsgCallback callback);
+    void setMsgCallback(MsgCallback callback) throws Exception;
 
     /**
      * 登录回调
      */
-    void setLoginCallback(LoginCallback callback);
+    void setLoginCallback(LoginCallback callback) throws Exception;
 
 }

@@ -13,7 +13,8 @@
         android:theme="@style/Theme.Reduce"
         tools:ignore="AllowBackup"
         tools:replace="android:allowBackup">
-        <activity android:name=".base.MainActivity">
+        <activity android:name=".base.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -44,8 +44,9 @@ public final class Toasts implements ToastListener {
      *
      * @param state true--启动debug，false--关闭debug
      */
-    public void isDebug(boolean state) {
+    public Toasts isDebug(boolean state) {
         this.debug = state;
+        return this;
     }
 
     /**
@@ -103,12 +104,10 @@ public final class Toasts implements ToastListener {
      * @param msg  内容
      */
     public <V, M> void e(V mark, M msg) {
-        if (debug) {
-            if (msg instanceof Throwable) {
-                Log.e(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
-            } else {
-                Log.e(String.valueOf(mark), String.valueOf(msg));
-            }
+        if (msg instanceof Throwable) {
+            Log.e(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
+        } else {
+            Log.e(String.valueOf(mark), String.valueOf(msg));
         }
     }
 
