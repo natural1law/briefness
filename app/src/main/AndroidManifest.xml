@@ -37,5 +37,15 @@
         <activity android:name=".homepage.activity.NetworkRequestActivity" />
         <!--截屏演示-->
         <activity android:name=".homepage.activity.ScreenCaptureActivity" />
+
+        <service
+            android:name=".homepage.service.NotificationService"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter android:priority="1000" >
+                <action android:name="ns" />
+            </intent-filter>
+        </service>
+
     </application>
 </manifest>

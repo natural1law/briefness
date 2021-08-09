@@ -36,8 +36,8 @@ public class WebConfiguration {
         return reconnectInterval;
     }
 
-    protected static String getSuccess() {
-        return stateBuilder.success;
+    protected static String getException() {
+        return stateBuilder.exception;
     }
 
     protected static String getConnect() {
@@ -127,17 +127,12 @@ public class WebConfiguration {
     public static final class StateBuilder {
 
         private final StateBuilder builder;
-        private String success = "success";
         private String connect = "connect";
         private String disconnect = "disconnect";
+        private String exception = "exception";
 
         private StateBuilder() {
             this.builder = this;
-        }
-
-        public StateBuilder setSuccess(String success) {
-            this.success = success;
-            return builder;
         }
 
         public StateBuilder setConnect(String connect) {
@@ -147,6 +142,11 @@ public class WebConfiguration {
 
         public StateBuilder setDisconnect(String disconnect) {
             this.disconnect = disconnect;
+            return builder;
+        }
+
+        public StateBuilder setException(String exception) {
+            this.exception = exception;
             return builder;
         }
 

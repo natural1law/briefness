@@ -6,7 +6,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-import com.androidx.http.module.MessageModule;
 import com.androidx.http.module.ResModule;
 import com.androidx.http.net.HttpNetwork;
 import com.androidx.http.net.listener.ActionListener;
@@ -16,6 +15,7 @@ import com.androidx.http.net.listener.MsgCallback;
 import com.androidx.http.net.module.DataModule;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.module.protobuf.MessageModule;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -32,7 +32,6 @@ import okio.ByteString;
 
 public final class SocketRequest implements Enqueue {
 
-    private static final String FAIL_MSG = "服务器连接已断开";//连接异常消息
     public final static int NORMAL_CLOSE = 1000;//正常关闭
     public final static int ABNORMAL_CLOSE = 1001;//非正常关闭
 
@@ -68,7 +67,6 @@ public final class SocketRequest implements Enqueue {
         @Override
         public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
             reconnect();
-            handler.sendMessage(handler.obtainMessage(-2, new DataModule(FAIL_MSG, loginCallback)));
             Log.e("socket连接异常", Log.getStackTraceString(t));
         }
 
@@ -76,26 +74,52 @@ public final class SocketRequest implements Enqueue {
         public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
             ResModule res = new Gson().fromJson(text, new TypeToken<ResModule>() {
             }.getType());
-            if (String.valueOf(res.getMsg()).equals(WebConfiguration.getSuccess())) {
+            if (String.valueOf(res.getMsg()).equals(WebConfiguration.getConnect())) {
                 Message message1 = handler.obtainMessage();
                 message1.what = 0;
-                message1.obj = new DataModule(loginCallback);
+                if (loginCallback != null && actionListener != null) {
+                    message1.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
+                } else if (loginCallback == null && actionListener != null) {
+                    message1.obj = new DataModule(res.getUser(), actionListener);
+                } else if (loginCallback != null) {
+                    message1.obj = new DataModule(res.getMsg(), loginCallback);
+                }
                 handler.sendMessage(message1);
-            } else if (String.valueOf(res.getMsg()).equals(WebConfiguration.getConnect())) {
+            } else if (String.valueOf(res.getMsg()).equals(WebConfiguration.getException())) {
                 Message message3 = handler.obtainMessage();
-                message3.what = 2;
-                message3.obj = new DataModule(String.valueOf(res.getUser()), actionListener);
+                message3.what = -3;
+                if (loginCallback != null && actionListener != null) {
+                    message3.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
+                } else if (loginCallback == null && actionListener != null) {
+                    message3.obj = new DataModule(res.getUser(), actionListener);
+                } else if (loginCallback != null) {
+                    message3.obj = new DataModule(res.getMsg(), loginCallback);
+                }
+                message3.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
                 handler.sendMessage(message3);
             } else if (String.valueOf(res.getMsg()).equals(WebConfiguration.getDisconnect())) {
                 Message message4 = handler.obtainMessage();
-                message4.what = 3;
-                message4.obj = new DataModule(String.valueOf(res.getUser()), actionListener);
+                message4.what = -2;
+                if (loginCallback != null && actionListener != null) {
+                    message4.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
+                } else if (loginCallback == null && actionListener != null) {
+                    message4.obj = new DataModule(res.getUser(), actionListener);
+                } else if (loginCallback != null) {
+                    message4.obj = new DataModule(res.getMsg(), loginCallback);
+                }
+                message4.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
                 handler.sendMessage(message4);
             } else {
                 webSocket.close(NORMAL_CLOSE, "close");
                 Message message2 = handler.obtainMessage();
                 message2.what = -1;
-                message2.obj = new DataModule(text, loginCallback);
+                if (loginCallback != null && actionListener != null) {
+                    message2.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
+                } else if (loginCallback == null && actionListener != null) {
+                    message2.obj = new DataModule(res.getUser(), actionListener);
+                } else if (loginCallback != null) {
+                    message2.obj = new DataModule(res.getMsg(), loginCallback);
+                }
                 handler.sendMessage(message2);
             }
         }
@@ -113,7 +137,7 @@ public final class SocketRequest implements Enqueue {
 
     @Override
     public boolean send(int type, byte[] msg) {
-        return sendMessage(MessageModule.MsgRequest.newBuilder()
+        return sendMessage(MessageModule.Request.newBuilder()
                 .setType(type)
                 .setData(msg == null ? com.google.protobuf.ByteString.copyFromUtf8("") : com.google.protobuf.ByteString.copyFrom(msg))
                 .build()
@@ -201,47 +225,32 @@ public final class SocketRequest implements Enqueue {
     }
 
     public static final Handler handler = new Handler(Looper.getMainLooper(), message -> {
-        try {
-            DataModule data = (DataModule) message.obj;
-            if (message.what == -1) {
-                try {
-                    data.getLoginCallback().onFailure(data.getMsg());
-                    return false;
-                } catch (Exception e) {
-                    return false;
-                }
-            } else if (message.what == -2) {
-                try {
-                    data.getLoginCallback().onFailure(data.getMsg());
-                    return false;
-                } catch (Exception e) {
-                    return false;
-                }
-            } else if (message.what == 0) {
-                try {
-                    data.getLoginCallback().onSuccess();
-                    return false;
-                } catch (Exception e) {
-                    return false;
-                }
-            } else if (message.what == 1) {
-                try {
-                    MessageModule.MsgResponse response = MessageModule.MsgResponse.parseFrom(data.getBytes().toByteArray());
-                    data.getMsgCallback().message(response.getCode(), response.getMsg(), response.getData());
-                } catch (Exception e) {
-                    Log.e("callbackException", Log.getStackTraceString(e));
-                }
-                return false;
-            } else if (message.what == 2) {
-                data.getActionListener().online(data.getUser());
-                return false;
-            } else if (message.what == 3) {
-                data.getActionListener().offline(data.getUser());
-                return false;
-            } else {
-                return false;
+        DataModule data = (DataModule) message.obj;
+        if (message.what == -1) {
+            if (loginCallback != null) data.getLoginCallback().onFailure(data.getMsg());
+            if (actionListener != null) data.getActionListener().online(data.getUser());
+            return false;
+        } else if (message.what == -2) {
+            if (loginCallback != null) data.getLoginCallback().onFailure(data.getMsg());
+            if (actionListener != null) data.getActionListener().online(data.getUser());
+            return false;
+        } else if (message.what == -3) {
+            if (loginCallback != null) data.getLoginCallback().onFailure(data.getMsg());
+            if (actionListener != null) data.getActionListener().online(data.getUser());
+            return false;
+        } else if (message.what == 0) {
+            if (loginCallback != null) data.getLoginCallback().onSuccess();
+            if (actionListener != null) data.getActionListener().online(data.getUser());
+            return false;
+        } else if (message.what == 1) {
+            try {
+                MessageModule.Response response = MessageModule.Response.parseFrom(data.getBytes().toByteArray());
+                data.getMsgCallback().message(response.getCode(), response.getMsg(), response.getData());
+            } catch (Exception e) {
+                Log.e("MessageModule异常", Log.getStackTraceString(e));
             }
-        } catch (Exception e) {
+            return false;
+        } else {
             return false;
         }
     });

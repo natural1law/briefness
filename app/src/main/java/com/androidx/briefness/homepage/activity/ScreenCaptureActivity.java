@@ -1,5 +1,7 @@
 package com.androidx.briefness.homepage.activity;
 
+import static com.androidx.briefness.base.App.toasts;
+
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,8 +24,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-
-import static com.androidx.briefness.base.App.toasts;
 
 /**
  * @date 2021/07/22
@@ -78,7 +78,7 @@ public final class ScreenCaptureActivity extends BaseActivity {
         imageView.setVisibility(View.VISIBLE);
         imageView.setColorFilter(R.color.black);
         titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
-        sr = ScreenRecording.build(aThis).setNotification(NotificationBar.notification(aThis, "正在使用录屏丨截屏功能", false));
+        sr = ScreenRecording.build(aThis).setNotification(NotificationBar.setSystem(aThis, "正在使用录屏丨截屏功能", "", R.mipmap.radio_on));
     }
 
     @OnClick(R.id.activity_dialog)

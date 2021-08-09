@@ -1,5 +1,7 @@
 package com.androidx.view.screen;
 
+import static android.content.Context.NOTIFICATION_SERVICE;
+
 import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -8,11 +10,10 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 
+import androidx.annotation.DrawableRes;
 import androidx.core.app.NotificationCompat;
 
 import java.lang.ref.WeakReference;
-
-import static android.content.Context.NOTIFICATION_SERVICE;
 
 /**
  * 通知栏
@@ -110,6 +111,24 @@ public final class NotificationBar {
      *
      * @return NotificationCompat.Builder
      */
+    public NotificationCompat.Builder createOther(String title, int smallIcon) {
+        return createOther(title, smallIcon, 0);
+    }
+
+    /**
+     * 创建通知栏 Builder
+     *
+     * @return NotificationCompat.Builder
+     */
+    public NotificationCompat.Builder createOther(String title) {
+        return createOther(title, 0);
+    }
+
+    /**
+     * 创建通知栏 Builder
+     *
+     * @return NotificationCompat.Builder
+     */
     public NotificationCompat.Builder createSystem(String title, int smallIcon, int largeIcon) {
         return create(CHANNEL_ID_SYSTEM, title, smallIcon, largeIcon);
     }
@@ -120,7 +139,7 @@ public final class NotificationBar {
      * @return NotificationCompat.Builder
      */
     public NotificationCompat.Builder createSystem(String title, int smallIcon) {
-        return createSystem(title, smallIcon, -1);
+        return createSystem(title, smallIcon, 0);
     }
 
     /**
@@ -129,18 +148,31 @@ public final class NotificationBar {
      * @return NotificationCompat.Builder
      */
     public NotificationCompat.Builder createSystem(String title) {
-        return createSystem(title, -1);
+        return createSystem(title, 0);
     }
 
     /**
      * 显示系统通知(默认)
      */
-    public static Notification notification(Context context, String title, boolean ongoing) {
-        return NotificationBar.getInstance(context).createSystem(title)
+    public static Notification setSystem(Context context, String title, String content, @DrawableRes int icon) {
+        return NotificationBar.getInstance(context).createSystem(title, icon)
                 .setAutoCancel(true)
-                .setOngoing(ongoing)// 常驻通知栏
+                .setOngoing(true)// 常驻通知栏
                 .setTicker(title)
-                .setContentText(title)
+                .setContentText(content)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .build();
+    }
+
+    /**
+     * 显示其他通知(默认)
+     */
+    public static Notification setOther(Context context, String title, String content,@DrawableRes int icon) {
+        return NotificationBar.getInstance(context).createOther(title, icon)
+                .setAutoCancel(true)
+                .setOngoing(true)// 常驻通知栏
+                .setTicker(title)
+                .setContentText(content)
                 .setDefaults(Notification.DEFAULT_ALL)
                 .build();
     }

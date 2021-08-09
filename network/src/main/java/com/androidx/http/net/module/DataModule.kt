@@ -24,23 +24,31 @@ class DataModule() : BaseBean() {
         parcel.readString()!!
     }
 
-    constructor(failMsg: String, loginCallback: LoginCallback) : this() {
-        this.msg = failMsg
-        this.loginCallback = loginCallback
-    }
-
-    constructor(loginCallback: LoginCallback) : this() {
-        this.loginCallback = loginCallback
-    }
-
-    constructor(user: String, actionListener: ActionListener) : this() {
-        this.user = user
-        this.actionListener = actionListener
-    }
-
     constructor(bytes: ByteString, msgCallback: MsgCallback) : this() {
         this.bytes = bytes
         this.msgCallback = msgCallback
+    }
+
+    constructor(
+        user: String?,
+        msg: String?,
+        loginCallback: LoginCallback,
+        actionListener: ActionListener
+    ) : this() {
+        this.user = user!!
+        this.msg = msg!!
+        this.loginCallback = loginCallback
+        this.actionListener = actionListener
+    }
+
+    constructor(user: String?, actionListener: ActionListener) : this() {
+        this.user = user!!
+        this.actionListener = actionListener
+    }
+
+    constructor(msg: String?, loginCallback: LoginCallback) : this() {
+        this.msg = msg!!
+        this.loginCallback = loginCallback
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {

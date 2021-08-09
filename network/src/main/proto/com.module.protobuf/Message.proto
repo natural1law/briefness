@@ -3,12 +3,12 @@ syntax = "proto3";
 option java_outer_classname = "MessageModule";
 
 //请求结构体
-message MessageRequest {
+message Request {
   sint32 type = 1;//请求状态
   bytes data = 2;//发送数据
 }
 //响应结构体
-message MessageResponse {
+message Response {
   sint32 code = 1;//响应状态
   string msg = 2;//响应信息
   bytes data = 3;//接收数据
