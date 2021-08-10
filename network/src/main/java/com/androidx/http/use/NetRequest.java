@@ -53,7 +53,6 @@ public final class NetRequest {
      * @param param 请求参数
      */
     public static Enqueue initWebSocket(String url, Map<String, Object> param) {
-        WebConfiguration.statebuilder().build();
         return initWebSocket(url, param, 10);//默认重连十秒间隔
     }
 

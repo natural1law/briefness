@@ -1,5 +1,8 @@
 package com.androidx.view.dialog;
 
+import static com.androidx.reduce.tools.Captcha.TYPE.CHARS;
+import static com.zyao89.view.zloading.Z_TYPE.CIRCLE;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -32,14 +35,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.androidx.reduce.tools.Captcha;
 import com.androidx.view.R;
 import com.androidx.view.dialog.adapter.CameraAdapter;
+import com.androidx.view.dialog.adapter.ListAdapter;
 import com.zyao89.view.zloading.ZLoadingTextView;
 import com.zyao89.view.zloading.ZLoadingView;
 import com.zyao89.view.zloading.Z_TYPE;
 
 import org.jetbrains.annotations.NotNull;
-
-import static com.androidx.reduce.tools.Captcha.TYPE.CHARS;
-import static com.zyao89.view.zloading.Z_TYPE.CIRCLE;
 
 /**
  * @author 李玄道
@@ -73,6 +74,7 @@ public final class DialogTools extends AppCompatDialog {
     private final OnClickQrListener qrListener;
     private final OnClickRadioListener radioListener;
     private final CameraAdapter.OnClickCameraAdapterListener adapterListener;
+    private final ListAdapter.OnClickItemListener itemListener;
     /**
      * 标题模块参数
      */
@@ -188,6 +190,10 @@ public final class DialogTools extends AppCompatDialog {
          * 单选提示窗
          */
         public static final int RADIO = R.layout.dialog11;
+        /**
+         * 列表提示窗
+         */
+        public static final int LIST = R.layout.dialog12;
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -246,6 +252,7 @@ public final class DialogTools extends AppCompatDialog {
             affirmTestView();
             timingView();
             cameraView();
+            list();
             qrView();
             loading();
         } catch (Exception e) {
@@ -268,6 +275,7 @@ public final class DialogTools extends AppCompatDialog {
             if (titleColorId != -1) {
                 titleView.setTextColor(getContext().getResources().getColor(titleColorId, getContext().getTheme()));
             }
+            this.create();
         }
     }
 
@@ -329,6 +337,25 @@ public final class DialogTools extends AppCompatDialog {
             adapter.setTextColor(contentColor);
             adapter.setTextSize(contentSize);
             adapter.setListener(adapterListener);
+        }
+    }
+
+    /**
+     * 列表弹窗
+     */
+    private void list() {
+        if (layout == LayoutResId.LIST) {
+            RecyclerView rv = findViewById(R.id.rv_content);
+            ListAdapter adapter = new ListAdapter();
+            if (rv != null) {
+                rv.setLayoutManager(new LinearLayoutManager(getContext()));
+                rv.setAdapter(adapter);
+            }
+            adapter.setDt(this);
+            adapter.setData(datas);
+            adapter.setTextColor(contentColor);
+            adapter.setTextSize(contentSize);
+            adapter.setListener(itemListener);
         }
     }
 
@@ -451,7 +478,8 @@ public final class DialogTools extends AppCompatDialog {
             if (qrListener != null) quitView.setOnClickListener(v -> qrListener.no(this));
             if (paramListener != null) quitView.setOnClickListener(v -> paramListener.no(this));
             if (radioListener != null) quitView.setOnClickListener(v -> radioListener.no(this));
-            if (adapterListener != null) quitView.setOnClickListener(v -> adapterListener.cancel(this));
+            if (adapterListener != null)
+                quitView.setOnClickListener(v -> adapterListener.cancel(this));
             if (codeListener != null) {
                 quitView.setOnClickListener(v -> {
                     if (verificationView != null) {
@@ -496,8 +524,8 @@ public final class DialogTools extends AppCompatDialog {
         }
     }
 
-    private DialogTools(Context context, @NotNull Builder builder) {
-        super(context, builder.style);
+    private DialogTools(@NotNull Builder builder) {
+        super(builder.context, builder.style);
         this.layout = builder.layout;
         this.canceled = builder.canceled;
         this.cancelable = builder.cancelable;
@@ -544,6 +572,7 @@ public final class DialogTools extends AppCompatDialog {
         this.cdSuffix = builder.cdSuffix;
         this.datas = builder.datas;
         this.adapterListener = builder.adapterListener;
+        this.itemListener = builder.itemListener;
         this.loadingType = builder.loadingType;
         this.loadingTime = builder.loadingTime;
         this.loadingColor = builder.loadingColor;
@@ -620,6 +649,7 @@ public final class DialogTools extends AppCompatDialog {
         private OnClickRadioListener radioListener;
         private String[] datas;
         private CameraAdapter.OnClickCameraAdapterListener adapterListener;
+        private ListAdapter.OnClickItemListener itemListener;
         private Z_TYPE loadingType = CIRCLE;
         private int loadingTime = 2;
         private int loadingColor = R.color.code;
@@ -669,7 +699,7 @@ public final class DialogTools extends AppCompatDialog {
          *
          * @param values 维度值
          */
-        public Builder setMargin(@NotNull int... values) {
+        public Builder setMargin(int... values) {
             switch (values.length) {
                 case 1:
                     this.left = values[0];
@@ -698,7 +728,7 @@ public final class DialogTools extends AppCompatDialog {
          *
          * @param values 维度值
          */
-        public Builder setDimension(@NotNull int... values) {
+        public Builder setDimension(int... values) {
             switch (values.length) {
                 case 1:
                     this.width = values[0];
@@ -1059,6 +1089,16 @@ public final class DialogTools extends AppCompatDialog {
         }
 
         /**
+         * 列表条目点击事件
+         *
+         * @param itemListener 事件
+         */
+        public Builder setListener(ListAdapter.OnClickItemListener itemListener) {
+            this.itemListener = itemListener;
+            return newBuilder;
+        }
+
+        /**
          * 倒计时（引入相应布局文件totalTime>0开启）
          *
          * @param totalTime 总时长
@@ -1240,7 +1280,7 @@ public final class DialogTools extends AppCompatDialog {
         @NotNull
         public DialogTools build() {
             synchronized (DialogTools.class) {
-                return new DialogTools(context, newBuilder);
+                return new DialogTools(newBuilder);
             }
         }
 
@@ -1255,7 +1295,7 @@ public final class DialogTools extends AppCompatDialog {
 
 
         default void no(DialogTools dialog) {
-            dialog.cancel();
+            dialog.hide();
         }
     }
 
@@ -1276,7 +1316,7 @@ public final class DialogTools extends AppCompatDialog {
         void callbackValue(DialogTools dialog, String var1, String var2, String var3, String var4);
 
         default void no(DialogTools dialog) {
-            dialog.cancel();
+            dialog.hide();
         }
     }
 
@@ -1285,7 +1325,7 @@ public final class DialogTools extends AppCompatDialog {
         void ok(DialogTools dialog, String param, String code);
 
         default void no(DialogTools dialog) {
-            dialog.cancel();
+            dialog.hide();
         }
 
     }
@@ -1294,7 +1334,7 @@ public final class DialogTools extends AppCompatDialog {
         void ok(DialogTools dialog, String param);
 
         default void no(DialogTools dialog) {
-            dialog.cancel();
+            dialog.hide();
         }
     }
 
@@ -1302,7 +1342,7 @@ public final class DialogTools extends AppCompatDialog {
         void ok(DialogTools dialog, String param, String radio);
 
         default void no(DialogTools dialog) {
-            dialog.cancel();
+            dialog.hide();
         }
     }
 

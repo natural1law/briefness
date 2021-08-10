@@ -36,6 +36,7 @@ public class NotificationService extends Service {
         flags = START_STICKY;
         Map<String, Object> map = new WeakHashMap<>();
         map.put(USER, mc.getValue(USER).toString());
+        startForeground(1, NotificationBar.setOther(getApplicationContext(), "通知", "消息推送服务已开启", R.mipmap.radio_on));
         enqueue = NetRequest.initWebSocket("http://192.168.1.133:8082/cmp/push/notification", map);
         enqueue.setMsgCallback((code, msg, data) -> {
             switch (code) {

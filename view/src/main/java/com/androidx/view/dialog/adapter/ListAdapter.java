@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.androidx.view.R;
 import com.androidx.view.dialog.DialogTools;
 
-public final class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.HolderView> {
+public final class ListAdapter extends RecyclerView.Adapter<ListAdapter.HolderView> {
 
     private String[] data;
     private int textColor;
     private int textSize;
     private DialogTools dt;
-    private OnClickCameraAdapterListener listener;
+    private OnClickItemListener listener;
 
     @NonNull
     @Override
@@ -60,7 +60,7 @@ public final class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.Hold
         this.dt = dt;
     }
 
-    public void setListener(OnClickCameraAdapterListener listener) {
+    public void setListener(OnClickItemListener listener) {
         this.listener = listener;
     }
 
@@ -79,7 +79,7 @@ public final class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.Hold
 
     }
 
-    public interface OnClickCameraAdapterListener {
+    public interface OnClickItemListener {
         void onClick(int position, DialogTools dialog);
 
         default void cancel(DialogTools dialog) {
