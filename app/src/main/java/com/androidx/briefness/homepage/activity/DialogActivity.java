@@ -1,11 +1,7 @@
 package com.androidx.briefness.homepage.activity;
 
-import static android.view.Gravity.BOTTOM;
 import static com.androidx.briefness.base.App.appThis;
 import static com.androidx.briefness.base.App.toasts;
-import static com.androidx.view.dialog.DialogTools.LayoutResId.CAMERA;
-import static com.androidx.view.dialog.DialogTools.LayoutResId.RADIO;
-import static com.androidx.view.dialog.DialogTools.LayoutResId.VERIFICATION_CODE;
 import static com.androidx.view.scan.ScanActivity.RESULT_KEY;
 
 import android.annotation.SuppressLint;
@@ -19,16 +15,13 @@ import android.widget.FrameLayout;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
 import com.androidx.reduce.tools.Idle;
-import com.androidx.reduce.tools.Toasts;
-import com.androidx.view.dialog.DialogTools;
-import com.androidx.view.dialog.adapter.CameraAdapter;
+import com.androidx.view.dialog.DialogDefault;
 import com.androidx.view.scan.ScanActivity;
 
 import butterknife.BindView;
@@ -97,124 +90,48 @@ public final class DialogActivity extends BaseActivity {
 
     @OnClick(R.id.activity_dialog)
     public void dialog() {
-        DialogTools.builder(aThis)
-                .setLayout(VERIFICATION_CODE)
-                .setContentId(R.id.dialog_content)
-                .setTitleText("验证码")
-                .setAffirmText("提交")
-                .setQuitColorId(R.color.irs)
-                .setAffirmColorId(R.color.white)
-                .setCanceled(false)
-                .setCancelable(false)
-                .setListener((DialogTools.OnClickCodeListener) (dialog, param, code) -> {
-                    if (code == null) {
-                        Toasts.builder(aThis).setMsg("请点击右方按钮获取验证码").showInfo();
-                    } else if (param.equals("")) {
-                        Toasts.builder(aThis).setMsg("请输入验证码").showWarning();
-                    } else if (!param.equalsIgnoreCase(code)) {
-                        Toasts.builder(aThis).setMsg("请输入正确的验证码").showError();
-                    } else {
-                        dialog.cancel();
-                    }
-                })
-                .build()
-                .show();
+        DialogDefault.alert(aThis, "标题", "内容");
     }
 
     @OnClick(R.id.activity_dialog1)
     public void dialog1() {
-        DialogTools.builder(aThis)
-                .setLayout(RADIO)
-                .setTitleText("分享")
-                .setCanceled(false)
-                .setCancelable(false)
-                .setHintText1("请输入分享人的手机号")
-                .setAffirmColorId(R.color.white)
-                .setListener((DialogTools.OnClickRadioListener) (dialog, param, radio) -> Log.i("分享数据", param + " / " + radio))
-                .build()
-                .show();
+        DialogDefault.console(aThis, "您要退出登录吗？", dialog -> {
+            toasts.setMsg("确认").showSuccess();
+            dialog.cancel();
+        });
     }
 
     @OnClick(R.id.activity_dialog2)
     public void dialog2() {
-        DialogTools.builder(aThis)
-                .setLayout(DialogTools.LayoutResId.INPUT_CHECK)
-                .setStyle(R.style.dialogStyle)
-                .setTitleText("添加烤房设备")
-                .setHintText1("请输入烤房编号")
-                .setHintText2("请输入烤房名称")
-                .setHintText3("请输入验证码")
-                .setHintText4("请输入详细地址（道路、街道、楼号）")
-                .setAffirmText("提交")
-                .setAffirmColorId(R.color.white)
-                .setQuitColorId(R.color.black)
-                .setQuitText("取消")
-                .setCanceled(false)
-                .setCancelable(false)
-                .setListener(new DialogTools.OnClickQrListener() {
-
-                    @Override
-                    public void qr(AppCompatAutoCompleteTextView paramView) {
-                        appThis.resultActivity(aThis, ScanActivity.class, launcher).start();
-                    }
-
-                    @Override
-                    public void code(AppCompatTextView getCodeView) {
-                        toasts.setMsg("获取验证码成功").showSuccess();
-                    }
-
-                    @Override
-                    public void callbackValue(DialogTools dialog, String var1, String var2, String var3, String var4) {
-                        if (var1.equals("")) toasts.setMsg("请输入设备编码").showWarning();
-                        else if (var1.length() != 14) toasts.setMsg("请输入正确的设备编码").showWarning();
-                        else if (var2.equals("")) toasts.setMsg("请输入设备名称").showWarning();
-                        else if (var3.equals("")) toasts.setMsg("请输入详细地址").showWarning();
-                        else if (var4.equals("")) toasts.setMsg("请输入手机验证码").showWarning();
-                        else {
-                            toasts.setMsg("提交成功").showSuccess();
-                        }
-                    }
-                })
-                .build()
-                .show();
+        appThis.resultActivity(aThis, ScanActivity.class, launcher).start();
     }
 
     @OnClick(R.id.activity_dialog3)
     public void dialog3() {
-        DialogTools.builder(aThis)
-                .setLayout(CAMERA)
-                .setQuitColorId(R.color.irs)
-                .setCanceled(false)
-                .setCancelable(false)
-                .setDatas("相机", "录像")
-                .setGravity(BOTTOM)
-                .setListener((CameraAdapter.OnClickCameraAdapterListener) (position, dialog) -> {
-                    toasts.setMsg(position).showSuccess();
-                    dialog.cancel();
-                })
-                .build()
-                .show();
+        String[] name = {"相机", "相册"};
+        DialogDefault.camera(aThis, name, (position, dialog) -> {
+            toasts.i("选择", position);
+            toasts.setMsg(name[position]).showSuccess();
+            dialog.cancel();
+        });
     }
 
-    @OnClick(R.id.activity_dialog4)
-    public void dialog4() {
-        DialogTools.builder(aThis)
-                .setLayout(DialogTools.LayoutResId.RELAX)
-                .setContentText("您要退出登录吗？")
-                .setAffirmText("确认")
-                .setAffirmColorId(R.color.white)
-                .setContentSize(20)
-                .setQuitText("取消")
-                .setQuitColorId(R.color.hint)
-                .setDimension(-1, 800)
-                .setCanceled(false)
-                .setCancelable(false)
-                .setListener(dialog -> {
-                    Toasts.builder(aThis).showError();
-                    dialog.cancel();
-                })
-                .build()
-                .show();
+    @OnClick(R.id.activity_dialog5)
+    public void dialog5() {
+        String[] name = {"条目1", "条目2", "条目3", "条目4", "条目5"};
+        DialogDefault.list(aThis, name, (position, dialog) -> {
+            toasts.i("选择", position);
+            toasts.setMsg(name[position]).showSuccess();
+            dialog.cancel();
+        });
+    }
+
+    @OnClick(R.id.activity_dialog6)
+    public void dialog6() {
+        DialogDefault.countDownTime(aThis, "正在加载", "还有", 5, "秒加载完成", () -> {
+            toasts.setMsg("加载完成").showSuccess();
+            toasts.i("正在加载", "加载完成");
+        });
     }
 
 }

@@ -95,8 +95,6 @@ public final class NetworkRequestActivity extends BaseActivity {
         } else {
             startService(intent);
         }
-//        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-//        manager.notify(0x00000000, NotificationBar.setSystem(aThis, "通知", R.mipmap.radio_on));
     }
 
     @OnClick(R.id.network_send)

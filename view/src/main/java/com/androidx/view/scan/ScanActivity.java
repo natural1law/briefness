@@ -1,5 +1,7 @@
 package com.androidx.view.scan;
 
+import static android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN;
+
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -26,8 +28,6 @@ import java.util.ArrayList;
 import cn.bingoogolapple.qrcode.core.BarcodeType;
 import cn.bingoogolapple.qrcode.core.QRCodeView;
 import cn.bingoogolapple.qrcode.zxing.ZXingView;
-
-import static android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN;
 
 /**
  * @date 2021/04/13
@@ -149,23 +149,13 @@ public final class ScanActivity extends AppCompatActivity implements QRCodeView.
                 .start(new SelectCallback() {
                     @Override
                     public void onResult(ArrayList<Photo> photos, ArrayList<String> paths, boolean isOriginal) {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            paths.forEach(photo -> {
-                                if (photo.contains("content:")) {
-                                    zxView.decodeQRCode(realUri(Uri.parse(photo)));
-                                } else {
-                                    zxView.decodeQRCode(photo);
-                                }
-                            });
-                        } else {
-                            for (Photo photo : photos) {
-                                if (photo.path.contains("content:")) {
-                                    zxView.decodeQRCode(realUri(Uri.parse(photo.path)));
-                                } else {
-                                    zxView.decodeQRCode(photo.path);
-                                }
+                        paths.forEach(photo -> {
+                            if (photo.contains("content:")) {
+                                zxView.decodeQRCode(realUri(Uri.parse(photo)));
+                            } else {
+                                zxView.decodeQRCode(photo);
                             }
-                        }
+                        });
                     }
                 }));
     }

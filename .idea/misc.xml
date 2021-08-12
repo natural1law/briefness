@@ -3,13 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/activity_dialog.xml" value="0.17806484295845998" />
+        <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/activity_dialog.xml" value="0.25" />
         <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/activity_echarts.xml" value="0.17806484295845998" />
         <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/activity_network.xml" value="0.25" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/alert_bg.xml" value="0.2833976833976834" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/alert_bottom_single_selector.xml" value="0.2833976833976834" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/activity_scan.xml" value="0.13446824789594491" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/chs_about_dialog.xml" value="0.2708333333333333" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog1.xml" value="0.25" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog10.xml" value="0.13446824789594491" />
-        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog11.xml" value="0.13446824789594491" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog11.xml" value="0.25" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog12.xml" value="0.2708333333333333" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog2.xml" value="0.13446824789594491" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog3.xml" value="0.13446824789594491" />
@@ -17,8 +20,16 @@
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog5.xml" value="0.13446824789594491" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog6.xml" value="0.13446824789594491" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog7.xml" value="0.13446824789594491" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog8.xml" value="0.13446824789594491" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog9.xml" value="0.13446824789594491" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog_alert.xml" value="0.26331967213114754" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog_camera.xml" value="0.25" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog_console.xml" value="0.25" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog_count_down_time.xml" value="0.26331967213114754" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialogtest.xml" value="0.26707650273224043" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/item_camera.xml" value="0.26331967213114754" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/item_dialog6.xml" value="0.13446824789594491" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/title_bar.xml" value="0.13446824789594491" />
       </map>
     </option>
   </component>

@@ -11,20 +11,21 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidx.view.R;
-import com.androidx.view.dialog.DialogTools;
+import com.androidx.view.dialog.DialogServlet;
+import com.androidx.view.dialog.listener.OnClickCameraListener;
 
 public final class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.HolderView> {
 
     private String[] data;
     private int textColor;
     private int textSize;
-    private DialogTools dt;
-    private OnClickCameraAdapterListener listener;
+    private DialogServlet dt;
+    private OnClickCameraListener listener;
 
     @NonNull
     @Override
     public HolderView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new HolderView(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_dialog6, parent, false));
+        return new HolderView(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_camera, parent, false));
     }
 
     @Override
@@ -32,7 +33,7 @@ public final class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.Hold
         holder.textView.setText(data[position]);
         holder.textView.setTextColor(textColor);
         holder.textView.setTextSize(textSize);
-        holder.layoutView.setOnClickListener(v -> listener.onClick(position, dt));
+        holder.layoutView.setOnClickListener(v -> listener.ok(position, dt));
         if (holder.getAdapterPosition() + 1 == data.length) holder.v.setVisibility(View.GONE);
         else holder.v.setVisibility(View.VISIBLE);
     }
@@ -56,11 +57,11 @@ public final class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.Hold
         this.textSize = textSize;
     }
 
-    public void setDt(DialogTools dt) {
+    public void setDt(DialogServlet dt) {
         this.dt = dt;
     }
 
-    public void setListener(OnClickCameraAdapterListener listener) {
+    public void setListener(OnClickCameraListener listener) {
         this.listener = listener;
     }
 
@@ -79,11 +80,4 @@ public final class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.Hold
 
     }
 
-    public interface OnClickCameraAdapterListener {
-        void onClick(int position, DialogTools dialog);
-
-        default void cancel(DialogTools dialog) {
-            dialog.cancel();
-        }
-    }
 }

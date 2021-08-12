@@ -4,11 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
+    android:id="@+id/dialog_frame"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="20dp">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_content"
+        android:id="@+id/camera_rv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/alert_bg"
@@ -16,20 +17,20 @@
         android:scrollbars="none"
         android:layout_marginBottom="10dp"
         tools:itemCount="2"
-        tools:listitem="@layout/item_dialog6" />
+        tools:listitem="@layout/item_camera" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/dialog_quit"
+        android:id="@+id/camera_cancel"
         style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="60dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:background="@drawable/alert_bottom_single_selector"
         android:gravity="center"
         android:text="取消"
         android:textColor="#006cff"
-        android:textSize="16sp"
+        android:textSize="20sp"
         tools:ignore="HardcodedText" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -24,7 +24,7 @@ android {
             multiDexEnabled true
             proguardFiles 'proguard-rules.pro'
         }
-//
+
 //        debug {
 //            minifyEnabled true
 //            shrinkResources true
@@ -42,9 +42,6 @@ android {
             enableV3Signing true
             enableV4Signing true
         }
-    }
-    buildFeatures {
-        dataBinding = true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
