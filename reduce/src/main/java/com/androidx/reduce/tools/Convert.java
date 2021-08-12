@@ -1,8 +1,11 @@
 package com.androidx.reduce.tools;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.icu.math.BigDecimal;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.WindowManager;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -246,4 +249,23 @@ public final class Convert {
         }
     }
 
+    public static final class Pixel {
+
+        private final DisplayMetrics dm;
+
+        private Pixel(Context context) {
+            WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            dm = new DisplayMetrics();
+            windowManager.getDefaultDisplay().getRealMetrics(dm);
+        }
+
+        public static Pixel get(Context context) {
+            return new Pixel(context);
+        }
+
+        public int dp(int px) {
+            return (int) (px * dm.density);
+        }
+
+    }
 }

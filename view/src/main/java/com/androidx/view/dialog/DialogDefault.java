@@ -2,8 +2,6 @@ package com.androidx.view.dialog;
 
 import static android.view.Gravity.BOTTOM;
 import static android.view.Gravity.CENTER;
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -11,9 +9,11 @@ import android.os.CountDownTimer;
 
 import androidx.annotation.ColorRes;
 import androidx.annotation.Size;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidx.reduce.tools.Convert;
 import com.androidx.view.R;
 import com.androidx.view.dialog.adapter.CameraAdapter;
 import com.androidx.view.dialog.adapter.ListAdapter;
@@ -37,8 +37,6 @@ public final class DialogDefault {
         DialogServlet dialog = DialogCall.builder()
                 .setLayoutView(R.layout.dialog_count_down_time)
                 .setLayoutViewId(R.id.dialog_frame)
-                .setLayoutWidth(MATCH_PARENT)
-                .setLayoutHeight(WRAP_CONTENT)
                 .setCanceled(false)
                 .setCancelable(false)
                 .setLayoutGravity(CENTER)
@@ -86,8 +84,6 @@ public final class DialogDefault {
         DialogServlet dialog = DialogCall.builder()
                 .setLayoutView(R.layout.dialog_camera)
                 .setLayoutViewId(R.id.dialog_frame)
-                .setLayoutWidth(MATCH_PARENT)
-                .setLayoutHeight(WRAP_CONTENT)
                 .setCanceled(false)
                 .setCancelable(false)
                 .setLayoutGravity(BOTTOM)
@@ -129,8 +125,6 @@ public final class DialogDefault {
         DialogServlet dialog = DialogCall.builder()
                 .setLayoutView(R.layout.dialog_list)
                 .setLayoutViewId(R.id.dialog_frame)
-                .setLayoutWidth(MATCH_PARENT)
-                .setLayoutHeight(WRAP_CONTENT)
                 .setCanceled(false)
                 .setCancelable(false)
                 .setLayoutGravity(BOTTOM)
@@ -158,8 +152,6 @@ public final class DialogDefault {
         DialogCall.builder()
                 .setLayoutView(R.layout.dialog_alert)
                 .setLayoutViewId(R.id.dialog_frame)
-                .setLayoutWidth(MATCH_PARENT)
-                .setLayoutHeight(WRAP_CONTENT)
                 .setCanceled(false)
                 .setCancelable(false)
                 .setLayoutGravity(CENTER)
@@ -178,11 +170,9 @@ public final class DialogDefault {
      * @param listener 确认取消
      */
     public static void console(Context context, String content, OnClickTriggerListener listener) {
-        DialogCall.builder()
+        DialogServlet dialog = DialogCall.builder()
                 .setLayoutView(R.layout.dialog_console)
                 .setLayoutViewId(R.id.dialog_frame)
-                .setLayoutWidth(MATCH_PARENT)
-                .setLayoutHeight(500)
                 .setCanceled(false)
                 .setCancelable(false)
                 .setLayoutGravity(CENTER)
@@ -190,8 +180,11 @@ public final class DialogDefault {
                 .get(context)
                 .setTextView(R.id.dialog_content, content)
                 .setOnClickListener(R.id.dialog_affirm, listener)
-                .setOnClickListener(R.id.dialog_quit, listener::no)
-                .show();
+                .setOnClickListener(R.id.dialog_quit, listener::no);
+        AppCompatTextView contentView = dialog.getView(R.id.dialog_content);
+        contentView.setHeight(Convert.Pixel.get(context).dp(150));
+        dialog.show();
+
     }
 
 }

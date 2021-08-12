@@ -17,8 +17,6 @@ public final class DialogModule implements Parcelable {
     private int layoutViewMarginsEnd;
     private int layoutViewMarginsTop;
     private int layoutViewMarginsBottom;
-    private int layoutWidth;
-    private int layoutHeight;
     private int layoutGravity;
 
     protected DialogModule(Parcel in) {
@@ -32,8 +30,6 @@ public final class DialogModule implements Parcelable {
         layoutViewMarginsEnd = in.readInt();
         layoutViewMarginsTop = in.readInt();
         layoutViewMarginsBottom = in.readInt();
-        layoutWidth = in.readInt();
-        layoutHeight = in.readInt();
         layoutGravity = in.readInt();
     }
 
@@ -89,14 +85,6 @@ public final class DialogModule implements Parcelable {
         this.layoutViewMarginsBottom = layoutViewMarginsBottom;
     }
 
-    protected void setLayoutWidth(int layoutWidth) {
-        this.layoutWidth = layoutWidth;
-    }
-
-    protected void setLayoutHeight(int layoutHeight) {
-        this.layoutHeight = layoutHeight;
-    }
-
     protected void setLayoutGravity(int layoutGravity) {
         this.layoutGravity = layoutGravity;
     }
@@ -141,14 +129,6 @@ public final class DialogModule implements Parcelable {
         return layoutViewMarginsBottom;
     }
 
-    protected int getLayoutWidth() {
-        return layoutWidth;
-    }
-
-    protected int getLayoutHeight() {
-        return layoutHeight;
-    }
-
     protected int getLayoutGravity() {
         return layoutGravity;
     }
@@ -170,8 +150,6 @@ public final class DialogModule implements Parcelable {
         parcel.writeInt(layoutViewMarginsEnd);
         parcel.writeInt(layoutViewMarginsTop);
         parcel.writeInt(layoutViewMarginsBottom);
-        parcel.writeInt(layoutWidth);
-        parcel.writeInt(layoutHeight);
         parcel.writeInt(layoutGravity);
     }
 
@@ -180,11 +158,11 @@ public final class DialogModule implements Parcelable {
         if (this == o) return true;
         if (!(o instanceof DialogModule)) return false;
         DialogModule that = (DialogModule) o;
-        return isCanceled() == that.isCanceled() && isCancelable() == that.isCancelable() && getLayoutView() == that.getLayoutView() && getLayoutViewId() == that.getLayoutViewId() && getLayoutViewBackgroundColor() == that.getLayoutViewBackgroundColor() && getLayoutViewBackgroundDrawable() == that.getLayoutViewBackgroundDrawable() && getLayoutViewMarginsStart() == that.getLayoutViewMarginsStart() && getLayoutViewMarginsEnd() == that.getLayoutViewMarginsEnd() && getLayoutViewMarginsTop() == that.getLayoutViewMarginsTop() && getLayoutViewMarginsBottom() == that.getLayoutViewMarginsBottom() && getLayoutWidth() == that.getLayoutWidth() && getLayoutHeight() == that.getLayoutHeight() && getLayoutGravity() == that.getLayoutGravity();
+        return isCanceled() == that.isCanceled() && isCancelable() == that.isCancelable() && getLayoutView() == that.getLayoutView() && getLayoutViewId() == that.getLayoutViewId() && getLayoutViewBackgroundColor() == that.getLayoutViewBackgroundColor() && getLayoutViewBackgroundDrawable() == that.getLayoutViewBackgroundDrawable() && getLayoutViewMarginsStart() == that.getLayoutViewMarginsStart() && getLayoutViewMarginsEnd() == that.getLayoutViewMarginsEnd() && getLayoutViewMarginsTop() == that.getLayoutViewMarginsTop() && getLayoutViewMarginsBottom() == that.getLayoutViewMarginsBottom() && getLayoutGravity() == that.getLayoutGravity();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(isCanceled(), isCancelable(), getLayoutView(), getLayoutViewId(), getLayoutViewBackgroundColor(), getLayoutViewBackgroundDrawable(), getLayoutViewMarginsStart(), getLayoutViewMarginsEnd(), getLayoutViewMarginsTop(), getLayoutViewMarginsBottom(), getLayoutWidth(), getLayoutHeight(), getLayoutGravity());
+        return Objects.hash(isCanceled(), isCancelable(), getLayoutView(), getLayoutViewId(), getLayoutViewBackgroundColor(), getLayoutViewBackgroundDrawable(), getLayoutViewMarginsStart(), getLayoutViewMarginsEnd(), getLayoutViewMarginsTop(), getLayoutViewMarginsBottom(), getLayoutGravity());
     }
 }

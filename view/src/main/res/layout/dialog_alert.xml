@@ -16,6 +16,7 @@
         android:layout_height="55dp"
         android:padding="15dp"
         android:text="标题"
+        android:textColor="@color/hint"
         android:textSize="18sp"
         android:textStyle="bold"
         tools:ignore="HardcodedText" />

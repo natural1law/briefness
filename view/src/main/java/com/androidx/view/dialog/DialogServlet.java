@@ -1,5 +1,8 @@
 package com.androidx.view.dialog;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
@@ -57,8 +60,8 @@ public class DialogServlet extends AppCompatDialog {
         if (window != null) {
             window.setBackgroundDrawableResource(android.R.color.transparent);
             WindowManager.LayoutParams params = window.getAttributes();
-            params.width = module.getLayoutWidth();
-            params.height = module.getLayoutHeight();
+            params.width = MATCH_PARENT;
+            params.height = WRAP_CONTENT;
             params.gravity = module.getLayoutGravity();
         }
         if (module.getLayoutViewId() != 0) {
