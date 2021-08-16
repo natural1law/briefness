@@ -34,6 +34,7 @@ public final class DialogDefault {
      * @param listener  完成
      */
     public static void countDownTime(Context context, String content, String prefix, long totalTime, String suffix, OnClickCountDownTimeListener listener) {
+        int count = 1000;
         DialogServlet dialog = DialogCall.builder()
                 .setLayoutView(R.layout.dialog_count_down_time)
                 .setLayoutViewId(R.id.dialog_frame)
@@ -44,11 +45,11 @@ public final class DialogDefault {
                 .get(context)
                 .setTextView(R.id.dialog_content, content);
         ZLoadingTextView countDownView = dialog.getView(R.id.dialog_timing_animation);
-        CountDownTimer countDownTimer = new CountDownTimer(totalTime * 1000, 1000) {
+        CountDownTimer countDownTimer = new CountDownTimer(totalTime * count, count) {
             @Override
             public void onTick(long m) {
                 if (countDownView != null)
-                    countDownView.setText(prefix + ((m / 1000) + 1) + suffix);
+                    countDownView.setText(prefix + ((m / count) + 1) + suffix);
             }
 
             @Override
