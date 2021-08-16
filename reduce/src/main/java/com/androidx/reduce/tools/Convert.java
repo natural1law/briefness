@@ -171,20 +171,25 @@ public final class Convert {
          * @param value 需要转换的值
          * @return 八位二进制
          */
-        public strictfp static <T> String toBinary(T value) {
+        @SuppressWarnings("StringBufferMayBeStringBuilder")
+        public static <T> String toBinary(T value) {
             try {
-                byte b = Byte.parseByte(Convert.Scm.build().set(value).tosInt());
-                return String.valueOf((b & 128) == 0 ? 0 : (b & 128) >> 7) +
-                        ((b & 64) == 0 ? 0 : (b & 64) >> 6) +
-                        ((b & 32) == 0 ? 0 : (b & 32) >> 5) +
-                        ((b & 16) == 0 ? 0 : (b & 16) >> 4) +
-                        ((b & 8) == 0 ? 0 : (b & 8) >> 3) +
-                        ((b & 4) == 0 ? 0 : (b & 4) >> 2) +
-                        ((b & 2) == 0 ? 0 : (b & 2) >> 1) +
-                        (b & 1);
+                StringBuffer sb = new StringBuffer();
+                int b = Integer.parseInt(Convert.Scm.build().set(value).tosInt());
+                int b1 = (b & 128) == 0 ? 0 : (b & 128) >>> 7;
+                int b2 = (b & 64) == 0 ? 0 : (b & 64) >>> 6;
+                int b3 = (b & 32) == 0 ? 0 : (b & 32) >>> 5;
+                int b4 = (b & 16) == 0 ? 0 : (b & 16) >>> 4;
+                int b5 = (b & 8) == 0 ? 0 : (b & 8) >>> 3;
+                int b6 = (b & 4) == 0 ? 0 : (b & 4) >>> 2;
+                int b7 = (b & 2) == 0 ? 0 : (b & 2) >>> 1;
+                int b8 = (b & 1);
+                sb.append(b1).append(b2).append(b3).append(b4)
+                        .append(b5).append(b6).append(b7).append(b8);
+                return sb.toString();
             } catch (Exception e) {
                 Log.e("转二进制异常", Log.getStackTraceString(e));
-                return "";
+                return "00000000";
             }
         }
     }
