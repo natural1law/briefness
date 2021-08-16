@@ -50,23 +50,23 @@
 ### 使用依赖
   * 全部
   ```
-    implementation 'com.github.natural1law.briefness:2.5.2'
+    implementation 'com.github.natural1law.briefness:2.5.5'
   ```
   * 分支-网络请求
   ```
-  implementation 'com.github.natural1law.briefness:network:2.5.2'
+  implementation 'com.github.natural1law.briefness:network:2.5.5'
   ```
   * 分支-常用工具
   ```
-  implementation 'com.github.natural1law.briefness:reduce:2.5.2'
+  implementation 'com.github.natural1law.briefness:reduce:2.5.5'
   ```
   * 分支-图表统计
   ```
-  implementation 'com.github.natural1law.briefness:echarts:2.5.2'
+  implementation 'com.github.natural1law.briefness:echarts:2.5.5'
   ```
   * 分支-视图布局
   ```
-  implementation 'com.github.natural1law.briefness:view:2.5.2'
+  implementation 'com.github.natural1law.briefness:view:2.5.5'
   ```
 
 ### 工具使用
