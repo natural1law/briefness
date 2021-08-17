@@ -29,6 +29,8 @@ import com.androidx.view.R;
 import com.androidx.view.dialog.listener.OnClickTriggerListener;
 import com.bumptech.glide.Glide;
 
+import org.jetbrains.annotations.NotNull;
+
 public class DialogServlet extends AppCompatDialog {
 
     private View layout;
@@ -91,7 +93,7 @@ public class DialogServlet extends AppCompatDialog {
         return (V) view;
     }
 
-    public <T> DialogServlet setTextView(@IdRes int viewId, T text) {
+    public <T> DialogServlet setTextView(@IdRes int viewId,@NotNull T text) {
         AppCompatTextView view = getView(viewId);
         view.setText(String.valueOf(text));
         return this;
@@ -102,14 +104,14 @@ public class DialogServlet extends AppCompatDialog {
         return String.valueOf(view.getText()).trim();
     }
 
-    public <T> DialogServlet setImageView(@IdRes int viewId, T resId) {
+    public <T> DialogServlet setImageView(@IdRes int viewId,@NotNull T resId) {
         AppCompatImageView view = getView(viewId);
         view.setScaleType(ImageView.ScaleType.FIT_CENTER);
         Glide.with(getContext()).load(resId).into(view);
         return this;
     }
 
-    public <T> DialogServlet setImageButton(@IdRes int viewId, T resId) {
+    public <T> DialogServlet setImageButton(@IdRes int viewId,@NotNull T resId) {
         AppCompatImageButton view = getView(viewId);
         view.setScaleType(ImageView.ScaleType.FIT_CENTER);
         Glide.with(getContext()).load(resId).into(view);
@@ -143,6 +145,12 @@ public class DialogServlet extends AppCompatDialog {
     public DialogServlet setEditHintColor(@IdRes int viewId, @ColorInt int color) {
         AppCompatAutoCompleteTextView view = getView(viewId);
         view.setHintTextColor(color);
+        return this;
+    }
+
+    public DialogServlet setEditHint(@IdRes int viewId, @NotNull String text) {
+        AppCompatAutoCompleteTextView view = getView(viewId);
+        view.setHint(text);
         return this;
     }
 

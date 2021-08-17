@@ -1,5 +1,8 @@
 package com.androidx.view.pages;
 
+import static com.androidx.view.pages.PaginationIndicator.dp2px;
+import static com.androidx.view.pages.PaginationIndicator.sp2px;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -9,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.SnapHelper;
 
 import com.androidx.view.R;
 import com.zyao89.view.zloading.ZLoadingView;
@@ -17,9 +22,6 @@ import com.zyao89.view.zloading.ZLoadingView;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.androidx.view.pages.PaginationIndicator.dp2px;
-import static com.androidx.view.pages.PaginationIndicator.sp2px;
 
 public class PaginationTopRecycleView extends LinearLayout implements PaginationIndicatorTop.OnChangedListener {
 
@@ -91,6 +93,11 @@ public class PaginationTopRecycleView extends LinearLayout implements Pagination
 
     public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
         mRecycleView.setLayoutManager(layoutManager);
+    }
+
+    public void setSnapHelper(){
+        SnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(mRecycleView);
     }
 
     /**
