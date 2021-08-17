@@ -10,18 +10,6 @@
      * http/https 
    #### 常用工具
    * 正则表达式
-     * 手机号验证
-     * 汉语验证
-     * 邮箱验证
-     * 身份证验证
-     * IP验证
-     * 域名验证
-     * 邮政编码验证
-     * 密码验证（非混合）
-     * 密码验证（混合）
-     * 日期验证
-     * 时间验证
-     * 空白字符验证
    * 安全加密
      * MD5加随机盐、MD5数据校验
      * AES加密解密
@@ -50,23 +38,23 @@
 ### 使用依赖
   * 全部
   ```
-    implementation 'com.github.natural1law.briefness:2.5.5'
+    implementation 'com.github.natural1law.briefness:2.5.6'
   ```
   * 分支-网络请求
   ```
-  implementation 'com.github.natural1law.briefness:network:2.5.5'
+  implementation 'com.github.natural1law.briefness:network:2.5.6'
   ```
   * 分支-常用工具
   ```
-  implementation 'com.github.natural1law.briefness:reduce:2.5.5'
+  implementation 'com.github.natural1law.briefness:reduce:2.5.6'
   ```
   * 分支-图表统计
   ```
-  implementation 'com.github.natural1law.briefness:echarts:2.5.5'
+  implementation 'com.github.natural1law.briefness:echarts:2.5.6'
   ```
   * 分支-视图布局
   ```
-  implementation 'com.github.natural1law.briefness:view:2.5.5'
+  implementation 'com.github.natural1law.briefness:view:2.5.6'
   ```
 
 ### 工具使用
