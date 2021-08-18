@@ -44,9 +44,13 @@ public final class Toasts implements ToastListener {
      *
      * @param state true--启动debug，false--关闭debug
      */
-    public Toasts isDebug(boolean state) {
+    public Toasts setDebug(boolean state) {
         this.debug = state;
         return this;
+    }
+
+    public boolean isDebug() {
+        return debug;
     }
 
     /**
