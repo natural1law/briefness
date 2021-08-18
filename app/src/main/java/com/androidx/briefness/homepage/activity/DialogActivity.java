@@ -5,6 +5,7 @@ import static com.androidx.briefness.base.App.toasts;
 import static com.androidx.view.scan.ScanActivity.RESULT_KEY;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -90,7 +91,7 @@ public final class DialogActivity extends BaseActivity {
 
     @OnClick(R.id.activity_dialog)
     public void dialog() {
-        DialogDefault.alert(aThis, "标题", "内容");
+        DialogDefault.alert(aThis, "标题", "内容", Dialog::cancel);
     }
 
     @OnClick(R.id.activity_dialog1)

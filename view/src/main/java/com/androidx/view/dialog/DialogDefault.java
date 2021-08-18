@@ -3,7 +3,6 @@ package com.androidx.view.dialog;
 import static android.view.Gravity.BOTTOM;
 import static android.view.Gravity.CENTER;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.os.CountDownTimer;
 
@@ -149,7 +148,7 @@ public final class DialogDefault {
      * @param title   标题
      * @param content 内容
      */
-    public static void alert(Context context, String title, String content) {
+    public static void alert(Context context, String title, String content, OnClickTriggerListener listener) {
         DialogCall.builder()
                 .setLayoutView(R.layout.dialog_alert)
                 .setLayoutViewId(R.id.dialog_frame)
@@ -160,7 +159,7 @@ public final class DialogDefault {
                 .get(context)
                 .setTextView(R.id.dialog_title, title)
                 .setTextView(R.id.dialog_content, content)
-                .setOnClickListener(R.id.dialog_affirm, Dialog::cancel)
+                .setOnClickListener(R.id.dialog_affirm, listener)
                 .show();
     }
 

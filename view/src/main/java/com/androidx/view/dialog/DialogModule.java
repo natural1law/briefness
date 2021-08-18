@@ -11,6 +11,8 @@ public final class DialogModule implements Parcelable {
     private boolean cancelable;
     private int layoutView;
     private int layoutViewId;
+    private int layoutWidth;
+    private int layoutHeight;
     private int layoutViewBackgroundColor;
     private int layoutViewBackgroundDrawable;
     private int layoutViewMarginsStart;
@@ -24,6 +26,8 @@ public final class DialogModule implements Parcelable {
         cancelable = in.readByte() != 0;
         layoutView = in.readInt();
         layoutViewId = in.readInt();
+        layoutWidth = in.readInt();
+        layoutHeight = in.readInt();
         layoutViewBackgroundColor = in.readInt();
         layoutViewBackgroundDrawable = in.readInt();
         layoutViewMarginsStart = in.readInt();
@@ -59,6 +63,14 @@ public final class DialogModule implements Parcelable {
 
     protected void setLayoutViewId(int layoutViewId) {
         this.layoutViewId = layoutViewId;
+    }
+
+    protected void setLayoutWidth(int layoutWidth) {
+        this.layoutWidth = layoutWidth;
+    }
+
+    protected void setLayoutHeight(int layoutHeight) {
+        this.layoutHeight = layoutHeight;
     }
 
     protected void setLayoutViewBackgroundColor(int layoutViewBackgroundColor) {
@@ -105,6 +117,14 @@ public final class DialogModule implements Parcelable {
         return layoutViewId;
     }
 
+    protected int getLayoutWidth() {
+        return layoutWidth;
+    }
+
+    protected int getLayoutHeight() {
+        return layoutHeight;
+    }
+
     protected int getLayoutViewBackgroundColor() {
         return layoutViewBackgroundColor;
     }
@@ -144,6 +164,8 @@ public final class DialogModule implements Parcelable {
         parcel.writeByte((byte) (cancelable ? 1 : 0));
         parcel.writeInt(layoutView);
         parcel.writeInt(layoutViewId);
+        parcel.writeInt(layoutWidth);
+        parcel.writeInt(layoutHeight);
         parcel.writeInt(layoutViewBackgroundColor);
         parcel.writeInt(layoutViewBackgroundDrawable);
         parcel.writeInt(layoutViewMarginsStart);
@@ -158,11 +180,11 @@ public final class DialogModule implements Parcelable {
         if (this == o) return true;
         if (!(o instanceof DialogModule)) return false;
         DialogModule that = (DialogModule) o;
-        return isCanceled() == that.isCanceled() && isCancelable() == that.isCancelable() && getLayoutView() == that.getLayoutView() && getLayoutViewId() == that.getLayoutViewId() && getLayoutViewBackgroundColor() == that.getLayoutViewBackgroundColor() && getLayoutViewBackgroundDrawable() == that.getLayoutViewBackgroundDrawable() && getLayoutViewMarginsStart() == that.getLayoutViewMarginsStart() && getLayoutViewMarginsEnd() == that.getLayoutViewMarginsEnd() && getLayoutViewMarginsTop() == that.getLayoutViewMarginsTop() && getLayoutViewMarginsBottom() == that.getLayoutViewMarginsBottom() && getLayoutGravity() == that.getLayoutGravity();
+        return isCanceled() == that.isCanceled() && isCancelable() == that.isCancelable() && getLayoutView() == that.getLayoutView() && getLayoutViewId() == that.getLayoutViewId() && getLayoutWidth() == that.getLayoutWidth() && getLayoutHeight() == that.getLayoutHeight() && getLayoutViewBackgroundColor() == that.getLayoutViewBackgroundColor() && getLayoutViewBackgroundDrawable() == that.getLayoutViewBackgroundDrawable() && getLayoutViewMarginsStart() == that.getLayoutViewMarginsStart() && getLayoutViewMarginsEnd() == that.getLayoutViewMarginsEnd() && getLayoutViewMarginsTop() == that.getLayoutViewMarginsTop() && getLayoutViewMarginsBottom() == that.getLayoutViewMarginsBottom() && getLayoutGravity() == that.getLayoutGravity();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(isCanceled(), isCancelable(), getLayoutView(), getLayoutViewId(), getLayoutViewBackgroundColor(), getLayoutViewBackgroundDrawable(), getLayoutViewMarginsStart(), getLayoutViewMarginsEnd(), getLayoutViewMarginsTop(), getLayoutViewMarginsBottom(), getLayoutGravity());
+        return Objects.hash(isCanceled(), isCancelable(), getLayoutView(), getLayoutViewId(), getLayoutWidth(), getLayoutHeight(), getLayoutViewBackgroundColor(), getLayoutViewBackgroundDrawable(), getLayoutViewMarginsStart(), getLayoutViewMarginsEnd(), getLayoutViewMarginsTop(), getLayoutViewMarginsBottom(), getLayoutGravity());
     }
 }

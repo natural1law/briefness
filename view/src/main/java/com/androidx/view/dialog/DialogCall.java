@@ -1,6 +1,8 @@
 package com.androidx.view.dialog;
 
 import static android.view.Gravity.CENTER;
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.androidx.view.dialog.DialogCall.Builder.module;
 
 import android.content.Context;
@@ -65,6 +67,8 @@ public final class DialogCall {
         private boolean cancelable = true;
         private int layoutView;
         private int layoutViewId;
+        private int layoutWidth = MATCH_PARENT;
+        private int layoutHeight = WRAP_CONTENT;
         private int layoutViewBackgroundColor;
         private int layoutViewBackgroundDrawable;
         private int layoutViewMarginsStart = 0;
@@ -90,6 +94,16 @@ public final class DialogCall {
 
         public Builder setLayoutViewId(@IdRes int id) {
             this.layoutViewId = id;
+            return this;
+        }
+
+        public Builder setLayoutWidth(int layoutWidth) {
+            this.layoutWidth = layoutWidth;
+            return this;
+        }
+
+        public Builder setLayoutHeight(int layoutHeight) {
+            this.layoutHeight = layoutHeight;
             return this;
         }
 
@@ -133,6 +147,8 @@ public final class DialogCall {
             module.setCancelable(cancelable);
             module.setLayoutView(layoutView);
             module.setLayoutViewId(layoutViewId);
+            module.setLayoutWidth(layoutWidth);
+            module.setLayoutHeight(layoutHeight);
             module.setLayoutGravity(layoutGravity);
             module.setLayoutViewBackgroundColor(layoutViewBackgroundColor);
             module.setLayoutViewBackgroundDrawable(layoutViewBackgroundDrawable);
