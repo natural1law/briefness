@@ -11,8 +11,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.SSLSocketFactory;
 
 import okhttp3.ConnectionPool;
 import okhttp3.ConnectionSpec;
@@ -47,6 +48,8 @@ public final class HttpNetwork implements IHttpNetwork {
     @Override
     public @NotNull
     OkHttpClient getClient() {
+        String cert = Configuration.getSsl();
+        SSLSocketFactory ssl = TrustManagers.newInstance().createSSLSocketFactory();
         OkHttpClient.Builder client = new OkHttpClient.Builder()
                 .dns(new HttpDns())
                 .retryOnConnectionFailure(true)//错误重连
@@ -57,8 +60,8 @@ public final class HttpNetwork implements IHttpNetwork {
                 .writeTimeout(TIMEOUT, TimeUnit.SECONDS)//设置写入超时时间(单位秒)
                 .addNetworkInterceptor(OkHttpInterceptor.newInstance())//网络拦截器
                 .connectionPool(new ConnectionPool(MAX_CONN_COUNT, ALIVE, TimeUnit.MINUTES))//创建连接池
-                .hostnameVerifier((hostname, session) -> hostname.equalsIgnoreCase(session.getPeerHost()))//IP主机校验
-                .sslSocketFactory(Objects.requireNonNull(TrustManagers.newInstance().createSSLSocketFactory()), TrustManagers.newInstance());//内置证书校验
+                .hostnameVerifier((hostname, session) -> hostname.equalsIgnoreCase(session.getPeerHost()));//IP主机校验
+        if (ssl != null) client.sslSocketFactory(ssl, TrustManagers.newInstance());//内置证书校验
         ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS)
                 .tlsVersions(TlsVersion.TLS_1_3, TlsVersion.TLS_1_2, TlsVersion.TLS_1_1, TlsVersion.TLS_1_0)
                 .allEnabledCipherSuites()
@@ -66,6 +69,7 @@ public final class HttpNetwork implements IHttpNetwork {
         // 兼容http接口
         ConnectionSpec spec1 = new ConnectionSpec.Builder(ConnectionSpec.CLEARTEXT).build();
         client.connectionSpecs(Arrays.asList(spec, spec1));
+        if (!cert.equals("")) TrustManagers.setCertificate(client, cert);
         return client.build();
     }
 
@@ -75,31 +79,17 @@ public final class HttpNetwork implements IHttpNetwork {
     @Override
     public @NotNull
     Request getRequest(Uri uri, Map<String, Object> map) throws MalformedURLException {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            final int[] p = {0};
-            param.setLength(p[0]);
-            map.forEach((key, o) -> {
-                if (p[0] == 0) {
-                    param.append("?");
-                } else {
-                    param.append("&");
-                }
-                param.append(key).append("=").append(map.get(key));
-                p[0]++;
-            });
-        } else {
-            int i = 0;
-            param.setLength(i);
-            for (String key : map.keySet()) {
-                if (i == 0) {
-                    param.append("?");
-                } else {
-                    param.append("&");
-                }
-                param.append(key).append("=").append(map.get(key));
-                i++;
+        final int[] p = {0};
+        param.setLength(p[0]);
+        map.forEach((key, o) -> {
+            if (p[0] == 0) {
+                param.append("?");
+            } else {
+                param.append("&");
             }
-        }
+            param.append(key).append("=").append(map.get(key));
+            p[0]++;
+        });
         return request.get()
                 .url(new URL(Uri.decode(uri.toString()) + param))
                 .build();
@@ -137,31 +127,17 @@ public final class HttpNetwork implements IHttpNetwork {
     @Override
     public @NotNull
     Request deleteRequest(Uri uri, Map<String, Object> map) throws MalformedURLException {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            final int[] p = {0};
-            param.setLength(p[0]);
-            map.forEach((key, o) -> {
-                if (p[0] == 0) {
-                    param.append("?");
-                } else {
-                    param.append("&");
-                }
-                param.append(key).append("=").append(map.get(key));
-                p[0]++;
-            });
-        } else {
-            int i = 0;
-            param.setLength(i);
-            for (String key : map.keySet()) {
-                if (i == 0) {
-                    param.append("?");
-                } else {
-                    param.append("&");
-                }
-                param.append(key).append("=").append(map.get(key));
-                i++;
+        final int[] p = {0};
+        param.setLength(p[0]);
+        map.forEach((key, o) -> {
+            if (p[0] == 0) {
+                param.append("?");
+            } else {
+                param.append("&");
             }
-        }
+            param.append(key).append("=").append(map.get(key));
+            p[0]++;
+        });
         return request.delete()
                 .url(new URL(Uri.decode(uri.toString()) + param))
                 .build();

@@ -14,7 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import androidx.annotation.ColorInt;
+import androidx.annotation.ColorRes;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.Size;
@@ -103,9 +103,9 @@ public class DialogServlet extends AppCompatDialog {
         return this;
     }
 
-    public DialogServlet setTextColor(@IdRes int viewId, @ColorInt int color) {
+    public DialogServlet setTextColor(@IdRes int viewId, @ColorRes int color) {
         AppCompatTextView view = getView(viewId);
-        view.setTextColor(color);
+        view.setTextColor(getContext().getResources().getColor(color, getContext().getTheme()));
         return this;
     }
 
@@ -137,17 +137,17 @@ public class DialogServlet extends AppCompatDialog {
         return this;
     }
 
-    public DialogServlet setImageColor(@IdRes int viewId, @ColorInt int color) {
+    public DialogServlet setImageColor(@IdRes int viewId, @ColorRes int color) {
         AppCompatImageView view = getView(viewId);
         view.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        view.setColorFilter(color);
+        view.setColorFilter(getContext().getResources().getColor(color, getContext().getTheme()));
         return this;
     }
 
-    public DialogServlet setImageColorMode(@IdRes int viewId, @ColorInt int color, PorterDuff.Mode mode) {
+    public DialogServlet setImageColorMode(@IdRes int viewId, @ColorRes int color, PorterDuff.Mode mode) {
         AppCompatImageView view = getView(viewId);
         view.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        view.setColorFilter(color, mode);
+        view.setColorFilter(getContext().getResources().getColor(color, getContext().getTheme()), mode);
         return this;
     }
 
@@ -159,9 +159,9 @@ public class DialogServlet extends AppCompatDialog {
         return String.valueOf(view.getText()).trim();
     }
 
-    public DialogServlet setEditColor(@IdRes int viewId, @ColorInt int color) {
+    public DialogServlet setEditColor(@IdRes int viewId, @ColorRes int color) {
         AppCompatAutoCompleteTextView view = getView(viewId);
-        view.setTextColor(color);
+        view.setTextColor(getContext().getResources().getColor(color, getContext().getTheme()));
         return this;
     }
 
@@ -183,9 +183,9 @@ public class DialogServlet extends AppCompatDialog {
         return this;
     }
 
-    public DialogServlet setEditHintColor(@IdRes int viewId, @ColorInt int color) {
+    public DialogServlet setEditHintColor(@IdRes int viewId, @ColorRes int color) {
         AppCompatAutoCompleteTextView view = getView(viewId);
-        view.setHintTextColor(color);
+        view.setHintTextColor(getContext().getResources().getColor(color, getContext().getTheme()));
         return this;
     }
 
@@ -211,15 +211,15 @@ public class DialogServlet extends AppCompatDialog {
         return this;
     }
 
-    public DialogServlet setImageButtonColor(@IdRes int viewId, @ColorInt int color) {
+    public DialogServlet setImageButtonColor(@IdRes int viewId, @ColorRes int color) {
         AppCompatImageButton view = getView(viewId);
-        view.setColorFilter(color);
+        view.setColorFilter(getContext().getResources().getColor(color, getContext().getTheme()));
         return this;
     }
 
-    public DialogServlet setBackgroundColor(@IdRes int viewId, @ColorInt int color) {
+    public DialogServlet setBackgroundColor(@IdRes int viewId, @ColorRes int color) {
         View view = getView(viewId);
-        view.setBackgroundColor(color);
+        view.setBackgroundColor(getContext().getResources().getColor(color, getContext().getTheme()));
         return this;
     }
 

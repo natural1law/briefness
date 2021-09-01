@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.util.Log
 import com.androidx.http.net.listener.BytesCallback
 import com.androidx.http.net.listener.HttpRequestListener
 import com.androidx.http.net.listener.StringCallback
@@ -54,10 +55,7 @@ class HttpRequest : HttpRequestListener {
             override fun onFailure(call: Call, e: IOException) {
                 handler.sendMessage(
                     handler.obtainMessage(
-                        -1, MsgModule(
-                            (if (e.message == null) "" else e.message)!!,
-                            callBack!!
-                        )
+                        -1, MsgModule(Log.getStackTraceString(e), callBack!!)
                     )
                 )
                 // 如果超时并未超过指定次数，则重新连接
@@ -90,10 +88,7 @@ class HttpRequest : HttpRequestListener {
                 override fun onFailure(call: Call, e: IOException) {
                     handler.sendMessage(
                         handler.obtainMessage(
-                            -2, MsgModule(
-                                e.message!!.toByteArray(),
-                                callBack!!
-                            )
+                            -2, MsgModule(Log.getStackTraceString(e).toByteArray(), callBack!!)
                         )
                     )
                     // 如果超时并未超过指定次数，则重新连接
@@ -126,10 +121,7 @@ class HttpRequest : HttpRequestListener {
                 override fun onFailure(call: Call, e: IOException) {
                     handler.sendMessage(
                         handler.obtainMessage(
-                            -1, MsgModule(
-                                (if (e.message == null) "" else e.message)!!,
-                                callBack!!
-                            )
+                            -1, MsgModule(Log.getStackTraceString(e), callBack!!)
                         )
                     )
                     // 如果超时并未超过指定次数，则重新连接
@@ -162,10 +154,7 @@ class HttpRequest : HttpRequestListener {
                 override fun onFailure(call: Call, e: IOException) {
                     handler.sendMessage(
                         handler.obtainMessage(
-                            -1, MsgModule(
-                                (if (e.message == null) "" else e.message)!!,
-                                callBack!!
-                            )
+                            -1, MsgModule(Log.getStackTraceString(e), callBack!!)
                         )
                     )
                     // 如果超时并未超过指定次数，则重新连接
@@ -198,10 +187,7 @@ class HttpRequest : HttpRequestListener {
                 override fun onFailure(call: Call, e: IOException) {
                     handler.sendMessage(
                         handler.obtainMessage(
-                            -1, MsgModule(
-                                (if (e.message == null) "" else e.message)!!,
-                                callBack!!
-                            )
+                            -1, MsgModule(Log.getStackTraceString(e), callBack!!)
                         )
                     )
                     // 如果超时并未超过指定次数，则重新连接
@@ -234,10 +220,7 @@ class HttpRequest : HttpRequestListener {
                 override fun onFailure(call: Call, e: IOException) {
                     handler.sendMessage(
                         handler.obtainMessage(
-                            -1, MsgModule(
-                                (if (e.message == null) "" else e.message)!!,
-                                callBack!!
-                            )
+                            -1, MsgModule(Log.getStackTraceString(e), callBack!!)
                         )
                     )
                     // 如果超时并未超过指定次数，则重新连接
@@ -271,10 +254,7 @@ class HttpRequest : HttpRequestListener {
                 override fun onFailure(call: Call, e: IOException) {
                     handler.sendMessage(
                         handler.obtainMessage(
-                            -1, MsgModule(
-                                (if (e.message == null) "" else e.message)!!,
-                                callBack!!
-                            )
+                            -1, MsgModule(Log.getStackTraceString(e), callBack!!)
                         )
                     )
                     // 如果超时并未超过指定次数，则重新连接

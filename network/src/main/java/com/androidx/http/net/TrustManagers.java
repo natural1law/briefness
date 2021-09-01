@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.util.Log;
 
 import java.io.ByteArrayInputStream;
-import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.SecureRandom;
 import java.security.cert.Certificate;
@@ -19,7 +18,7 @@ import javax.net.ssl.X509TrustManager;
 
 import okhttp3.OkHttpClient;
 
-@SuppressLint("TrustAllX509TrustManager")
+@SuppressLint({"TrustAllX509TrustManager", "CustomX509TrustManager"})
 @SuppressWarnings("WeakerAccess")
 public final class TrustManagers implements X509TrustManager {
 
@@ -58,8 +57,8 @@ public final class TrustManagers implements X509TrustManager {
             SSLContext sc = SSLContext.getInstance("TLS");
             sc.init(null, new TrustManager[]{TrustManagers.newInstance()}, new SecureRandom());
             return sc.getSocketFactory();
-        } catch (GeneralSecurityException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            Log.e("https自制签名异常", Log.getStackTraceString(e));
             return null;
         }
     }
@@ -99,7 +98,7 @@ public final class TrustManagers implements X509TrustManager {
             sslContext.init(null, tmf.getTrustManagers(), new SecureRandom());
             okHttpClientBuilder.sslSocketFactory(sslContext.getSocketFactory(), (X509TrustManager) tmf.getTrustManagers()[0]);
         } catch (Exception e) {
-            Log.e("SSLException", String.valueOf(e.getMessage()));
+            Log.e("SSLException", Log.getStackTraceString(e));
         }
     }
 

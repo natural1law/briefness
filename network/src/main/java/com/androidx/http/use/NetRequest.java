@@ -32,6 +32,13 @@ public final class NetRequest {
     }
 
     /**
+     * 设置SSL证书
+     */
+    public static void setSsl(String certification) {
+        Configuration.setSsl(certification);
+    }
+
+    /**
      * 设置状态
      *
      * @param connect    成功状态key
