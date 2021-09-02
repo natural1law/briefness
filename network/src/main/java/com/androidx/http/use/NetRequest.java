@@ -39,6 +39,13 @@ public final class NetRequest {
     }
 
     /**
+     * 显示请求头信息
+     */
+    public static String showRequest() {
+        return Configuration.getShowRequest();
+    }
+
+    /**
      * 设置状态
      *
      * @param connect    成功状态key

@@ -1,6 +1,9 @@
 package com.androidx.reduce.tools;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Build;
+import android.provider.Settings;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -10,7 +13,7 @@ public final class Facility {
     /**
      * 获取android设备ID
      */
-    private static String getID() {
+    private static String getBuild() {
         //noinspection deprecation
         String dev = "@%&" +
                 Build.BOARD.length() % 10 + Build.BRAND.length() % 10 +
@@ -40,9 +43,25 @@ public final class Facility {
         }
     }
 
-    public static String meid() {
-        String id = getID().replace("-", "");
-        return id.replace("f", "");
+    /**
+     * 获取手机cpu架构，支持的指令集
+     */
+    private static String getCpuAbi() {
+        String[] abis;
+        abis = Build.SUPPORTED_ABIS;
+        StringBuilder abiStr = new StringBuilder();
+        for (String abi : abis) {
+            abiStr.append(abi);
+            abiStr.append(',');
+        }
+        return abiStr.toString();
     }
 
+    @SuppressLint("HardwareIds")
+    public static String imei(Context context) {
+        String deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        String cleartext = Build.BRAND + Build.MODEL + getCpuAbi() + getBuild();
+        String md5 = Secure.MD5.encrypt(cleartext, deviceId);
+        return md5.substring(8, 23);
+    }
 }

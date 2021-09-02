@@ -23,6 +23,17 @@ public final class Secure {
         }
 
         /**
+         * 使用MD5加密（非随机盐）
+         *
+         * @param cleartext 明文
+         * @param salt      盐
+         * @return 加密后的字符串
+         */
+        public static String encrypt(String cleartext, String salt) {
+            return Control.MD5.encrypt(cleartext, salt);
+        }
+
+        /**
          * 获取MD5数据校验
          *
          * @param original   原始数据（未加密）

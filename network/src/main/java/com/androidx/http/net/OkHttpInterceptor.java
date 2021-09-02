@@ -46,6 +46,7 @@ public final class OkHttpInterceptor implements Interceptor {
         Request request = chain.request();
         Request.Builder requestBuilder = request.newBuilder();
         headers.forEach(requestBuilder::addHeader);
+        Configuration.setShowRequest(requestBuilder.build().toString());
         //响应
         return chain.proceed(requestBuilder.build());
     }

@@ -1,5 +1,7 @@
 package com.androidx.reduce.config;
 
+import static android.util.Base64.DEFAULT;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -28,8 +30,6 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
-import static android.util.Base64.DEFAULT;
-
 public final class Control {
 
     private Control() {
@@ -56,6 +56,18 @@ public final class Control {
                 }
             }
             String salt = sb.toString() + timestamp;
+            cleartext = String.valueOf(md5Hex(cleartext + salt));
+            char[] cs = new char[48];
+            for (int i = 0; i < 48; i += 3) {
+                cs[i] = cleartext.charAt(i / 3 * 2);
+                char c = salt.charAt(i / 3);
+                cs[i + 1] = c;
+                cs[i + 2] = cleartext.charAt(i / 3 * 2 + 1);
+            }
+            return new String(cs);
+        }
+
+        public static String encrypt(String cleartext, String salt) {
             cleartext = String.valueOf(md5Hex(cleartext + salt));
             char[] cs = new char[48];
             for (int i = 0; i < 48; i += 3) {

@@ -102,9 +102,7 @@ public final class HttpNetwork implements IHttpNetwork {
     public @NotNull
     Request postRequest(Uri uri, Map<String, Object> map) throws MalformedURLException {
         FormBody.Builder formBody = new FormBody.Builder();
-        for (String key : map.keySet()) {
-            formBody.add(key, String.valueOf(map.get(key)));
-        }
+        map.forEach((key, value) -> formBody.addEncoded(key, String.valueOf(value)));
         return request.post(formBody.build())
                 .url(new URL(Uri.decode(uri.toString())))
                 .build();
@@ -161,7 +159,7 @@ public final class HttpNetwork implements IHttpNetwork {
     @Override
     public @NotNull
     Request formRequest(Uri uri, String key, JsonObject json) throws MalformedURLException {
-        return request.post(new FormBody.Builder().add(key, json.toString()).build())
+        return request.post(new FormBody.Builder().addEncoded(key, json.toString()).build())
                 .url(new URL(Uri.decode(uri.toString())))
                 .build();
     }

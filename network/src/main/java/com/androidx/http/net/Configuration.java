@@ -10,10 +10,15 @@ public final class Configuration implements Serializable {
     }
 
     private static String ssl = "";
+    private static String showRequest = "";
     private static volatile Map<String, String> headers = new ConcurrentHashMap<>();
 
     public static String getSsl() {
         return ssl;
+    }
+
+    public static String getShowRequest() {
+        return showRequest;
     }
 
     public static Map<String, String> getHeaders() {
@@ -26,5 +31,9 @@ public final class Configuration implements Serializable {
 
     public static void setSsl(String certification) {
         Configuration.ssl = ssl;
+    }
+
+    public static void setShowRequest(String showRequest) {
+        Configuration.showRequest = showRequest;
     }
 }

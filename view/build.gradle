@@ -12,7 +12,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 31
         versionCode 2
-        versionName "2.5.7"
+        versionName "2.5.9"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -53,7 +53,7 @@ android {
 }
 
 dependencies {
-
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
     implementation project(path: ':reduce')
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.3.0'
