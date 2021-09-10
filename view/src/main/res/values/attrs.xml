@@ -2,11 +2,48 @@
 <resources>
 
     <declare-styleable name="PaginationIndicator">
-        <attr name="number_tip_count" format="integer"/>
-        <attr name="selected_color" format="color"/>
-        <attr name="unselected_color" format="color"/>
-        <attr name="text_size" format="dimension"/>
-        <attr name="rect_size" format="dimension"/>
+        <attr name="number_tip_count" format="integer" />
+        <attr name="selected_color" format="color" />
+        <attr name="unselected_color" format="color" />
+        <attr name="text_size" format="dimension" />
+        <attr name="rect_size" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="pagination">
+        <attr name="count" format="integer" />
+        <attr name="textStart" format="integer" />
+        <attr name="textWidth" format="integer" />
+        <attr name="textHeight" format="integer" />
+        <attr name="textAlpha" format="integer" />
+        <attr name="textShape" format="integer" />
+        <attr name="rim" format="integer" />
+        <attr name="selectedColor" format="color" />
+        <attr name="unselectedColor" format="color" />
+        <attr name="roundCorner" format="color" />
+        <attr name="textSize" format="dimension" />
+        <attr name="rectSize" format="dimension" />
+        <attr name="progressColor" format="color" />
+        <attr name="progressDuration" format="float" />
+        <attr name="progressAnimation">
+            <enum name="CircleBuilder" value="0" />
+            <enum name="ClockBuilder" value="1" />
+            <enum name="StarBuilder" value="2" />
+            <enum name="LeafBuilder" value="3" />
+            <enum name="DoubleCircleBuilder" value="4" />
+            <enum name="PacManBuilder" value="5" />
+            <enum name="ElasticBallBuilder" value="6" />
+            <enum name="InfectionBallBuilder" value="7" />
+            <enum name="IntertwineBuilder" value="8" />
+            <enum name="TextBuilder" value="9" />
+            <enum name="SearchPathBuilder" value="10" />
+            <enum name="RotateCircleBuilder" value="11" />
+            <enum name="SingleCircleBuilder" value="12" />
+            <enum name="SnakeCircleBuilder" value="13" />
+            <enum name="StairsPathBuilder" value="14" />
+            <enum name="MusicPathBuilder" value="15" />
+            <enum name="StairsRectBuilder" value="16" />
+            <enum name="ChartRectBuilder" value="17" />
+        </attr>
     </declare-styleable>
 
     <declare-styleable name="PaginationRecycleView" parent="PaginationIndicator">
@@ -14,10 +51,10 @@
     </declare-styleable>
 
     <declare-styleable name="SlideSwitch">
-        <attr name="openBackground" format="reference"/>
-        <attr name="closeBackground" format="reference"/>
-        <attr name="slideImage" format="reference"/>
-        <attr name="isOpen" format="boolean"/>
+        <attr name="openBackground" format="reference" />
+        <attr name="closeBackground" format="reference" />
+        <attr name="slideImage" format="reference" />
+        <attr name="isOpen" format="boolean" />
     </declare-styleable>
 
     <declare-styleable name="ScrollTextView">

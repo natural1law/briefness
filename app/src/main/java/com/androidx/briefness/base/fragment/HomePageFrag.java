@@ -1,5 +1,7 @@
 package com.androidx.briefness.base.fragment;
 
+import static com.androidx.briefness.base.App.appThis;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import com.androidx.briefness.homepage.activity.DialogActivity;
 import com.androidx.briefness.homepage.activity.EchartsActivity;
 import com.androidx.briefness.homepage.activity.MsgShowActivity;
 import com.androidx.briefness.homepage.activity.NetworkRequestActivity;
+import com.androidx.briefness.homepage.activity.PageRecyclerViewActivity;
 import com.androidx.briefness.homepage.activity.ScreenCaptureActivity;
 import com.androidx.briefness.homepage.activity.TabActivity;
 import com.androidx.briefness.homepage.adapter.HomepageAdapter;
@@ -31,8 +34,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-
-import static com.androidx.briefness.base.App.appThis;
 
 /**
  * @date 2021/04/30
@@ -52,7 +53,8 @@ public final class HomePageFrag extends BaseFragment {
     private HomepageAdapter adapter;
     private final List<String> list = new ArrayList<>();
     private final Bundle bundle = new Bundle();
-    private final String[] arr = {"Toast功能演示", "dialog功能演示", "图表功能演示", "Tab导航栏功能演示", "网络请求接口演示", "截屏录屏功能演示"};
+    private final String[] arr = {"Toast功能演示", "dialog功能演示", "图表功能演示", "Tab导航栏功能演示", "网络请求接口演示", "截屏录屏功能演示",
+            "分页功能演示"};
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -124,6 +126,7 @@ public final class HomePageFrag extends BaseFragment {
                 appThis.activity(c, ScreenCaptureActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(6))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
+                appThis.activity(c, PageRecyclerViewActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(7))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(8))) {

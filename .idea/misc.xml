@@ -6,8 +6,15 @@
         <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/activity_dialog.xml" value="0.25" />
         <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/activity_echarts.xml" value="0.17806484295845998" />
         <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/activity_network.xml" value="0.25" />
+        <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/activity_pagerecyclerview.xml" value="0.22" />
+        <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/adapter_page.xml" value="0.258879781420765" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/alert_bg.xml" value="0.2833976833976834" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/alert_bottom_single_selector.xml" value="0.2833976833976834" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/nav_icon2.xml" value="0.2701388888888889" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/pagination_background.xml" value="0.2701388888888889" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/pagination_selected.xml" value="0.2701388888888889" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/pagination_shape_round_rect_selected.xml" value="0.2638888888888889" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/pagination_spinner.xml" value="0.26666666666666666" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/activity_scan.xml" value="0.13446824789594491" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/chs_about_dialog.xml" value="0.2708333333333333" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog1.xml" value="0.25" />
@@ -29,6 +36,16 @@
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialogtest.xml" value="0.26707650273224043" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/item_camera.xml" value="0.26331967213114754" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/item_dialog6.xml" value="0.13446824789594491" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/layout_pagination.xml" value="0.2547814207650273" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/layout_recycler.xml" value="0.2547814207650273" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/layout_tab.xml" value="0.13446824789594491" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/layout_tab_bottom.xml" value="0.13446824789594491" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/layout_tab_top.xml" value="0.13446824789594491" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/nav_layout.xml" value="0.13446824789594491" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/pagination_indicator.xml" value="0.25" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/pagination_indicator_top.xml" value="0.13446824789594491" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/pagination_layout.xml" value="0.25" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/pagination_layout_view.xml" value="0.258879781420765" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/pagination_top_layout.xml" value="0.13446824789594491" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/title_bar.xml" value="0.13446824789594491" />
       </map>
