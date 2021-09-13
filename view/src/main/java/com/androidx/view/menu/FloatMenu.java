@@ -148,8 +148,8 @@ public class FloatMenu extends PopupWindow {
             textView.setTextSize(15);
             textView.setTextColor(Color.BLACK);
             MenuItem menuModel = menuItemList.get(i);
-            if (menuModel.getItemResId() != View.NO_ID) {
-                Drawable drawable = ContextCompat.getDrawable(context, menuModel.getItemResId());
+            if (menuModel.getIteresId() != View.NO_ID) {
+                Drawable drawable = ContextCompat.getDrawable(context, menuModel.getIteresId());
                 Objects.requireNonNull(drawable).setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
                 textView.setCompoundDrawablePadding(Display.dip2px(context, 12));
                 textView.setCompoundDrawables(drawable, null, null, null);
@@ -246,7 +246,7 @@ public class FloatMenu extends PopupWindow {
         MenuItem menu = new MenuItem();
         menu.setItem(String.valueOf(itemTitle));
         if (itemIconResId != View.NO_ID) {
-            menu.setItemResId(itemIconResId);
+            menu.setIteresId(itemIconResId);
         }
         menuItemList.add(menu);
         a.recycle();

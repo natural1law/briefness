@@ -3,4 +3,5 @@ include ':echarts'
 include ':network'
 include ':view'
 include ':reduce'
+include ':animation'
 rootProject.name = "briefness"

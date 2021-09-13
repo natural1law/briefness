@@ -24,7 +24,7 @@ interface IHttpNetwork {
 
     Request deleteRequest(Uri url, JsonObject json) throws MalformedURLException;
 
-    Request formRequest(Uri url, String key, JsonObject json) throws MalformedURLException;
+    Request forrequest(Uri url, String key, JsonObject json) throws MalformedURLException;
 
     Request postRequestProto(Uri url, byte[] bytes) throws MalformedURLException;
 

@@ -58,7 +58,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
     private final Rect mTabRect = new Rect();
     private final GradientDrawable mIndicatorDrawable = new GradientDrawable();
 
-    private final Paint mRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint rectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mDividerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mTrianglePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Path mTrianglePath = new Path();
@@ -323,8 +323,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
         //for mIndicatorWidthEqualTitle
         if (mIndicatorStyle == STYLE_NORMAL && mIndicatorWidthEqualTitle) {
             AppCompatTextView tab_title = currentTabView.findViewById(R.id.tv_tab_title);
-            mTextPaint.setTextSize(mTextsize);
-            float textWidth = mTextPaint.measureText(tab_title.getText().toString());
+            paint.setTextSize(mTextsize);
+            float textWidth = paint.measureText(tab_title.getText().toString());
             margin = (right - left - textWidth) / 2;
         }
 
@@ -339,8 +339,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
             //for mIndicatorWidthEqualTitle
             if (mIndicatorStyle == STYLE_NORMAL && mIndicatorWidthEqualTitle) {
                 AppCompatTextView next_tab_title = nextTabView.findViewById(R.id.tv_tab_title);
-                mTextPaint.setTextSize(mTextsize);
-                float nextTextWidth = mTextPaint.measureText(next_tab_title.getText().toString());
+                paint.setTextSize(mTextsize);
+                float nextTextWidth = paint.measureText(next_tab_title.getText().toString());
                 float nextMargin = (nextTabRight - nextTabLeft - nextTextWidth) / 2;
                 margin = margin + mCurrentPositionOffset * (nextMargin - margin);
             }
@@ -396,11 +396,11 @@ public class SlidingTabLayout extends HorizontalScrollView {
 
         // draw underline
         if (mUnderlineHeight > 0) {
-            mRectPaint.setColor(mUnderlineColor);
+            rectPaint.setColor(mUnderlineColor);
             if (mUnderlineGravity == Gravity.BOTTOM) {
-                canvas.drawRect(paddingLeft, height - mUnderlineHeight, mTabsContainer.getWidth() + paddingLeft, height, mRectPaint);
+                canvas.drawRect(paddingLeft, height - mUnderlineHeight, mTabsContainer.getWidth() + paddingLeft, height, rectPaint);
             } else {
-                canvas.drawRect(paddingLeft, 0, mTabsContainer.getWidth() + paddingLeft, mUnderlineHeight, mRectPaint);
+                canvas.drawRect(paddingLeft, 0, mTabsContainer.getWidth() + paddingLeft, mUnderlineHeight, rectPaint);
             }
         }
 
@@ -435,10 +435,10 @@ public class SlidingTabLayout extends HorizontalScrollView {
                 mIndicatorDrawable.draw(canvas);
             }
         } else {
-               /* mRectPaint.setColor(mIndicatorColor);
+               /* rectPaint.setColor(mIndicatorColor);
                 calcIndicatorRect();
                 canvas.drawRect(getPaddingLeft() + mIndicatorRect.left, getHeight() - mIndicatorHeight,
-                        mIndicatorRect.right + getPaddingLeft(), getHeight(), mRectPaint);*/
+                        mIndicatorRect.right + getPaddingLeft(), getHeight(), rectPaint);*/
 
             if (mIndicatorHeight > 0) {
                 mIndicatorDrawable.setColor(mIndicatorColor);
@@ -683,7 +683,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
     //setter and getter
 
     // show MsgTipView
-    private final Paint mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     @SuppressLint("UseSparseArrays")
     private final SparseArray<Boolean> mInitSetMap = new SparseArray<>();
 
@@ -750,9 +750,9 @@ public class SlidingTabLayout extends HorizontalScrollView {
         MsgView tipView = (MsgView) tabView.findViewById(R.id.rtv_msg_tip);
         if (tipView != null) {
             AppCompatTextView tv_tab_title = tabView.findViewById(R.id.tv_tab_title);
-            mTextPaint.setTextSize(mTextsize);
-            float textWidth = mTextPaint.measureText(tv_tab_title.getText().toString());
-            float textHeight = mTextPaint.descent() - mTextPaint.ascent();
+            paint.setTextSize(mTextsize);
+            float textWidth = paint.measureText(tv_tab_title.getText().toString());
+            float textHeight = paint.descent() - paint.ascent();
             MarginLayoutParams lp = (MarginLayoutParams) tipView.getLayoutParams();
             lp.leftMargin = mTabWidth >= 0 ? (int) (mTabWidth / 2 + textWidth / 2 + dp2px(leftPadding)) : (int) (mTabPadding + textWidth + dp2px(leftPadding));
             lp.topMargin = mHeight > 0 ? (int) (mHeight - textHeight) / 2 - dp2px(bottomPadding) : 0;

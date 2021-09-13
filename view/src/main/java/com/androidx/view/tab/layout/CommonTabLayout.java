@@ -58,7 +58,7 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
     private final Rect mIndicatorRect = new Rect();
     private final GradientDrawable mIndicatorDrawable = new GradientDrawable();
 
-    private final Paint mRectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint rectPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mDividerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint mTrianglePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Path mTrianglePath = new Path();
@@ -447,11 +447,11 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
 
         // draw underline
         if (mUnderlineHeight > 0) {
-            mRectPaint.setColor(mUnderlineColor);
+            rectPaint.setColor(mUnderlineColor);
             if (mUnderlineGravity == Gravity.BOTTOM) {
-                canvas.drawRect(paddingLeft, height - mUnderlineHeight, mTabsContainer.getWidth() + paddingLeft, height, mRectPaint);
+                canvas.drawRect(paddingLeft, height - mUnderlineHeight, mTabsContainer.getWidth() + paddingLeft, height, rectPaint);
             } else {
-                canvas.drawRect(paddingLeft, 0, mTabsContainer.getWidth() + paddingLeft, mUnderlineHeight, mRectPaint);
+                canvas.drawRect(paddingLeft, 0, mTabsContainer.getWidth() + paddingLeft, mUnderlineHeight, rectPaint);
             }
         }
 
@@ -495,10 +495,10 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
                 mIndicatorDrawable.draw(canvas);
             }
         } else {
-               /* mRectPaint.setColor(mIndicatorColor);
+               /* rectPaint.setColor(mIndicatorColor);
                 calcIndicatorRect();
                 canvas.drawRect(getPaddingLeft() + mIndicatorRect.left, getHeight() - mIndicatorHeight,
-                        mIndicatorRect.right + getPaddingLeft(), getHeight(), mRectPaint);*/
+                        mIndicatorRect.right + getPaddingLeft(), getHeight(), rectPaint);*/
 
             if (mIndicatorHeight > 0) {
                 mIndicatorDrawable.setColor(mIndicatorColor);
@@ -823,7 +823,7 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
     //setter and getter
 
     // show MsgTipView
-    private final Paint mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     @SuppressLint("UseSparseArrays")
     private final SparseArray<Boolean> mInitSetMap = new SparseArray<>();
 
@@ -896,9 +896,9 @@ public class CommonTabLayout extends FrameLayout implements ValueAnimator.Animat
         MsgView tipView = (MsgView) tabView.findViewById(R.id.rtv_msg_tip);
         if (tipView != null) {
             AppCompatTextView tv_tab_title = tabView.findViewById(R.id.tv_tab_title);
-            mTextPaint.setTextSize(mTextsize);
-            float textWidth = mTextPaint.measureText(tv_tab_title.getText().toString());
-            float textHeight = mTextPaint.descent() - mTextPaint.ascent();
+            paint.setTextSize(mTextsize);
+            float textWidth = paint.measureText(tv_tab_title.getText().toString());
+            float textHeight = paint.descent() - paint.ascent();
             MarginLayoutParams lp = (MarginLayoutParams) tipView.getLayoutParams();
 
             float iconH = mIconHeight;

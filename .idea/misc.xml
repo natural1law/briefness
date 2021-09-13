@@ -10,12 +10,14 @@
         <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/adapter_page.xml" value="0.258879781420765" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/alert_bg.xml" value="0.2833976833976834" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/alert_bottom_single_selector.xml" value="0.2833976833976834" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/border_bottom.xml" value="0.116796875" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/dialog_border_right.xml" value="0.116796875" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/nav_icon2.xml" value="0.2701388888888889" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/pagination_background.xml" value="0.2701388888888889" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/pagination_selected.xml" value="0.2701388888888889" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/pagination_shape_round_rect_selected.xml" value="0.2638888888888889" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/drawable/pagination_spinner.xml" value="0.26666666666666666" />
-        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/activity_scan.xml" value="0.13446824789594491" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/activity_scan.xml" value="0.2" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/chs_about_dialog.xml" value="0.2708333333333333" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog1.xml" value="0.25" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog10.xml" value="0.13446824789594491" />
@@ -33,6 +35,7 @@
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog_camera.xml" value="0.25" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog_console.xml" value="0.25" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog_count_down_time.xml" value="0.26331967213114754" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog_list.xml" value="0.13446824789594491" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialogtest.xml" value="0.26707650273224043" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/item_camera.xml" value="0.26331967213114754" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/item_dialog6.xml" value="0.13446824789594491" />
@@ -50,6 +53,11 @@
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/title_bar.xml" value="0.13446824789594491" />
       </map>
     </option>
+  </component>
+  <component name="EntryPointsManager">
+    <list size="1">
+      <item index="0" class="java.lang.String" itemvalue="android.annotation.SuppressLint" />
+    </list>
   </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />

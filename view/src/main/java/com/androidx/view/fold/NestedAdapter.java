@@ -1,11 +1,11 @@
 package com.androidx.view.fold;
 
+import static androidx.recyclerview.widget.RecyclerView.NO_ID;
+
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
-import static androidx.recyclerview.widget.RecyclerView.NO_ID;
 
 /**
  * @date 2020/11/27.
@@ -167,8 +167,7 @@ public abstract class NestedAdapter<G extends RecyclerView.ViewHolder, C extends
             return;
         }
         int count = getSafeChildCount(groupIndex);
-
-        notifyItemRangeChanged(from, count + 1);
+        notifyItemChanged(from, count + 1);
     }
 
     /*
@@ -177,14 +176,14 @@ public abstract class NestedAdapter<G extends RecyclerView.ViewHolder, C extends
      */
     public final void notifyChildItemChanged(int groupIndex, int childIndex) {
 
-        notifyChildItemRangeChanged(groupIndex, childIndex, 1);
+        notifyChildIterangeChanged(groupIndex, childIndex, 1);
     }
 
     /*
      * only update children which belong to this group,from  childIndex to childIndex+itemCount,
      *
      */
-    public final void notifyChildItemRangeChanged(int groupIndex, int childIndex, int itemCount) {
+    public final void notifyChildIterangeChanged(int groupIndex, int childIndex, int itemCount) {
         if (itemCount <= 0) {
             return;
         }
@@ -201,15 +200,15 @@ public abstract class NestedAdapter<G extends RecyclerView.ViewHolder, C extends
         if (childCount < childIndex + itemCount) {
             itemCount = childCount - childIndex;
         }
-        notifyItemRangeChanged(childPosition, itemCount);
+        notifyItemChanged(childPosition, itemCount);
     }
 
 
     public final void notifyChildItemInserted(int groupIndex, int childIndex) {
-        notifyChildItemRangeInserted(groupIndex, childIndex, 1);
+        notifyChildIterangeInserted(groupIndex, childIndex, 1);
     }
 
-    public final void notifyChildItemRangeInserted(int groupIndex, int childIndex, int itemCount) {
+    public final void notifyChildIterangeInserted(int groupIndex, int childIndex, int itemCount) {
         if (itemCount <= 0 || groupIndex < 0 || childIndex < 0) {
             return;
         }
@@ -233,16 +232,16 @@ public abstract class NestedAdapter<G extends RecyclerView.ViewHolder, C extends
         position += childIndex;
 
         position++;
-        notifyItemRangeInserted(position, itemCount);
+        notifyItemChanged(position, itemCount);
     }
 
 
-    public final void notifyChildItemRemoved(int groupIndex, int childIndex) {
-        notifyChildItemRangeRemoved(groupIndex, childIndex, 1);
+    public final void notifyChildIteremoved(int groupIndex, int childIndex) {
+        notifyChildIterangeRemoved(groupIndex, childIndex, 1);
     }
 
 
-    public final void notifyChildItemRangeRemoved(int groupIndex, int childIndex, int itemCount) {
+    public final void notifyChildIterangeRemoved(int groupIndex, int childIndex, int itemCount) {
         if (itemCount <= 0) {
             return;
         }

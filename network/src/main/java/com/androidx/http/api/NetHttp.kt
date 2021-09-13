@@ -119,7 +119,7 @@ class NetHttp private constructor() {
                 builder.maxAnewCount!!,
                 builder.stringCallback
             )
-            FROM_JSON -> requestListener.formRequest(
+            FROM_JSON -> requestListener.forrequest(
                 url,
                 builder.key,
                 builder.json,

@@ -9,7 +9,7 @@ import android.view.View;
 public class MenuItem {
 
 	private String item;
-	private int itemResId = View.NO_ID;
+	private int iteresId = View.NO_ID;
 
 
 	public String getItem() {
@@ -20,11 +20,11 @@ public class MenuItem {
 		this.item = item;
 	}
 
-	public int getItemResId() {
-		return itemResId;
+	public int getIteresId() {
+		return iteresId;
 	}
 
-	public void setItemResId(int itemResId) {
-		this.itemResId = itemResId;
+	public void setIteresId(int iteresId) {
+		this.iteresId = iteresId;
 	}
 }

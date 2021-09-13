@@ -21,6 +21,6 @@ public interface HttpRequestListener {
 
     void deleteRequest(Uri url, Map<String, Object> map, int maxAnewCount, StringCallback callBack) throws MalformedURLException;
 
-    void formRequest(Uri url, String key, JsonObject json, int maxAnewCount, StringCallback callBack) throws MalformedURLException;
+    void forrequest(Uri url, String key, JsonObject json, int maxAnewCount, StringCallback callBack) throws MalformedURLException;
 
 }

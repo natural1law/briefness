@@ -28,7 +28,7 @@
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
-    <com.zyao89.view.zloading.ZLoadingView
+    <com.androidx.animation.view.ProgressView
         android:id="@+id/progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,8 +37,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:z_color="@color/irs"
-        app:z_type="SnakeCircleBuilder" />
+        app:viewColor="@color/irs"
+        app:viewType="心电" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

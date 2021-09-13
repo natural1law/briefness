@@ -12,6 +12,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidx.animation.view.ProgressTextView;
 import com.androidx.reduce.tools.Convert;
 import com.androidx.view.R;
 import com.androidx.view.dialog.adapter.CameraAdapter;
@@ -19,7 +20,6 @@ import com.androidx.view.dialog.adapter.ListAdapter;
 import com.androidx.view.dialog.listener.OnClickCameraListener;
 import com.androidx.view.dialog.listener.OnClickCountDownTimeListener;
 import com.androidx.view.dialog.listener.OnClickTriggerListener;
-import com.zyao89.view.zloading.ZLoadingTextView;
 
 public final class DialogDefault {
 
@@ -43,7 +43,7 @@ public final class DialogDefault {
                 .build()
                 .get(context)
                 .setTextView(R.id.dialog_content, content);
-        ZLoadingTextView countDownView = dialog.getView(R.id.dialog_timing_animation);
+        ProgressTextView countDownView = dialog.getView(R.id.dialog_timing_animation);
         CountDownTimer countDownTimer = new CountDownTimer(totalTime * count, count) {
             @Override
             public void onTick(long m) {

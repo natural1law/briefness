@@ -25,7 +25,7 @@ public abstract class ExpandableAdapter<G extends RecyclerView.ViewHolder, C ext
             return;
         }
         if (isExpanded(groupIndex)) {
-            notifyChildItemRangeRemoved(groupIndex, 0, getSafeChildCount(groupIndex));
+            notifyChildIterangeRemoved(groupIndex, 0, getSafeChildCount(groupIndex));
             isCollapsed.set(groupIndex);
         }
     }
@@ -36,7 +36,7 @@ public abstract class ExpandableAdapter<G extends RecyclerView.ViewHolder, C ext
         }
         if (!isExpanded(groupIndex)) {
             isCollapsed.clear(groupIndex);
-            notifyChildItemRangeInserted(groupIndex, 0, getSafeChildCount(groupIndex));
+            notifyChildIterangeInserted(groupIndex, 0, getSafeChildCount(groupIndex));
         }
     }
 

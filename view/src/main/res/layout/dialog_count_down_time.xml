@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/dialog_frame"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -23,18 +24,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.zyao89.view.zloading.ZLoadingTextView
+    <com.androidx.animation.view.ProgressTextView
         android:id="@+id/dialog_timing_animation"
         style="@style/textSize14"
         android:layout_width="match_parent"
         android:layout_height="150dp"
-        app:z_text=" "
         android:layout_marginTop="40dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:z_color="#7A7A7A"
-        app:z_type="TextBuilder" />
+
+        app:viewColor="#7A7A7A"
+        app:viewType="文本"
+        tools:ignore="ImageContrastCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

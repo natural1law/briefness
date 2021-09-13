@@ -20,9 +20,8 @@ import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import com.androidx.animation.view.ProgressView;
 import com.androidx.view.R;
-import com.zyao89.view.zloading.ZLoadingView;
-import com.zyao89.view.zloading.Z_TYPE;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +32,10 @@ public class PaginationRecycleView extends LinearLayoutCompat {
 
     private final RecyclerView rv;
     private final PaginationIndicator pi;
-    private final ZLoadingView progress;
+    private final ProgressView progress;
 
     private Adapter<?, ?> adapter;
-    OnChangedListener listener;
+    private OnChangedListener listener;
 
     public PaginationRecycleView(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
@@ -73,8 +72,8 @@ public class PaginationRecycleView extends LinearLayoutCompat {
         int progressAnimation = typed.getInt(R.styleable.pagination_progressAnimation, 0);
         float duration = typed.getFloat(R.styleable.pagination_progressDuration, 0);
         progress.setColorFilter(progressColor);
-        if (duration == 0) progress.setLoadingBuilder(Z_TYPE.values()[progressAnimation]);
-        else progress.setLoadingBuilder(Z_TYPE.values()[progressAnimation], duration);
+        if (duration == 0) progress.setType(progressAnimation);
+        else progress.setType(progressAnimation, duration);
         typed.recycle();
     }
 
@@ -150,15 +149,15 @@ public class PaginationRecycleView extends LinearLayoutCompat {
     /**
      * 设置加载动画样式
      */
-    public void setLoadingBuilder(Z_TYPE type) {
-        progress.setLoadingBuilder(type);
+    public void setLoadingBuilder(int type) {
+        progress.setType(type);
     }
 
     /**
      * 设置加载动画样式（延时）
      */
-    public void setLoadingBuilder(Z_TYPE type, float duration) {
-        progress.setLoadingBuilder(type, duration);
+    public void setLoadingBuilder(int type, float duration) {
+        progress.setType(type, duration);
     }
 
     /**

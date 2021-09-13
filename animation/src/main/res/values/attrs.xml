@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="progress">
+        <attr name="viewType">
+            <enum name="圆" value="0" />
+            <enum name="时钟" value="1" />
+            <enum name="星" value="2" />
+            <enum name="叶子" value="3" />
+            <enum name="双环" value="4" />
+            <enum name="套环" value="5" />
+            <enum name="弹球" value="6" />
+            <enum name="感染球" value="7" />
+            <enum name="交织" value="8" />
+            <enum name="文本" value="9" />
+            <enum name="搜寻" value="10" />
+            <enum name="旋转" value="11" />
+            <enum name="单环" value="12" />
+            <enum name="贪食蛇" value="13" />
+            <enum name="心电" value="14" />
+            <enum name="音乐" value="15" />
+            <enum name="台阶" value="16" />
+            <enum name="跳动" value="17" />
+        </attr>
+        <attr name="viewColor" format="color" />
+        <attr name="viewDuration" format="float" />
+    </declare-styleable>
+    <declare-styleable name="progressText">
+        <attr name="textContent" format="string"/>
+    </declare-styleable>
+</resources>

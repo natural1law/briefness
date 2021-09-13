@@ -242,14 +242,14 @@ class HttpRequest : HttpRequestListener {
             })
     }
 
-    override fun formRequest(
+    override fun forrequest(
         uri: Uri?,
         key: String?,
         json: JsonObject?,
         maxAnewCount: Int,
         callBack: StringCallback?
     ) {
-        httpNetwork.client.newCall(httpNetwork.formRequest(uri, key, json))
+        httpNetwork.client.newCall(httpNetwork.forrequest(uri, key, json))
             .enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     handler.sendMessage(

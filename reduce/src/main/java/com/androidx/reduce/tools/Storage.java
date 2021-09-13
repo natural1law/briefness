@@ -1,5 +1,7 @@
 package com.androidx.reduce.tools;
 
+import static java.lang.Boolean.TRUE;
+
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -20,8 +22,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import static java.lang.Boolean.TRUE;
 
 /**
  * 存储工具

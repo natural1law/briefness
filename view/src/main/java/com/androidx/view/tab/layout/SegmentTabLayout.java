@@ -41,7 +41,7 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
      */
     private final Rect mIndicatorRect = new Rect();
     private final GradientDrawable mIndicatorDrawable = new GradientDrawable();
-    private final GradientDrawable mRectDrawable = new GradientDrawable();
+    private final GradientDrawable rectDrawable = new GradientDrawable();
 
     private final Paint mDividerPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
@@ -94,7 +94,7 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
     private final ValueAnimator mValueAnimator;
     private final OvershootInterpolator mInterpolator = new OvershootInterpolator(0.8f);
 
-    private final float[] mRadiusArr = new float[8];
+    private final float[] radiusArr = new float[8];
 
     public SegmentTabLayout(Context context) {
         this(context, null, 0);
@@ -293,45 +293,45 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
         if (!mIndicatorAnimEnable) {
             if (mCurrentTab == 0) {
                 /*The corners are ordered top-left, top-right, bottom-right, bottom-left*/
-                mRadiusArr[0] = mIndicatorCornerRadius;
-                mRadiusArr[1] = mIndicatorCornerRadius;
-                mRadiusArr[2] = 0;
-                mRadiusArr[3] = 0;
-                mRadiusArr[4] = 0;
-                mRadiusArr[5] = 0;
-                mRadiusArr[6] = mIndicatorCornerRadius;
-                mRadiusArr[7] = mIndicatorCornerRadius;
+                radiusArr[0] = mIndicatorCornerRadius;
+                radiusArr[1] = mIndicatorCornerRadius;
+                radiusArr[2] = 0;
+                radiusArr[3] = 0;
+                radiusArr[4] = 0;
+                radiusArr[5] = 0;
+                radiusArr[6] = mIndicatorCornerRadius;
+                radiusArr[7] = mIndicatorCornerRadius;
             } else if (mCurrentTab == mTabCount - 1) {
                 /*The corners are ordered top-left, top-right, bottom-right, bottom-left*/
-                mRadiusArr[0] = 0;
-                mRadiusArr[1] = 0;
-                mRadiusArr[2] = mIndicatorCornerRadius;
-                mRadiusArr[3] = mIndicatorCornerRadius;
-                mRadiusArr[4] = mIndicatorCornerRadius;
-                mRadiusArr[5] = mIndicatorCornerRadius;
-                mRadiusArr[6] = 0;
-                mRadiusArr[7] = 0;
+                radiusArr[0] = 0;
+                radiusArr[1] = 0;
+                radiusArr[2] = mIndicatorCornerRadius;
+                radiusArr[3] = mIndicatorCornerRadius;
+                radiusArr[4] = mIndicatorCornerRadius;
+                radiusArr[5] = mIndicatorCornerRadius;
+                radiusArr[6] = 0;
+                radiusArr[7] = 0;
             } else {
                 /*The corners are ordered top-left, top-right, bottom-right, bottom-left*/
-                mRadiusArr[0] = 0;
-                mRadiusArr[1] = 0;
-                mRadiusArr[2] = 0;
-                mRadiusArr[3] = 0;
-                mRadiusArr[4] = 0;
-                mRadiusArr[5] = 0;
-                mRadiusArr[6] = 0;
-                mRadiusArr[7] = 0;
+                radiusArr[0] = 0;
+                radiusArr[1] = 0;
+                radiusArr[2] = 0;
+                radiusArr[3] = 0;
+                radiusArr[4] = 0;
+                radiusArr[5] = 0;
+                radiusArr[6] = 0;
+                radiusArr[7] = 0;
             }
         } else {
             /*The corners are ordered top-left, top-right, bottom-right, bottom-left*/
-            mRadiusArr[0] = mIndicatorCornerRadius;
-            mRadiusArr[1] = mIndicatorCornerRadius;
-            mRadiusArr[2] = mIndicatorCornerRadius;
-            mRadiusArr[3] = mIndicatorCornerRadius;
-            mRadiusArr[4] = mIndicatorCornerRadius;
-            mRadiusArr[5] = mIndicatorCornerRadius;
-            mRadiusArr[6] = mIndicatorCornerRadius;
-            mRadiusArr[7] = mIndicatorCornerRadius;
+            radiusArr[0] = mIndicatorCornerRadius;
+            radiusArr[1] = mIndicatorCornerRadius;
+            radiusArr[2] = mIndicatorCornerRadius;
+            radiusArr[3] = mIndicatorCornerRadius;
+            radiusArr[4] = mIndicatorCornerRadius;
+            radiusArr[5] = mIndicatorCornerRadius;
+            radiusArr[6] = mIndicatorCornerRadius;
+            radiusArr[7] = mIndicatorCornerRadius;
         }
     }
 
@@ -365,11 +365,11 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
         }
 
         //draw rect
-        mRectDrawable.setColor(mBarColor);
-        mRectDrawable.setStroke((int) mBarStrokeWidth, mBarStrokeColor);
-        mRectDrawable.setCornerRadius(mIndicatorCornerRadius);
-        mRectDrawable.setBounds(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
-        mRectDrawable.draw(canvas);
+        rectDrawable.setColor(mBarColor);
+        rectDrawable.setStroke((int) mBarStrokeWidth, mBarStrokeColor);
+        rectDrawable.setCornerRadius(mIndicatorCornerRadius);
+        rectDrawable.setBounds(getPaddingLeft(), getPaddingTop(), getWidth() - getPaddingRight(), getHeight() - getPaddingBottom());
+        rectDrawable.draw(canvas);
 
         // draw divider
         if (!mIndicatorAnimEnable && mDividerWidth > 0) {
@@ -396,7 +396,7 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
         mIndicatorDrawable.setBounds(paddingLeft + (int) mIndicatorMarginLeft + mIndicatorRect.left,
                 (int) mIndicatorMarginTop, (int) (paddingLeft + mIndicatorRect.right - mIndicatorMarginRight),
                 (int) (mIndicatorMarginTop + mIndicatorHeight));
-        mIndicatorDrawable.setCornerRadii(mRadiusArr);
+        mIndicatorDrawable.setCornerRadii(radiusArr);
         mIndicatorDrawable.draw(canvas);
 
     }
@@ -603,7 +603,7 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
 
     //setter and getter
     // show MsgTipView
-    private final Paint mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     @SuppressLint("UseSparseArrays")
     private final SparseArray<Boolean> mInitSetMap = new SparseArray<>();
 
@@ -669,9 +669,9 @@ public class SegmentTabLayout extends FrameLayout implements ValueAnimator.Anima
         MsgView tipView = tabView.findViewById(R.id.rtv_msg_tip);
         if (tipView != null) {
             AppCompatTextView tv_tab_title = tabView.findViewById(R.id.tv_tab_title);
-            mTextPaint.setTextSize(mTextSize);
-            float textWidth = mTextPaint.measureText(tv_tab_title.getText().toString());
-            float textHeight = mTextPaint.descent() - mTextPaint.ascent();
+            paint.setTextSize(mTextSize);
+            float textWidth = paint.measureText(tv_tab_title.getText().toString());
+            float textHeight = paint.descent() - paint.ascent();
             MarginLayoutParams lp = (MarginLayoutParams) tipView.getLayoutParams();
 
             lp.leftMargin = dp2px(leftPadding);

@@ -158,7 +158,7 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull
-    Request formRequest(Uri uri, String key, JsonObject json) throws MalformedURLException {
+    Request forrequest(Uri uri, String key, JsonObject json) throws MalformedURLException {
         return request.post(new FormBody.Builder().addEncoded(key, json.toString()).build())
                 .url(new URL(Uri.decode(uri.toString())))
                 .build();
