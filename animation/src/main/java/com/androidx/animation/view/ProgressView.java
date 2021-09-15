@@ -1,88 +1,102 @@
 package com.androidx.animation.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 
 import com.androidx.animation.R;
 import com.androidx.animation.base.BaseAnimator;
-import com.androidx.animation.base.Nape;
 import com.androidx.animation.base.ProgressDrawable;
+import com.androidx.animation.base.ProgressType;
 
 /**
  * @createDate 2021/09/10
  */
-@SuppressLint("CustomViewStyleable")
 public class ProgressView extends AppCompatImageView {
 
-    private ProgressDrawable progressDrawable;
+    private ProgressDrawable drawable;
     protected BaseAnimator baseAnimator;
+    private float duration;
+    private float size;
 
-    public ProgressView(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public ProgressView(Context context) {
+        this(context, null);
+    }
+
+    public ProgressView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    protected ProgressView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ProgressView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray typed = context.obtainStyledAttributes(attrs, R.styleable.progress);
-        int type = typed.getInt(R.styleable.progress_viewType, 0);
-        int color = typed.getColor(R.styleable.progress_viewColor, Color.GRAY);
-        float duration = typed.getFloat(R.styleable.progress_viewDuration, 1.0f);
-        typed.recycle();
-        this.setType(type, duration);
-        this.setColorFilter(color);
+        try {
+            TypedArray typed = context.obtainStyledAttributes(attrs, R.styleable.ProgressView);
+            int typeId = typed.getInt(R.styleable.ProgressView_progressType, 0);
+            duration = typed.getFloat(R.styleable.ProgressView_progressDuration, 1.0f);
+            size = typed.getFloat(R.styleable.ProgressView_progressSize, 56.0f);
+            typed.recycle();
+            this.setColorFilter(typed.getColor(R.styleable.ProgressView_progressColor, Color.GRAY));
+            this.setBuilder(ProgressType.values()[typeId], duration, size);
+        } catch (Exception e) {
+            Log.e("ProgressView异常", Log.getStackTraceString(e));
+        }
+    }
+
+    public void setBuilder(@NonNull ProgressType builder) {
+        this.setBuilder(builder, duration);
+    }
+
+    public void setBuilder(@NonNull ProgressType builder, double duration) {
+        this.setBuilder(builder, duration, size);
+
+    }
+
+    public void setBuilder(@NonNull ProgressType builder, double duration, float size) {
+        try {
+            baseAnimator = builder.newInstance();
+            if (baseAnimator != null) {
+                baseAnimator.setSize(size);
+                baseAnimator.setDurationTimePercent(duration);
+                drawable = new ProgressDrawable(baseAnimator);
+                drawable.initParams(getContext());
+                setImageDrawable(drawable);
+            }
+        } catch (Exception e) {
+            Log.e("ProgressView异常", Log.getStackTraceString(e));
+        }
     }
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        this.startAnimation();
+        startAnimation();
     }
 
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        this.stopAnimation();
+        stopAnimation();
     }
 
     @Override
     protected void onVisibilityChanged(@NonNull View changedView, int visibility) {
+        super.onVisibilityChanged(changedView, visibility);
         final boolean visible = visibility == VISIBLE && getVisibility() == VISIBLE;
-        if (visible) this.startAnimation();
-        else this.stopAnimation();
-    }
-
-    /* START ----------------------------------SET--GET------------------------------------------ */
-
-    public void setType(int type) {
-        this.setType(type, 1.0f);
-    }
-
-    public void setType(int type, float duration) {
-        baseAnimator = Nape.newInstance(type);
-        if (baseAnimator != null) {
-            progressDrawable = new ProgressDrawable(baseAnimator);
-            progressDrawable.initParams(getContext());
-            this.setImageDrawable(progressDrawable);
-            baseAnimator.setDuration(duration);
-        }
+        if (visible) startAnimation();
+        else stopAnimation();
     }
 
     private void startAnimation() {
-        if (progressDrawable != null) progressDrawable.start();
+        if (drawable != null) drawable.start();
     }
 
     private void stopAnimation() {
-        if (progressDrawable != null) progressDrawable.stop();
+        if (drawable != null) drawable.stop();
     }
-
-    /* END ------------------------------------SET--GET------------------------------------------ */
-
 }

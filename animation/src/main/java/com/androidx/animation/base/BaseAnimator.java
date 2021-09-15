@@ -10,29 +10,45 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 
 import androidx.annotation.FloatRange;
+import androidx.annotation.Size;
 
-/**
- * @createDate 2021/09/10
- */
 public abstract class BaseAnimator implements ValueAnimator.AnimatorUpdateListener, Animator.AnimatorListener {
-
-    private float allSize;
-    private float width;
-    private float height;
-    private double duration = 1.0;
-
-    private Drawable.Callback callback;
-    private ValueAnimator animator;
-
-    public static float size_default = 56.0f;
+    /**
+     * 外部可以修改，但是不建议
+     */
+    private float size = 56.0f;
     protected static final long ANIMATION_START_DELAY = 333;
     protected static final long ANIMATION_DURATION = 1333;
 
-    protected abstract void initParams(Context context);
+    private float mAllSize;
+    private float mViewWidth;
+    private float mViewHeight;
+
+    private Drawable.Callback mCallback;
+    private ValueAnimator mFloatValueAnimator;
+
+    private double mDurationTimePercent = 1.0;
+
+    public void init(Context context) {
+        mAllSize = dip2px(context, size * 0.5f - 12);
+        mViewWidth = dip2px(context, size);
+        mViewHeight = dip2px(context, size);
+        initAnimators();
+    }
+
+    private void initAnimators() {
+        mFloatValueAnimator = ValueAnimator.ofFloat(0.0f, 1.0f);
+        mFloatValueAnimator.setRepeatCount(Animation.INFINITE);
+        mFloatValueAnimator.setDuration(getAnimationDuration());
+        mFloatValueAnimator.setStartDelay(getAnimationStartDelay());
+        mFloatValueAnimator.setInterpolator(new LinearInterpolator());
+    }
+
+    public abstract void initParams(Context context);
 
     protected abstract void onDraw(Canvas canvas);
 
-    protected abstract void setAlpha(int alpha);
+    public abstract void setAlpha(int alpha);
 
     protected abstract void prepareStart(ValueAnimator animation);
 
@@ -40,128 +56,80 @@ public abstract class BaseAnimator implements ValueAnimator.AnimatorUpdateListen
 
     protected abstract void computeUpdateValue(ValueAnimator animation, @FloatRange(from = 0.0, to = 1.0) float animatedValue);
 
-    protected abstract void setColorFilter(ColorFilter colorFilter);
+    public abstract void setColorFilter(ColorFilter colorFilter);
 
-    protected void init(Context context) {
-        allSize = dip2px(context, size_default * 0.5f - 12);
-        width = dip2px(context, size_default);
-        height = dip2px(context, size_default);
-        initAnimators();
+    public void setCallback(Drawable.Callback callback) {
+        this.mCallback = callback;
     }
 
-    private void initAnimators() {
-        animator = ValueAnimator.ofFloat(0.0f, 1.0f);
-        animator.setRepeatCount(Animation.INFINITE);
-        animator.setDuration(getAnimationDuration());
-        animator.setStartDelay(getAnimationStartDelay());
-        animator.setInterpolator(new LinearInterpolator());
+    public void draw(Canvas canvas) {
+        onDraw(canvas);
     }
 
-    @Override
-    public void onAnimationStart(Animator animation, boolean isReverse) {
-
+    public void start() {
+        if (mFloatValueAnimator.isStarted()) {
+            return;
+        }
+        mFloatValueAnimator.addUpdateListener(this);
+        mFloatValueAnimator.addListener(this);
+        mFloatValueAnimator.setRepeatCount(Animation.INFINITE);
+        mFloatValueAnimator.setDuration(getAnimationDuration());
+        prepareStart(mFloatValueAnimator);
+        mFloatValueAnimator.start();
     }
 
-    @Override
-    public void onAnimationEnd(Animator animation, boolean isReverse) {
-
+    public void stop() {
+        mFloatValueAnimator.removeAllUpdateListeners();
+        mFloatValueAnimator.removeAllListeners();
+        mFloatValueAnimator.setRepeatCount(0);
+        mFloatValueAnimator.setDuration(0);
+        prepareEnd();
+        mFloatValueAnimator.end();
     }
 
-    @Override
-    public void onAnimationStart(Animator animator) {
-
-    }
-
-    @Override
-    public void onAnimationEnd(Animator animator) {
-
-    }
-
-    @Override
-    public void onAnimationCancel(Animator animator) {
-
-    }
-
-    @Override
-    public void onAnimationRepeat(Animator animator) {
-
+    public boolean isRunning() {
+        return mFloatValueAnimator.isRunning();
     }
 
     @Override
     public final void onAnimationUpdate(ValueAnimator animation) {
         computeUpdateValue(animation, (float) animation.getAnimatedValue());
-        if (callback != null) callback.invalidateDrawable(null);
+        invalidateSelf();
     }
 
-    protected static float dip2px(Context context, float dpValue) {
-        float scale = context.getResources().getDisplayMetrics().density;
-        return dpValue * scale;
-    }
-    /* START ------------------------------------FUNCTION-----------------------------------------*/
-
-    protected void draw(Canvas canvas) {
-        onDraw(canvas);
-    }
-
-    protected void start() {
-        if (animator.isStarted()) {
-            return;
+    private void invalidateSelf() {
+        if (mCallback != null) {
+            mCallback.invalidateDrawable(null);
         }
-        animator.addUpdateListener(this);
-        animator.setRepeatCount(Animation.INFINITE);
-        animator.setDuration(getAnimationDuration());
-        prepareStart(animator);
-        animator.start();
     }
 
-    protected void stop() {
-        animator.removeAllUpdateListeners();
-        animator.removeAllListeners();
-        animator.setRepeatCount(0);
-        animator.setDuration(0);
-        prepareEnd();
-        animator.end();
+    @Override
+    public void onAnimationStart(Animator animation) {
+
     }
 
-    protected boolean isRunning() {
-        return animator.isRunning();
+    @Override
+    public void onAnimationEnd(Animator animation) {
+
     }
 
-    /* END --------------------------------------FUNCTION-----------------------------------------*/
+    @Override
+    public void onAnimationCancel(Animator animation) {
 
-    /* START ------------------------------------SET----------------------------------------------*/
-
-    public void setDuration(double duration) {
-        if (duration <= 0) this.duration = 1.0f;
-        else this.duration = duration;
     }
 
-    protected void setCallback(Drawable.Callback callback) {
-        this.callback = callback;
+    @Override
+    public void onAnimationRepeat(Animator animation) {
+
     }
 
-    /* END --------------------------------------SET----------------------------------------------*/
-
-    /* START ------------------------------------GET----------------------------------------------*/
-
-    public float getAllSize() {
-        return allSize;
+    public void setSize(@Size float size) {
+        this.size = size;
     }
 
-    public float getWidth() {
-        return width;
-    }
-
-    public float getHeight() {
-        return height;
-    }
-
-    protected final float getViewCenterX() {
-        return getWidth() * 0.5f;
-    }
-
-    protected final float getViewCenterY() {
-        return getHeight() * 0.5f;
+    public void setDurationTimePercent(double durationTimePercent) {
+        if (durationTimePercent <= 0) mDurationTimePercent = 1.0f;
+        else mDurationTimePercent = durationTimePercent;
     }
 
     protected long getAnimationStartDelay() {
@@ -169,12 +137,35 @@ public abstract class BaseAnimator implements ValueAnimator.AnimatorUpdateListen
     }
 
     protected long getAnimationDuration() {
-        return ceil(ANIMATION_DURATION * duration);
+        return ceil(ANIMATION_DURATION * mDurationTimePercent);
+    }
+
+    public float getIntrinsicHeight() {
+        return mViewHeight;
+    }
+
+    public float getIntrinsicWidth() {
+        return mViewWidth;
+    }
+
+    protected final float getViewCenterX() {
+        return getIntrinsicWidth() * 0.5f;
+    }
+
+    protected final float getViewCenterY() {
+        return getIntrinsicHeight() * 0.5f;
+    }
+
+    protected final float getAllSize() {
+        return mAllSize;
+    }
+
+    protected static float dip2px(Context context, float dpValue) {
+        float scale = context.getResources().getDisplayMetrics().density;
+        return dpValue * scale;
     }
 
     protected static long ceil(double value) {
         return (long) Math.ceil(value);
     }
-
-    /* END --------------------------------------GET----------------------------------------------*/
 }

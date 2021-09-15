@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
+import com.androidx.animation.base.ProgressType;
 import com.androidx.animation.view.ProgressView;
 import com.androidx.view.R;
 
@@ -72,8 +73,8 @@ public class PaginationRecycleView extends LinearLayoutCompat {
         int progressAnimation = typed.getInt(R.styleable.pagination_progressAnimation, 0);
         float duration = typed.getFloat(R.styleable.pagination_progressDuration, 0);
         progress.setColorFilter(progressColor);
-        if (duration == 0) progress.setType(progressAnimation);
-        else progress.setType(progressAnimation, duration);
+        if (duration == 0) progress.setBuilder(ProgressType.values()[progressAnimation]);
+        else progress.setBuilder(ProgressType.values()[progressAnimation], duration);
         typed.recycle();
     }
 
@@ -149,15 +150,15 @@ public class PaginationRecycleView extends LinearLayoutCompat {
     /**
      * 设置加载动画样式
      */
-    public void setLoadingBuilder(int type) {
-        progress.setType(type);
+    public void setLoadingBuilder(ProgressType type) {
+        progress.setBuilder(type);
     }
 
     /**
      * 设置加载动画样式（延时）
      */
-    public void setLoadingBuilder(int type, float duration) {
-        progress.setType(type, duration);
+    public void setLoadingBuilder(ProgressType type, float duration) {
+        progress.setBuilder(type, duration);
     }
 
     /**

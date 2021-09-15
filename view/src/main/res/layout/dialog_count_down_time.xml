@@ -34,9 +34,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-
-        app:viewColor="#7A7A7A"
-        app:viewType="文本"
+        app:progressColor="#7A7A7A"
+        app:progressType="TEXT"
+        app:textContent=""
         tools:ignore="ImageContrastCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

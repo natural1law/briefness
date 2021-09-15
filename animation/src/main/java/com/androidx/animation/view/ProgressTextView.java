@@ -1,41 +1,51 @@
 package com.androidx.animation.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.text.TextUtils;
 import android.util.AttributeSet;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+import android.util.Log;
 
 import com.androidx.animation.R;
-import com.androidx.animation.figure.Text;
+import com.androidx.animation.base.ProgressType;
+import com.androidx.animation.figure.text.TextBuilder;
 
 public class ProgressTextView extends ProgressView {
+    private String mText = "正在加载";
 
-    private String text;
-
-    public ProgressTextView(@NonNull Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, -1);
+    public ProgressTextView(Context context) {
+        this(context, null);
     }
 
-    @SuppressLint("CustomViewStyleable")
-    protected ProgressTextView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ProgressTextView(Context context, AttributeSet attrs) {
+        this(context, attrs, 0);
+    }
+
+    public ProgressTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.progressText);
-        String text = ta.getString(R.styleable.progressText_textContent);
-        ta.recycle();
-        if (!TextUtils.isEmpty(text)) this.text = text;
+        init(context, attrs);
+    }
+
+    public void setText(String text) {
+        this.mText = text;
+        if (baseAnimator instanceof TextBuilder) ((TextBuilder) baseAnimator).setText(mText);
+    }
+
+    private void init(Context context, AttributeSet attrs) {
+        super.setBuilder(ProgressType.TEXT);
+        try {
+            TypedArray typed = context.obtainStyledAttributes(attrs, R.styleable.ProgressTextView);
+            String text = typed.getString(R.styleable.ProgressTextView_textContent);
+            typed.recycle();
+            if (!TextUtils.isEmpty(text)) this.mText = text;
+        } catch (Exception e) {
+            Log.e("ProgressTextView", Log.getStackTraceString(e));
+        }
     }
 
     @Override
     protected void onAttachedToWindow() {
-        if (baseAnimator instanceof Text) ((Text) baseAnimator).setText(text);
+        setText(mText);
         super.onAttachedToWindow();
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 }

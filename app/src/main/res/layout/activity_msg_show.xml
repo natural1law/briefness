@@ -11,4 +11,16 @@
         app:layout_constraintTop_toTopOf="parent"
         layout="@layout/title_bar" />
 
+    <com.androidx.animation.view.ProgressView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:progressColor="@color/irs"
+        app:progressSize="120"
+        app:progressType="ELASTIC_BALL" />
+
+    <com.androidx.animation.view.ProgressTextView
+        android:layout_width="match_parent"
+        app:progressSize="39"
+        android:layout_height="match_parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,5 @@
 package com.androidx.animation.base;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
@@ -9,75 +8,82 @@ import android.graphics.drawable.AnimationDrawable;
 import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
-/**
- * @createDate 2021/09/10
- */
-@SuppressLint("CustomViewStyleable")
-public final class ProgressDrawable extends AnimationDrawable {
+public class ProgressDrawable extends AnimationDrawable {
 
-    private final BaseAnimator base;
+    private final BaseAnimator baseAnimator;
 
-    public void initParams(Context context) {
-        if (base != null) {
-            base.init(context);
-            base.initParams(context);
-        }
-    }
-
-    public ProgressDrawable(BaseAnimator base) {
-        this.base = base;
-        this.base.setCallback(new Callback() {
+    public ProgressDrawable(BaseAnimator builder) {
+        this.baseAnimator = builder;
+        this.baseAnimator.setCallback(new Callback() {
             @Override
-            public void invalidateDrawable(@NonNull Drawable drawable) {
+            public void invalidateDrawable(Drawable d) {
                 invalidateSelf();
             }
 
             @Override
-            public void scheduleDrawable(@NonNull Drawable drawable, @NonNull Runnable runnable, long l) {
-                scheduleSelf(runnable, l);
+            public void scheduleDrawable(Drawable d, Runnable what, long when) {
+                scheduleSelf(what, when);
             }
 
             @Override
-            public void unscheduleDrawable(@NonNull Drawable drawable, @NonNull Runnable runnable) {
-                unscheduleSelf(runnable);
+            public void unscheduleDrawable(Drawable d, Runnable what) {
+                unscheduleSelf(what);
             }
         });
     }
 
-    @Override
-    public void start() {
-        this.base.start();
-    }
-
-    @Override
-    public void stop() {
-        this.base.stop();
-    }
-
-    @Override
-    public boolean isRunning() {
-        return this.base.isRunning();
+    public void initParams(Context context) {
+        if (baseAnimator != null) {
+            baseAnimator.init(context);
+            baseAnimator.initParams(context);
+        }
     }
 
     @Override
     public void draw(@NonNull Canvas canvas) {
-        if (!getBounds().isEmpty()) this.base.draw(canvas);
+        if (!getBounds().isEmpty()) {
+            this.baseAnimator.draw(canvas);
+        }
     }
 
     @Override
-    public void setAlpha(int i) {
-        this.base.setAlpha(i);
+    public void setAlpha(int alpha) {
+        this.baseAnimator.setAlpha(alpha);
     }
 
     @Override
-    public void setColorFilter(@Nullable ColorFilter colorFilter) {
-        this.base.setColorFilter(colorFilter);
+    public void setColorFilter(ColorFilter colorFilter) {
+        this.baseAnimator.setColorFilter(colorFilter);
     }
 
     @Override
     public int getOpacity() {
         return PixelFormat.TRANSLUCENT;
+    }
+
+    @Override
+    public void start() {
+        this.baseAnimator.start();
+    }
+
+    @Override
+    public void stop() {
+        this.baseAnimator.stop();
+    }
+
+    @Override
+    public boolean isRunning() {
+        return this.baseAnimator.isRunning();
+    }
+
+    @Override
+    public int getIntrinsicHeight() {
+        return (int) this.baseAnimator.getIntrinsicHeight();
+    }
+
+    @Override
+    public int getIntrinsicWidth() {
+        return (int) this.baseAnimator.getIntrinsicWidth();
     }
 }

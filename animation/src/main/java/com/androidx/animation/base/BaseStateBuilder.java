@@ -7,15 +7,12 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 
-/**
- * @createDate 2021/09/13
- */
-public abstract class BaseAnimatorState extends BaseAnimator {
+public abstract class BaseStateBuilder extends BaseAnimator {
     /**
      * 当前动画阶段
      */
-    private int animatorState = 0;
-    private Paint paint;
+    private int mCurrAnimatorState = 0;
+    private Paint mPaint;
 
     /**
      * 总阶段数
@@ -37,42 +34,43 @@ public abstract class BaseAnimatorState extends BaseAnimator {
     protected abstract void onComputeUpdateValue(ValueAnimator animation, float animatedValue, int state);
 
     @Override
-    protected final void initParams(Context context) {
+    public final void initParams(Context context) {
         initPaint();
-        this.initParams(context, paint);
+        this.initParams(context, mPaint);
     }
 
     private void initPaint() {
-        paint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(6);
-        paint.setColor(Color.BLACK);
-        paint.setDither(true);
-        paint.setFilterBitmap(true);
-        paint.setStrokeCap(Paint.Cap.ROUND);
-        paint.setStrokeJoin(Paint.Join.ROUND);
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeWidth(6);
+        mPaint.setColor(Color.BLACK);
+        mPaint.setDither(true);
+        mPaint.setFilterBitmap(true);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mPaint.setStrokeJoin(Paint.Join.ROUND);
     }
 
     @Override
-    protected void setAlpha(int alpha) {
-        paint.setAlpha(alpha);
+    public void setAlpha(int alpha) {
+        mPaint.setAlpha(alpha);
     }
 
     @Override
     protected void computeUpdateValue(ValueAnimator animation, float animatedValue) {
-        this.onComputeUpdateValue(animation, animatedValue, animatorState);
+        this.onComputeUpdateValue(animation, animatedValue, mCurrAnimatorState);
     }
 
     @Override
     public void onAnimationRepeat(Animator animation) {
         int iFinalState = getStateCount();
-        //还原到第一阶段
-        if (++animatorState > iFinalState) animatorState = 0;
+        if (++mCurrAnimatorState > iFinalState) {//还原到第一阶段
+            mCurrAnimatorState = 0;
+        }
     }
 
     @Override
-    protected void setColorFilter(ColorFilter colorFilter) {
-        paint.setColorFilter(colorFilter);
+    public void setColorFilter(ColorFilter colorFilter) {
+        mPaint.setColorFilter(colorFilter);
     }
 
 }

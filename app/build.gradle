@@ -65,6 +65,7 @@ dependencies {
     implementation project(path: ':reduce')
     implementation project(path: ':network')
     implementation project(path: ':echarts')
+    implementation project(path: ':animation')
 //    implementation(name: 'reduce', ext: 'aar')
     // bindView
     implementation 'com.jakewharton:butterknife:10.2.3'

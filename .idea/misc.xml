@@ -5,6 +5,7 @@
       <map>
         <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/activity_dialog.xml" value="0.25" />
         <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/activity_echarts.xml" value="0.17806484295845998" />
+        <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/activity_msg_show.xml" value="0.25" />
         <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/activity_network.xml" value="0.25" />
         <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/activity_pagerecyclerview.xml" value="0.22" />
         <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/adapter_page.xml" value="0.258879781420765" />
@@ -34,7 +35,7 @@
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog_alert.xml" value="0.26331967213114754" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog_camera.xml" value="0.25" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog_console.xml" value="0.25" />
-        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog_count_down_time.xml" value="0.26331967213114754" />
+        <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog_count_down_time.xml" value="0.33" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialog_list.xml" value="0.13446824789594491" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/dialogtest.xml" value="0.26707650273224043" />
         <entry key="..\:/androidWorks/briefness/view/src/main/res/layout/item_camera.xml" value="0.26331967213114754" />

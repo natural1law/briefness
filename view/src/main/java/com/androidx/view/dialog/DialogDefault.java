@@ -43,12 +43,14 @@ public final class DialogDefault {
                 .build()
                 .get(context)
                 .setTextView(R.id.dialog_content, content);
-        ProgressTextView countDownView = dialog.getView(R.id.dialog_timing_animation);
+        ProgressTextView view = dialog.getView(R.id.dialog_timing_animation);
         CountDownTimer countDownTimer = new CountDownTimer(totalTime * count, count) {
             @Override
             public void onTick(long m) {
-                if (countDownView != null)
-                    countDownView.setText(prefix + ((m / count) + 1) + suffix);
+                if (view != null){
+                    view.setText(prefix + ((m / count) + 1) + suffix);
+                }
+
             }
 
             @Override

@@ -129,7 +129,7 @@ public final class DialogActivity extends BaseActivity {
 
     @OnClick(R.id.activity_dialog6)
     public void dialog6() {
-        DialogDefault.countDownTime(aThis, "正在加载", "还有", 5, "秒加载完成", () -> {
+        DialogDefault.countDownTime(aThis, "正在加载", "还有", 60, "秒加载完成", () -> {
             toasts.setMsg("加载完成").showSuccess();
             toasts.i("正在加载", "加载完成");
         });

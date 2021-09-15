@@ -37,8 +37,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:viewColor="@color/irs"
-        app:viewType="心电" />
+        app:progressColor="@color/irs"
+        app:progressType="STAIRS_PATH" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
