@@ -3,7 +3,6 @@
 
 ### 工具目录
    #### 图表统计
-   * 图表统计
    * [图表统计](https://github.com/natural1law/briefness/ "点击查看使用`图表统计`功能代码")
    #### 网络请求
    * [网络请求（WebSocket长连接、http/https）](https://github.com/natural1law/briefness/ "点击查看使用`网络请求`功能代码")
