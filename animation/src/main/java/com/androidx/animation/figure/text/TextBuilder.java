@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 
 import androidx.annotation.FloatRange;
@@ -16,7 +17,7 @@ import androidx.annotation.FloatRange;
 import com.androidx.animation.base.BaseAnimator;
 
 public class TextBuilder extends BaseAnimator {
-    private static final int BASE_ALPHA = 100;
+    private static final int BASE_ALPHA = 90;
     private static final String DEFAULT_TEXT = "正在加载";
     private Paint mTextPaint;
     private String mTextChars;
@@ -44,8 +45,9 @@ public class TextBuilder extends BaseAnimator {
             @SuppressLint("DrawAllocation")
             Paint paint = new Paint(mTextPaint);
             paint.setAlpha(BASE_ALPHA);
-            canvas.drawText(mTextChars, 0, length, getViewCenterX() - measureText / 2, getViewCenterY(), paint);
-            canvas.drawText(mTextChars, 0, mDrawTextCount, getViewCenterX() - measureText / 2, getViewCenterY(), mTextPaint);
+            float x = getViewCenterX() - measureText / 2;
+            canvas.drawText(mTextChars, 0, length, x, getViewCenterY(), paint);
+            canvas.drawText(mTextChars, 0, mDrawTextCount, x, getViewCenterY(), mTextPaint);
         }
     }
 
@@ -73,9 +75,8 @@ public class TextBuilder extends BaseAnimator {
     @Override
     public void onAnimationRepeat(Animator animation) {
         if (isNotEmpty()) {
-            if (++mDrawTextCount > mTextChars.toCharArray().length) {//还原到第一阶段
-                mDrawTextCount = 0;
-            }
+            //还原到第一阶段
+            if (++mDrawTextCount > mTextChars.toCharArray().length) mDrawTextCount = 0;
         }
     }
 

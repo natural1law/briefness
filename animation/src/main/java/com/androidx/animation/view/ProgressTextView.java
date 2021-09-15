@@ -39,7 +39,7 @@ public class ProgressTextView extends ProgressView {
             typed.recycle();
             if (!TextUtils.isEmpty(text)) this.mText = text;
         } catch (Exception e) {
-            Log.e("ProgressTextView", Log.getStackTraceString(e));
+            Log.e("ProgressTextView异常", Log.getStackTraceString(e));
         }
     }
 

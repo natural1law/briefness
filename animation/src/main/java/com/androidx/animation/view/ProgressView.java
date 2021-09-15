@@ -38,10 +38,11 @@ public class ProgressView extends AppCompatImageView {
         try {
             TypedArray typed = context.obtainStyledAttributes(attrs, R.styleable.ProgressView);
             int typeId = typed.getInt(R.styleable.ProgressView_progressType, 0);
+            int color = typed.getColor(R.styleable.ProgressView_progressColor, Color.GRAY);
             duration = typed.getFloat(R.styleable.ProgressView_progressDuration, 1.0f);
             size = typed.getFloat(R.styleable.ProgressView_progressSize, 56.0f);
             typed.recycle();
-            this.setColorFilter(typed.getColor(R.styleable.ProgressView_progressColor, Color.GRAY));
+            this.setColorFilter(color);
             this.setBuilder(ProgressType.values()[typeId], duration, size);
         } catch (Exception e) {
             Log.e("ProgressView异常", Log.getStackTraceString(e));

@@ -16,7 +16,7 @@ public abstract class BaseAnimator implements ValueAnimator.AnimatorUpdateListen
     /**
      * 外部可以修改，但是不建议
      */
-    private float size = 56.0f;
+    private float size;
     protected static final long ANIMATION_START_DELAY = 333;
     protected static final long ANIMATION_DURATION = 1333;
 
