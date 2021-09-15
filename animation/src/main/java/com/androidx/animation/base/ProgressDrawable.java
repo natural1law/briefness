@@ -9,7 +9,7 @@ import android.graphics.drawable.Drawable;
 
 import androidx.annotation.NonNull;
 
-public class ProgressDrawable extends AnimationDrawable {
+public final class ProgressDrawable extends AnimationDrawable {
 
     private final BaseAnimator baseAnimator;
 

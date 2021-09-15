@@ -92,7 +92,7 @@ public class PageRecyclerViewActivity extends AppCompatActivity {
 
     private void indifference(int lot) {
         Map<String, Object> param = new WeakHashMap<>();
-        String uid = "326b3b25158fda1099249fa1a9c2016d";
+        String uid = "b73f6a0e0b23af47bcfae6c7c05c95e1";
         String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
         String var = "ca2882680429c6549f0ed4c047c20778" + 1009 + lot + "" + uid + timestamp;
         param.put("j", 1009);//接口id
