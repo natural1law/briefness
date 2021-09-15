@@ -1,4 +1,4 @@
-日常工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https://jitpack.io/#natural1law/briefness)
+Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https://jitpack.io/#natural1law/briefness)
 ======
 
 ### 工具目录
