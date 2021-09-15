@@ -27,7 +27,8 @@
    * [扫描二维码](https://github.com/natural1law/briefness/ "点击查看使用`扫描二维码`功能代码")
    * [屏幕录制和截图](https://github.com/natural1law/briefness/ "点击查看使用`屏幕录制和截图`功能代码")
    * [头部导航栏](https://github.com/natural1law/briefness/ "点击查看使用`头部导航栏`功能代码")
-
+   #### 加载动画（仿zyao89）
+   * [加载动画](https://github.com/natural1law/briefness/ "点击查看使用`加载动画`功能代码")
 ### 使用依赖
   * 全部
   ```
@@ -48,6 +49,10 @@
   * 分支-视图布局
   ```
   implementation 'com.github.natural1law.briefness:view:2.6.0'
+  ```
+  * 分支-加载动画（仿zyao89）
+  ```
+  implementation 'com.github.natural1law.briefness:animation:2.6.0'
   ```
 
 ### 工具使用
