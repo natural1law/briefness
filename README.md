@@ -3,9 +3,9 @@
 
 ### 工具目录
    #### 图表统计
-   * [图表统计](https://github.com/natural1law/briefness/ "点击查看使用`图表统计`功能代码")
+   * [图表统计](https://github.com/natural1law/briefness/blob/master/app/src/main/java/com/androidx/briefness/homepage/activity/EchartsActivity.java "点击查看使用`图表统计`功能代码")
    #### 网络请求
-   * [网络请求（WebSocket长连接、http/https）](https://github.com/natural1law/briefness/ "点击查看使用`网络请求`功能代码")
+   * [网络请求（WebSocket长连接、http/https）](https://github.com/natural1law/briefness/blob/master/app/src/main/java/com/androidx/briefness/homepage/activity/NetworkRequestActivity.java "点击查看使用`网络请求`功能代码")
    #### 常用工具
    * [正则表达式](https://github.com/natural1law/briefness/ "点击查看使用`正则表达式`功能代码")
    * [安全加密（MD5加随机盐-MD5数据校验、AES加密解密、RSA加密解密-签名-校验、SHA1等加密、Base64加密解密）](https://github.com/natural1law/briefness/ "点击查看使用`安全加密`功能代码")
@@ -17,16 +17,16 @@
    * [动态代理](https://github.com/natural1law/briefness/ "点击查看使用`动态代理`功能代码")
    * [网络状态](https://github.com/natural1law/briefness/ "点击查看使用`网络状态`功能代码")
    * [文件存储](https://github.com/natural1law/briefness/ "点击查看使用`文件存储`功能代码")
-   * [activirt跳转](https://github.com/natural1law/briefness/ "点击查看使用`activirt跳转`功能代码")
-   * [toast提示](https://github.com/natural1law/briefness/ "点击查看使用`toast提示`功能代码")
+   * [activirt跳转](https://github.com/natural1law/briefness/blob/master/app/src/main/java/com/androidx/briefness/base/fragment/HomePageFrag.java "点击查看使用`activirt跳转`功能代码")
+   * [toast提示](https://github.com/natural1law/briefness/blob/master/app/src/main/java/com/androidx/briefness/homepage/activity/MsgShowActivity.java "点击查看使用`toast提示`功能代码")
    #### 视图布局
-   * [底部导航栏](https://github.com/natural1law/briefness/ "点击查看使用`底部导航栏`功能代码")
-   * [对话框](https://github.com/natural1law/briefness/ "点击查看使用`对话框`功能代码")
+   * [底部导航栏](https://github.com/natural1law/briefness/blob/master/app/src/main/java/com/androidx/briefness/base/MainActivity.java "点击查看使用`底部导航栏`功能代码")
+   * [对话框](https://github.com/natural1law/briefness/blob/master/app/src/main/java/com/androidx/briefness/homepage/activity/DialogActivity.java "点击查看使用`对话框`功能代码")
    * [菜单框](https://github.com/natural1law/briefness/ "点击查看使用`菜单框`功能代码")
-   * [分页列表](https://github.com/natural1law/briefness/ "点击查看使用`分页列表`功能代码")
+   * [分页列表](https://github.com/natural1law/briefness/blob/master/app/src/main/java/com/androidx/briefness/homepage/activity/PageRecyclerViewActivity.java "点击查看使用`分页列表`功能代码")
    * [扫描二维码](https://github.com/natural1law/briefness/ "点击查看使用`扫描二维码`功能代码")
-   * [屏幕录制和截图](https://github.com/natural1law/briefness/ "点击查看使用`屏幕录制和截图`功能代码")
-   * [头部导航栏](https://github.com/natural1law/briefness/ "点击查看使用`头部导航栏`功能代码")
+   * [屏幕录制和截图](https://github.com/natural1law/briefness/blob/master/app/src/main/java/com/androidx/briefness/homepage/activity/ScreenCaptureActivity.java "点击查看使用`屏幕录制和截图`功能代码")
+   * [头部导航栏](https://github.com/natural1law/briefness/blob/master/app/src/main/java/com/androidx/briefness/homepage/activity/TabActivity.java "点击查看使用`头部导航栏`功能代码")
    #### 加载动画（仿zyao89）
    * [加载动画](https://github.com/natural1law/briefness/ "点击查看使用`加载动画`功能代码")
 ### 使用依赖
