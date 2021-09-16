@@ -15,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.Transformation;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.GridView;
@@ -30,6 +31,7 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Size;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatCheckedTextView;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageButton;
@@ -58,25 +60,25 @@ public final class HolderView extends RecyclerView.ViewHolder {
     }
 
     public static HolderView createHolderView(ViewGroup parent, @LayoutRes int layoutId) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
+        return createHolderView(parent, layoutId, false);
+    }
+
+    public static HolderView createHolderView(ViewGroup parent, @LayoutRes int layoutId, boolean root) {
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, root);
         return new HolderView(itemView);
     }
 
     /**
      * 通过viewId获取控件
      */
+    @SuppressWarnings("unchecked")
     public <T extends View> T getView(int viewId) {
         View view = views.get(viewId);
         if (view == null) {
             view = convertView.findViewById(viewId);
             views.put(viewId, view);
         }
-        //noinspection unchecked
         return (T) view;
-    }
-
-    public View getConvertView() {
-        return convertView;
     }
 
     public HolderView setMatrix(@IdRes int id, int... v) {
@@ -197,6 +199,12 @@ public final class HolderView extends RecyclerView.ViewHolder {
         } else if (getView(id) instanceof TextView) {
             TextView textView = getView(id);
             textView.setText(String.valueOf(text));
+        } else if (getView(id) instanceof Button) {
+            Button textView = getView(id);
+            textView.setText(String.valueOf(text));
+        } else if (getView(id) instanceof AppCompatButton) {
+            AppCompatButton textView = getView(id);
+            textView.setText(String.valueOf(text));
         } else {
             Log.w("HolderView", "未匹配到有效对象");
         }
@@ -221,6 +229,12 @@ public final class HolderView extends RecyclerView.ViewHolder {
             textView.setHint(String.valueOf(text));
         } else if (getView(id) instanceof TextView) {
             TextView textView = getView(id);
+            textView.setHint(String.valueOf(text));
+        } else if (getView(id) instanceof Button) {
+            Button textView = getView(id);
+            textView.setHint(String.valueOf(text));
+        } else if (getView(id) instanceof AppCompatButton) {
+            AppCompatButton textView = getView(id);
             textView.setHint(String.valueOf(text));
         } else {
             Log.w("HolderView", "未匹配到有效对象");
@@ -247,6 +261,12 @@ public final class HolderView extends RecyclerView.ViewHolder {
         } else if (getView(id) instanceof TextView) {
             TextView textView = getView(id);
             textView.setTextColor(c.getResources().getColor(color, c.getTheme()));
+        } else if (getView(id) instanceof Button) {
+            Button textView = getView(id);
+            textView.setTextColor(c.getResources().getColor(color, c.getTheme()));
+        } else if (getView(id) instanceof AppCompatButton) {
+            AppCompatButton textView = getView(id);
+            textView.setTextColor(c.getResources().getColor(color, c.getTheme()));
         } else {
             Log.w("HolderView", "未匹配到有效对象");
         }
@@ -271,6 +291,12 @@ public final class HolderView extends RecyclerView.ViewHolder {
             textView.setHintTextColor(c.getResources().getColor(color, c.getTheme()));
         } else if (getView(id) instanceof TextView) {
             TextView textView = getView(id);
+            textView.setHintTextColor(c.getResources().getColor(color, c.getTheme()));
+        } else if (getView(id) instanceof Button) {
+            Button textView = getView(id);
+            textView.setHintTextColor(c.getResources().getColor(color, c.getTheme()));
+        } else if (getView(id) instanceof AppCompatButton) {
+            AppCompatButton textView = getView(id);
             textView.setHintTextColor(c.getResources().getColor(color, c.getTheme()));
         } else {
             Log.w("HolderView", "未匹配到有效对象");
@@ -297,6 +323,12 @@ public final class HolderView extends RecyclerView.ViewHolder {
         } else if (getView(id) instanceof TextView) {
             TextView textView = getView(id);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+        } else if (getView(id) instanceof Button) {
+            Button textView = getView(id);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+        } else if (getView(id) instanceof AppCompatButton) {
+            AppCompatButton textView = getView(id);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
         } else {
             Log.w("HolderView", "未匹配到有效对象");
         }
@@ -307,9 +339,17 @@ public final class HolderView extends RecyclerView.ViewHolder {
         if (getView(id) instanceof AppCompatImageView) {
             AppCompatImageView imageView = getView(id);
             Glide.with(c).load(image).into(imageView);
-        } else {
+        } else if (getView(id) instanceof ImageView) {
             ImageView imageView = getView(id);
             Glide.with(c).load(image).into(imageView);
+        } else if (getView(id) instanceof ImageButton) {
+            ImageButton imageView = getView(id);
+            Glide.with(c).load(image).into(imageView);
+        } else if (getView(id) instanceof AppCompatImageButton) {
+            AppCompatImageButton imageView = getView(id);
+            Glide.with(c).load(image).into(imageView);
+        } else {
+            Log.w("HolderView", "未匹配到有效对象");
         }
         return this;
     }
@@ -318,9 +358,17 @@ public final class HolderView extends RecyclerView.ViewHolder {
         if (getView(id) instanceof AppCompatImageView) {
             AppCompatImageView imageView = getView(id);
             imageView.setColorFilter(c.getResources().getColor(color, c.getTheme()));
-        } else {
+        } else if (getView(id) instanceof ImageView) {
             ImageView imageView = getView(id);
             imageView.setColorFilter(c.getResources().getColor(color, c.getTheme()));
+        } else if (getView(id) instanceof ImageButton) {
+            ImageButton imageView = getView(id);
+            imageView.setColorFilter(c.getResources().getColor(color, c.getTheme()));
+        } else if (getView(id) instanceof AppCompatImageButton) {
+            AppCompatImageButton imageView = getView(id);
+            imageView.setColorFilter(c.getResources().getColor(color, c.getTheme()));
+        } else {
+            Log.w("HolderView", "未匹配到有效对象");
         }
         return this;
     }
@@ -329,9 +377,17 @@ public final class HolderView extends RecyclerView.ViewHolder {
         if (getView(id) instanceof AppCompatImageView) {
             AppCompatImageView imageView = getView(id);
             imageView.setColorFilter(c.getResources().getColor(color, c.getTheme()), mode);
-        } else {
+        } else if (getView(id) instanceof ImageView) {
             ImageView imageView = getView(id);
             imageView.setColorFilter(c.getResources().getColor(color, c.getTheme()), mode);
+        } else if (getView(id) instanceof ImageButton) {
+            ImageButton imageView = getView(id);
+            imageView.setColorFilter(c.getResources().getColor(color, c.getTheme()), mode);
+        } else if (getView(id) instanceof AppCompatImageButton) {
+            AppCompatImageButton imageView = getView(id);
+            imageView.setColorFilter(c.getResources().getColor(color, c.getTheme()), mode);
+        } else {
+            Log.w("HolderView", "未匹配到有效对象");
         }
         return this;
     }
