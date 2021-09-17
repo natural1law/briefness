@@ -140,24 +140,23 @@ public final class ScanActivity extends AppCompatActivity implements QRCodeView.
     }
 
     private void photoView() {
-        zxPhotoView.setOnClickListener(v -> EasyPhotos.createAlbum(aThis, false, GlideEngine.getInstance())
+        zxPhotoView.setOnClickListener(v -> EasyPhotos.createAlbum(aThis, false, false, GlideEngine.getInstance())
                 .setCleanMenu(true)
                 .setGif(false)
-                .isCompress(false)
                 .setCount(1)
                 .setOriginalMenu(false, true, "原图不可用")
                 .start(new SelectCallback() {
                     @Override
-                    public void onResult(ArrayList<Photo> photos, ArrayList<String> paths, boolean isOriginal) {
-                        paths.forEach(photo -> {
-                            if (photo.contains("content:")) {
-                                zxView.decodeQRCode(realUri(Uri.parse(photo)));
-                            } else {
-                                zxView.decodeQRCode(photo);
-                            }
-                        });
+                    public void onResult(ArrayList<Photo> photos, boolean isOriginal) {
+                        photos.forEach(photo -> zxView.decodeQRCode(photo.path));
                     }
-                }));
+
+                    @Override
+                    public void onCancel() {
+
+                    }
+                })
+        );
     }
 
     /**
