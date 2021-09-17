@@ -10,6 +10,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.FragmentActivity;
 
@@ -19,6 +20,7 @@ import com.androidx.view.bar.BaseFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+
 /**
  * @date 2021/04/30
  */
@@ -27,6 +29,8 @@ public final class MyPageFrag extends BaseFragment {
 
     @BindView(R.id.title_layout)
     public FrameLayout titleLayout;
+    @BindView(R.id.title_return_image)
+    public AppCompatImageView returnView;
     @BindView(R.id.title_text)
     public AppCompatTextView titleView;
 
@@ -56,6 +60,7 @@ public final class MyPageFrag extends BaseFragment {
         unbinder = ButterKnife.bind(this, view);
         titleLayout.setBackgroundColor(fThis.getResources().getColor(R.color.gray, fThis.getTheme()));
         titleView.setTextColor(getResources().getColor(R.color.black1, fThis.getTheme()));
+        returnView.setVisibility(View.GONE);
         titleView.setText("我的");
     }
 

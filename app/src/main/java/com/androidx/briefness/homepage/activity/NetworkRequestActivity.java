@@ -39,18 +39,16 @@ import butterknife.Unbinder;
 @SuppressLint("NonConstantResourceId")
 public final class NetworkRequestActivity extends BaseActivity {
 
+    private final AppCompatActivity aThis = this;
     @BindView(R.id.title_layout)
     public FrameLayout titleLayout;
     @BindView(R.id.title_return_image)
     public AppCompatImageView imageView;
     @BindView(R.id.title_text)
     public AppCompatTextView titleView;
-
     @BindView(R.id.network_content)
     public AppCompatTextView contentView;
-
     private Unbinder unbinder;
-    private final AppCompatActivity aThis = this;
 
     @SuppressLint("SetTextI18n")
     @Override

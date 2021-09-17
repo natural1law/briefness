@@ -35,8 +35,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:progressColor="#7A7A7A"
-        app:progressType="TEXT"
         app:progressSize="40"
+        app:progressType="TEXT"
         tools:ignore="ImageContrastCheck" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

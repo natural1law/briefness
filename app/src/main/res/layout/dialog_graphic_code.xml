@@ -43,8 +43,8 @@
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/dialog_verification"
             android:layout_width="100dp"
-            android:layout_margin="10dp"
             android:layout_height="50dp"
+            android:layout_margin="10dp"
             android:background="#B3B3B3" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>

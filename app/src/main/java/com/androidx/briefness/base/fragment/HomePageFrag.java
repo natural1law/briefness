@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,20 +42,21 @@ import butterknife.Unbinder;
 @SuppressLint("NonConstantResourceId")
 public final class HomePageFrag extends BaseFragment {
 
-    @BindView(R.id.title_layout)
-    public FrameLayout titleLayout;
-    @BindView(R.id.title_text)
-    public AppCompatTextView titleView;
-    @BindView(R.id.homepage_rv)
-    public RecyclerView homepageRv;
-
-    private Context c;
-    private Unbinder unbinder;
-    private HomepageAdapter adapter;
     private final List<String> list = new ArrayList<>();
     private final Bundle bundle = new Bundle();
     private final String[] arr = {"Toast功能演示", "dialog功能演示", "图表功能演示", "Tab导航栏功能演示", "网络请求接口演示", "截屏录屏功能演示",
             "分页功能演示"};
+    @BindView(R.id.title_layout)
+    public FrameLayout titleLayout;
+    @BindView(R.id.title_return_image)
+    public AppCompatImageView returnView;
+    @BindView(R.id.title_text)
+    public AppCompatTextView titleView;
+    @BindView(R.id.homepage_rv)
+    public RecyclerView homepageRv;
+    private Context c;
+    private Unbinder unbinder;
+    private HomepageAdapter adapter;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -91,6 +93,8 @@ public final class HomePageFrag extends BaseFragment {
     private void initView() {
         titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, c.getTheme()));
         titleView.setTextColor(getResources().getColor(R.color.black1, c.getTheme()));
+        returnView.setVisibility(View.GONE);
+
         titleView.setText("目录");
 
         homepageRv.setLayoutManager(new LinearLayoutManager(c));

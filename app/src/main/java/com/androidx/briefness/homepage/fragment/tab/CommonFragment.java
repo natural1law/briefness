@@ -25,6 +25,8 @@ import butterknife.Unbinder;
 @SuppressLint("NonConstantResourceId")
 public class CommonFragment extends Fragment {
 
+    private final int[] unselectedIcon = {R.mipmap.tab_home_unselect, R.mipmap.tab_speech_unselect, R.mipmap.tab_contact_unselect};
+    private final int[] selectedIcon = {R.mipmap.tab_home_select, R.mipmap.tab_speech_select, R.mipmap.tab_contact_select};
     @BindView(R.id.common1)
     public CommonTabLayout commonTabLayout1;
     @BindView(R.id.common2)
@@ -43,7 +45,6 @@ public class CommonFragment extends Fragment {
     public CommonTabLayout commonTabLayout8;
     @BindView(R.id.common_vp2)
     public ViewPager2 viewPager2;
-
     private TabLayoutBar tab1;
     private TabLayoutBar tab2;
     private TabLayoutBar tab3;
@@ -54,9 +55,6 @@ public class CommonFragment extends Fragment {
     private TabLayoutBar tab8;
     private Unbinder unbinder;
     private AppCompatActivity aThis;
-
-    private final int[] unselectedIcon = {R.mipmap.tab_home_unselect, R.mipmap.tab_speech_unselect, R.mipmap.tab_contact_unselect};
-    private final int[] selectedIcon = {R.mipmap.tab_home_select, R.mipmap.tab_speech_select, R.mipmap.tab_contact_select};
 
     @Override
     public void onAttach(@NonNull Context context) {

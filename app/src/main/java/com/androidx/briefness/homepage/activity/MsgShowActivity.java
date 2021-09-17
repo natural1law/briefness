@@ -26,15 +26,14 @@ import butterknife.Unbinder;
 @SuppressLint("NonConstantResourceId")
 public final class MsgShowActivity extends BaseActivity {
 
+    private final AppCompatActivity aThis = this;
     @BindView(R.id.title_layout)
     public FrameLayout titleLayout;
     @BindView(R.id.title_return_image)
     public AppCompatImageView imageView;
     @BindView(R.id.title_text)
     public AppCompatTextView titleView;
-
     private Unbinder unbinder;
-    private final AppCompatActivity aThis = this;
 
     @SuppressLint("SetTextI18n")
     @Override

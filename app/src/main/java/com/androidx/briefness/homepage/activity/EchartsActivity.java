@@ -27,6 +27,7 @@ import butterknife.Unbinder;
 @SuppressLint("NonConstantResourceId")
 public final class EchartsActivity extends BaseWebActivity {
 
+    private final EchartsActivity aThis = this;
     @BindView(R.id.title_layout)
     public FrameLayout titleLayout;
     @BindView(R.id.title_return_image)
@@ -35,9 +36,7 @@ public final class EchartsActivity extends BaseWebActivity {
     public AppCompatTextView titleView;
     @BindView(R.id.activity_web_layout)
     public LinearLayoutCompat webView;
-
     private Unbinder unbinder;
-    private final EchartsActivity aThis = this;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

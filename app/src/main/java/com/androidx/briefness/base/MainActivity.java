@@ -17,8 +17,8 @@ import butterknife.Unbinder;
 @SuppressLint("NonConstantResourceId")
 public class MainActivity extends FragmentActivity {
 
-    private Unbinder unbinder;
     private final FragmentActivity aThis = this;
+    private Unbinder unbinder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

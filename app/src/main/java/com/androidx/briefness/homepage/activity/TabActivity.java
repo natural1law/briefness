@@ -35,21 +35,19 @@ import butterknife.Unbinder;
 @SuppressLint("NonConstantResourceId")
 public class TabActivity extends AppCompatActivity {
 
+    private final TabActivity aThis = this;
     @BindView(R.id.title_layout)
     public FrameLayout titleLayout;
     @BindView(R.id.title_return_image)
     public AppCompatImageView imageView;
     @BindView(R.id.title_text)
     public AppCompatTextView titleView;
-
     @BindView(R.id.sliding)
     public SegmentTabLayout segmentTabLayout;
     @BindView(R.id.vp2)
     public ViewPager2 viewPager2;
-
     private Unbinder unbinder;
     private TabLayoutBar tabView;
-    private final TabActivity aThis = this;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

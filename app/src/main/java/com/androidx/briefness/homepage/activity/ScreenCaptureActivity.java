@@ -31,16 +31,15 @@ import butterknife.Unbinder;
 @SuppressLint("NonConstantResourceId")
 public final class ScreenCaptureActivity extends BaseActivity {
 
+    private final AppCompatActivity aThis = this;
     @BindView(R.id.title_layout)
     public FrameLayout titleLayout;
     @BindView(R.id.title_return_image)
     public AppCompatImageView imageView;
     @BindView(R.id.title_text)
     public AppCompatTextView titleView;
-
     private Unbinder unbinder;
     private ScreenRecording sr;
-    private final AppCompatActivity aThis = this;
 
     @SuppressLint("SetTextI18n")
     @Override

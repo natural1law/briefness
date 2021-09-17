@@ -33,15 +33,14 @@ import butterknife.Unbinder;
 @SuppressLint("NonConstantResourceId")
 public final class DialogActivity extends BaseActivity {
 
+    private final DialogActivity aThis = this;
     @BindView(R.id.title_layout)
     public FrameLayout titleLayout;
     @BindView(R.id.title_return_image)
     public AppCompatImageView imageView;
     @BindView(R.id.title_text)
     public AppCompatTextView titleView;
-
     private Unbinder unbinder;
-    private final DialogActivity aThis = this;
     private ActivityResultLauncher<Intent> launcher;
 
     @Override

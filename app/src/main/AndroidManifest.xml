@@ -13,7 +13,8 @@
         android:theme="@style/Theme.Reduce"
         tools:ignore="AllowBackup"
         tools:replace="android:allowBackup">
-        <activity android:name=".base.MainActivity"
+        <activity
+            android:name=".base.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,7 +45,7 @@
             android:name=".homepage.service.NotificationService"
             android:enabled="true"
             android:exported="false">
-            <intent-filter android:priority="1000" >
+            <intent-filter android:priority="1000">
                 <action android:name="ns" />
             </intent-filter>
         </service>

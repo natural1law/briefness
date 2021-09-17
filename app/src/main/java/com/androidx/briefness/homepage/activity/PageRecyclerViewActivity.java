@@ -36,6 +36,7 @@ import butterknife.Unbinder;
 @SuppressLint("NonConstantResourceId")
 public class PageRecyclerViewActivity extends AppCompatActivity {
 
+    private final AppCompatActivity aThis = this;
     @BindView(R.id.title_layout)
     public FrameLayout titleLayout;
     @BindView(R.id.title_return_image)
@@ -44,9 +45,30 @@ public class PageRecyclerViewActivity extends AppCompatActivity {
     public AppCompatTextView titleView;
     @BindView(R.id.listview)
     public PaginationRecycleView listView;
-
     private Unbinder unbinder;
-    private final AppCompatActivity aThis = this;
+
+    /**
+     * @param str 32位小写MD5
+     */
+    private static String MD5(String str) {
+        String reStr = null;
+        try {
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            byte[] bytes = md5.digest(str.getBytes());
+            StringBuilder stringBuffer = new StringBuilder();
+            for (byte b : bytes) {
+                int bt = b & 0xff;
+                if (bt < 16) {
+                    stringBuffer.append(0);
+                }
+                stringBuffer.append(Integer.toHexString(bt));
+            }
+            reStr = stringBuffer.toString();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
+        return reStr;
+    }
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -89,7 +111,6 @@ public class PageRecyclerViewActivity extends AppCompatActivity {
         indifference(1);
     }
 
-
     private void indifference(int lot) {
         Map<String, Object> param = new WeakHashMap<>();
         String uid = "b73f6a0e0b23af47bcfae6c7c05c95e1";
@@ -119,28 +140,5 @@ public class PageRecyclerViewActivity extends AppCompatActivity {
                 Log.i("数据", String.valueOf(jsonList));
             }
         });
-    }
-
-    /**
-     * @param str 32位小写MD5
-     */
-    private static String MD5(String str) {
-        String reStr = null;
-        try {
-            MessageDigest md5 = MessageDigest.getInstance("MD5");
-            byte[] bytes = md5.digest(str.getBytes());
-            StringBuilder stringBuffer = new StringBuilder();
-            for (byte b : bytes) {
-                int bt = b & 0xff;
-                if (bt < 16) {
-                    stringBuffer.append(0);
-                }
-                stringBuffer.append(Integer.toHexString(bt));
-            }
-            reStr = stringBuffer.toString();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return reStr;
     }
 }

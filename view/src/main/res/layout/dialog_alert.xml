@@ -46,6 +46,6 @@
         android:text="确认"
         android:textColor="#ffffff"
         android:textSize="14sp"
-        tools:ignore="HardcodedText,RtlSymmetry" />
+        tools:ignore="HardcodedText,RtlSymmetry,TextContrastCheck" />
 
 </FrameLayout>
