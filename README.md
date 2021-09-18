@@ -8,7 +8,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
    * [网络请求（WebSocket长连接、http/https）](https://github.com/natural1law/briefness/blob/master/app/src/main/java/com/androidx/briefness/homepage/activity/NetworkRequestActivity.java "点击查看使用`网络请求`功能代码")
    #### 常用工具
    * [正则表达式](https://github.com/natural1law/briefness/ "点击查看使用`正则表达式`功能代码")
-   * [安全加密（MD5加随机盐-MD5数据校验、AES加密解密、RSA加密解密-签名-校验、SHA1等加密、Base64加密解密）](https://github.com/natural1law/briefness/ "点击查看使用`安全加密`功能代码")
+   * [数据安全加密](https://github.com/natural1law/briefness/ "点击查看使用`安全加密`功能代码")
    * [excel导出](https://github.com/natural1law/briefness/ "点击查看使用`excel导出`功能代码")
    * [生成验证码](https://github.com/natural1law/briefness/ "点击查看使用`生成验证码`功能代码")
    * [短信倒计时](https://github.com/natural1law/briefness/ "点击查看使用`短信倒计时`功能代码")
