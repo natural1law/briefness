@@ -60,7 +60,6 @@ android {
             java.srcDirs = ['src/main/java', 'src/main/proto']
         }
     }
-    ndkVersion '23.0.7599858'
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"

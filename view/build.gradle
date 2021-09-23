@@ -42,7 +42,6 @@ android {
             }
         }
     }
-    ndkVersion '23.0.7599858'
 }
 
 dependencies {
