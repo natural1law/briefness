@@ -3,7 +3,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-parcelize'
     id 'com.google.protobuf'
-    id 'maven-publish'
+    id 'com.github.dcendents.android-maven'
 }
 
 android {
