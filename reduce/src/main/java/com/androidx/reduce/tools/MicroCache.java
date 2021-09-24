@@ -1,109 +1,91 @@
 package com.androidx.reduce.tools;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.WeakHashMap;
-import java.util.function.BiConsumer;
 
 /**
  * 微程序缓冲储存器
  *
  * @date 2021/02/20
  */
-@SuppressLint("ApplySharedPref")
 @SuppressWarnings({"unused", "RedundantSuppression"})
 public final class MicroCache {
 
-    private SharedPreferences sp;
-    private static volatile MicroCache mc;
-    private final Message msg = new Handler(Looper.getMainLooper()).obtainMessage();
+    private final SharedPreferences sp;
+    private final Message msg = new Message();
+    private final SharedPreferences.Editor editor;
 
-    private MicroCache(Context context) {
-        if (context != null) sp = context.getSharedPreferences("MicroCache", Activity.MODE_PRIVATE);
+    private MicroCache(Context context, String name, int mode) {
+        sp = context.getSharedPreferences(name, mode);
+        editor = sp.edit();
     }
 
-    public static MicroCache builder(Context context) {
-        if (mc == null) synchronized (MicroCache.class) {
-            if (mc == null) mc = new MicroCache(context);
-        }
-        return mc;
+    public static MicroCache getInstance(Context context) {
+        return getInstance(context, "MicroCache", Activity.MODE_PRIVATE);
     }
 
-    public void setApply(String key, String value) {
-        sp.edit().putString(key, value).apply();
+    public static MicroCache getInstance(Context context, String name) {
+        return getInstance(context, name, Activity.MODE_PRIVATE);
     }
 
+    public static MicroCache getInstance(Context context, String name, int mode) {
+        return Singleton.newInstance(context, name, mode);
+    }
+
+    @SuppressWarnings("unchecked")
     public void setApply(String key, Object value) {
-        sp.edit().putString(key, String.valueOf(value)).apply();
+        if (value == null) return;
+        if (value instanceof String) {
+            editor.putString(key, String.valueOf(value)).apply();
+        } else if (value instanceof Integer) {
+            editor.putInt(key, (Integer) value).apply();
+        } else if (value instanceof Long) {
+            editor.putLong(key, (Long) value).apply();
+        } else if (value instanceof Float) {
+            editor.putFloat(key, (Float) value).apply();
+        } else if (value instanceof Boolean) {
+            editor.putBoolean(key, (Boolean) value).apply();
+        } else if (value instanceof Set<?>) {
+            editor.putStringSet(key, (Set<String>) value).apply();
+        }
     }
 
-    public void setApply(String key, int value) {
-        sp.edit().putInt(key, value).apply();
-    }
-
-    public void setApply(String key, float value) {
-        sp.edit().putFloat(key, value).apply();
-    }
-
-    public void setApply(String key, long value) {
-        sp.edit().putLong(key, value).apply();
-    }
-
-    public void setApply(String key, boolean value) {
-        sp.edit().putBoolean(key, value).apply();
-    }
-
-    public void setCommit(String key, String value) {
-        sp.edit().putString(key, value).commit();
-    }
-
+    @SuppressWarnings("unchecked")
     public void setCommit(String key, Object value) {
-        sp.edit().putString(key, String.valueOf(value)).commit();
-    }
-
-    public void setCommit(String key, int value) {
-        sp.edit().putInt(key, value).commit();
-    }
-
-    public void setCommit(String key, float value) {
-        sp.edit().putFloat(key, value).commit();
-    }
-
-    public void setCommit(String key, long value) {
-        sp.edit().putLong(key, value).commit();
-    }
-
-    public void setCommit(String key, boolean value) {
-        sp.edit().putBoolean(key, value).commit();
+        if (value == null) return;
+        if (value instanceof String) {
+            editor.putString(key, String.valueOf(value)).commit();
+        } else if (value instanceof Integer) {
+            editor.putInt(key, (Integer) value).commit();
+        } else if (value instanceof Long) {
+            editor.putLong(key, (Long) value).commit();
+        } else if (value instanceof Float) {
+            editor.putFloat(key, (Float) value).commit();
+        } else if (value instanceof Boolean) {
+            editor.putBoolean(key, (Boolean) value).commit();
+        } else if (value instanceof Set<?>) {
+            editor.putStringSet(key, (Set<String>) value).commit();
+        }
     }
 
     public MicroCache getValue(String key) {
         try {
             if (getAll().isEmpty()) return this;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                getAll().forEach((key1, value) -> {
-                    if (Objects.equals(key, key1)) msg.obj = value;
-                });
-            } else {
-                for (String key1 : getAll().keySet()) {
-                    if (Objects.equals(key, key1)) msg.obj = getAll().get(key1);
-                }
-            }
-            return this;
+            getAll().forEach((k, v) -> {
+                if (Objects.equals(key, k)) msg.obj = v;
+            });
         } catch (Exception e) {
-            Log.e("MicroCache异常", String.valueOf(e.getMessage()), e);
-            return this;
+            Log.e("MicroCache异常", Log.getStackTraceString(e));
         }
+        return this;
     }
 
     public String toString() {
@@ -134,24 +116,33 @@ public final class MicroCache {
         return sp.getAll() == null ? new WeakHashMap<>() : sp.getAll();
     }
 
+    public void clear() {
+        editor.clear().commit();
+    }
+
     public void clearApply(String key) {
-        sp.edit().remove(key).apply();
+        editor.remove(key).apply();
     }
 
     public void clearCommit(String key) {
-        sp.edit().remove(key).commit();
+        editor.remove(key).commit();
     }
 
-    public void clearAll() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            getAll().forEach((BiConsumer<String, Object>) (s, o) -> sp.edit().remove(s).commit());
-        } else {
-            for (String key : getAll().keySet()) {
-                sp.edit().remove(key).commit();
-            }
+    private static final class Singleton {
+
+        private static volatile MicroCache mc;
+
+        private Singleton() {
         }
-    }
 
+        private static MicroCache newInstance(Context context, String name, int mode) {
+            if (mc == null) synchronized (MicroCache.class) {
+                if (mc == null) mc = new MicroCache(context, name, mode);
+            }
+            return mc;
+        }
+
+    }
 }
 
 

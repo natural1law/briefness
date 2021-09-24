@@ -17,7 +17,7 @@ public class App extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         toasts = Toasts.builder(base).setDebug(true);
-        mc = MicroCache.builder(base);
+        mc = MicroCache.getInstance(base);
         appThis = This.build();
     }
 }
