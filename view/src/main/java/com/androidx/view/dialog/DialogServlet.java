@@ -5,35 +5,57 @@ import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.util.Log;
 import android.util.SparseArray;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.ColorRes;
-import androidx.annotation.DrawableRes;
 import androidx.annotation.IdRes;
 import androidx.annotation.Size;
 import androidx.appcompat.app.AppCompatDialog;
 import androidx.appcompat.widget.AppCompatAutoCompleteTextView;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.appcompat.widget.AppCompatCheckedTextView;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatMultiAutoCompleteTextView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.appcompat.widget.LinearLayoutCompat;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidx.reduce.tools.Convert;
 import com.androidx.view.R;
 import com.androidx.view.dialog.listener.OnClickTriggerListener;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 public class DialogServlet extends AppCompatDialog {
 
     private View layout;
+    private final Resources r;
+    private final RequestManager g;
+    private final Resources.Theme t;
+    private final Convert.Pixel pixel;
     private final SparseArray<View> views;
 
     protected DialogServlet(Context context, DialogModule module) {
@@ -42,6 +64,10 @@ public class DialogServlet extends AppCompatDialog {
 
     private DialogServlet(Context context, int theme, DialogModule module) {
         super(context, theme);
+        pixel = Convert.Pixel.get(context);
+        r = context.getResources();
+        t = context.getTheme();
+        g = Glide.with(context);
         views = new SparseArray<>();
         try {
             initView(module);
@@ -94,170 +120,357 @@ public class DialogServlet extends AppCompatDialog {
         return (V) view;
     }
 
+    public DialogServlet setMatrix(@IdRes int id, int... v) {
+        if (getView(id) instanceof AppCompatTextView) {
+            AppCompatTextView textView = getView(id);
+            textView.setWidth(v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]));
+            textView.setHeight(v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]));
+        } else if (getView(id) instanceof TextView) {
+            TextView textView = getView(id);
+            textView.setWidth(v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]));
+            textView.setHeight(v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]));
+        } else if (getView(id) instanceof AppCompatImageView) {
+            AppCompatImageView imageView = getView(id);
+            ViewGroup.LayoutParams params = imageView.getLayoutParams();
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]);
+            imageView.setLayoutParams(params);
+        } else if (getView(id) instanceof ImageView) {
+            ImageView imageView = getView(id);
+            ViewGroup.LayoutParams params = imageView.getLayoutParams();
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]);
+            imageView.setLayoutParams(params);
+        } else if (getView(id) instanceof AppCompatEditText) {
+            AppCompatEditText editText = getView(id);
+            editText.setWidth(v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]));
+            editText.setHeight(v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]));
+        } else if (getView(id) instanceof EditText) {
+            EditText editText = getView(id);
+            editText.setWidth(v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]));
+            editText.setHeight(v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]));
+        } else if (getView(id) instanceof AppCompatAutoCompleteTextView) {
+            AppCompatAutoCompleteTextView textView = getView(id);
+            textView.setWidth(v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]));
+            textView.setHeight(v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]));
+        } else if (getView(id) instanceof AppCompatMultiAutoCompleteTextView) {
+            AppCompatMultiAutoCompleteTextView textView = getView(id);
+            textView.setWidth(v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]));
+            textView.setHeight(v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]));
+        } else if (getView(id) instanceof AppCompatImageButton) {
+            AppCompatImageButton imageButton = getView(id);
+            ViewGroup.LayoutParams params = imageButton.getLayoutParams();
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]);
+            imageButton.setLayoutParams(params);
+        } else if (getView(id) instanceof ImageButton) {
+            ImageButton imageButton = getView(id);
+            ViewGroup.LayoutParams params = imageButton.getLayoutParams();
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]);
+            imageButton.setLayoutParams(params);
+        } else if (getView(id) instanceof AppCompatCheckedTextView) {
+            AppCompatCheckedTextView textView = getView(id);
+            textView.setWidth(v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]));
+            textView.setHeight(v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]));
+        } else if (getView(id) instanceof LinearLayoutCompat) {
+            LinearLayoutCompat layout = getView(id);
+            ViewGroup.LayoutParams params = layout.getLayoutParams();
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]);
+            layout.setLayoutParams(params);
+        } else if (getView(id) instanceof LinearLayout) {
+            LinearLayout layout = getView(id);
+            ViewGroup.LayoutParams params = layout.getLayoutParams();
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]);
+            layout.setLayoutParams(params);
+        } else if (getView(id) instanceof ConstraintLayout) {
+            ConstraintLayout layout = getView(id);
+            ViewGroup.LayoutParams params = layout.getLayoutParams();
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]);
+            layout.setLayoutParams(params);
+        } else if (getView(id) instanceof FrameLayout) {
+            FrameLayout layout = getView(id);
+            ViewGroup.LayoutParams params = layout.getLayoutParams();
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]);
+            layout.setLayoutParams(params);
+        } else if (getView(id) instanceof RelativeLayout) {
+            RelativeLayout layout = getView(id);
+            ViewGroup.LayoutParams params = layout.getLayoutParams();
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]);
+            layout.setLayoutParams(params);
+        } else if (getView(id) instanceof GridView) {
+            GridView view = getView(id);
+            ViewGroup.LayoutParams params = view.getLayoutParams();
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]);
+            view.setLayoutParams(params);
+        } else if (getView(id) instanceof RecyclerView) {
+            RecyclerView recyclerView = getView(id);
+            ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp(v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp(v[1]);
+            recyclerView.setLayoutParams(params);
+        }
+        return this;
+    }
+
     /**
      * 设置文本
      */
-    public <T> DialogServlet setTextView(@IdRes int viewId, @NotNull T text) {
-        AppCompatTextView view = getView(viewId);
-        view.setText(String.valueOf(text));
+    public <Text> DialogServlet setText(@IdRes int id, Text text) {
+        if (getView(id) instanceof AppCompatTextView) {
+            AppCompatTextView textView = getView(id);
+            textView.setText(String.valueOf(text));
+        } else if (getView(id) instanceof AppCompatCheckedTextView) {
+            AppCompatCheckedTextView textView = getView(id);
+            textView.setText(String.valueOf(text));
+        } else if (getView(id) instanceof AppCompatAutoCompleteTextView) {
+            AppCompatAutoCompleteTextView textView = getView(id);
+            textView.setText(String.valueOf(text));
+        } else if (getView(id) instanceof AppCompatEditText) {
+            AppCompatEditText textView = getView(id);
+            textView.setText(String.valueOf(text));
+        } else if (getView(id) instanceof EditText) {
+            EditText textView = getView(id);
+            textView.setText(String.valueOf(text));
+        } else if (getView(id) instanceof TextView) {
+            TextView textView = getView(id);
+            textView.setText(String.valueOf(text));
+        } else if (getView(id) instanceof Button) {
+            Button textView = getView(id);
+            textView.setText(String.valueOf(text));
+        } else if (getView(id) instanceof AppCompatButton) {
+            AppCompatButton textView = getView(id);
+            textView.setText(String.valueOf(text));
+        } else {
+            Log.w("HolderView", "未匹配到有效对象");
+        }
         return this;
     }
 
-    public DialogServlet setTextColor(@IdRes int viewId, @ColorRes int color) {
-        AppCompatTextView view = getView(viewId);
-        view.setTextColor(getContext().getResources().getColor(color, getContext().getTheme()));
+    /**
+     * 设置提示
+     */
+    public <Text> DialogServlet setHint(@IdRes int id, Text text) {
+        if (getView(id) instanceof AppCompatTextView) {
+            AppCompatTextView textView = getView(id);
+            textView.setHint(String.valueOf(text));
+        } else if (getView(id) instanceof AppCompatCheckedTextView) {
+            AppCompatCheckedTextView textView = getView(id);
+            textView.setHint(String.valueOf(text));
+        } else if (getView(id) instanceof AppCompatAutoCompleteTextView) {
+            AppCompatAutoCompleteTextView textView = getView(id);
+            textView.setHint(String.valueOf(text));
+        } else if (getView(id) instanceof AppCompatEditText) {
+            AppCompatEditText textView = getView(id);
+            textView.setHint(String.valueOf(text));
+        } else if (getView(id) instanceof EditText) {
+            EditText textView = getView(id);
+            textView.setHint(String.valueOf(text));
+        } else if (getView(id) instanceof TextView) {
+            TextView textView = getView(id);
+            textView.setHint(String.valueOf(text));
+        } else if (getView(id) instanceof Button) {
+            Button textView = getView(id);
+            textView.setHint(String.valueOf(text));
+        } else if (getView(id) instanceof AppCompatButton) {
+            AppCompatButton textView = getView(id);
+            textView.setHint(String.valueOf(text));
+        } else {
+            Log.w("HolderView", "未匹配到有效对象");
+        }
         return this;
     }
 
-    public DialogServlet setTextSize(@IdRes int viewId, @Size int size) {
-        AppCompatTextView view = getView(viewId);
-        view.setTextSize(size);
+    /**
+     * 设置字体颜色
+     */
+    public DialogServlet setTextColor(@IdRes int id, @ColorRes int color) {
+        if (getView(id) instanceof AppCompatTextView) {
+            AppCompatTextView textView = getView(id);
+            textView.setTextColor(r.getColor(color, t));
+        } else if (getView(id) instanceof AppCompatCheckedTextView) {
+            AppCompatCheckedTextView textView = getView(id);
+            textView.setTextColor(r.getColor(color, t));
+        } else if (getView(id) instanceof AppCompatAutoCompleteTextView) {
+            AppCompatAutoCompleteTextView textView = getView(id);
+            textView.setTextColor(r.getColor(color, t));
+        } else if (getView(id) instanceof AppCompatEditText) {
+            AppCompatEditText textView = getView(id);
+            textView.setTextColor(r.getColor(color, t));
+        } else if (getView(id) instanceof EditText) {
+            EditText textView = getView(id);
+            textView.setTextColor(r.getColor(color, t));
+        } else if (getView(id) instanceof TextView) {
+            TextView textView = getView(id);
+            textView.setTextColor(r.getColor(color, t));
+        } else if (getView(id) instanceof Button) {
+            Button textView = getView(id);
+            textView.setTextColor(r.getColor(color, t));
+        } else if (getView(id) instanceof AppCompatButton) {
+            AppCompatButton textView = getView(id);
+            textView.setTextColor(r.getColor(color, t));
+        } else {
+            Log.w("HolderView", "未匹配到有效对象");
+        }
         return this;
     }
 
-    public DialogServlet setTextWidth(@IdRes int viewId, @Size int size) {
-        AppCompatTextView view = getView(viewId);
-        view.setWidth(Convert.Pixel.get(getContext()).dp(size));
+    /**
+     * 设置提示颜色
+     */
+    public DialogServlet setHintColor(@IdRes int id, @ColorRes int color) {
+        if (getView(id) instanceof AppCompatTextView) {
+            AppCompatTextView textView = getView(id);
+            textView.setHintTextColor(r.getColor(color, t));
+        } else if (getView(id) instanceof AppCompatCheckedTextView) {
+            AppCompatCheckedTextView textView = getView(id);
+            textView.setHintTextColor(r.getColor(color, t));
+        } else if (getView(id) instanceof AppCompatAutoCompleteTextView) {
+            AppCompatAutoCompleteTextView textView = getView(id);
+            textView.setHintTextColor(r.getColor(color, t));
+        } else if (getView(id) instanceof AppCompatEditText) {
+            AppCompatEditText textView = getView(id);
+            textView.setHintTextColor(r.getColor(color, t));
+        } else if (getView(id) instanceof EditText) {
+            EditText textView = getView(id);
+            textView.setHintTextColor(r.getColor(color, t));
+        } else if (getView(id) instanceof TextView) {
+            TextView textView = getView(id);
+            textView.setHintTextColor(r.getColor(color, t));
+        } else if (getView(id) instanceof Button) {
+            Button textView = getView(id);
+            textView.setHintTextColor(r.getColor(color, t));
+        } else if (getView(id) instanceof AppCompatButton) {
+            AppCompatButton textView = getView(id);
+            textView.setHintTextColor(r.getColor(color, t));
+        } else {
+            Log.w("HolderView", "未匹配到有效对象");
+        }
         return this;
     }
 
-    public DialogServlet setTextHeight(@IdRes int viewId, @Size int size) {
-        AppCompatTextView view = getView(viewId);
-        view.setHeight(Convert.Pixel.get(getContext()).dp(size));
+    /**
+     * 设置字体大小
+     */
+    public DialogServlet setTextSize(@IdRes int id, @Size float size) {
+        if (getView(id) instanceof AppCompatTextView) {
+            AppCompatTextView textView = getView(id);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+        } else if (getView(id) instanceof AppCompatCheckedTextView) {
+            AppCompatCheckedTextView textView = getView(id);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+        } else if (getView(id) instanceof AppCompatAutoCompleteTextView) {
+            AppCompatAutoCompleteTextView textView = getView(id);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+        } else if (getView(id) instanceof AppCompatEditText) {
+            AppCompatEditText textView = getView(id);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+        } else if (getView(id) instanceof EditText) {
+            EditText textView = getView(id);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+        } else if (getView(id) instanceof TextView) {
+            TextView textView = getView(id);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+        } else if (getView(id) instanceof Button) {
+            Button textView = getView(id);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+        } else if (getView(id) instanceof AppCompatButton) {
+            AppCompatButton textView = getView(id);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, size);
+        } else {
+            Log.w("HolderView", "未匹配到有效对象");
+        }
         return this;
     }
 
     /**
      * 设置图片
      */
-    public <T> DialogServlet setImageView(@IdRes int viewId, @NotNull T resId) {
-        AppCompatImageView view = getView(viewId);
-        view.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        Glide.with(getContext()).load(resId).into(view);
-        return this;
-    }
-
-    public DialogServlet setImageColor(@IdRes int viewId, @ColorRes int color) {
-        AppCompatImageView view = getView(viewId);
-        view.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        view.setColorFilter(getContext().getResources().getColor(color, getContext().getTheme()));
-        return this;
-    }
-
-    public DialogServlet setImageColorMode(@IdRes int viewId, @ColorRes int color, PorterDuff.Mode mode) {
-        AppCompatImageView view = getView(viewId);
-        view.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        view.setColorFilter(getContext().getResources().getColor(color, getContext().getTheme()), mode);
-        return this;
-    }
-
-    /**
-     * 设置输入文本
-     */
-    public String getEditText(@IdRes int viewId) {
-        AppCompatAutoCompleteTextView view = getView(viewId);
-        return String.valueOf(view.getText()).trim();
-    }
-
-    public DialogServlet setEditColor(@IdRes int viewId, @ColorRes int color) {
-        AppCompatAutoCompleteTextView view = getView(viewId);
-        view.setTextColor(getContext().getResources().getColor(color, getContext().getTheme()));
-        return this;
-    }
-
-    public DialogServlet setEditSize(@IdRes int viewId, @Size int size) {
-        AppCompatAutoCompleteTextView view = getView(viewId);
-        view.setTextSize(size);
-        return this;
-    }
-
-    public DialogServlet setEditHint(@IdRes int viewId, @NotNull String text) {
-        AppCompatAutoCompleteTextView view = getView(viewId);
-        view.setHint(text);
-        return this;
-    }
-
-    public DialogServlet setEditHintSize(@IdRes int viewId, @Size int size) {
-        AppCompatAutoCompleteTextView view = getView(viewId);
-        view.setTextSize(size);
-        return this;
-    }
-
-    public DialogServlet setEditHintColor(@IdRes int viewId, @ColorRes int color) {
-        AppCompatAutoCompleteTextView view = getView(viewId);
-        view.setHintTextColor(getContext().getResources().getColor(color, getContext().getTheme()));
-        return this;
-    }
-
-    public DialogServlet setEditWidth(@IdRes int viewId, @Size int size) {
-        AppCompatAutoCompleteTextView view = getView(viewId);
-        view.setWidth(Convert.Pixel.get(getContext()).dp(size));
-        return this;
-    }
-
-    public DialogServlet setEditHeight(@IdRes int viewId, @Size int size) {
-        AppCompatAutoCompleteTextView view = getView(viewId);
-        view.setHeight(Convert.Pixel.get(getContext()).dp(size));
-        return this;
-    }
-
-    /**
-     * 图片按钮
-     */
-    public <T> DialogServlet setImageButton(@IdRes int viewId, @NotNull T resId) {
-        AppCompatImageButton view = getView(viewId);
-        view.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        Glide.with(getContext()).load(resId).into(view);
-        return this;
-    }
-
-    public DialogServlet setImageButtonColor(@IdRes int viewId, @ColorRes int color) {
-        AppCompatImageButton view = getView(viewId);
-        view.setColorFilter(getContext().getResources().getColor(color, getContext().getTheme()));
-        return this;
-    }
-
-    public DialogServlet setBackgroundColor(@IdRes int viewId, @ColorRes int color) {
-        View view = getView(viewId);
-        view.setBackgroundColor(getContext().getResources().getColor(color, getContext().getTheme()));
-        return this;
-    }
-
-    public DialogServlet setBackgroundResource(@IdRes int viewId, @DrawableRes int drawable) {
-        View view = getView(viewId);
-        view.setBackgroundResource(drawable);
-        return this;
-    }
-
-    public DialogServlet setVisible(@IdRes int viewId, boolean visible) {
-        ViewGroup view = getView(viewId);
-        if (visible) {
-            view.setVisibility(View.GONE);
+    public <Image> DialogServlet setImageView(@IdRes int id, @NotNull Image image) {
+        if (getView(id) instanceof AppCompatImageView) {
+            AppCompatImageView imageView = getView(id);
+            g.load(image).into(imageView);
+        } else if (getView(id) instanceof ImageView) {
+            ImageView imageView = getView(id);
+            g.load(image).into(imageView);
+        } else if (getView(id) instanceof ImageButton) {
+            ImageButton imageView = getView(id);
+            g.load(image).into(imageView);
+        } else if (getView(id) instanceof AppCompatImageButton) {
+            AppCompatImageButton imageView = getView(id);
+            g.load(image).into(imageView);
         } else {
-            view.setVisibility(View.VISIBLE);
+            Log.w("HolderView", "未匹配到有效对象");
         }
         return this;
     }
 
-    public DialogServlet setOnClickListener(@IdRes int viewId, OnClickTriggerListener listener) {
-        View view = getView(viewId);
-        view.setOnClickListener(view1 -> listener.ok(this));
+    /**
+     * 设置图片颜色
+     */
+    public DialogServlet setImageColor(@IdRes int id, @ColorRes int color) {
+        if (getView(id) instanceof AppCompatImageView) {
+            AppCompatImageView imageView = getView(id);
+            imageView.setColorFilter(r.getColor(color, t));
+        } else if (getView(id) instanceof ImageView) {
+            ImageView imageView = getView(id);
+            imageView.setColorFilter(r.getColor(color, t));
+        } else if (getView(id) instanceof ImageButton) {
+            ImageButton imageView = getView(id);
+            imageView.setColorFilter(r.getColor(color, t));
+        } else if (getView(id) instanceof AppCompatImageButton) {
+            AppCompatImageButton imageView = getView(id);
+            imageView.setColorFilter(r.getColor(color, t));
+        } else {
+            Log.w("HolderView", "未匹配到有效对象");
+        }
         return this;
     }
 
-    @SuppressLint("ClickableViewAccessibility")
-    public DialogServlet setOnTouchListener(@IdRes int viewId, OnClickTriggerListener listener) {
-        View view = getView(viewId);
-        view.setOnTouchListener((view1, motionEvent) -> {
+    /**
+     * 设置图片颜色
+     */
+    public DialogServlet setImageColor(@IdRes int id, @ColorRes int color, PorterDuff.Mode mode) {
+        if (getView(id) instanceof AppCompatImageView) {
+            AppCompatImageView imageView = getView(id);
+            imageView.setColorFilter(r.getColor(color, t), mode);
+        } else if (getView(id) instanceof ImageView) {
+            ImageView imageView = getView(id);
+            imageView.setColorFilter(r.getColor(color, t), mode);
+        } else if (getView(id) instanceof ImageButton) {
+            ImageButton imageView = getView(id);
+            imageView.setColorFilter(r.getColor(color, t), mode);
+        } else if (getView(id) instanceof AppCompatImageButton) {
+            AppCompatImageButton imageView = getView(id);
+            imageView.setColorFilter(r.getColor(color, t), mode);
+        } else {
+            Log.w("HolderView", "未匹配到有效对象");
+        }
+        return this;
+    }
+
+    public DialogServlet setOnClickListener(@IdRes int id, OnClickTriggerListener listener) {
+        getView(id).setOnClickListener(v -> listener.ok(this));
+        return this;
+    }
+
+    public DialogServlet setOnLongClickListener(@IdRes int id, OnClickTriggerListener listener) {
+        getView(id).setOnLongClickListener(v -> {
             listener.ok(this);
             return false;
         });
         return this;
     }
 
-    public DialogServlet setOnLongClickListener(@IdRes int viewId, OnClickTriggerListener listener) {
-        View view = getView(viewId);
-        view.setOnLongClickListener(view1 -> {
+    @SuppressLint("ClickableViewAccessibility")
+    public DialogServlet setOnTouchListener(@IdRes int id, OnClickTriggerListener listener) {
+        getView(id).setOnTouchListener((v, e) -> {
             listener.ok(this);
             return false;
         });

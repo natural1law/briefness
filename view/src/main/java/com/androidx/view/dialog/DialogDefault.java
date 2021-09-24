@@ -41,13 +41,13 @@ public final class DialogDefault {
                 .setCancelable(false)
                 .setLayoutGravity(CENTER)
                 .build()
-                .get(context)
-                .setTextView(R.id.dialog_content, content);
+                .get(context);
+        dialog.setText(R.id.dialog_content, content);
         ProgressTextView view = dialog.getView(R.id.dialog_timing_animation);
         CountDownTimer countDownTimer = new CountDownTimer(totalTime * count, count) {
             @Override
             public void onTick(long m) {
-                if (view != null){
+                if (view != null) {
                     view.setText(prefix + ((m / count) + 1) + suffix);
                 }
 
@@ -90,9 +90,9 @@ public final class DialogDefault {
                 .setCancelable(false)
                 .setLayoutGravity(BOTTOM)
                 .build()
-                .get(context)
-                .setTextView(R.id.camera_cancel, "取消")
-                .setOnClickListener(R.id.camera_cancel, listener::no);
+                .get(context);
+        dialog.setText(R.id.camera_cancel, "取消");
+        dialog.setOnClickListener(R.id.camera_cancel, listener::no);
         RecyclerView rv = dialog.getView(R.id.camera_rv);
         CameraAdapter adapter = new CameraAdapter();
         rv.setLayoutManager(new LinearLayoutManager(context));
@@ -159,8 +159,8 @@ public final class DialogDefault {
                 .setLayoutGravity(CENTER)
                 .build()
                 .get(context)
-                .setTextView(R.id.dialog_title, title)
-                .setTextView(R.id.dialog_content, content)
+                .setText(R.id.dialog_title, title)
+                .setText(R.id.dialog_content, content)
                 .setOnClickListener(R.id.dialog_affirm, listener)
                 .show();
     }
@@ -180,7 +180,7 @@ public final class DialogDefault {
                 .setLayoutGravity(CENTER)
                 .build()
                 .get(context)
-                .setTextView(R.id.dialog_content, content)
+                .setText(R.id.dialog_content, content)
                 .setOnClickListener(R.id.dialog_affirm, listener)
                 .setOnClickListener(R.id.dialog_quit, listener::no);
         AppCompatTextView contentView = dialog.getView(R.id.dialog_content);

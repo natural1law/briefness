@@ -268,8 +268,25 @@ public final class Convert {
             return new Pixel(context);
         }
 
-        public int dp(int px) {
+        /**
+         * dp值
+         */
+        public int dp(double px) {
             return (int) (px * dm.density);
+        }
+
+        /**
+         * px值
+         */
+        public int px(double dp) {
+            return (int) (dp / dm.density);
+        }
+
+        /**
+         * sp值
+         */
+        public int sp(double px) {
+            return (int) (px * dm.scaledDensity);
         }
 
     }

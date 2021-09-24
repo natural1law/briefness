@@ -23,7 +23,7 @@ import java.util.Random;
  *
  * @version 1.0.0
  */
-public class Captcha {
+public final class Captcha {
 
     public static Captcha build() {
         if (rxCaptcha == null) synchronized (Captcha.class) {

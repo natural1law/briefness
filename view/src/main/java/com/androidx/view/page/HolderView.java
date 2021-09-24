@@ -42,6 +42,7 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidx.reduce.tools.Convert;
 import com.bumptech.glide.Glide;
 
 import org.jetbrains.annotations.NotNull;
@@ -50,6 +51,7 @@ public final class HolderView extends RecyclerView.ViewHolder {
 
     private final Context c;
     private final View convertView;
+    private final Convert.Pixel pixel;
     private final SparseArray<View> views;
 
     private HolderView(@NonNull View itemView) {
@@ -57,6 +59,7 @@ public final class HolderView extends RecyclerView.ViewHolder {
         convertView = itemView;
         c = itemView.getContext();
         views = new SparseArray<>();
+        pixel = Convert.Pixel.get(c);
     }
 
     public static HolderView createHolderView(ViewGroup parent, @LayoutRes int layoutId) {
@@ -84,97 +87,97 @@ public final class HolderView extends RecyclerView.ViewHolder {
     public HolderView setMatrix(@IdRes int id, int... v) {
         if (getView(id) instanceof AppCompatTextView) {
             AppCompatTextView textView = getView(id);
-            textView.setWidth(v[0] == 0 ? MATCH_PARENT : dp(c, v[0]));
-            textView.setHeight(v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]));
+            textView.setWidth(v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]));
+            textView.setHeight(v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]));
         } else if (getView(id) instanceof TextView) {
             TextView textView = getView(id);
-            textView.setWidth(v[0] == 0 ? MATCH_PARENT : dp(c, v[0]));
-            textView.setHeight(v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]));
+            textView.setWidth(v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]));
+            textView.setHeight(v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]));
         } else if (getView(id) instanceof AppCompatImageView) {
             AppCompatImageView imageView = getView(id);
             ViewGroup.LayoutParams params = imageView.getLayoutParams();
-            params.width = v[0] == 0 ? MATCH_PARENT : dp(c, v[0]);
-            params.height = v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]);
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]);
             imageView.setLayoutParams(params);
         } else if (getView(id) instanceof ImageView) {
             ImageView imageView = getView(id);
             ViewGroup.LayoutParams params = imageView.getLayoutParams();
-            params.width = v[0] == 0 ? MATCH_PARENT : dp(c, v[0]);
-            params.height = v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]);
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]);
             imageView.setLayoutParams(params);
         } else if (getView(id) instanceof AppCompatEditText) {
             AppCompatEditText editText = getView(id);
-            editText.setWidth(v[0] == 0 ? MATCH_PARENT : dp(c, v[0]));
-            editText.setHeight(v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]));
+            editText.setWidth(v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]));
+            editText.setHeight(v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]));
         } else if (getView(id) instanceof EditText) {
             EditText editText = getView(id);
-            editText.setWidth(v[0] == 0 ? MATCH_PARENT : dp(c, v[0]));
-            editText.setHeight(v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]));
+            editText.setWidth(v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]));
+            editText.setHeight(v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]));
         } else if (getView(id) instanceof AppCompatAutoCompleteTextView) {
             AppCompatAutoCompleteTextView textView = getView(id);
-            textView.setWidth(v[0] == 0 ? MATCH_PARENT : dp(c, v[0]));
-            textView.setHeight(v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]));
+            textView.setWidth(v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]));
+            textView.setHeight(v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]));
         } else if (getView(id) instanceof AppCompatMultiAutoCompleteTextView) {
             AppCompatMultiAutoCompleteTextView textView = getView(id);
-            textView.setWidth(v[0] == 0 ? MATCH_PARENT : dp(c, v[0]));
-            textView.setHeight(v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]));
+            textView.setWidth(v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]));
+            textView.setHeight(v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]));
         } else if (getView(id) instanceof AppCompatImageButton) {
             AppCompatImageButton imageButton = getView(id);
             ViewGroup.LayoutParams params = imageButton.getLayoutParams();
-            params.width = v[0] == 0 ? MATCH_PARENT : dp(c, v[0]);
-            params.height = v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]);
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]);
             imageButton.setLayoutParams(params);
         } else if (getView(id) instanceof ImageButton) {
             ImageButton imageButton = getView(id);
             ViewGroup.LayoutParams params = imageButton.getLayoutParams();
-            params.width = v[0] == 0 ? MATCH_PARENT : dp(c, v[0]);
-            params.height = v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]);
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]);
             imageButton.setLayoutParams(params);
         } else if (getView(id) instanceof AppCompatCheckedTextView) {
             AppCompatCheckedTextView textView = getView(id);
-            textView.setWidth(v[0] == 0 ? MATCH_PARENT : dp(c, v[0]));
-            textView.setHeight(v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]));
+            textView.setWidth(v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]));
+            textView.setHeight(v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]));
         } else if (getView(id) instanceof LinearLayoutCompat) {
             LinearLayoutCompat layout = getView(id);
             ViewGroup.LayoutParams params = layout.getLayoutParams();
-            params.width = v[0] == 0 ? MATCH_PARENT : dp(c, v[0]);
-            params.height = v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]);
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]);
             layout.setLayoutParams(params);
         } else if (getView(id) instanceof LinearLayout) {
             LinearLayout layout = getView(id);
             ViewGroup.LayoutParams params = layout.getLayoutParams();
-            params.width = v[0] == 0 ? MATCH_PARENT : dp(c, v[0]);
-            params.height = v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]);
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]);
             layout.setLayoutParams(params);
         } else if (getView(id) instanceof ConstraintLayout) {
             ConstraintLayout layout = getView(id);
             ViewGroup.LayoutParams params = layout.getLayoutParams();
-            params.width = v[0] == 0 ? MATCH_PARENT : dp(c, v[0]);
-            params.height = v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]);
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]);
             layout.setLayoutParams(params);
         } else if (getView(id) instanceof FrameLayout) {
             FrameLayout layout = getView(id);
             ViewGroup.LayoutParams params = layout.getLayoutParams();
-            params.width = v[0] == 0 ? MATCH_PARENT : dp(c, v[0]);
-            params.height = v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]);
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]);
             layout.setLayoutParams(params);
         } else if (getView(id) instanceof RelativeLayout) {
             RelativeLayout layout = getView(id);
             ViewGroup.LayoutParams params = layout.getLayoutParams();
-            params.width = v[0] == 0 ? MATCH_PARENT : dp(c, v[0]);
-            params.height = v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]);
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]);
             layout.setLayoutParams(params);
         } else if (getView(id) instanceof GridView) {
             GridView view = getView(id);
             ViewGroup.LayoutParams params = view.getLayoutParams();
-            params.width = v[0] == 0 ? MATCH_PARENT : dp(c, v[0]);
-            params.height = v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]);
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]);
             view.setLayoutParams(params);
         } else if (getView(id) instanceof RecyclerView) {
             RecyclerView recyclerView = getView(id);
             ViewGroup.LayoutParams params = recyclerView.getLayoutParams();
-            params.width = v[0] == 0 ? MATCH_PARENT : dp(c, v[0]);
-            params.height = v[1] == 0 ? WRAP_CONTENT : dp(c, v[1]);
+            params.width = v[0] == 0 ? MATCH_PARENT : pixel.dp( v[0]);
+            params.height = v[1] == 0 ? WRAP_CONTENT : pixel.dp( v[1]);
             recyclerView.setLayoutParams(params);
         }
         return this;
