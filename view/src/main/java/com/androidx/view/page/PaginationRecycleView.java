@@ -94,6 +94,10 @@ public class PaginationRecycleView extends LinearLayoutCompat {
         adapter.addItem(assign, datas);
     }
 
+    public void addItem(int assign, List<?> datas, int total) {
+        adapter.addItem(assign, datas, total);
+    }
+
     private void clear() {
         adapter.clear();
     }
@@ -209,12 +213,16 @@ public class PaginationRecycleView extends LinearLayoutCompat {
         private PaginationIndicator pi;
 
         private void addItem(int assign, List<?> datas) {
+            addItem(assign, datas, datas.size());
+        }
+
+        private void addItem(int assign, List<?> datas, int total) {
             try {
                 dataList.clear();
                 dataMap.put(assign <= 0 ? 1 : assign, (List<T>) datas);
                 if (dataMap.get(assign) != null) {
                     dataList.addAll(dataMap.get(assign));
-                    pi.setTotalCount(dataList.size());
+                    pi.setTotalCount(total);
                 }
                 innerAdapter.notifyDataSetChanged();
             } catch (Exception e) {
