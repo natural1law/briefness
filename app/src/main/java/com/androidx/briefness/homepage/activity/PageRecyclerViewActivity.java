@@ -109,12 +109,11 @@ public class PageRecyclerViewActivity extends AppCompatActivity {
         listView.setAdapterAndManager(new PageAdapter(), new LinearLayoutManager(aThis));
         indifference(1);
         listView.setListener(this::indifference);
-        listView.setListener(this::attention);
     }
 
     private void indifference(int lot) {
         Map<String, Object> param = new WeakHashMap<>();
-        String uid = "a81a21933570782f20b666c390259954";
+        String uid = "aa216858cbd80fd21931d1bcd170f4a4";
         String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
         String var = "ca2882680429c6549f0ed4c047c20778" + 1009 + lot + "" + uid + timestamp;
         param.put("j", 1009);//接口id
@@ -133,18 +132,17 @@ public class PageRecyclerViewActivity extends AppCompatActivity {
             JsonObject bakeJson = new Gson().fromJson(bakeData, new TypeToken<JsonObject>() {
             }.getType());
             if (bakeJson.get("c").getAsInt() == 0) {
-//                if (listView != null) listView.setDataTotalSize(Integer.parseInt(bakeJson.get("t").toString()));
                 List<JsonObject> jsonList = new Gson().fromJson(bakeJson.get("d"), new TypeToken<List<JsonObject>>() {
                 }.getType());
-                listView.addItem(lot, jsonList);
-                Log.i("数据", String.valueOf(jsonList));
+                listView.addItem(lot, jsonList, bakeJson.get("t").getAsInt());
+                Log.i("数据", String.valueOf(bakeJson.get("t").getAsInt()));
             }
         });
     }
 
     private void attention(int lot) {
         Map<String, Object> param = new WeakHashMap<>();
-        String uid = "a81a21933570782f20b666c390259954";
+        String uid = "aa216858cbd80fd21931d1bcd170f4a4";
         String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
         String var = "ca2882680429c6549f0ed4c047c20778" + 1013 + lot + "" + uid + timestamp;
         param.put("j", 1013);//接口id
@@ -162,21 +160,23 @@ public class PageRecyclerViewActivity extends AppCompatActivity {
             if (listView != null) listView.loadingFinish();
             JsonObject bakeJson = new Gson().fromJson(bakeData, new TypeToken<JsonObject>() {
             }.getType());
+            Log.i("数据1", String.valueOf(bakeJson));
             if (bakeJson.get("c").getAsInt() == 0) {
-//                if (listView != null) listView.setDataTotalSize(Integer.parseInt(bakeJson.get("t").toString()));
                 List<JsonObject> jsonList = new Gson().fromJson(bakeJson.get("d"), new TypeToken<List<JsonObject>>() {
                 }.getType());
-                listView.addItem(lot, jsonList);
-                Log.i("数据1", String.valueOf(jsonList));
+                listView.addItem(lot, jsonList, bakeJson.get("t").getAsInt());
+
             }
         });
     }
 
     public void aaa(View view) {
         indifference(1);
+        listView.setListener(this::indifference);
     }
 
     public void bbb(View view) {
         attention(1);
+        listView.setListener(this::attention);
     }
 }

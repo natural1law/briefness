@@ -95,6 +95,7 @@ public class PaginationRecycleView extends LinearLayoutCompat {
     }
 
     public void addItem(int assign, List<?> datas, int total) {
+        if (total == 0) total = 1;
         adapter.addItem(assign, datas, total);
     }
 
