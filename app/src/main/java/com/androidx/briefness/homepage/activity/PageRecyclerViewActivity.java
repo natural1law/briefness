@@ -107,13 +107,14 @@ public class PageRecyclerViewActivity extends AppCompatActivity {
 
     private void initView() {
         listView.setAdapterAndManager(new PageAdapter(), new LinearLayoutManager(aThis));
-        listView.setListener(this::indifference);
         indifference(1);
+        listView.setListener(this::indifference);
+        listView.setListener(this::attention);
     }
 
     private void indifference(int lot) {
         Map<String, Object> param = new WeakHashMap<>();
-        String uid = "b73f6a0e0b23af47bcfae6c7c05c95e1";
+        String uid = "a81a21933570782f20b666c390259954";
         String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
         String var = "ca2882680429c6549f0ed4c047c20778" + 1009 + lot + "" + uid + timestamp;
         param.put("j", 1009);//接口id
@@ -132,13 +133,50 @@ public class PageRecyclerViewActivity extends AppCompatActivity {
             JsonObject bakeJson = new Gson().fromJson(bakeData, new TypeToken<JsonObject>() {
             }.getType());
             if (bakeJson.get("c").getAsInt() == 0) {
-                if (listView != null)
-                    listView.setDataTotalSize(Integer.parseInt(bakeJson.get("t").toString()));
+//                if (listView != null) listView.setDataTotalSize(Integer.parseInt(bakeJson.get("t").toString()));
                 List<JsonObject> jsonList = new Gson().fromJson(bakeJson.get("d"), new TypeToken<List<JsonObject>>() {
                 }.getType());
                 listView.addItem(lot, jsonList);
                 Log.i("数据", String.valueOf(jsonList));
             }
         });
+    }
+
+    private void attention(int lot) {
+        Map<String, Object> param = new WeakHashMap<>();
+        String uid = "a81a21933570782f20b666c390259954";
+        String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
+        String var = "ca2882680429c6549f0ed4c047c20778" + 1013 + lot + "" + uid + timestamp;
+        param.put("j", 1013);//接口id
+        param.put("p", lot);
+        param.put("b", "");
+        param.put("n", "");
+        param.put("s", "");
+        param.put("c", "");
+        param.put("a", "");
+        param.put("v", "");
+        param.put("u", uid);
+        param.put("t", timestamp);
+        param.put("k", MD5(var));
+        NetRequest.sendMapPost("http://hapi1.syyfkj.cn/app/v1_1/", param, bakeData -> {
+            if (listView != null) listView.loadingFinish();
+            JsonObject bakeJson = new Gson().fromJson(bakeData, new TypeToken<JsonObject>() {
+            }.getType());
+            if (bakeJson.get("c").getAsInt() == 0) {
+//                if (listView != null) listView.setDataTotalSize(Integer.parseInt(bakeJson.get("t").toString()));
+                List<JsonObject> jsonList = new Gson().fromJson(bakeJson.get("d"), new TypeToken<List<JsonObject>>() {
+                }.getType());
+                listView.addItem(lot, jsonList);
+                Log.i("数据1", String.valueOf(jsonList));
+            }
+        });
+    }
+
+    public void aaa(View view) {
+        indifference(1);
+    }
+
+    public void bbb(View view) {
+        attention(1);
     }
 }

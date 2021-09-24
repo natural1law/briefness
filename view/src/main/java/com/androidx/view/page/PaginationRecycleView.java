@@ -82,6 +82,7 @@ public class PaginationRecycleView extends LinearLayoutCompat {
 
     public void setAdapterAndManager(Adapter<?, ?> adapter, RecyclerView.LayoutManager manager) {
         this.adapter = adapter;
+        adapter.pi = pi;
         rv.setLayoutManager(manager);
         rv.setAdapter(adapter.innerAdapter);
         rv.setHasFixedSize(true);
@@ -131,13 +132,6 @@ public class PaginationRecycleView extends LinearLayoutCompat {
      */
     public void setPageCount(int count) {
         pi.setPageCount(count);
-    }
-
-    /**
-     * 设置总页数
-     */
-    public void setDataTotalSize(int size) {
-        pi.setTotalCount(size);
     }
 
     /**
@@ -212,12 +206,16 @@ public class PaginationRecycleView extends LinearLayoutCompat {
         protected final InnerAdapter innerAdapter = new InnerAdapter();
         private final Map<Integer, List<T>> dataMap = new ConcurrentHashMap<>();
         private final List<T> dataList = new ArrayList<>();
+        private PaginationIndicator pi;
 
         private void addItem(int assign, List<?> datas) {
             try {
                 dataList.clear();
                 dataMap.put(assign <= 0 ? 1 : assign, (List<T>) datas);
-                if (dataMap.get(assign) != null) dataList.addAll(dataMap.get(assign));
+                if (dataMap.get(assign) != null) {
+                    dataList.addAll(dataMap.get(assign));
+                    pi.setTotalCount(dataList.size());
+                }
                 innerAdapter.notifyDataSetChanged();
             } catch (Exception e) {
                 Log.e("PaginationRecycleView.Adapter异常", Log.getStackTraceString(e));

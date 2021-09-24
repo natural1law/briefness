@@ -11,11 +11,37 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title_layout">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="aaa"
+            android:onClick="aaa"
+            android:layout_height="match_parent"/>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="bbb"
+            android:onClick="bbb"
+            android:layout_height="match_parent"/>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
     <com.androidx.view.page.PaginationRecycleView
         android:id="@+id/listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="100dp"
         android:orientation="vertical"
         android:overScrollMode="never"
         android:scrollbars="none"

@@ -147,6 +147,8 @@ public class PaginationIndicator extends FrameLayout {
     }
 
     private void geneNumberTextView() {
+        if (!textViews.isEmpty()) textViews.clear();
+        if (pageCodeView != null) pageCodeView.removeAllViews();
         int num = Math.min(count, totalPageCount);
         for (int i = 0; i < num; i++) {
             AppCompatTextView textView = new AppCompatTextView(getContext());
@@ -164,7 +166,6 @@ public class PaginationIndicator extends FrameLayout {
                     onChangedListener.onPageSelectedChanged(number);
                 updatePageCode();
             });
-
             textViews.add(textView);
         }
     }
@@ -198,6 +199,7 @@ public class PaginationIndicator extends FrameLayout {
      * @param totalCount 数据总数
      */
     protected void setTotalCount(int totalCount) {
+        if (totalCount == 0) return;
         observer.setInfo(String.valueOf(totalCount));
     }
 
