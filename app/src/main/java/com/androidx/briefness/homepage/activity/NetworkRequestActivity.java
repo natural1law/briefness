@@ -23,8 +23,10 @@ import androidx.appcompat.widget.AppCompatTextView;
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
 import com.androidx.briefness.homepage.service.NotificationService;
+import com.androidx.http.use.NetRequest;
 import com.androidx.reduce.tools.Convert;
 import com.androidx.reduce.tools.Idle;
+import com.google.gson.JsonObject;
 import com.google.protobuf.ByteString;
 import com.module.protobuf.MsgModule;
 
@@ -106,4 +108,16 @@ public final class NetworkRequestActivity extends BaseActivity {
         enqueue.send(1, request.toByteArray());
     }
 
+    @OnClick(R.id.network_send1)
+    public void send1() {
+        String a = "463C3D8B7E9AAD9B23D1973106DE509E";
+        String b = "65FCD1370C862EB9DEF62CE689E1EAD932E0F1ECC819C9ACDF1E25A87B81778AC76819A6CB1B3DB691E7D40B86DF4EE6";
+        JsonObject json = new JsonObject();
+        json.addProperty("username", "13800000000");
+        json.addProperty("password", "123456");
+        NetRequest.sendJsonPost(a, b, json, data -> contentView.setText(data));
+
+//        String cleartext = "http://49.232.66.227:8081/app/login";
+//        NetRequest.sendJsonPost(cleartext, json, data -> toasts.i("数据", data));
+    }
 }

@@ -7,6 +7,7 @@ import com.androidx.http.net.HttpRequest
 import com.androidx.http.net.listener.BytesCallback
 import com.androidx.http.net.listener.HttpRequestListener
 import com.androidx.http.net.listener.StringCallback
+import com.androidx.reduce.tools.Secure
 import com.google.gson.JsonObject
 import java.util.concurrent.ConcurrentHashMap
 
@@ -32,8 +33,9 @@ class NetHttp private constructor() {
 
         private val builder: Builder = this
         internal var maxAnewCount: Int? = 3
-        internal var host: Uri? = null
+        internal var host: String? = null
         internal var mode: Int? = 0
+        internal var jsonKey: String? = ""
         internal var key: String? = ""
         internal var map: Map<String, Any> = ConcurrentHashMap()
         internal var json = JsonObject()
@@ -46,8 +48,8 @@ class NetHttp private constructor() {
             return builder
         }
 
-        fun setHosts(uri: Uri): Builder {
-            this.host = uri
+        fun setHosts(url: String): Builder {
+            this.host = url
             return builder
         }
 
@@ -63,6 +65,16 @@ class NetHttp private constructor() {
 
         fun setJson(json: JsonObject): Builder {
             this.json = json
+            return builder
+        }
+
+        fun setKey(key: String): Builder {
+            this.key = key
+            return builder
+        }
+
+        fun setJsonKey(key: String): Builder {
+            this.jsonKey = key
             return builder
         }
 
@@ -87,7 +99,9 @@ class NetHttp private constructor() {
 
     }
 
-    private fun init(builder: Builder, url: Uri?, requestListener: HttpRequestListener) {
+    private fun init(builder: Builder, urlEncoder: String?, requestListener: HttpRequestListener) {
+        val url = if (builder.key.isNullOrEmpty()) Uri.parse(Uri.encode(urlEncoder))
+        else Uri.parse(Uri.encode(Secure.AES.decrypt(builder.key, urlEncoder)))
         when (builder.mode) {
             GET_MAP -> requestListener.getRequest(
                 url,
@@ -121,7 +135,7 @@ class NetHttp private constructor() {
             )
             FROM_JSON -> requestListener.forrequest(
                 url,
-                builder.key,
+                builder.jsonKey,
                 builder.json,
                 builder.maxAnewCount!!,
                 builder.stringCallback

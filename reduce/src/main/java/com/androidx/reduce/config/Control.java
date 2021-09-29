@@ -148,10 +148,8 @@ public final class Control {
          * AES加密
          */
         public static String encrypt(String key, String cleartext) {
-            if (TextUtils.isEmpty(cleartext)) {
-                return cleartext;
-            }
             try {
+                if (TextUtils.isEmpty(cleartext)) return cleartext;
                 byte[] result = encrypt(key, cleartext.getBytes());
                 return parseBytes2Hex(result);
             } catch (Exception e) {
