@@ -13,6 +13,10 @@ public class App extends Application {
     public static volatile This appThis;
     public static volatile MicroCache mc;
 
+    static {
+        Runtime.getRuntime().loadLibrary("url");
+    }
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);

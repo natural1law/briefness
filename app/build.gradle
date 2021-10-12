@@ -14,7 +14,12 @@ android {
         versionCode 3
         versionName "3.0.0"
         multiDexEnabled true
-
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++17"
+                abiFilters "armeabi-v7a", "arm64-v8a"
+            }
+        }
         //配置注解处理器
         javaCompileOptions {
             annotationProcessorOptions {
@@ -22,13 +27,24 @@ android {
             }
         }
     }
-
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             multiDexEnabled true
             proguardFiles 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            multiDexEnabled false
+            proguardFiles 'proguard-rules.pro'
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['lib']
+            java.srcDirs = ['src/main/java', 'src/main/cpp']
         }
     }
     signingConfigs {
@@ -41,10 +57,15 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    externalNativeBuild {
+        cmake {
+            path "src/main/jni/CMakeLists.txt"
+            version "3.18.1"
+        }
+    }
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_1_8
     }
-
 }
 
 dependencies {
@@ -67,6 +88,6 @@ dependencies {
     implementation 'com.github.Justson.AgentWeb:agentweb-core:v4.1.9-androidx'
 
     //noinspection AnnotationProcessorOnCompilePath
-    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
-    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
+    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
 }

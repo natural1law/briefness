@@ -2,19 +2,17 @@
 
 package com.androidx.http.api
 
-import android.net.Uri
 import com.androidx.http.net.HttpRequest
 import com.androidx.http.net.listener.BytesCallback
 import com.androidx.http.net.listener.HttpRequestListener
 import com.androidx.http.net.listener.StringCallback
-import com.androidx.reduce.tools.Secure
 import com.google.gson.JsonObject
 import java.util.concurrent.ConcurrentHashMap
 
 class NetHttp private constructor() {
 
     companion object {
-        private val instance = SingletonHolder.holder
+
         const val GET_MAP = 1
         const val POST_JSON = 2
         const val POST_MAP = 3
@@ -24,7 +22,7 @@ class NetHttp private constructor() {
         const val FROM_JSON = 7
 
         fun builder(): Builder {
-            synchronized(Builder::class.java) { return instance }
+            synchronized(Builder::class.java) { return Singleton.getInstance()!! }
         }
 
     }
@@ -33,10 +31,9 @@ class NetHttp private constructor() {
 
         private val builder: Builder = this
         internal var maxAnewCount: Int? = 3
-        internal var host: String? = null
+        internal var host: String? = ""
         internal var mode: Int? = 0
         internal var jsonKey: String? = ""
-        internal var key: String? = ""
         internal var map: Map<String, Any> = ConcurrentHashMap()
         internal var json = JsonObject()
         internal var bytes: ByteArray? = null
@@ -68,11 +65,6 @@ class NetHttp private constructor() {
             return builder
         }
 
-        fun setKey(key: String): Builder {
-            this.key = key
-            return builder
-        }
-
         fun setJsonKey(key: String): Builder {
             this.jsonKey = key
             return builder
@@ -99,49 +91,47 @@ class NetHttp private constructor() {
 
     }
 
-    private fun init(builder: Builder, urlEncoder: String?, requestListener: HttpRequestListener) {
-        val url = if (builder.key.isNullOrEmpty()) Uri.parse(Uri.encode(urlEncoder))
-        else Uri.parse(Uri.encode(Secure.AES.decrypt(builder.key, urlEncoder)))
+    private fun init(builder: Builder, requestListener: HttpRequestListener) {
         when (builder.mode) {
             GET_MAP -> requestListener.getRequest(
-                url,
+                builder.host,
                 builder.map,
                 builder.maxAnewCount!!,
                 builder.stringCallback
             )
             POST_JSON -> requestListener.postRequest(
-                url,
+                builder.host,
                 builder.json,
                 builder.maxAnewCount!!,
                 builder.stringCallback
             )
             POST_MAP -> requestListener.postRequest(
-                url,
+                builder.host,
                 builder.map,
                 builder.maxAnewCount!!,
                 builder.stringCallback
             )
             POST_BYTES -> requestListener.postRequestProto(
-                url,
+                builder.host,
                 builder.bytes,
                 builder.maxAnewCount!!,
                 builder.bytesCallback
             )
             DEL_MAP -> requestListener.deleteRequest(
-                url,
+                builder.host,
                 builder.map,
                 builder.maxAnewCount!!,
                 builder.stringCallback
             )
             FROM_JSON -> requestListener.forrequest(
-                url,
+                builder.host,
                 builder.jsonKey,
                 builder.json,
                 builder.maxAnewCount!!,
                 builder.stringCallback
             )
             DEL_JSON -> requestListener.deleteRequest(
-                url,
+                builder.host,
                 builder.json,
                 builder.maxAnewCount!!,
                 builder.stringCallback
@@ -150,11 +140,22 @@ class NetHttp private constructor() {
     }
 
     private constructor(b: Builder) : this() {
-        init(b, b.host, HttpRequest())
+        init(b, HttpRequest())
     }
 
-    private object SingletonHolder {
-        val holder = Builder()
+    private object Singleton {
+        @Volatile
+        private var instance: Builder? = null
+
+        @JvmStatic
+        private val INSTANCE = Builder()
+
+        fun getInstance(): Builder? {
+            if (instance == null) synchronized(Builder::class.java) {
+                if (instance == null) return INSTANCE.also { instance = it }
+            }
+            return instance
+        }
     }
 
 }

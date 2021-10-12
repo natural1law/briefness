@@ -1,6 +1,5 @@
 package com.androidx.http.net
 
-import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
@@ -46,12 +45,12 @@ class HttpRequest : HttpRequestListener {
         })
 
     override fun getRequest(
-        uri: Uri?,
+        url: String?,
         map: MutableMap<String, Any>?,
         maxAnewCount: Int,
         callBack: StringCallback?
     ) {
-        httpNetwork.client.newCall(httpNetwork.getRequest(uri, map)).enqueue(object : Callback {
+        httpNetwork.client.newCall(httpNetwork.getRequest(url, map)).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 handler.sendMessage(
                     handler.obtainMessage(
@@ -78,12 +77,12 @@ class HttpRequest : HttpRequestListener {
     }
 
     override fun postRequestProto(
-        uri: Uri?,
+        url: String?,
         bytes: ByteArray?,
         maxAnewCount: Int,
         callBack: BytesCallback?
     ) {
-        httpNetwork.client.newCall(httpNetwork.postRequestProto(uri, bytes))
+        httpNetwork.client.newCall(httpNetwork.postRequestProto(url, bytes))
             .enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     handler.sendMessage(
@@ -111,23 +110,22 @@ class HttpRequest : HttpRequestListener {
     }
 
     override fun postRequest(
-        uri: Uri?,
+        url: String?,
         map: MutableMap<String, Any>?,
         maxAnewCount: Int,
         callBack: StringCallback?
     ) {
-        httpNetwork.client.newCall(httpNetwork.postRequest(uri, map))
-            .enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    handler.sendMessage(
-                        handler.obtainMessage(
-                            -1, MsgModule(Log.getStackTraceString(e), callBack!!)
-                        )
+        httpNetwork.client.newCall(httpNetwork.postRequest(url, map)).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                handler.sendMessage(
+                    handler.obtainMessage(
+                        -1, MsgModule(Log.getStackTraceString(e), callBack!!)
                     )
-                    // 如果超时并未超过指定次数，则重新连接
-                    if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
-                        currentConnect++
-                        httpNetwork.client.newCall(call.request()).enqueue(this)
+                )
+                // 如果超时并未超过指定次数，则重新连接
+                if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
+                    currentConnect++
+                    httpNetwork.client.newCall(call.request()).enqueue(this)
                     }
                 }
 
@@ -144,23 +142,22 @@ class HttpRequest : HttpRequestListener {
     }
 
     override fun postRequest(
-        uri: Uri?,
+        url: String?,
         json: JsonObject?,
         maxAnewCount: Int,
         callBack: StringCallback?
     ) {
-        httpNetwork.client.newCall(httpNetwork.postRequest(uri, json))
-            .enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    handler.sendMessage(
-                        handler.obtainMessage(
-                            -1, MsgModule(Log.getStackTraceString(e), callBack!!)
-                        )
+        httpNetwork.client.newCall(httpNetwork.postRequest(url, json)).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                handler.sendMessage(
+                    handler.obtainMessage(
+                        -1, MsgModule(Log.getStackTraceString(e), callBack!!)
                     )
-                    // 如果超时并未超过指定次数，则重新连接
-                    if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
-                        currentConnect++
-                        httpNetwork.client.newCall(call.request()).enqueue(this)
+                )
+                // 如果超时并未超过指定次数，则重新连接
+                if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
+                    currentConnect++
+                    httpNetwork.client.newCall(call.request()).enqueue(this)
                     }
                 }
 
@@ -177,56 +174,52 @@ class HttpRequest : HttpRequestListener {
     }
 
     override fun deleteRequest(
-        uri: Uri?,
+        url: String?,
         json: JsonObject?,
         maxAnewCount: Int,
         callBack: StringCallback?
     ) {
-        httpNetwork.client.newCall(httpNetwork.deleteRequest(uri, json))
-            .enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    handler.sendMessage(
-                        handler.obtainMessage(
-                            -1, MsgModule(Log.getStackTraceString(e), callBack!!)
-                        )
+        httpNetwork.client.newCall(httpNetwork.deleteRequest(url, json)).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                handler.sendMessage(
+                    handler.obtainMessage(
+                        -1, MsgModule(Log.getStackTraceString(e), callBack!!)
                     )
-                    // 如果超时并未超过指定次数，则重新连接
-                    if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
-                        currentConnect++
-                        httpNetwork.client.newCall(call.request()).enqueue(this)
+                )
+                // 如果超时并未超过指定次数，则重新连接
+                if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
+                    currentConnect++
+                    httpNetwork.client.newCall(call.request()).enqueue(this)
                     }
                 }
 
                 @Throws(IOException::class)
                 override fun onResponse(call: Call, response: Response) {
                     handler.sendMessage(
-                        handler.obtainMessage(0, response.body?.let {
-                            MsgModule(it.string(), callBack!!)
-                        }
-                        )
+                        handler.obtainMessage(0,
+                            response.body?.let { MsgModule(it.string(), callBack!!) })
                     )
                 }
             })
     }
 
     override fun deleteRequest(
-        uri: Uri?,
+        url: String?,
         map: MutableMap<String, Any>?,
         maxAnewCount: Int,
         callBack: StringCallback?
     ) {
-        httpNetwork.client.newCall(httpNetwork.deleteRequest(uri, map))
-            .enqueue(object : Callback {
-                override fun onFailure(call: Call, e: IOException) {
-                    handler.sendMessage(
-                        handler.obtainMessage(
-                            -1, MsgModule(Log.getStackTraceString(e), callBack!!)
-                        )
+        httpNetwork.client.newCall(httpNetwork.deleteRequest(url, map)).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                handler.sendMessage(
+                    handler.obtainMessage(
+                        -1, MsgModule(Log.getStackTraceString(e), callBack!!)
                     )
-                    // 如果超时并未超过指定次数，则重新连接
-                    if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
-                        currentConnect++
-                        httpNetwork.client.newCall(call.request()).enqueue(this)
+                )
+                // 如果超时并未超过指定次数，则重新连接
+                if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
+                    currentConnect++
+                    httpNetwork.client.newCall(call.request()).enqueue(this)
                     }
                 }
 
@@ -243,13 +236,13 @@ class HttpRequest : HttpRequestListener {
     }
 
     override fun forrequest(
-        uri: Uri?,
+        url: String?,
         key: String?,
         json: JsonObject?,
         maxAnewCount: Int,
         callBack: StringCallback?
     ) {
-        httpNetwork.client.newCall(httpNetwork.forrequest(uri, key, json))
+        httpNetwork.client.newCall(httpNetwork.forrequest(url, key, json))
             .enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     handler.sendMessage(
@@ -267,10 +260,8 @@ class HttpRequest : HttpRequestListener {
                 @Throws(IOException::class)
                 override fun onResponse(call: Call, response: Response) {
                     handler.sendMessage(
-                        handler.obtainMessage(0, response.body?.let {
-                            MsgModule(it.string(), callBack!!)
-                        }
-                        )
+                        handler.obtainMessage(0,
+                            response.body?.let { MsgModule(it.string(), callBack!!) })
                     )
                 }
             })

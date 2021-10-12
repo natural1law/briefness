@@ -26,9 +26,11 @@ import com.androidx.briefness.homepage.service.NotificationService;
 import com.androidx.http.use.NetRequest;
 import com.androidx.reduce.tools.Convert;
 import com.androidx.reduce.tools.Idle;
-import com.google.gson.JsonObject;
 import com.google.protobuf.ByteString;
 import com.module.protobuf.MsgModule;
+
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,6 +54,8 @@ public final class NetworkRequestActivity extends BaseActivity {
     public AppCompatTextView contentView;
     private Unbinder unbinder;
 
+    private static native String url();
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +68,7 @@ public final class NetworkRequestActivity extends BaseActivity {
             imageView.setVisibility(View.VISIBLE);
             imageView.setColorFilter(R.color.black);
             titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
-            initView();
+//            initView();
         } catch (Exception e) {
             toasts.e("收到数据", e);
         }
@@ -110,14 +114,10 @@ public final class NetworkRequestActivity extends BaseActivity {
 
     @OnClick(R.id.network_send1)
     public void send1() {
-        String a = "463C3D8B7E9AAD9B23D1973106DE509E";
-        String b = "65FCD1370C862EB9DEF62CE689E1EAD932E0F1ECC819C9ACDF1E25A87B81778AC76819A6CB1B3DB691E7D40B86DF4EE6";
-        JsonObject json = new JsonObject();
-        json.addProperty("username", "13800000000");
-        json.addProperty("password", "123456");
-        NetRequest.sendJsonPost(a, b, json, data -> contentView.setText(data));
-
-//        String cleartext = "http://49.232.66.227:8081/app/login";
-//        NetRequest.sendJsonPost(cleartext, json, data -> toasts.i("数据", data));
+        Map<String, Object> param = new ConcurrentHashMap<>();
+        param.put("userName", "18604900857");
+        param.put("password", "LNgz@082");
+        param.put("version", "1.1.6");
+        NetRequest.sendMapPost(url(), param, data -> contentView.setText(data));
     }
 }

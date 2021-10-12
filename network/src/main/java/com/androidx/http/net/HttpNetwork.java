@@ -1,14 +1,10 @@
 package com.androidx.http.net;
 
-import android.net.Uri;
-
 import com.google.gson.JsonObject;
 
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -29,11 +25,11 @@ public final class HttpNetwork implements IHttpNetwork {
     private static final MediaType JSON = MediaType.parse("application/json;charset=utf-8");
     private static final MediaType PROTO = MediaType.parse("application/x-protobuf");
     private static final int TIMEOUT = 180;// 超时时间
-    private static final int INTERVAL = 10;// ping帧心跳间隔
-    private static final int MAX_CONN_COUNT = 50;// 最大连接池
+    private static final int INTERVAL = 15;// ping帧心跳间隔
+    private static final int MAX_CONN_COUNT = 1024;// 最大连接池
     private static final int ALIVE = 30;// 接池的连接活跃时间（默认设置半小时）
     private final StringBuffer param = new StringBuffer();
-    private static final HttpNetwork instance = Singleton.INSTANCE;
+
     private final Request.Builder request;
 
     private HttpNetwork() {
@@ -42,7 +38,7 @@ public final class HttpNetwork implements IHttpNetwork {
 
     @Contract(pure = true)
     public static HttpNetwork builder() {
-        return instance;
+        return Singleton.getInstance();
     }
 
     @Override
@@ -78,7 +74,7 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull
-    Request getRequest(Uri uri, Map<String, Object> map) throws MalformedURLException {
+    Request getRequest(String url, Map<String, Object> map) {
         final int[] p = {0};
         param.setLength(p[0]);
         map.forEach((key, o) -> {
@@ -90,9 +86,7 @@ public final class HttpNetwork implements IHttpNetwork {
             param.append(key).append("=").append(map.get(key));
             p[0]++;
         });
-        return request.get()
-                .url(new URL(Uri.decode(uri.toString()) + param))
-                .build();
+        return request.get().url(url + param).build();
     }
 
     /**
@@ -100,12 +94,10 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull
-    Request postRequest(Uri uri, Map<String, Object> map) throws MalformedURLException {
+    Request postRequest(String url, Map<String, Object> map) {
         FormBody.Builder formBody = new FormBody.Builder();
         map.forEach((key, value) -> formBody.addEncoded(key, String.valueOf(value)));
-        return request.post(formBody.build())
-                .url(new URL(Uri.decode(uri.toString())))
-                .build();
+        return request.post(formBody.build()).url(url).build();
     }
 
     /**
@@ -113,10 +105,8 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull
-    Request postRequest(Uri uri, JsonObject json) throws MalformedURLException {
-        return request.post(RequestBody.create(json.toString(), JSON))
-                .url(new URL(Uri.decode(uri.toString())))
-                .build();
+    Request postRequest(String url, JsonObject json) {
+        return request.post(RequestBody.create(json.toString(), JSON)).url(url).build();
     }
 
     /**
@@ -124,7 +114,7 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull
-    Request deleteRequest(Uri uri, Map<String, Object> map) throws MalformedURLException {
+    Request deleteRequest(String url, Map<String, Object> map) {
         final int[] p = {0};
         param.setLength(p[0]);
         map.forEach((key, o) -> {
@@ -136,9 +126,7 @@ public final class HttpNetwork implements IHttpNetwork {
             param.append(key).append("=").append(map.get(key));
             p[0]++;
         });
-        return request.delete()
-                .url(new URL(Uri.decode(uri.toString()) + param))
-                .build();
+        return request.delete().url(url + param).build();
     }
 
     /**
@@ -146,10 +134,8 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull
-    Request deleteRequest(Uri uri, JsonObject json) throws MalformedURLException {
-        return request.delete(RequestBody.create(json.toString(), null))
-                .url(new URL(Uri.decode(uri.toString())))
-                .build();
+    Request deleteRequest(String url, JsonObject json) {
+        return request.delete(RequestBody.create(json.toString(), JSON)).url(url).build();
     }
 
     /**
@@ -158,10 +144,8 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull
-    Request forrequest(Uri uri, String key, JsonObject json) throws MalformedURLException {
-        return request.post(new FormBody.Builder().addEncoded(key, json.toString()).build())
-                .url(new URL(Uri.decode(uri.toString())))
-                .build();
+    Request forrequest(String url, String key, JsonObject json) {
+        return request.post(new FormBody.Builder().addEncoded(key, json.toString()).build()).url(url).build();
     }
 
     /**
@@ -169,16 +153,23 @@ public final class HttpNetwork implements IHttpNetwork {
      */
     @Override
     public @NotNull
-    Request postRequestProto(Uri uri, byte[] bytes) throws MalformedURLException {
-        return request.post(RequestBody.create(bytes, PROTO))
-                .url(new URL(Uri.decode(uri.toString())))
-                .build();
+    Request postRequestProto(String url, byte[] bytes) {
+        return request.post(RequestBody.create(bytes, PROTO)).url(url).build();
     }
 
     private static final class Singleton {
         private Singleton() {
         }
 
+        private static volatile HttpNetwork instance;
+
         private static final HttpNetwork INSTANCE = new HttpNetwork();
+
+        private static HttpNetwork getInstance(){
+            if (instance== null) synchronized (HttpNetwork.class){
+                if (instance == null) return instance = INSTANCE;
+            }
+            return instance;
+        }
     }
 }
