@@ -1,14 +1,11 @@
 package com.androidx.reduce.config;
 
-import static android.util.Base64.DEFAULT;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
@@ -291,8 +288,7 @@ public final class Control {
         public static boolean verify(String ciphertext, String publicKey, String sign) {
             try {
                 final byte[] dataBytes = ciphertext.getBytes(StandardCharsets.UTF_8);
-                final PublicKey key = getPublicKey(decode(publicKey));
-                return verify(dataBytes, key, decode(sign));
+                return verify(dataBytes, getPublicKey(decode(publicKey)), decode(sign));
             } catch (Exception e) {
                 Log.e("RSA签名异常", Log.getStackTraceString(e));
                 return false;
@@ -321,12 +317,11 @@ public final class Control {
          * @param publicKey 公钥(BASE64编码)
          * @return BASE64编码的加密数据
          */
-        public static String encryptByPublicKey(String cleartext, String publicKey) {
+        public static String encryptByPublicKey(String publicKey, String cleartext) {
             try {
                 final byte[] dataBytes = cleartext.getBytes(StandardCharsets.UTF_8);
                 PublicKey key = getPublicKey(decode(publicKey));
-                final byte[] encryptDataBytes = encryptByPublicKey(dataBytes, key);
-                return encode(encryptDataBytes);
+                return encode(encryptByPublicKey(dataBytes, key));
             } catch (Exception e) {
                 Log.e("RSA公钥加密异常", String.valueOf(e.getMessage()), e);
                 return "";
@@ -340,14 +335,13 @@ public final class Control {
          * @param privateKey 私钥(BASE64编码)
          * @return BASE64编码的加密数据
          */
-        public static String encryptByPrivateKey(String cleartext, String privateKey) {
+        public static String encryptByPrivateKey(String privateKey, String cleartext) {
             try {
                 final byte[] dataBytes = cleartext.getBytes(StandardCharsets.UTF_8);
                 PrivateKey key = getPrivateKey(decode(privateKey));
-                final byte[] encryptDataBytes = encryptByPrivateKey(dataBytes, key);
-                return encode(encryptDataBytes);
+                return encode(encryptByPrivateKey(dataBytes, key));
             } catch (Exception e) {
-                Log.e("RSA私钥加密异常", String.valueOf(e.getMessage()), e);
+                Log.e("RSA私钥加密异常", Log.getStackTraceString(e));
                 return "";
             }
         }
@@ -359,7 +353,7 @@ public final class Control {
          * @param publicKey  公钥(BASE64编码)
          * @return 私钥加密前的数据
          */
-        public static String decryptByPublicKey(String ciphertext, String publicKey) {
+        public static String decryptByPublicKey(String publicKey, String ciphertext) {
             try {
                 final byte[] dataBytes = decode(ciphertext);
                 PublicKey key = getPublicKey(decode(publicKey));
@@ -378,7 +372,7 @@ public final class Control {
          * @param privateKey 私钥(BASE64编码)
          * @return 公钥加密前的数据
          */
-        public static String decryptByPrivateKey(String ciphertext, String privateKey) {
+        public static String decryptByPrivateKey(String privateKey, String ciphertext) {
             try {
                 final byte[] dataBytes = decode(ciphertext);
                 PrivateKey key = getPrivateKey(decode(privateKey));
@@ -393,10 +387,13 @@ public final class Control {
         /**
          * 获取公钥
          */
-        private static PublicKey getPublicKey(byte[] keyBytes) throws Exception {
-            final X509EncodedKeySpec x509EncodedKeySpec = new X509EncodedKeySpec(keyBytes);
-            final KeyFactory keyFactory = KeyFactory.getInstance(Mode.RSA);
-            return keyFactory.generatePublic(x509EncodedKeySpec);
+        private static PublicKey getPublicKey(byte[] keyBytes) {
+            try {
+                return KeyFactory.getInstance(Mode.RSA).generatePublic(new X509EncodedKeySpec(keyBytes));
+            } catch (Exception e) {
+                Log.e("RSA获取公钥异常", Log.getStackTraceString(e));
+                return null;
+            }
         }
 
         /**
@@ -404,10 +401,7 @@ public final class Control {
          */
         private static PrivateKey getPrivateKey(byte[] keyBytes) {
             try {
-                final KeyFactory keyFactory;
-                final PKCS8EncodedKeySpec pkcs8EncodedKeySpec = new PKCS8EncodedKeySpec(keyBytes);
-                keyFactory = KeyFactory.getInstance(Mode.RSA);
-                return keyFactory.generatePrivate(pkcs8EncodedKeySpec);
+                return KeyFactory.getInstance(Mode.RSA).generatePrivate(new PKCS8EncodedKeySpec(keyBytes));
             } catch (Exception e) {
                 Log.e("RSA获取私钥异常", Log.getStackTraceString(e));
                 return null;
@@ -561,7 +555,7 @@ public final class Control {
          * Base64编码数据
          */
         private static String encode(byte[] binaryData) {
-            return Base_64.encode(binaryData);
+            return Base64.encode(binaryData);
         }
 
         /**
@@ -570,7 +564,7 @@ public final class Control {
          * @param encoded (BASE64编码)
          */
         private static byte[] decode(String encoded) {
-            return Base_64.decode(encoded);
+            return Base64.decode(encoded);
         }
 
         /**
@@ -593,32 +587,226 @@ public final class Control {
 
     }
 
-    public static final class Base_64 {
+    public static final class Base64 {
 
-        /**
-         * Base64编码
-         *
-         * @param data 保存地址
-         */
-        public static String encode(byte[] data) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                return java.util.Base64.getMimeEncoder().encodeToString(data);
-            } else {
-                return Base64.encodeToString(data, DEFAULT);
+        private static final int BASE_LENGTH = 128;
+        private static final int LOOK_UP_LENGTH = 64;
+        private static final int TWENTY_FOUR_BIT_GROUP = 24;
+        private static final int EIG_HT_BIT = 8;
+        private static final int SIX_TEEN_BIT = 16;
+        private static final int FOUR_BY_TE = 4;
+        private static final int SIGN = -128;
+        private static final char PAD = '=';
+        private static final byte[] base64Alphabet = new byte[BASE_LENGTH];
+        private static final char[] lookUpBase64Alphabet = new char[LOOK_UP_LENGTH];
+
+        static {
+            for (int i = 0; i < BASE_LENGTH; ++i) {
+                base64Alphabet[i] = -1;
             }
+            for (int i = 'Z'; i >= 'A'; i--) {
+                base64Alphabet[i] = (byte) (i - 'A');
+            }
+            for (int i = 'z'; i >= 'a'; i--) {
+                base64Alphabet[i] = (byte) (i - 'a' + 26);
+            }
+            for (int i = '9'; i >= '0'; i--) {
+                base64Alphabet[i] = (byte) (i - '0' + 52);
+            }
+            base64Alphabet['+'] = 62;
+            base64Alphabet['$'] = 63;
+
+            for (int i = 0; i <= 25; i++) {
+                lookUpBase64Alphabet[i] = (char) ('A' + i);
+            }
+            for (int i = 26, j = 0; i <= 51; i++, j++) {
+                lookUpBase64Alphabet[i] = (char) ('a' + j);
+            }
+            for (int i = 52, j = 0; i <= 61; i++, j++) {
+                lookUpBase64Alphabet[i] = (char) ('0' + j);
+            }
+            lookUpBase64Alphabet[62] = '+';
+            lookUpBase64Alphabet[63] = '$';
+
+        }
+
+        private static boolean isWhiteSpace(char octect) {
+            return (octect == 0x20 || octect == 0xd || octect == 0xa || octect == 0x9);
+        }
+
+        private static boolean isPad(char octect) {
+            return (octect == PAD);
+        }
+
+        private static boolean isData(char octect) {
+            return (octect >= BASE_LENGTH || base64Alphabet[octect] == -1);
         }
 
         /**
-         * base64解码
+         * Encodes hex octects into BASE64Util
          *
-         * @param data 密文
+         * @param binaryData Array containing binaryData
+         * @return Encoded BASE64Util array
          */
-        public static byte[] decode(String data) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                return java.util.Base64.getMimeDecoder().decode(data);
-            } else {
-                return Base64.decode(data, DEFAULT);
+        public static String encode(byte[] binaryData) {
+            if (binaryData == null) {
+                return null;
             }
+            int lengthDataBits = binaryData.length * EIG_HT_BIT;
+            if (lengthDataBits == 0) {
+                return "";
+            }
+            int fewerThan24bits = lengthDataBits % TWENTY_FOUR_BIT_GROUP;
+            int numberTriplets = lengthDataBits / TWENTY_FOUR_BIT_GROUP;
+            int numberQuartet = fewerThan24bits != 0 ? numberTriplets + 1 : numberTriplets;
+            char[] encodedData;
+            encodedData = new char[numberQuartet * 4];
+            byte k, l, b1, b2, b3;
+            int encodedIndex = 0;
+            int dataIndex = 0;
+            for (int i = 0; i < numberTriplets; i++) {
+                b1 = binaryData[dataIndex++];
+                b2 = binaryData[dataIndex++];
+                b3 = binaryData[dataIndex++];
+                l = (byte) (b2 & 0x0f);
+                k = (byte) (b1 & 0x03);
+                byte val1 = ((b1 & SIGN) == 0) ? (byte) (b1 >> 2) : (byte) ((b1) >> 2 ^ 0xc0);
+                byte val2 = ((b2 & SIGN) == 0) ? (byte) (b2 >> 4) : (byte) ((b2) >> 4 ^ 0xf0);
+                byte val3 = ((b3 & SIGN) == 0) ? (byte) (b3 >> 6) : (byte) ((b3) >> 6 ^ 0xfc);
+                encodedData[encodedIndex++] = lookUpBase64Alphabet[val1];
+                encodedData[encodedIndex++] = lookUpBase64Alphabet[val2 | (k << 4)];
+                encodedData[encodedIndex++] = lookUpBase64Alphabet[(l << 2) | val3];
+                encodedData[encodedIndex++] = lookUpBase64Alphabet[b3 & 0x3f];
+            }
+
+            // form integral number of 6-bit groups
+            if (fewerThan24bits == EIG_HT_BIT) {
+                b1 = binaryData[dataIndex];
+                k = (byte) (b1 & 0x03);
+                byte val1 = ((b1 & SIGN) == 0) ? (byte) (b1 >> 2) : (byte) ((b1) >> 2 ^ 0xc0);
+                encodedData[encodedIndex++] = lookUpBase64Alphabet[val1];
+                encodedData[encodedIndex++] = lookUpBase64Alphabet[k << 4];
+                encodedData[encodedIndex++] = PAD;
+                //noinspection UnusedAssignment
+                encodedData[encodedIndex++] = PAD;
+            } else if (fewerThan24bits == SIX_TEEN_BIT) {
+                b1 = binaryData[dataIndex];
+                b2 = binaryData[dataIndex + 1];
+                l = (byte) (b2 & 0x0f);
+                k = (byte) (b1 & 0x03);
+                byte val1 = ((b1 & SIGN) == 0) ? (byte) (b1 >> 2) : (byte) ((b1) >> 2 ^ 0xc0);
+                byte val2 = ((b2 & SIGN) == 0) ? (byte) (b2 >> 4) : (byte) ((b2) >> 4 ^ 0xf0);
+                encodedData[encodedIndex++] = lookUpBase64Alphabet[val1];
+                encodedData[encodedIndex++] = lookUpBase64Alphabet[val2 | (k << 4)];
+                encodedData[encodedIndex++] = lookUpBase64Alphabet[l << 2];
+                //noinspection UnusedAssignment
+                encodedData[encodedIndex++] = PAD;
+            }
+            return new String(encodedData);
+        }
+
+        /**
+         * Decodes BASE64Util data into octects
+         *
+         * @param encoded string containing BASE64Util data
+         * @return Array containind decoded data.
+         */
+        public static byte[] decode(String encoded) {
+            if (encoded == null) {
+                return null;
+            }
+            char[] base64Data = encoded.toCharArray();
+            // remove white spaces
+            int len = removeWhiteSpace(base64Data);
+            if (len % FOUR_BY_TE != 0) {
+                return null;// should be divisible by four
+            }
+            int numberQuadruple = (len / FOUR_BY_TE);
+            if (numberQuadruple == 0) {
+                return new byte[0];
+            }
+            byte[] decodedData;
+            byte b1, b2, b3, b4;
+            char d1, d2, d3, d4;
+            int i = 0;
+            int encodedIndex = 0;
+            int dataIndex = 0;
+            decodedData = new byte[(numberQuadruple) * 3];
+            for (; i < numberQuadruple - 1; i++) {
+                if (isData((d1 = base64Data[dataIndex++])) || isData((d2 = base64Data[dataIndex++]))
+                        || isData((d3 = base64Data[dataIndex++])) || isData((d4 = base64Data[dataIndex++]))) {
+                    return null;
+                }// if found "no data" just return null
+                b1 = base64Alphabet[d1];
+                b2 = base64Alphabet[d2];
+                b3 = base64Alphabet[d3];
+                b4 = base64Alphabet[d4];
+                decodedData[encodedIndex++] = (byte) (b1 << 2 | b2 >> 4);
+                decodedData[encodedIndex++] = (byte) (((b2 & 0xf) << 4) | ((b3 >> 2) & 0xf));
+                decodedData[encodedIndex++] = (byte) (b3 << 6 | b4);
+            }
+            if (isData((d1 = base64Data[dataIndex++])) || isData((d2 = base64Data[dataIndex++]))) {
+                return null;// if found "no data" just return null
+            }
+            b1 = base64Alphabet[d1];
+            b2 = base64Alphabet[d2];
+            d3 = base64Data[dataIndex++];
+            //noinspection UnusedAssignment
+            d4 = base64Data[dataIndex++];
+            if (isData((d3)) || isData((d4))) {// Check if they are PAD characters
+                if (isPad(d3) && isPad(d4)) {
+                    if ((b2 & 0xf) != 0)// last 4 bits should be zero
+                    {
+                        return null;
+                    }
+                    byte[] tmp = new byte[i * 3 + 1];
+                    System.arraycopy(decodedData, 0, tmp, 0, i * 3);
+                    tmp[encodedIndex] = (byte) (b1 << 2 | b2 >> 4);
+                    return tmp;
+                } else if (!isPad(d3) && isPad(d4)) {
+                    b3 = base64Alphabet[d3];
+                    if ((b3 & 0x3) != 0)// last 2 bits should be zero
+                    {
+                        return null;
+                    }
+                    byte[] tmp = new byte[i * 3 + 2];
+                    System.arraycopy(decodedData, 0, tmp, 0, i * 3);
+                    tmp[encodedIndex++] = (byte) (b1 << 2 | b2 >> 4);
+                    tmp[encodedIndex] = (byte) (((b2 & 0xf) << 4) | ((b3 >> 2) & 0xf));
+                    return tmp;
+                } else {
+                    return null;
+                }
+            } else { // No PAD e.g 3cQl
+                b3 = base64Alphabet[d3];
+                b4 = base64Alphabet[d4];
+                decodedData[encodedIndex++] = (byte) (b1 << 2 | b2 >> 4);
+                decodedData[encodedIndex++] = (byte) (((b2 & 0xf) << 4) | ((b3 >> 2) & 0xf));
+                //noinspection UnusedAssignment
+                decodedData[encodedIndex++] = (byte) (b3 << 6 | b4);
+            }
+            return decodedData;
+        }
+
+        /**
+         * remove WhiteSpace from MIME containing encoded BASE64Util data.
+         *
+         * @param data the byte array of base64 data (with WS)
+         * @return the new length
+         */
+        private static int removeWhiteSpace(char[] data) {
+            if (data == null) {
+                return 0;
+            }
+            // count characters that's not whitespace
+            int newSize = 0;
+            int len = data.length;
+            for (int i = 0; i < len; i++) {
+                if (!isWhiteSpace(data[i])) {
+                    data[newSize++] = data[i];
+                }
+            }
+            return newSize;
         }
     }
 

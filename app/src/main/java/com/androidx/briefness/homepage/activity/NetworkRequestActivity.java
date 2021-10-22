@@ -22,14 +22,17 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
+import com.androidx.briefness.homepage.module.Module;
 import com.androidx.briefness.homepage.service.NotificationService;
 import com.androidx.http.use.NetRequest;
 import com.androidx.reduce.tools.Convert;
 import com.androidx.reduce.tools.Idle;
+import com.androidx.reduce.tools.Secure;
 import com.google.protobuf.ByteString;
 import com.module.protobuf.MsgModule;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 import butterknife.BindView;
@@ -56,6 +59,12 @@ public final class NetworkRequestActivity extends BaseActivity {
 
     private static native String url();
 
+    private static native String url1();
+
+    private static native String ios();
+
+    private static native String publicKey();
+
     @SuppressLint("SetTextI18n")
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +78,15 @@ public final class NetworkRequestActivity extends BaseActivity {
             imageView.setColorFilter(R.color.black);
             titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
 //            initView();
+//            KeyPair key = Secure.RSA.keyPair();
+//            String k1;
+//            toasts.i("公钥", k1 =Secure.RSA.publicKey(key));
+//            String k2;
+//            toasts.i("私钥", k2 = Secure.RSA.privateKey(key));
+//            String v1;
+//            toasts.i("私钥加密", v1 = Secure.RSA.encryptPrivate(k2, "http://192.168.1.122:9981/api/user/login.ios"));
+//            toasts.i("公钥加密", Secure.RSA.decryptPublic(k1, v1));
+            toasts.i("数据", key = Secure.AES.key());
         } catch (Exception e) {
             toasts.e("收到数据", e);
         }
@@ -120,4 +138,26 @@ public final class NetworkRequestActivity extends BaseActivity {
         param.put("version", "1.1.6");
         NetRequest.sendMapPost(url(), param, data -> contentView.setText(data));
     }
+
+    private String key;
+
+    @OnClick(R.id.network_send2)
+    public void send2() {
+        Random rand = new Random();
+        String rand1 = String.valueOf(rand.nextInt(1000000) + 1);
+//        byte[] param = Secure.RSA.encryptPublic(publicKey(), rand1).getBytes();
+        byte[] param = Secure.AES.encrypt(key, rand1).getBytes();
+        NetRequest.sendBytes(url1(), param, data -> {
+            Module.Result builder = Module.Result.parseFrom(data);
+            contentView.setText(builder.toString());
+        });
+//        JsonObject json = new JsonObject();
+//        json.addProperty("data", "18604900857");
+//        Map<String, Object> map = new ConcurrentHashMap<>();
+//        map.put("data", "18604900857");
+//        NetRequest.sendMapPost(ios(), map, data -> contentView.setText(data));
+    }
+
+
+
 }

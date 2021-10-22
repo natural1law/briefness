@@ -168,7 +168,7 @@ public final class Secure {
          * @return 加密后的字符串
          */
         public static String encode(byte[] data) {
-            return Control.Base_64.encode(data);
+            return Control.Base64.encode(data);
         }
 
         /**
@@ -178,7 +178,7 @@ public final class Secure {
          * @return 解密后的字符串
          */
         public static byte[] decode(String data) {
-            return Control.Base_64.decode(data);
+            return Control.Base64.decode(data);
         }
     }
 

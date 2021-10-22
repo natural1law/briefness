@@ -37,7 +37,11 @@ class HttpRequest : HttpRequestListener {
                     return@label false
                 }
                 1 -> {
-                    msg.bytesCallback.onSuccess(msg.msg1)
+                    try {
+                        msg.bytesCallback.onSuccess(msg.msg1)
+                    } catch (e : Exception) {
+                        Log.e("参数回调异常", Log.getStackTraceString(e))
+                    }
                     return@label false
                 }
                 else -> return@label false
