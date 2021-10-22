@@ -32,27 +32,27 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
 ### 使用依赖
   * 全部
   ```
-    implementation 'com.github.natural1law.briefness:3.0.11'
+    implementation 'com.github.natural1law.briefness:3.1'
   ```
   * 分支-网络请求
   ```
-  implementation 'com.github.natural1law.briefness:network:3.0.11'
+  implementation 'com.github.natural1law.briefness:network:3.1'
   ```
   * 分支-常用工具
   ```
-  implementation 'com.github.natural1law.briefness:reduce:3.0.11'
+  implementation 'com.github.natural1law.briefness:reduce:3.1'
   ```
   * 分支-图表统计
   ```
-  implementation 'com.github.natural1law.briefness:echarts:3.0.11'
+  implementation 'com.github.natural1law.briefness:echarts:3.1'
   ```
   * 分支-视图布局
   ```
-  implementation 'com.github.natural1law.briefness:view:3.0.11'
+  implementation 'com.github.natural1law.briefness:view:3.1'
   ```
   * 分支-加载动画（仿zyao89）
   ```
-  implementation 'com.github.natural1law.briefness:animation:3.0.11'
+  implementation 'com.github.natural1law.briefness:animation:3.1'
   ```
 
 ### 工具使用
