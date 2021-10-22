@@ -24,7 +24,7 @@ import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
 import com.androidx.briefness.homepage.module.Module;
 import com.androidx.briefness.homepage.service.NotificationService;
-import com.androidx.http.use.NetRequest;
+import com.androidx.http.use.Rn;
 import com.androidx.reduce.tools.Convert;
 import com.androidx.reduce.tools.Idle;
 import com.androidx.reduce.tools.Secure;
@@ -136,7 +136,7 @@ public final class NetworkRequestActivity extends BaseActivity {
         param.put("userName", "18604900857");
         param.put("password", "LNgz@082");
         param.put("version", "1.1.6");
-        NetRequest.sendMapPost(url(), param, data -> contentView.setText(data));
+        Rn.sendMapPost(url(), param, data -> contentView.setText(data));
     }
 
     private String key;
@@ -147,7 +147,7 @@ public final class NetworkRequestActivity extends BaseActivity {
         String rand1 = String.valueOf(rand.nextInt(1000000) + 1);
 //        byte[] param = Secure.RSA.encryptPublic(publicKey(), rand1).getBytes();
         byte[] param = Secure.AES.encrypt(key, rand1).getBytes();
-        NetRequest.sendBytes(url1(), param, data -> {
+        Rn.sendBytes(url1(), param, data -> {
             Module.Result builder = Module.Result.parseFrom(data);
             contentView.setText(builder.toString());
         });

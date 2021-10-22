@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.androidx.briefness.R;
 import com.androidx.briefness.homepage.adapter.PageAdapter;
-import com.androidx.http.use.NetRequest;
+import com.androidx.http.use.Rn;
 import com.androidx.reduce.tools.Idle;
 import com.androidx.view.page.PaginationRecycleView;
 import com.google.gson.Gson;
@@ -127,7 +127,7 @@ public class PageRecyclerViewActivity extends AppCompatActivity {
         param.put("u", uid);
         param.put("t", timestamp);
         param.put("k", MD5(var));
-        NetRequest.sendMapPost("http://hapi1.syyfkj.cn/app/v1_1/", param, bakeData -> {
+        Rn.sendMapPost("http://hapi1.syyfkj.cn/app/v1_1/", param, bakeData -> {
             if (listView != null) listView.loadingFinish();
             JsonObject bakeJson = new Gson().fromJson(bakeData, new TypeToken<JsonObject>() {
             }.getType());
@@ -156,7 +156,7 @@ public class PageRecyclerViewActivity extends AppCompatActivity {
         param.put("u", uid);
         param.put("t", timestamp);
         param.put("k", MD5(var));
-        NetRequest.sendMapPost("http://hapi1.syyfkj.cn/app/v1_1/", param, bakeData -> {
+        Rn.sendMapPost("http://hapi1.syyfkj.cn/app/v1_1/", param, bakeData -> {
             if (listView != null) listView.loadingFinish();
             JsonObject bakeJson = new Gson().fromJson(bakeData, new TypeToken<JsonObject>() {
             }.getType());

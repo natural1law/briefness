@@ -6,18 +6,18 @@ import java.util.Map;
 
 public interface HttpRequestListener {
 
-    void getRequest(String url, Map<String, Object> map, int maxAnewCount, StringCallback stringCallback);
+    void getRequest(String url, Map<String, Object> map, int maxAnewCount, Response response);
 
-    void postRequestProto(String url, byte[] bytes, int maxAnewCount, BytesCallback callBack);
+    void postRequestProto(String url, byte[] bytes, int maxAnewCount, Callback callback);
 
-    void postRequest(String url, Map<String, Object> map, int maxAnewCount, StringCallback callBack);
+    void postRequest(String url, Map<String, Object> map, int maxAnewCount, Response response);
 
-    void postRequest(String url, JsonObject json, int maxAnewCount, StringCallback callBack);
+    void postRequest(String url, JsonObject json, int maxAnewCount, Response response);
 
-    void deleteRequest(String url, JsonObject json, int maxAnewCount, StringCallback callBack);
+    void deleteRequest(String url, JsonObject json, int maxAnewCount, Response response);
 
-    void deleteRequest(String url, Map<String, Object> map, int maxAnewCount, StringCallback callBack);
+    void deleteRequest(String url, Map<String, Object> map, int maxAnewCount, Response response);
 
-    void forrequest(String url, String key, JsonObject json, int maxAnewCount, StringCallback callBack);
+    void forrequest(String url, String key, JsonObject json, int maxAnewCount, Response response);
 
 }

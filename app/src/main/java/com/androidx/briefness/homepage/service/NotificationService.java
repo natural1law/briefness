@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.androidx.briefness.R;
 import com.androidx.http.net.listener.Enqueue;
-import com.androidx.http.use.NetRequest;
+import com.androidx.http.use.Rn;
 import com.androidx.view.screen.NotificationBar;
 
 import java.util.Map;
@@ -37,7 +37,7 @@ public class NotificationService extends Service {
         Map<String, Object> map = new WeakHashMap<>();
         map.put(USER, mc.getValue(USER).toString());
         startForeground(1, NotificationBar.setOther(getApplicationContext(), "通知", "消息推送服务已开启", R.mipmap.radio_on));
-        enqueue = NetRequest.initWebSocket("http://192.168.1.133:8082/cmp/push/notification", map);
+        enqueue = Rn.initWebSocket("http://192.168.1.133:8082/cmp/push/notification", map);
         enqueue.setMsgCallback((code, msg, data) -> {
             switch (code) {
                 case 999:

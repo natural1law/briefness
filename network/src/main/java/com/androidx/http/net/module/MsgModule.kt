@@ -3,8 +3,8 @@ package com.androidx.http.net.module
 import android.os.Parcel
 import android.os.Parcelable
 import com.androidx.http.base.BaseBean
-import com.androidx.http.net.listener.BytesCallback
-import com.androidx.http.net.listener.StringCallback
+import com.androidx.http.net.listener.Callback
+import com.androidx.http.net.listener.Response
 import java.io.ObjectInput
 import java.io.ObjectOutput
 
@@ -12,22 +12,22 @@ class MsgModule() : BaseBean() {
 
     lateinit var msg: String
     lateinit var msg1: ByteArray
-    lateinit var stringCallback: StringCallback
-    lateinit var bytesCallback: BytesCallback
+    lateinit var response: Response
+    lateinit var callback: Callback
 
     constructor(parcel: Parcel) : this() {
         msg = parcel.readString()!!
         msg1 = parcel.createByteArray()!!
     }
 
-    constructor(msg: String, callBack: StringCallback) : this() {
+    constructor(msg: String, callBack: Response) : this() {
         this.msg = msg
-        this.stringCallback = callBack
+        this.response = callBack
     }
 
-    constructor(bytes: ByteArray, callBack: BytesCallback) : this() {
+    constructor(bytes: ByteArray, callBack: Callback) : this() {
         this.msg1 = bytes
-        this.bytesCallback = callBack
+        this.callback = callBack
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -38,8 +38,8 @@ class MsgModule() : BaseBean() {
     override fun writeExternal(out: ObjectOutput?) {
         out!!.writeUTF(msg)
         out.write(msg1)
-        out.writeObject(stringCallback)
-        out.writeObject(stringCallback)
+        out.writeObject(response)
+        out.writeObject(response)
     }
 
     override fun readExternal(`in`: ObjectInput?) {

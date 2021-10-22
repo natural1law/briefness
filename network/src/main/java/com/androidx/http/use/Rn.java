@@ -10,9 +10,9 @@ import static com.androidx.http.api.NetHttp.POST_MAP;
 
 import com.androidx.http.api.NetHttp;
 import com.androidx.http.net.Configuration;
-import com.androidx.http.net.listener.BytesCallback;
+import com.androidx.http.net.listener.Callback;
 import com.androidx.http.net.listener.Enqueue;
-import com.androidx.http.net.listener.StringCallback;
+import com.androidx.http.net.listener.Response;
 import com.androidx.http.net.socket.Proxys;
 import com.androidx.http.net.socket.SocketRequest;
 import com.androidx.http.net.socket.WebConfiguration;
@@ -22,7 +22,11 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public final class NetRequest {
+/**
+ * 请求网络
+ * request network
+ */
+public final class Rn {
 
     private static volatile Executor executor = Executors.newWorkStealingPool();
 
@@ -95,14 +99,14 @@ public final class NetRequest {
      *
      * @param url      请求地址
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param response 结果回调
      */
-    public static void sendMapGet(String url, Map<String, Object> data, StringCallback callback) {
+    public static void sendMapGet(String url, Map<String, Object> data, Response response) {
         executor.execute(() -> NetHttp.Companion.builder()
                 .setHosts(url)
                 .setMode(GET_MAP)
                 .setMap(data)
-                .setCallback(callback)
+                .setCallback(response)
                 .build());
     }
 
@@ -111,14 +115,14 @@ public final class NetRequest {
      *
      * @param url      请求地址
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param response 结果回调
      */
-    public static void sendJsonPost(String url, JsonObject data, StringCallback callback) {
+    public static void sendJsonPost(String url, JsonObject data, Response response) {
         executor.execute(() -> NetHttp.Companion.builder()
                 .setHosts(url)
                 .setMode(POST_JSON)
                 .setJson(data)
-                .setCallback(callback)
+                .setCallback(response)
                 .build());
     }
 
@@ -127,25 +131,25 @@ public final class NetRequest {
      *
      * @param url      请求地址
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param response 结果回调
      */
-    public static void sendMapPost(String url, Map<String, Object> data, StringCallback callback) {
+    public static void sendMapPost(String url, Map<String, Object> data, Response response) {
         executor.execute(() -> NetHttp.Companion.builder()
                 .setHosts(url)
                 .setMode(POST_MAP)
                 .setMap(data)
-                .setCallback(callback)
+                .setCallback(response)
                 .build());
     }
 
     /**
-     * http发送请求
+     * http发送请求(protobuf)
      *
      * @param url      请求地址
      * @param data     发送数据
      * @param callback 结果回调
      */
-    public static void sendBytes(String url, byte[] data, BytesCallback callback) {
+    public static void sendBytes(String url, byte[] data, Callback callback) {
         executor.execute(() -> NetHttp.Companion.builder()
                 .setHosts(url)
                 .setMode(POST_BYTES)
@@ -159,14 +163,14 @@ public final class NetRequest {
      *
      * @param url            请求地址
      * @param data           发送数据
-     * @param stringCallback 结果回调
+     * @param response 结果回调
      */
-    public static void sendMapDelete(String url, Map<String, Object> data, StringCallback stringCallback) {
+    public static void sendMapDelete(String url, Map<String, Object> data, Response response) {
         executor.execute(() -> NetHttp.Companion.builder()
                 .setHosts(url)
                 .setMode(DEL_MAP)
                 .setMap(data)
-                .setCallback(stringCallback)
+                .setCallback(response)
                 .build());
     }
 
@@ -175,14 +179,14 @@ public final class NetRequest {
      *
      * @param url      请求地址
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param response 结果回调
      */
-    public static void sendJsonDelete(String url, JsonObject data, StringCallback callback) {
+    public static void sendJsonDelete(String url, JsonObject data, Response response) {
         executor.execute(() -> NetHttp.Companion.builder()
                 .setHosts(url)
                 .setMode(DEL_JSON)
                 .setJson(data)
-                .setCallback(callback)
+                .setCallback(response)
                 .build());
     }
 
@@ -191,15 +195,15 @@ public final class NetRequest {
      *
      * @param url      请求地址
      * @param data     发送数据
-     * @param callback 结果回调
+     * @param response 结果回调
      */
-    public static void sendJsonFrom(String url, String key, JsonObject data, StringCallback callback) {
+    public static void sendJsonFrom(String url, String key, JsonObject data, Response response) {
         executor.execute(() -> NetHttp.Companion.builder()
                 .setJsonKey(key)
                 .setHosts(url)
                 .setMode(FROM_JSON)
                 .setJson(data)
-                .setCallback(callback)
+                .setCallback(response)
                 .build());
     }
 

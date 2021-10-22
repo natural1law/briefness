@@ -13,7 +13,7 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 
 import com.androidx.briefness.R;
 import com.androidx.echarts.base.BaseWebActivity;
-import com.androidx.http.use.NetRequest;
+import com.androidx.http.use.Rn;
 import com.androidx.reduce.tools.Idle;
 
 import java.util.Map;
@@ -79,7 +79,7 @@ public final class EchartsActivity extends BaseWebActivity {
         titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
         Map<String, Object> map = new ConcurrentHashMap<>();
         String url = "http://hapi.syyfkj.cn/app/v1/";
-        super.initWeb(webView).setLoadListener(() -> NetRequest.sendMapPost(url, map, data -> super.setCallJs("callJS", data)));
+        super.initWeb(webView).setLoadListener(() -> Rn.sendMapPost(url, map, data -> super.setCallJs("callJS", data)));
     }
 
     @OnClick(R.id.activity_echarts)

@@ -3,9 +3,9 @@
 package com.androidx.http.api
 
 import com.androidx.http.net.HttpRequest
-import com.androidx.http.net.listener.BytesCallback
+import com.androidx.http.net.listener.Callback
 import com.androidx.http.net.listener.HttpRequestListener
-import com.androidx.http.net.listener.StringCallback
+import com.androidx.http.net.listener.Response
 import com.google.gson.JsonObject
 import java.util.concurrent.ConcurrentHashMap
 
@@ -37,8 +37,8 @@ class NetHttp private constructor() {
         internal var map: Map<String, Any> = ConcurrentHashMap()
         internal var json = JsonObject()
         internal var bytes: ByteArray? = null
-        internal var stringCallback: StringCallback? = null
-        internal var bytesCallback: BytesCallback? = null
+        internal var response: Response? = null
+        internal var callback: Callback? = null
 
         fun setMaxAnewCount(maxAnewCount: Int?): Builder {
             this.maxAnewCount = maxAnewCount
@@ -75,13 +75,13 @@ class NetHttp private constructor() {
             return builder
         }
 
-        fun setCallback(stringCallback: StringCallback?): Builder {
-            this.stringCallback = stringCallback
+        fun setCallback(response: Response?): Builder {
+            this.response = response
             return builder
         }
 
-        fun setCallback(bytesCallback: BytesCallback?): Builder {
-            this.bytesCallback = bytesCallback
+        fun setCallback(callback: Callback?): Builder {
+            this.callback = callback
             return builder
         }
 
@@ -97,44 +97,44 @@ class NetHttp private constructor() {
                 builder.host,
                 builder.map,
                 builder.maxAnewCount!!,
-                builder.stringCallback
+                builder.response
             )
             POST_JSON -> requestListener.postRequest(
                 builder.host,
                 builder.json,
                 builder.maxAnewCount!!,
-                builder.stringCallback
+                builder.response
             )
             POST_MAP -> requestListener.postRequest(
                 builder.host,
                 builder.map,
                 builder.maxAnewCount!!,
-                builder.stringCallback
+                builder.response
             )
             POST_BYTES -> requestListener.postRequestProto(
                 builder.host,
                 builder.bytes,
                 builder.maxAnewCount!!,
-                builder.bytesCallback
+                builder.callback
             )
             DEL_MAP -> requestListener.deleteRequest(
                 builder.host,
                 builder.map,
                 builder.maxAnewCount!!,
-                builder.stringCallback
+                builder.response
             )
             FROM_JSON -> requestListener.forrequest(
                 builder.host,
                 builder.jsonKey,
                 builder.json,
                 builder.maxAnewCount!!,
-                builder.stringCallback
+                builder.response
             )
             DEL_JSON -> requestListener.deleteRequest(
                 builder.host,
                 builder.json,
                 builder.maxAnewCount!!,
-                builder.stringCallback
+                builder.response
             )
         }
     }

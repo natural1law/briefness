@@ -1,9 +1,7 @@
 package com.androidx.reduce.tools;
 
-import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -11,22 +9,14 @@ import android.widget.EditText;
 import androidx.appcompat.widget.AppCompatEditText;
 
 /**
- * 输入和屏幕适配限制
+ * 输入限制
  */
 public final class Astrict {
 
     private Astrict() {
     }
 
-    private static final class SingletonHolder {
-        private static final Astrict INSTANCE = new Astrict();
-    }
-
-    public static Astrict get() {
-        return SingletonHolder.INSTANCE;
-    }
-
-    public void isBuyPrice(AppCompatEditText text) {
+    public static void isBuyPrice(AppCompatEditText text) {
         text.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -59,7 +49,7 @@ public final class Astrict {
         });
     }
 
-    public void isBuyCount(AppCompatEditText text) {
+    public static void isBuyCount(AppCompatEditText text) {
         text.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -83,7 +73,7 @@ public final class Astrict {
         });
     }
 
-    public boolean isShouldHideInput(View v, MotionEvent event) {
+    public static boolean isShouldHideInput(View v, MotionEvent event) {
         if ((v instanceof EditText)) {
             int[] leftTop = {0, 0};
             //获取输入框当前的location位置
@@ -96,70 +86,6 @@ public final class Astrict {
                     || !(event.getY() > top) || !(event.getY() < bottom);
         }
         return false;
-    }
-
-    public int vector(Context context) {
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        double minWidth = Math.floor(metrics.widthPixels / metrics.density);
-        int i;
-        int[] dp = {320, 360, 384, 392, 400, 410, 411, 428, 432, 480, 533, 592, 600, 640, 662, 720, 768, 800};
-        if (minWidth == dp[0]) {
-            i = -258;
-            return i;
-        } else if (minWidth == dp[1]) {
-            i = -230;
-            return i;
-        } else if (minWidth == dp[2]) {
-            i = -212;
-            return i;
-        } else if (minWidth == dp[3]) {
-            i = -180;
-            return i;
-        } else if (minWidth == dp[4]) {
-            i = -205;
-            return i;
-        } else if (minWidth == dp[5]) {
-            i = -200;
-            return i;
-        } else if (minWidth == dp[6]) {
-            i = -170;
-            return i;
-        } else if (minWidth == dp[7]) {
-            i = -195;
-            return i;
-        } else if (minWidth == dp[8]) {
-            i = -188;
-            return i;
-        } else if (minWidth == dp[9]) {
-            i = -171;
-            return i;
-        } else if (minWidth == dp[10]) {
-            i = -155;
-            return i;
-        } else if (minWidth == dp[11]) {
-            i = -155;
-            return i;
-        } else if (minWidth == dp[12]) {
-            i = -138;
-            return i;
-        } else if (minWidth == dp[13]) {
-            i = -129;
-            return i;
-        } else if (minWidth == dp[14]) {
-            i = -122;
-            return i;
-        } else if (minWidth == dp[15]) {
-            i = -116;
-            return i;
-        } else if (minWidth == dp[16]) {
-            i = -110;
-            return i;
-        } else if (minWidth == dp[17]) {
-            i = -104;
-            return i;
-        } else {
-            return 0;
-        }
     }
 
 }

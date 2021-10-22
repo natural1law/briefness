@@ -25,7 +25,7 @@ import java.util.Random;
  */
 public final class Captcha {
 
-    public static Captcha build() {
+    public static Captcha getInstance() {
         if (rxCaptcha == null) synchronized (Captcha.class) {
             if (rxCaptcha == null) rxCaptcha = new Captcha();
         }

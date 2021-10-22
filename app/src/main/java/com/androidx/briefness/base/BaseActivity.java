@@ -114,7 +114,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     public boolean dispatchTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             View v = getCurrentFocus();
-            if (Astrict.get().isShouldHideInput(v, ev))
+            if (Astrict.isShouldHideInput(v, ev))
                 getSystemService(InputMethodManager.class).hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
         return super.dispatchTouchEvent(ev);

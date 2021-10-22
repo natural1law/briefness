@@ -4,9 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.Message
 import android.util.Log
-import com.androidx.http.net.listener.BytesCallback
 import com.androidx.http.net.listener.HttpRequestListener
-import com.androidx.http.net.listener.StringCallback
 import com.androidx.http.net.module.MsgModule
 import com.google.gson.JsonObject
 import okhttp3.Call
@@ -25,20 +23,20 @@ class HttpRequest : HttpRequestListener {
             val msg = message.obj as MsgModule
             when (message.what) {
                 -2 -> {
-                    msg.bytesCallback.onFailure(String(msg.msg1))
+                    msg.callback.onFailure(String(msg.msg1))
                     return@label false
                 }
                 -1 -> {
-                    msg.stringCallback.onFailure(msg.msg)
+                    msg.response.onFailure(msg.msg)
                     return@label false
                 }
                 0 -> {
-                    msg.stringCallback.onSuccess(msg.msg)
+                    msg.response.onSuccess(msg.msg)
                     return@label false
                 }
                 1 -> {
                     try {
-                        msg.bytesCallback.onSuccess(msg.msg1)
+                        msg.callback.onSuccess(msg.msg1)
                     } catch (e : Exception) {
                         Log.e("参数回调异常", Log.getStackTraceString(e))
                     }
@@ -52,13 +50,13 @@ class HttpRequest : HttpRequestListener {
         url: String?,
         map: MutableMap<String, Any>?,
         maxAnewCount: Int,
-        callBack: StringCallback?
+        resonse: com.androidx.http.net.listener.Response?
     ) {
         httpNetwork.client.newCall(httpNetwork.getRequest(url, map)).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 handler.sendMessage(
                     handler.obtainMessage(
-                        -1, MsgModule(Log.getStackTraceString(e), callBack!!)
+                        -1, MsgModule(Log.getStackTraceString(e), resonse!!)
                     )
                 )
                 // 如果超时并未超过指定次数，则重新连接
@@ -72,7 +70,7 @@ class HttpRequest : HttpRequestListener {
             override fun onResponse(call: Call, response: Response) {
                 handler.sendMessage(
                     handler.obtainMessage(0, response.body?.let {
-                        MsgModule(it.string(), callBack!!)
+                        MsgModule(it.string(), resonse!!)
                     }
                     )
                 )
@@ -84,14 +82,14 @@ class HttpRequest : HttpRequestListener {
         url: String?,
         bytes: ByteArray?,
         maxAnewCount: Int,
-        callBack: BytesCallback?
+        callback: com.androidx.http.net.listener.Callback?
     ) {
         httpNetwork.client.newCall(httpNetwork.postRequestProto(url, bytes))
             .enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     handler.sendMessage(
                         handler.obtainMessage(
-                            -2, MsgModule(Log.getStackTraceString(e).toByteArray(), callBack!!)
+                            -2, MsgModule(Log.getStackTraceString(e).toByteArray(), callback!!)
                         )
                     )
                     // 如果超时并未超过指定次数，则重新连接
@@ -105,7 +103,7 @@ class HttpRequest : HttpRequestListener {
                 override fun onResponse(call: Call, response: Response) {
                     handler.sendMessage(
                         handler.obtainMessage(1, response.body?.let {
-                            MsgModule(it.bytes(), callBack!!)
+                            MsgModule(it.bytes(), callback!!)
                         }
                         )
                     )
@@ -117,13 +115,13 @@ class HttpRequest : HttpRequestListener {
         url: String?,
         map: MutableMap<String, Any>?,
         maxAnewCount: Int,
-        callBack: StringCallback?
+        resonse: com.androidx.http.net.listener.Response?
     ) {
         httpNetwork.client.newCall(httpNetwork.postRequest(url, map)).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 handler.sendMessage(
                     handler.obtainMessage(
-                        -1, MsgModule(Log.getStackTraceString(e), callBack!!)
+                        -1, MsgModule(Log.getStackTraceString(e), resonse!!)
                     )
                 )
                 // 如果超时并未超过指定次数，则重新连接
@@ -137,7 +135,7 @@ class HttpRequest : HttpRequestListener {
                 override fun onResponse(call: Call, response: Response) {
                     handler.sendMessage(
                         handler.obtainMessage(0, response.body?.let {
-                            MsgModule(it.string(), callBack!!)
+                            MsgModule(it.string(), resonse!!)
                         }
                         )
                     )
@@ -149,13 +147,13 @@ class HttpRequest : HttpRequestListener {
         url: String?,
         json: JsonObject?,
         maxAnewCount: Int,
-        callBack: StringCallback?
+        resonse: com.androidx.http.net.listener.Response?
     ) {
         httpNetwork.client.newCall(httpNetwork.postRequest(url, json)).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 handler.sendMessage(
                     handler.obtainMessage(
-                        -1, MsgModule(Log.getStackTraceString(e), callBack!!)
+                        -1, MsgModule(Log.getStackTraceString(e), resonse!!)
                     )
                 )
                 // 如果超时并未超过指定次数，则重新连接
@@ -169,7 +167,7 @@ class HttpRequest : HttpRequestListener {
                 override fun onResponse(call: Call, response: Response) {
                     handler.sendMessage(
                         handler.obtainMessage(0, response.body?.let {
-                            MsgModule(it.string(), callBack!!)
+                            MsgModule(it.string(), resonse!!)
                         }
                         )
                     )
@@ -181,13 +179,13 @@ class HttpRequest : HttpRequestListener {
         url: String?,
         json: JsonObject?,
         maxAnewCount: Int,
-        callBack: StringCallback?
+        resonse: com.androidx.http.net.listener.Response?
     ) {
         httpNetwork.client.newCall(httpNetwork.deleteRequest(url, json)).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 handler.sendMessage(
                     handler.obtainMessage(
-                        -1, MsgModule(Log.getStackTraceString(e), callBack!!)
+                        -1, MsgModule(Log.getStackTraceString(e), resonse!!)
                     )
                 )
                 // 如果超时并未超过指定次数，则重新连接
@@ -201,7 +199,7 @@ class HttpRequest : HttpRequestListener {
                 override fun onResponse(call: Call, response: Response) {
                     handler.sendMessage(
                         handler.obtainMessage(0,
-                            response.body?.let { MsgModule(it.string(), callBack!!) })
+                            response.body?.let { MsgModule(it.string(), resonse!!) })
                     )
                 }
             })
@@ -211,13 +209,13 @@ class HttpRequest : HttpRequestListener {
         url: String?,
         map: MutableMap<String, Any>?,
         maxAnewCount: Int,
-        callBack: StringCallback?
+        resonse: com.androidx.http.net.listener.Response?
     ) {
         httpNetwork.client.newCall(httpNetwork.deleteRequest(url, map)).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 handler.sendMessage(
                     handler.obtainMessage(
-                        -1, MsgModule(Log.getStackTraceString(e), callBack!!)
+                        -1, MsgModule(Log.getStackTraceString(e), resonse!!)
                     )
                 )
                 // 如果超时并未超过指定次数，则重新连接
@@ -231,7 +229,7 @@ class HttpRequest : HttpRequestListener {
                 override fun onResponse(call: Call, response: Response) {
                     handler.sendMessage(
                         handler.obtainMessage(0, response.body?.let {
-                            MsgModule(it.string(), callBack!!)
+                            MsgModule(it.string(), resonse!!)
                         }
                         )
                     )
@@ -244,14 +242,14 @@ class HttpRequest : HttpRequestListener {
         key: String?,
         json: JsonObject?,
         maxAnewCount: Int,
-        callBack: StringCallback?
+        resonse: com.androidx.http.net.listener.Response?
     ) {
         httpNetwork.client.newCall(httpNetwork.forrequest(url, key, json))
             .enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     handler.sendMessage(
                         handler.obtainMessage(
-                            -1, MsgModule(Log.getStackTraceString(e), callBack!!)
+                            -1, MsgModule(Log.getStackTraceString(e), resonse!!)
                         )
                     )
                     // 如果超时并未超过指定次数，则重新连接
@@ -265,7 +263,7 @@ class HttpRequest : HttpRequestListener {
                 override fun onResponse(call: Call, response: Response) {
                     handler.sendMessage(
                         handler.obtainMessage(0,
-                            response.body?.let { MsgModule(it.string(), callBack!!) })
+                            response.body?.let { MsgModule(it.string(), resonse!!) })
                     )
                 }
             })

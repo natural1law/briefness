@@ -7,7 +7,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
 
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
@@ -175,7 +174,7 @@ public final class Convert {
         public static <T> String toBinary(T value) {
             try {
                 StringBuffer sb = new StringBuffer();
-                int b = Integer.parseInt(Convert.Scm.build().set(value).tosInt());
+                int b = Convert.Scm.set(value).intValue();
                 int b1 = (b & 128) == 0 ? 0 : (b & 128) >>> 7;
                 int b2 = (b & 64) == 0 ? 0 : (b & 64) >>> 6;
                 int b3 = (b & 32) == 0 ? 0 : (b & 32) >>> 5;
@@ -200,67 +199,29 @@ public final class Convert {
      */
     public static final class Scm {
 
-        private BigDecimal bd;
-
         private Scm() {
         }
 
-        @Contract(value = " -> new", pure = true)
-        public static @NotNull Scm build() {
-            synchronized (Scm.class) {
-                return new Scm();
-            }
+        public static <V>BigDecimal set(V value){
+            return set(value, 0);
         }
 
-        public <T> Scm set(T value) {
-            bd = new BigDecimal(String.valueOf(value)).setScale(0, BigDecimal.ROUND_HALF_UP);
-            return this;
+        public static <V>BigDecimal set(V value, int scale){
+            return set(value, scale, BigDecimal.ROUND_HALF_UP);
         }
 
-        public @NotNull String toString() {
-            return bd.unscaledValue().toString();
+        public static <V>BigDecimal set(V value, int scale, int round){
+            return new BigDecimal(String.valueOf(value)).setScale(scale, round);
         }
 
-        public @NotNull String tosInt() {
-            return String.valueOf(bd.unscaledValue().intValue());
-        }
-
-        public @NotNull String tosDouble() {
-            return String.valueOf(bd.unscaledValue().doubleValue());
-        }
-
-        public @NotNull String tosLong() {
-            return String.valueOf(bd.unscaledValue().longValue());
-        }
-
-        public @NotNull String tosByte() {
-            return String.valueOf(bd.unscaledValue().byteValue());
-        }
-
-        public int toInt() {
-            return bd.unscaledValue().intValue();
-        }
-
-        public long toLong() {
-            return bd.unscaledValue().longValue();
-        }
-
-        public byte toByte() {
-            return bd.unscaledValue().byteValue();
-        }
-
-        public double toDouble() {
-            return bd.unscaledValue().doubleValue();
-        }
     }
 
     public static final class Pixel {
 
-        private final DisplayMetrics dm;
+        private final DisplayMetrics dm = new DisplayMetrics();
 
         private Pixel(Context context) {
             WindowManager windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            dm = new DisplayMetrics();
             windowManager.getDefaultDisplay().getRealMetrics(dm);
         }
 
