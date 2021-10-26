@@ -29,7 +29,7 @@ import java.util.concurrent.Executors;
 @SuppressWarnings({"unused", "FieldMayBeFinal"})
 public final class Rn {
 
-    private static volatile Executor executor = Executors.newCachedThreadPool();
+    private static volatile Executor executor = Executors.newWorkStealingPool();
 
     /**
      * 设置请求头
