@@ -1,4 +1,4 @@
-package com.androidx.http.base;
+package com.androidx.http.net.module;
 
 import android.os.Parcelable;
 

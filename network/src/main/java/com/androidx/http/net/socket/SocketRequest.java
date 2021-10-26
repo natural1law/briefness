@@ -6,7 +6,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 
-import com.androidx.http.module.ResModule;
+import com.androidx.http.net.module.ResModule;
 import com.androidx.http.net.HttpNetwork;
 import com.androidx.http.net.listener.ActionListener;
 import com.androidx.http.net.listener.Enqueue;

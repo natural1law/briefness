@@ -2,7 +2,6 @@ package com.androidx.http.net.module
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.androidx.http.base.BaseBean
 import com.androidx.http.net.listener.Callback
 import com.androidx.http.net.listener.Response
 import java.io.ObjectInput

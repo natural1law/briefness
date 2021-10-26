@@ -22,27 +22,11 @@ import okhttp3.OkHttpClient;
 @SuppressWarnings("WeakerAccess")
 public final class TrustManagers implements X509TrustManager {
 
-    private static volatile TrustManagers trustManagers;
-
     private TrustManagers() {
     }
 
-    private static final class SingletonHolder {
-        private SingletonHolder() {
-        }
-
-        private static final TrustManagers INSTANCE = new TrustManagers();
-    }
-
-    protected static TrustManagers newInstance() {
-        if (trustManagers == null) {
-            synchronized (TrustManagers.class) {
-                if (trustManagers == null) {
-                    trustManagers = SingletonHolder.INSTANCE;
-                }
-            }
-        }
-        return trustManagers;
+    protected static TrustManagers getInstance(){
+        return SingletonHolder.newInstance();
     }
 
     /**
@@ -52,10 +36,10 @@ public final class TrustManagers implements X509TrustManager {
      *
      * @return 支持自签名的客户端
      */
-    protected SSLSocketFactory createSSLSocketFactory() {
+    protected static SSLSocketFactory createSSLSocketFactory() {
         try {
             SSLContext sc = SSLContext.getInstance("TLS");
-            sc.init(null, new TrustManager[]{TrustManagers.newInstance()}, new SecureRandom());
+            sc.init(null, new TrustManager[]{TrustManagers.getInstance()}, new SecureRandom());
             return sc.getSocketFactory();
         } catch (Exception e) {
             Log.e("https自制签名异常", Log.getStackTraceString(e));
@@ -100,6 +84,28 @@ public final class TrustManagers implements X509TrustManager {
         } catch (Exception e) {
             Log.e("SSLException", Log.getStackTraceString(e));
         }
+    }
+
+    private static final class SingletonHolder {
+
+        private static volatile TrustManagers trustManagers;
+
+        private SingletonHolder() {
+        }
+
+        private static final TrustManagers INSTANCE = new TrustManagers();
+
+        private static TrustManagers newInstance() {
+            if (trustManagers == null) {
+                synchronized (TrustManagers.class) {
+                    if (trustManagers == null) {
+                        trustManagers = INSTANCE;
+                    }
+                }
+            }
+            return trustManagers;
+        }
+
     }
 
 }

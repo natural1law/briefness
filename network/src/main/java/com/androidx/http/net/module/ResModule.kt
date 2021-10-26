@@ -1,8 +1,7 @@
-package com.androidx.http.module
+package com.androidx.http.net.module
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.androidx.http.base.BaseBean
 import java.io.ObjectInput
 import java.io.ObjectOutput
 

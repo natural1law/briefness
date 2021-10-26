@@ -16,6 +16,7 @@ import okhttp3.ConnectionSpec;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.Protocol;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.TlsVersion;
@@ -45,19 +46,20 @@ public final class HttpNetwork implements IHttpNetwork {
     public @NotNull
     OkHttpClient getClient() {
         String cert = Configuration.getSsl();
-        SSLSocketFactory ssl = TrustManagers.newInstance().createSSLSocketFactory();
+        SSLSocketFactory ssl = TrustManagers.createSSLSocketFactory();
         OkHttpClient.Builder client = new OkHttpClient.Builder()
                 .dns(new HttpDns())
-                .retryOnConnectionFailure(true)//错误重连
+                .retryOnConnectionFailure(true)//连接重连
                 .minWebSocketMessageToCompress(0)//压缩消息
                 .pingInterval(INTERVAL, TimeUnit.SECONDS)//ping帧心跳
                 .connectTimeout(TIMEOUT, TimeUnit.SECONDS)//设置超时时间(单位秒)
                 .readTimeout(TIMEOUT, TimeUnit.SECONDS)//设置读取超时时间(单位秒)
                 .writeTimeout(TIMEOUT, TimeUnit.SECONDS)//设置写入超时时间(单位秒)
-                .addNetworkInterceptor(OkHttpInterceptor.newInstance())//网络拦截器
+                .addNetworkInterceptor(OkHttpInterceptor.getInstance())//网络拦截器
+                .protocols(Arrays.asList(Protocol.HTTP_2, Protocol.HTTP_1_1))
                 .connectionPool(new ConnectionPool(MAX_CONN_COUNT, ALIVE, TimeUnit.MINUTES))//创建连接池
                 .hostnameVerifier((hostname, session) -> hostname.equalsIgnoreCase(session.getPeerHost()));//IP主机校验
-        if (ssl != null) client.sslSocketFactory(ssl, TrustManagers.newInstance());//内置证书校验
+        if (ssl != null) client.sslSocketFactory(ssl, TrustManagers.getInstance());//内置证书校验
         ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS)
                 .tlsVersions(TlsVersion.TLS_1_3, TlsVersion.TLS_1_2, TlsVersion.TLS_1_1, TlsVersion.TLS_1_0)
                 .allEnabledCipherSuites()

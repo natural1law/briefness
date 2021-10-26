@@ -12,7 +12,7 @@ import okhttp3.Response;
 
 public final class OkHttpInterceptor implements Interceptor {
 
-    private static volatile OkHttpInterceptor okHttpInterceptor;
+
     private final Map<String, String> headers = new ConcurrentHashMap<>();
 
     private OkHttpInterceptor() {
@@ -20,23 +20,29 @@ public final class OkHttpInterceptor implements Interceptor {
         headers.putAll(Configuration.getHeaders());
     }
 
+    protected static OkHttpInterceptor getInstance(){
+        return SingletonHolder.newInstance();
+    }
+
     private static final class SingletonHolder {
+
+        private static volatile OkHttpInterceptor okHttpInterceptor;
+
         private SingletonHolder() {
         }
 
         private static final OkHttpInterceptor INSTANCE = new OkHttpInterceptor();
-    }
 
-    @SuppressWarnings("WeakerAccess")
-    protected static OkHttpInterceptor newInstance() {
-        if (okHttpInterceptor == null) {
-            synchronized (OkHttpInterceptor.class) {
-                if (okHttpInterceptor == null) {
-                    okHttpInterceptor = SingletonHolder.INSTANCE;
+        private static OkHttpInterceptor newInstance() {
+            if (okHttpInterceptor == null) {
+                synchronized (OkHttpInterceptor.class) {
+                    if (okHttpInterceptor == null) {
+                        okHttpInterceptor = INSTANCE;
+                    }
                 }
             }
+            return okHttpInterceptor;
         }
-        return okHttpInterceptor;
     }
 
     @NotNull
@@ -44,10 +50,12 @@ public final class OkHttpInterceptor implements Interceptor {
     public Response intercept(@NotNull Chain chain) throws IOException {
         //请求
         Request request = chain.request();
-        Request.Builder requestBuilder = request.newBuilder();
-        headers.forEach(requestBuilder::addHeader);
-        Configuration.setShowRequest(requestBuilder.build().toString());
+        Request.Builder rb = request.newBuilder();
+        rb.addHeader("Connection", "Upgrade, HTTP2-Settings")
+                .addHeader("Upgrade", "h2c");
+        headers.forEach(rb::addHeader);
+        Configuration.setShowRequest(rb.build().toString());
         //响应
-        return chain.proceed(requestBuilder.build());
+        return chain.proceed(rb.build());
     }
 }

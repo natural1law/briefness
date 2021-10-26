@@ -26,9 +26,10 @@ import java.util.concurrent.Executors;
  * 请求网络
  * request network
  */
+@SuppressWarnings({"unused", "FieldMayBeFinal"})
 public final class Rn {
 
-    private static volatile Executor executor = Executors.newWorkStealingPool();
+    private static volatile Executor executor = Executors.newCachedThreadPool();
 
     /**
      * 设置请求头
@@ -64,6 +65,7 @@ public final class Rn {
                 .setDisconnect(disconnect)
                 .setException(exception)
                 .build());
+        Executors.newFixedThreadPool(10);
     }
 
     /**
