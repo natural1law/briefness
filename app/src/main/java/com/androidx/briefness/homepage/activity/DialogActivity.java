@@ -7,7 +7,6 @@ import static com.androidx.view.scan.ScanActivity.RESULT_KEY;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -15,7 +14,6 @@ import android.widget.FrameLayout;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
@@ -44,8 +42,7 @@ public final class DialogActivity extends BaseActivity {
     private ActivityResultLauncher<Intent> launcher;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate() {
         setContentView(R.layout.activity_dialog);
         unbinder = ButterKnife.bind(aThis);
         initView();
@@ -62,7 +59,7 @@ public final class DialogActivity extends BaseActivity {
     }
 
     @Override
-    public void onDestroy() {
+    protected void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
     }

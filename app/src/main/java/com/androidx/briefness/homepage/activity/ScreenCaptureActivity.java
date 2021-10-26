@@ -3,13 +3,11 @@ package com.androidx.briefness.homepage.activity;
 import static com.androidx.briefness.base.App.toasts;
 
 import android.annotation.SuppressLint;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -41,15 +39,9 @@ public final class ScreenCaptureActivity extends BaseActivity {
     private Unbinder unbinder;
     private ScreenRecording sr;
 
-    @SuppressLint("SetTextI18n")
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        try {
-            super.onCreate(savedInstanceState);
-            initView();
-        } catch (Exception e) {
-            Log.e("截屏异常", Log.getStackTraceString(e));
-        }
+    protected void onCreate() {
+        initView();
     }
 
     @Override
@@ -58,7 +50,7 @@ public final class ScreenCaptureActivity extends BaseActivity {
     }
 
     @Override
-    public void onDestroy() {
+    protected void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
         sr.onDestroy();

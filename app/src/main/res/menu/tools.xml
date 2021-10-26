@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <item
+        app:menu_title="分享"
+        tools:ignore="MenuTitle" />
+    <item
+        app:menu_title="编辑"
+        tools:ignore="MenuTitle" />
+    <item
+        app:menu_title="删除"
+        tools:ignore="MenuTitle" />
+</menu>

@@ -1,18 +1,11 @@
 package com.androidx.briefness.base.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.fragment.app.FragmentActivity;
 
 import com.androidx.briefness.R;
 import com.androidx.view.bar.BaseFragment;
@@ -35,31 +28,17 @@ public final class MyPageFrag extends BaseFragment {
     public AppCompatTextView titleView;
 
     private Unbinder unbinder;
-    private FragmentActivity fThis;
 
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        this.fThis = (FragmentActivity) context;
+    protected View onCreateView() {
+        return setRootView(R.layout.frag_my);
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return setRootView(inflater, container, R.layout.frag_my);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    protected void onViewCreated(View view) {
         unbinder = ButterKnife.bind(this, view);
-        titleLayout.setBackgroundColor(fThis.getResources().getColor(R.color.gray, fThis.getTheme()));
-        titleView.setTextColor(getResources().getColor(R.color.black1, fThis.getTheme()));
+        titleLayout.setBackgroundColor(context.getResources().getColor(R.color.gray, context.getTheme()));
+        titleView.setTextColor(getResources().getColor(R.color.black1, context.getTheme()));
         returnView.setVisibility(View.GONE);
         titleView.setText("我的");
     }

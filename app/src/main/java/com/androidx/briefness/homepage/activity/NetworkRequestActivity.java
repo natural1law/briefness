@@ -10,12 +10,10 @@ import static com.androidx.reduce.tools.Convert.Timestamp.DATE_FORMAT10;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -65,18 +63,15 @@ public final class NetworkRequestActivity extends BaseActivity {
 
     private static native String publicKey();
 
-    @SuppressLint("SetTextI18n")
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        try {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_network);
-            unbinder = ButterKnife.bind(aThis);
-            titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
-            titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));
-            imageView.setVisibility(View.VISIBLE);
-            imageView.setColorFilter(R.color.black);
-            titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
+    protected void onCreate() {
+        setContentView(R.layout.activity_network);
+        unbinder = ButterKnife.bind(aThis);
+        titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
+        titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));
+        imageView.setVisibility(View.VISIBLE);
+        imageView.setColorFilter(R.color.black);
+        titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
 //            initView();
 //            KeyPair key = Secure.RSA.keyPair();
 //            String k1;
@@ -86,10 +81,7 @@ public final class NetworkRequestActivity extends BaseActivity {
 //            String v1;
 //            toasts.i("私钥加密", v1 = Secure.RSA.encryptPrivate(k2, "http://192.168.1.122:9981/api/user/login.ios"));
 //            toasts.i("公钥加密", Secure.RSA.decryptPublic(k1, v1));
-            toasts.i("数据", key = Secure.AES.key());
-        } catch (Exception e) {
-            toasts.e("收到数据", e);
-        }
+        toasts.i("数据", key = Secure.AES.key());
     }
 
     @Override

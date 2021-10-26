@@ -40,6 +40,8 @@
         <activity android:name=".homepage.activity.ScreenCaptureActivity" />
         <!--分页演示-->
         <activity android:name=".homepage.activity.PageRecyclerViewActivity" />
+        <!--长按菜单演示-->
+        <activity android:name=".homepage.activity.MenuActivity" />
 
         <service
             android:name=".homepage.service.NotificationService"

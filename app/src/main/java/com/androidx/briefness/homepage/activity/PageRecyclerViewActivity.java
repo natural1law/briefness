@@ -1,19 +1,18 @@
 package com.androidx.briefness.homepage.activity;
 
 import android.annotation.SuppressLint;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.androidx.briefness.R;
+import com.androidx.briefness.base.BaseActivity;
 import com.androidx.briefness.homepage.adapter.PageAdapter;
 import com.androidx.http.use.Rn;
 import com.androidx.reduce.tools.Idle;
@@ -34,7 +33,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 @SuppressLint("NonConstantResourceId")
-public class PageRecyclerViewActivity extends AppCompatActivity {
+public class PageRecyclerViewActivity extends BaseActivity {
 
     private final AppCompatActivity aThis = this;
     @BindView(R.id.title_layout)
@@ -70,10 +69,8 @@ public class PageRecyclerViewActivity extends AppCompatActivity {
         return reStr;
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void onCreate() {
         setContentView(R.layout.activity_pagerecyclerview);
         unbinder = ButterKnife.bind(aThis);
         titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));

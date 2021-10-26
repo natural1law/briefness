@@ -3,15 +3,10 @@ package com.androidx.briefness.base.fragment;
 import static com.androidx.briefness.base.App.appThis;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.androidx.briefness.R;
 import com.androidx.briefness.homepage.activity.DialogActivity;
 import com.androidx.briefness.homepage.activity.EchartsActivity;
+import com.androidx.briefness.homepage.activity.MenuActivity;
 import com.androidx.briefness.homepage.activity.MsgShowActivity;
 import com.androidx.briefness.homepage.activity.NetworkRequestActivity;
 import com.androidx.briefness.homepage.activity.PageRecyclerViewActivity;
@@ -42,10 +38,6 @@ import butterknife.Unbinder;
 @SuppressLint("NonConstantResourceId")
 public final class HomePageFrag extends BaseFragment {
 
-    private final List<String> list = new ArrayList<>();
-    private final Bundle bundle = new Bundle();
-    private final String[] arr = {"Toast功能演示", "dialog功能演示", "图表功能演示", "Tab导航栏功能演示", "网络请求接口演示", "截屏录屏功能演示",
-            "分页功能演示"};
     @BindView(R.id.title_layout)
     public FrameLayout titleLayout;
     @BindView(R.id.title_return_image)
@@ -54,30 +46,22 @@ public final class HomePageFrag extends BaseFragment {
     public AppCompatTextView titleView;
     @BindView(R.id.homepage_rv)
     public RecyclerView homepageRv;
-    private Context c;
+
     private Unbinder unbinder;
     private HomepageAdapter adapter;
 
+    private final List<String> list = new ArrayList<>();
+    private final Bundle bundle = new Bundle();
+    private final String[] arr = {"Toast功能演示", "dialog功能演示", "图表功能演示", "Tab导航栏功能演示",
+            "网络请求接口演示", "截屏录屏功能演示", "分页功能演示", "长按菜单演示"};
+
     @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        this.c = context;
+    protected View onCreateView() {
+        return setRootView(R.layout.frag_homepage);
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return setRootView(inflater, container, R.layout.frag_homepage);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    protected void onViewCreated(View view) {
         unbinder = ButterKnife.bind(this, view);
         initView();
         initData();
@@ -91,13 +75,13 @@ public final class HomePageFrag extends BaseFragment {
     }
 
     private void initView() {
-        titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, c.getTheme()));
-        titleView.setTextColor(getResources().getColor(R.color.black1, c.getTheme()));
+        titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, context.getTheme()));
+        titleView.setTextColor(getResources().getColor(R.color.black1, context.getTheme()));
         returnView.setVisibility(View.GONE);
 
         titleView.setText("目录");
 
-        homepageRv.setLayoutManager(new LinearLayoutManager(c));
+        homepageRv.setLayoutManager(new LinearLayoutManager(context));
         homepageRv.setAdapter(adapter = new HomepageAdapter());
 
     }
@@ -112,27 +96,28 @@ public final class HomePageFrag extends BaseFragment {
             if (list.isEmpty()) return;
             if (list.get(position).equals(list.get(0))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
-                appThis.activity(c, MsgShowActivity.class, bundle).start();
+                appThis.activity(context, MsgShowActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(1))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
-                appThis.activity(c, DialogActivity.class, bundle).start();
+                appThis.activity(context, DialogActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(2))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
-                appThis.activity(c, EchartsActivity.class, bundle).start();
+                appThis.activity(context, EchartsActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(3))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
-                appThis.activity(c, TabActivity.class, bundle).start();
+                appThis.activity(context, TabActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(4))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
-                appThis.activity(c, NetworkRequestActivity.class, bundle).start();
+                appThis.activity(context, NetworkRequestActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(5))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
-                appThis.activity(c, ScreenCaptureActivity.class, bundle).start();
+                appThis.activity(context, ScreenCaptureActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(6))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
-                appThis.activity(c, PageRecyclerViewActivity.class, bundle).start();
+                appThis.activity(context, PageRecyclerViewActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(7))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
+                appThis.activity(context, MenuActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(8))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(9))) {

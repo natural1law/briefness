@@ -1,5 +1,7 @@
 package com.androidx.briefness.base;
 
+import static com.androidx.briefness.base.App.toasts;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -26,6 +28,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
+    protected abstract void onCreate();
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         getWindow().setFormat(PixelFormat.TRANSLUCENT);//（这个对宿主没什么影响，建议声明）
@@ -33,6 +37,11 @@ public abstract class BaseActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_LEFT_ICON);
         getWindow().setNavigationBarColor(getResources().getColor(R.color.gray, getTheme()));
         super.onCreate(savedInstanceState);
+        try {
+            this.onCreate();
+        } catch (Exception e) {
+            toasts.e(getClass().getName(), e);
+        }
     }
 
     @Override
@@ -41,7 +50,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onDestroy() {
+    protected void onDestroy() {
         super.onDestroy();
     }
 

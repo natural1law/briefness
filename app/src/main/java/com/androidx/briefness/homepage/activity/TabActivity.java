@@ -1,20 +1,17 @@
 package com.androidx.briefness.homepage.activity;
 
 import android.annotation.SuppressLint;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.androidx.briefness.R;
+import com.androidx.briefness.base.BaseActivity;
 import com.androidx.briefness.homepage.fragment.tab.CommonFragment;
 import com.androidx.briefness.homepage.fragment.tab.SegmentFragment;
 import com.androidx.briefness.homepage.fragment.tab.SlidingFragment;
@@ -33,7 +30,7 @@ import butterknife.Unbinder;
  * @date 2021/07/02
  */
 @SuppressLint("NonConstantResourceId")
-public class TabActivity extends AppCompatActivity {
+public class TabActivity extends BaseActivity {
 
     private final TabActivity aThis = this;
     @BindView(R.id.title_layout)
@@ -50,15 +47,10 @@ public class TabActivity extends AppCompatActivity {
     private TabLayoutBar tabView;
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        try {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_tab);
-            unbinder = ButterKnife.bind(aThis);
-            initView();
-        } catch (Exception e) {
-            Log.e("Tab导航异常", Log.getStackTraceString(e));
-        }
+    protected void onCreate() {
+        setContentView(R.layout.activity_tab);
+        unbinder = ButterKnife.bind(aThis);
+        initView();
     }
 
     @Override
