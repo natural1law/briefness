@@ -65,7 +65,6 @@ public final class Rn {
                 .setDisconnect(disconnect)
                 .setException(exception)
                 .build());
-        Executors.newFixedThreadPool(10);
     }
 
     /**
