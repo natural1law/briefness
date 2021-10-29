@@ -56,5 +56,6 @@ public final class MsgShowActivity extends BaseActivity {
     }
 
     private void initView() {
+
     }
 }

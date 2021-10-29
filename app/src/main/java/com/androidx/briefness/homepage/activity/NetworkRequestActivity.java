@@ -2,7 +2,7 @@ package com.androidx.briefness.homepage.activity;
 
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.provider.Telephony.Carriers.USER;
-import static com.androidx.briefness.base.App.mc;
+import static com.androidx.briefness.base.App.kv;
 import static com.androidx.briefness.base.App.toasts;
 import static com.androidx.briefness.homepage.service.NotificationService.enqueue;
 import static com.androidx.reduce.tools.Convert.Timestamp.DATE_FORMAT10;
@@ -101,7 +101,8 @@ public final class NetworkRequestActivity extends BaseActivity {
     }
 
     private void initView() {
-        mc.setApply(USER, "小纯");
+//        mc.setApply(USER, "小纯");
+        kv.encode(USER, "小纯");
         Intent intent = new Intent(aThis, NotificationService.class);
         intent.addFlags(FLAG_ACTIVITY_NEW_TASK);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

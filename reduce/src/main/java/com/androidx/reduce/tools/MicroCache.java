@@ -3,16 +3,14 @@ package com.androidx.reduce.tools;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Message;
-import android.util.Log;
 
+import java.util.HashSet;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 import java.util.WeakHashMap;
 
 /**
- * 微程序缓冲储存器
+ * 轻量级程序缓储存器
  *
  * @date 2021/02/20
  */
@@ -20,7 +18,6 @@ import java.util.WeakHashMap;
 public final class MicroCache {
 
     private final SharedPreferences sp;
-    private final Message msg = new Message();
     private final SharedPreferences.Editor editor;
 
     private MicroCache(Context context, String name, int mode) {
@@ -76,40 +73,28 @@ public final class MicroCache {
         }
     }
 
-    public MicroCache getValue(String key) {
-        try {
-            if (getAll().isEmpty()) return this;
-            getAll().forEach((k, v) -> {
-                if (Objects.equals(key, k)) msg.obj = v;
-            });
-        } catch (Exception e) {
-            Log.e("MicroCache异常", Log.getStackTraceString(e));
-        }
-        return this;
+    public String getString(String key) {
+        return sp.getString(key, "");
     }
 
-    public String toString() {
-        return msg.obj == null ? "" : String.valueOf(msg.obj);
+    public int getInt(String key) {
+        return sp.getInt(key, 0);
     }
 
-    public int toInt() {
-        if (msg.obj == null) return 0;
-        return msg.obj instanceof Integer ? Integer.parseInt(msg.obj.toString()) : 0;
+    public long getLong(String key) {
+        return sp.getLong(key, 0);
     }
 
-    public long toLong() {
-        if (msg.obj == null) return 0;
-        return msg.obj instanceof Long ? Long.parseLong(msg.obj.toString()) : 0;
+    public float getFloat(String key) {
+        return sp.getFloat(key, 0);
     }
 
-    public float toFloat() {
-        if (msg.obj == null) return 0;
-        return msg.obj instanceof Float ? Float.parseFloat(msg.obj.toString()) : 0.0f;
+    public boolean getBoolean(String key) {
+        return sp.getBoolean(key, false);
     }
 
-    public boolean toBoolean() {
-        if (msg.obj == null) return false;
-        return msg.obj instanceof Boolean && Boolean.parseBoolean(msg.obj.toString());
+    public Set<String> getStringSet(String key) {
+        return sp.getStringSet(key, new HashSet<>());
     }
 
     public Map<String, ?> getAll() {

@@ -90,4 +90,6 @@ dependencies {
     //noinspection AnnotationProcessorOnCompilePath
     implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
+
+    implementation 'com.tencent:mmkv-static:1.2.11'
 }

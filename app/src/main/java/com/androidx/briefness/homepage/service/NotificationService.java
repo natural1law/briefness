@@ -1,7 +1,7 @@
 package com.androidx.briefness.homepage.service;
 
 import static android.provider.Telephony.Carriers.USER;
-import static com.androidx.briefness.base.App.mc;
+import static com.androidx.briefness.base.App.kv;
 import static com.androidx.briefness.base.App.toasts;
 
 import android.annotation.SuppressLint;
@@ -35,7 +35,8 @@ public class NotificationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         flags = START_STICKY;
         Map<String, Object> map = new WeakHashMap<>();
-        map.put(USER, mc.getValue(USER).toString());
+//        map.put(USER, mc.getString(USER));
+        map.put(USER, kv.decodeString(USER));
         startForeground(1, NotificationBar.setOther(getApplicationContext(), "通知", "消息推送服务已开启", R.mipmap.radio_on));
         enqueue = Rn.initWebSocket("http://192.168.1.133:8082/cmp/push/notification", map);
         enqueue.setMsgCallback((code, msg, data) -> {

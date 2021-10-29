@@ -6,12 +6,14 @@ import android.content.Context;
 import com.androidx.reduce.tools.MicroCache;
 import com.androidx.reduce.tools.This;
 import com.androidx.reduce.tools.Toasts;
+import com.tencent.mmkv.MMKV;
 
 public class App extends Application {
 
     public static volatile Toasts toasts;
     public static volatile This appThis;
     public static volatile MicroCache mc;
+    public static volatile MMKV kv;
 
     static {
         Runtime.getRuntime().loadLibrary("url");
@@ -20,6 +22,8 @@ public class App extends Application {
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        MMKV.initialize(base);
+        kv = MMKV.defaultMMKV();
         toasts = Toasts.builder(base).setDebug(true);
         mc = MicroCache.getInstance(base);
         appThis = This.build();
