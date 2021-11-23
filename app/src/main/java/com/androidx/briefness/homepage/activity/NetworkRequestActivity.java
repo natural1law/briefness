@@ -3,7 +3,6 @@ package com.androidx.briefness.homepage.activity;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.provider.Telephony.Carriers.USER;
 import static com.androidx.briefness.base.App.kv;
-import static com.androidx.briefness.base.App.toasts;
 import static com.androidx.briefness.homepage.service.NotificationService.enqueue;
 import static com.androidx.reduce.tools.Convert.Timestamp.DATE_FORMAT10;
 
@@ -81,7 +80,6 @@ public final class NetworkRequestActivity extends BaseActivity {
 //            String v1;
 //            toasts.i("私钥加密", v1 = Secure.RSA.encryptPrivate(k2, "http://192.168.1.122:9981/api/user/login.ios"));
 //            toasts.i("公钥加密", Secure.RSA.decryptPublic(k1, v1));
-        toasts.i("数据", key = Secure.AES.key());
     }
 
     @Override

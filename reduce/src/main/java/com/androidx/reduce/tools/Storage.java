@@ -243,6 +243,31 @@ public final class Storage {
             return cr.insert(uri, values);
         }
 
+        /**
+         * 将文件保存到本地存储中
+         *
+         * @param msg 将要保存的数据
+         * @param url 保存地址 (Storage.Locality.generateDownloadPath("log.txt"))
+         * @param <M> 消息类型
+         */
+        public static <M> boolean toFile(M msg, String url) {
+            try {
+                String m;
+                if (msg instanceof Throwable) m = Log.getStackTraceString((Throwable) msg);
+                else m = String.valueOf(msg);
+                FileOutputStream fos = new FileOutputStream(url);
+                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
+                writer.write(m, 0, m.length());
+                writer.close();
+                fos.flush();
+                fos.close();
+                return true;
+            } catch (Exception e) {
+                Log.e(Locality.class.getName(), Log.getStackTraceString(e));
+                return false;
+            }
+        }
+
     }
 
     /**
