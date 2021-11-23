@@ -34,8 +34,6 @@ public final class Control {
 
     public static final class MD5 {
 
-        private static final long timestamp = System.currentTimeMillis();
-
         private MD5() {
         }
 
@@ -52,7 +50,7 @@ public final class Control {
                     sb.append("0");
                 }
             }
-            String salt = sb.toString() + timestamp;
+            String salt = sb.toString();
             cleartext = String.valueOf(md5Hex(cleartext + salt));
             char[] cs = new char[48];
             for (int i = 0; i < 48; i += 3) {
@@ -111,7 +109,7 @@ public final class Control {
                     cs1[i / 3 * 2 + 1] = ciphertext.charAt(i + 2);
                     cs2[i / 3] = ciphertext.charAt(i + 1);
                 }
-                String salt = new String(cs2) + timestamp;
+                String salt = new String(cs2);
                 return String.valueOf(md5Hex(cleartext + salt)).equals(new String(cs1));
             } catch (Exception e) {
                 Log.e("校验MD5密码异常", String.valueOf(e.getMessage()));
@@ -613,8 +611,8 @@ public final class Control {
             for (int i = '9'; i >= '0'; i--) {
                 base64Alphabet[i] = (byte) (i - '0' + 52);
             }
-            base64Alphabet['+'] = 62;
-            base64Alphabet['$'] = 63;
+            base64Alphabet['@'] = 62;
+            base64Alphabet[';'] = 63;
 
             for (int i = 0; i <= 25; i++) {
                 lookUpBase64Alphabet[i] = (char) ('A' + i);
@@ -625,8 +623,8 @@ public final class Control {
             for (int i = 52, j = 0; i <= 61; i++, j++) {
                 lookUpBase64Alphabet[i] = (char) ('0' + j);
             }
-            lookUpBase64Alphabet[62] = '+';
-            lookUpBase64Alphabet[63] = '$';
+            lookUpBase64Alphabet[62] = '@';
+            lookUpBase64Alphabet[63] = ';';
 
         }
 

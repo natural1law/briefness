@@ -158,6 +158,25 @@ public final class Secure {
     }
 
     public static final class Base64 {
+
+        static { Runtime.getRuntime().loadLibrary("use"); }
+
+        /**
+         * Base64加密
+         *
+         * @param cleartext 明文
+         * @return 加密成密文
+         */
+        public static native String encode(String cleartext);
+
+        /**
+         * Base64解密
+         *
+         * @param ciphertext 密文
+         * @return 解密成明文
+         */
+        public static native String decode(String ciphertext);
+
         private Base64() {
         }
 
@@ -171,14 +190,9 @@ public final class Secure {
             return Control.Base64.encode(data);
         }
 
-        /**
-         * Base64解密
-         *
-         * @param data 保存的数据
-         * @return 解密后的字符串
-         */
-        public static byte[] decode(String data) {
-            return Control.Base64.decode(data);
+
+        public static byte[] decode(String... data) {
+            return Control.Base64.decode(data[0]);
         }
     }
 

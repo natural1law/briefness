@@ -30,10 +30,6 @@ public final class InsecureSHA1PRNGKey {
     private static final int[] LEFT = {0, 24, 16, 8};
     private static final int[] MASK = {0xFFFFFFFF, 0x00FFFFFF, 0x0000FFFF,
             0x000000FF};
-    // HASHBYTES_TO_USE defines # of bytes returned by "computeHash(byte[])"
-    // to use to form byte array returning by the "nextBytes(byte[])" method
-    // Note, that this implementation uses more bytes than it is defined
-    // in the above specification.
     private static final int HASHBYTES_TO_USE = 20;
     // value of 16 defined in the "SECURE HASH STANDARD", FIPS PUB 180-2
     private static final int FRAME_LENGTH = 16;
@@ -321,7 +317,7 @@ public final class InsecureSHA1PRNGKey {
      * In case of incorrect array passed to the method
      * either NPE or IndexOutOfBoundException gets thrown by JVM.
      *
-     * @params arrW - integer array; arrW.length >= (BYTES_OFFSET+6); <BR>
+     * @param arrW - integer array; arrW.length >= (BYTES_OFFSET+6); <BR>
      * only first (BYTES_OFFSET+6) words are used
      */
     private static void computeHash(int[] arrW) {
@@ -397,11 +393,11 @@ public final class InsecureSHA1PRNGKey {
      * No checks on arguments passed to the method, that is,
      * a calling method is responsible for such checks.
      *
-     * @params intArray  - int array containing bytes to which to append;
+     * @param intArray  - int array containing bytes to which to append;
      * intArray.length >= (BYTES_OFFSET+6)
-     * @params byteInput - array of bytes to use for the update
-     * @params from      - the offset to start in the "byteInput" array
-     * @params to        - a number of the last byte in the input array to use,
+     * @param byteInput - array of bytes to use for the update
+     * @param fromByte      - the offset to start in the "byteInput" array
+     * @param toByte        - a number of the last byte in the input array to use,
      * that is, for first byte "to"==0, for last byte "to"==input.length-1
      */
     @SuppressWarnings("SameParameterValue")
