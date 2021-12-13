@@ -1,7 +1,5 @@
 package com.androidx.reduce.tools;
 
-import static java.lang.Boolean.TRUE;
-
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -52,19 +50,15 @@ public final class Storage {
                 sb.delete(0, sb.length());
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath());
-                    for (String s : files) if (!s.contentEquals(".")) sb.append("/").append(s);
+                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
                     Path path = Paths.get(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
                     File file = Paths.get(path.getParent().toString()).toFile();
-                    if (!file.exists()) {
-                        if (!file.mkdirs()) System.out.println(file.setWritable(TRUE));
-                    }
+                    if (!file.exists()) System.out.println(file.mkdirs());
                 } else {
                     sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath());
-                    for (String s : files) if (!s.contentEquals(".")) sb.append("/").append(s);
+                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
                     File file = new File(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
-                    if (!file.exists()) {
-                        if (!file.mkdirs()) System.out.println(file.setWritable(TRUE));
-                    }
+                    if (!file.exists()) System.out.println(file.mkdirs());
                 }
                 return sb.toString();
             } catch (Exception e) {
@@ -79,19 +73,15 @@ public final class Storage {
                 sb.delete(0, sb.length());
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
-                    for (String s : files) if (!s.contentEquals(".")) sb.append("/").append(s);
+                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
                     Path path = Paths.get(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
                     File file = Paths.get(path.getParent().toString()).toFile();
-                    if (!file.exists()) {
-                        if (!file.mkdirs()) System.out.println(file.setWritable(TRUE));
-                    }
+                    if (!file.exists()) System.out.println(file.mkdirs());
                 } else {
                     sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
-                    for (String s : files) if (!s.contentEquals(".")) sb.append("/").append(s);
+                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
                     File file = new File(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
-                    if (!file.exists()) {
-                        if (!file.mkdirs()) System.out.println(file.setWritable(TRUE));
-                    }
+                    if (!file.exists()) System.out.println(file.mkdirs());
                 }
                 return sb.toString();
             } catch (Exception e) {
@@ -106,19 +96,15 @@ public final class Storage {
                 sb.delete(0, sb.length());
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
-                    for (String s : files) if (!s.contentEquals(".")) sb.append("/").append(s);
+                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
                     Path path = Paths.get(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
                     File file = Paths.get(path.getParent().toString()).toFile();
-                    if (!file.exists()) {
-                        if (!file.mkdirs()) System.out.println(file.setWritable(TRUE));
-                    }
+                    if (!file.exists()) System.out.println(file.mkdirs());
                 } else {
                     sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
-                    for (String s : files) if (!s.contentEquals(".")) sb.append("/").append(s);
+                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
                     File file = new File(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
-                    if (!file.exists()) {
-                        if (!file.mkdirs()) System.out.println(file.setWritable(TRUE));
-                    }
+                    if (!file.exists()) System.out.println(file.mkdirs());
                 }
                 return sb.toString();
             } catch (Exception e) {
@@ -133,19 +119,15 @@ public final class Storage {
                 sb.delete(0, sb.length());
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                     sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath());
-                    for (String s : files) if (!s.contentEquals(".")) sb.append("/").append(s);
+                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
                     Path path = Paths.get(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
                     File file = Paths.get(path.getParent().toString()).toFile();
-                    if (!file.exists()) {
-                        if (!file.mkdirs()) System.out.println(file.setWritable(TRUE));
-                    }
+                    if (!file.exists()) System.out.println(file.mkdirs());
                 } else {
                     sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath());
-                    for (String s : files) if (!s.contentEquals(".")) sb.append("/").append(s);
+                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
                     File file = new File(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
-                    if (!file.exists()) {
-                        if (!file.mkdirs()) System.out.println(file.setWritable(TRUE));
-                    }
+                    if (!file.exists()) System.out.println(file.mkdirs());
                 }
                 return sb.toString();
             } catch (Exception e) {

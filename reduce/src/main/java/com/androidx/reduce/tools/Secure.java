@@ -180,20 +180,6 @@ public final class Secure {
         private Base64() {
         }
 
-        /**
-         * Base64加密
-         *
-         * @param data 数据
-         * @return 加密后的字符串
-         */
-        public static String encode(byte[] data) {
-            return Control.Base64.encode(data);
-        }
-
-
-        public static byte[] decode(String... data) {
-            return Control.Base64.decode(data[0]);
-        }
     }
 
     public static final class RSA {

@@ -3,12 +3,13 @@ package com.androidx.briefness.homepage.activity;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.provider.Telephony.Carriers.USER;
 import static com.androidx.briefness.base.App.kv;
+import static com.androidx.briefness.base.App.toasts;
 import static com.androidx.briefness.homepage.service.NotificationService.enqueue;
-import static com.androidx.reduce.tools.Convert.Timestamp.DATE_FORMAT10;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -20,16 +21,18 @@ import androidx.appcompat.widget.AppCompatTextView;
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
 import com.androidx.briefness.homepage.module.Module;
+import com.androidx.briefness.homepage.module.SendModule;
 import com.androidx.briefness.homepage.service.NotificationService;
 import com.androidx.http.use.Rn;
-import com.androidx.reduce.tools.Convert;
 import com.androidx.reduce.tools.Idle;
 import com.androidx.reduce.tools.Secure;
+import com.androidx.reduce.tools.Storage;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.protobuf.ByteString;
-import com.module.protobuf.MsgModule;
 
 import java.util.Map;
-import java.util.Random;
+import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import butterknife.BindView;
@@ -58,9 +61,13 @@ public final class NetworkRequestActivity extends BaseActivity {
 
     private static native String url1();
 
+    private static native String wsUrl();
+
     private static native String ios();
 
     private static native String publicKey();
+
+    private String publicKey;
 
     @Override
     protected void onCreate() {
@@ -71,6 +78,12 @@ public final class NetworkRequestActivity extends BaseActivity {
         imageView.setVisibility(View.VISIBLE);
         imageView.setColorFilter(R.color.black);
         titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
+
+        Map<String, Object> map = new WeakHashMap<>();
+        map.put("id", "123");
+        enqueue = Rn.initWebSocket(wsUrl(), map);
+        enqueue.setMsgCallback((code, msg, data) -> publicKey = data.toStringUtf8());
+        Log.i("地址", Storage.Locality.generateDownloadPath("cigarette","历史纪录",".xlsx"));
 //            initView();
 //            KeyPair key = Secure.RSA.keyPair();
 //            String k1;
@@ -112,13 +125,14 @@ public final class NetworkRequestActivity extends BaseActivity {
 
     @OnClick(R.id.network_send)
     public void send() {
-        MsgModule.MsgRequest request = MsgModule.MsgRequest.newBuilder()
-                .setCode(200)
-                .setUserId("小纯")
-                .setData(ByteString.copyFromUtf8("你好"))
-                .setSendTime(Convert.Timestamp.refining(System.currentTimeMillis(), DATE_FORMAT10))
-                .build();
-        enqueue.send(1, request.toByteArray());
+//        MsgModule.MsgRequest request = MsgModule.MsgRequest.newBuilder()
+//                .setCode(200)
+//                .setUserId("小纯")
+//                .setData(ByteString.copyFromUtf8("你好"))
+//                .setSendTime(Convert.Timestamp.refining(System.currentTimeMillis(), DATE_FORMAT10))
+//                .build();
+//        enqueue.send(1, request.toByteArray());
+
     }
 
     @OnClick(R.id.network_send1)
@@ -130,23 +144,29 @@ public final class NetworkRequestActivity extends BaseActivity {
         Rn.sendMapPost(url(), param, data -> contentView.setText(data));
     }
 
-    private String key;
-
     @OnClick(R.id.network_send2)
     public void send2() {
-        Random rand = new Random();
-        String rand1 = String.valueOf(rand.nextInt(1000000) + 1);
-//        byte[] param = Secure.RSA.encryptPublic(publicKey(), rand1).getBytes();
-        byte[] param = Secure.AES.encrypt(key, rand1).getBytes();
-        Rn.sendBytes(url1(), param, data -> {
-            Module.Result builder = Module.Result.parseFrom(data);
-            contentView.setText(builder.toString());
+        String key = Secure.AES.key();
+        String rsaKey = Secure.RSA.encryptPublic(publicKey, key);
+        JsonObject json = new JsonObject();
+        json.addProperty("mobile", "15555555555");
+        json.addProperty("pass", "123456");
+        String encode = Secure.AES.encrypt(key, json.toString());
+        SendModule.Request request = SendModule.Request.newBuilder()
+                .setToken(rsaKey)
+                .setData(ByteString.copyFromUtf8(encode))
+                .build();
+        Rn.sendBytes(url1(), request.toByteArray(), data -> {
+            Module.Result result = Module.Result.parseFrom(data);
+            if (result.getCode() == 0) {
+                if (Secure.RSA.verify(result.getPuk(), result.getToken(), result.getSign())){
+                    String aesKey = Secure.RSA.decryptPublic(publicKey, result.getToken());
+                    String decode = Secure.AES.decrypt(aesKey, result.getData());
+                    JsonObject json1 = new Gson().fromJson(decode, JsonObject.class);
+                    contentView.setText(json1.toString());
+                } else contentView.setText("数据被篡改");
+            } else toasts.setMsg(result.getMsg()).showError();
         });
-//        JsonObject json = new JsonObject();
-//        json.addProperty("data", "18604900857");
-//        Map<String, Object> map = new ConcurrentHashMap<>();
-//        map.put("data", "18604900857");
-//        NetRequest.sendMapPost(ios(), map, data -> contentView.setText(data));
     }
 
 
