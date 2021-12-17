@@ -12,6 +12,7 @@ public final class MessageModule {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
+
   public interface RequestOrBuilder extends
       // @@protoc_insertion_point(interface_extends:Request)
       com.google.protobuf.MessageOrBuilder {
@@ -28,19 +29,74 @@ public final class MessageModule {
 
     /**
      * <pre>
-     *发送数据
+     * 发送数据
      * </pre>
      *
      * <code>bytes data = 2;</code>
+     *
      * @return The data.
      */
     com.google.protobuf.ByteString getData();
   }
+
+  private static final com.google.protobuf.Descriptors.FileDescriptor
+      descriptor;
+
+  public interface ResponseOrBuilder extends
+      // @@protoc_insertion_point(interface_extends:Response)
+      com.google.protobuf.MessageOrBuilder {
+
+    /**
+     * <pre>
+     * 响应状态
+     * </pre>
+     *
+     * <code>sint32 code = 1;</code>
+     *
+     * @return The code.
+     */
+    int getCode();
+
+    /**
+     * <pre>
+     * 响应信息
+     * </pre>
+     *
+     * <code>string msg = 2;</code>
+     *
+     * @return The msg.
+     */
+    String getMsg();
+
+    /**
+     * <pre>
+     * 响应信息
+     * </pre>
+     *
+     * <code>string msg = 2;</code>
+     *
+     * @return The bytes for msg.
+     */
+    com.google.protobuf.ByteString
+    getMsgBytes();
+
+    /**
+     * <pre>
+     * 接收数据
+     * </pre>
+     *
+     * <code>bytes data = 3;</code>
+     *
+     * @return The data.
+     */
+    com.google.protobuf.ByteString getData();
+  }
+
   /**
    * <pre>
-   *请求结构体
+   * 请求结构体
    * </pre>
-   *
+   * <p>
    * Protobuf type {@code Request}
    */
   public static final class Request extends
@@ -214,8 +270,7 @@ public final class MessageModule {
           != other.getType()) return false;
       if (!getData()
           .equals(other.getData())) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      return unknownFields.equals(other.unknownFields);
     }
 
     @Override
@@ -504,7 +559,7 @@ public final class MessageModule {
        * @return This builder for chaining.
        */
       public Builder setType(int value) {
-        
+
         type_ = value;
         onChanged();
         return this;
@@ -518,7 +573,7 @@ public final class MessageModule {
        * @return This builder for chaining.
        */
       public Builder clearType() {
-        
+
         type_ = 0;
         onChanged();
         return this;
@@ -550,7 +605,7 @@ public final class MessageModule {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+
         data_ = value;
         onChanged();
         return this;
@@ -564,7 +619,7 @@ public final class MessageModule {
        * @return This builder for chaining.
        */
       public Builder clearData() {
-        
+
         data_ = getDefaultInstance().getData();
         onChanged();
         return this;
@@ -622,55 +677,27 @@ public final class MessageModule {
 
   }
 
-  public interface ResponseOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:Response)
-      com.google.protobuf.MessageOrBuilder {
+  private static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_Request_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Request_fieldAccessorTable;
+  private static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_Response_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Response_fieldAccessorTable;
 
-    /**
-     * <pre>
-     *响应状态
-     * </pre>
-     *
-     * <code>sint32 code = 1;</code>
-     * @return The code.
-     */
-    int getCode();
-
-    /**
-     * <pre>
-     *响应信息
-     * </pre>
-     *
-     * <code>string msg = 2;</code>
-     * @return The msg.
-     */
-    String getMsg();
-    /**
-     * <pre>
-     *响应信息
-     * </pre>
-     *
-     * <code>string msg = 2;</code>
-     * @return The bytes for msg.
-     */
-    com.google.protobuf.ByteString
-        getMsgBytes();
-
-    /**
-     * <pre>
-     *接收数据
-     * </pre>
-     *
-     * <code>bytes data = 3;</code>
-     * @return The data.
-     */
-    com.google.protobuf.ByteString getData();
+  public static com.google.protobuf.Descriptors.FileDescriptor
+  getDescriptor() {
+    return descriptor;
   }
+
   /**
    * <pre>
-   *响应结构体
+   * 响应结构体
    * </pre>
-   *
+   * <p>
    * Protobuf type {@code Response}
    */
   public static final class Response extends
@@ -734,8 +761,7 @@ public final class MessageModule {
               break;
             }
             default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
+              if (!parseUnknownField(input, unknownFields, extensionRegistry, tag)) {
                 done = true;
               }
               break;
@@ -796,7 +822,7 @@ public final class MessageModule {
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         msg_ = s;
@@ -816,7 +842,7 @@ public final class MessageModule {
         getMsgBytes() {
       Object ref = msg_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
         msg_ = b;
@@ -905,8 +931,7 @@ public final class MessageModule {
           .equals(other.getMsg())) return false;
       if (!getData()
           .equals(other.getData())) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      return unknownFields.equals(other.unknownFields);
     }
 
     @Override
@@ -1204,7 +1229,7 @@ public final class MessageModule {
        * @return This builder for chaining.
        */
       public Builder setCode(int value) {
-        
+
         code_ = value;
         onChanged();
         return this;
@@ -1218,7 +1243,7 @@ public final class MessageModule {
        * @return This builder for chaining.
        */
       public Builder clearCode() {
-        
+
         code_ = 0;
         onChanged();
         return this;
@@ -1257,7 +1282,7 @@ public final class MessageModule {
           getMsgBytes() {
         Object ref = msg_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (String) ref);
           msg_ = b;
@@ -1280,7 +1305,7 @@ public final class MessageModule {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+
         msg_ = value;
         onChanged();
         return this;
@@ -1294,7 +1319,7 @@ public final class MessageModule {
        * @return This builder for chaining.
        */
       public Builder clearMsg() {
-        
+
         msg_ = getDefaultInstance().getMsg();
         onChanged();
         return this;
@@ -1314,7 +1339,7 @@ public final class MessageModule {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-        
+
         msg_ = value;
         onChanged();
         return this;
@@ -1346,7 +1371,7 @@ public final class MessageModule {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+
         data_ = value;
         onChanged();
         return this;
@@ -1360,7 +1385,7 @@ public final class MessageModule {
        * @return This builder for chaining.
        */
       public Builder clearData() {
-        
+
         data_ = getDefaultInstance().getData();
         onChanged();
         return this;
@@ -1417,24 +1442,6 @@ public final class MessageModule {
     }
 
   }
-
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Request_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_Request_fieldAccessorTable;
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Response_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_Response_fieldAccessorTable;
-
-  public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
-    return descriptor;
-  }
-  private static  com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
   static {
     String[] descriptorData = {
       "\n!com.module.protobuf/Message.proto\"%\n\007R" +

@@ -4,8 +4,8 @@ option java_outer_classname = "MsgModule";
 
 //请求结构体
 message MsgRequest {
-  sint32 code = 1;//请求码
-  string userId = 2;//用户ID
-  bytes data = 3;//数据信息
-  string sendTime = 4;//发送时间
+    sint32 code = 1;//请求码
+    string user_id = 2;//用户ID
+    bytes data = 3;//数据信息
+    string send_time = 4;//发送时间
 }

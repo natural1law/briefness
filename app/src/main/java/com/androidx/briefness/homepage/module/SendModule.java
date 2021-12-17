@@ -12,6 +12,7 @@ public final class SendModule {
     registerAllExtensions(
         (com.google.protobuf.ExtensionRegistryLite) registry);
   }
+
   public interface RequestOrBuilder extends
       // @@protoc_insertion_point(interface_extends:Request)
       com.google.protobuf.MessageOrBuilder {
@@ -25,6 +26,7 @@ public final class SendModule {
      * @return The token.
      */
     String getToken();
+
     /**
      * <pre>
      *标记
@@ -34,7 +36,7 @@ public final class SendModule {
      * @return The bytes for token.
      */
     com.google.protobuf.ByteString
-        getTokenBytes();
+    getTokenBytes();
 
     /**
      * <pre>
@@ -45,6 +47,7 @@ public final class SendModule {
      * @return The bulking.
      */
     String getBulking();
+
     /**
      * <pre>
      *增量体
@@ -54,23 +57,39 @@ public final class SendModule {
      * @return The bytes for bulking.
      */
     com.google.protobuf.ByteString
-        getBulkingBytes();
+    getBulkingBytes();
 
     /**
      * <pre>
-     *请求数据
+     * 请求数据
      * </pre>
      *
      * <code>bytes data = 3;</code>
+     *
      * @return The data.
      */
     com.google.protobuf.ByteString getData();
   }
+
+  private static final com.google.protobuf.Descriptors.FileDescriptor
+      descriptor;
+
+  private static final com.google.protobuf.Descriptors.Descriptor
+      internal_static_Request_descriptor;
+  private static final
+  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
+      internal_static_Request_fieldAccessorTable;
+
+  public static com.google.protobuf.Descriptors.FileDescriptor
+  getDescriptor() {
+    return descriptor;
+  }
+
   /**
    * <pre>
-   *响应结构体
+   * 响应结构体
    * </pre>
-   *
+   * <p>
    * Protobuf type {@code Request}
    */
   public static final class Request extends
@@ -183,7 +202,7 @@ public final class SendModule {
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         token_ = s;
@@ -203,7 +222,7 @@ public final class SendModule {
         getTokenBytes() {
       Object ref = token_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
         token_ = b;
@@ -229,7 +248,7 @@ public final class SendModule {
       if (ref instanceof String) {
         return (String) ref;
       } else {
-        com.google.protobuf.ByteString bs = 
+        com.google.protobuf.ByteString bs =
             (com.google.protobuf.ByteString) ref;
         String s = bs.toStringUtf8();
         bulking_ = s;
@@ -249,7 +268,7 @@ public final class SendModule {
         getBulkingBytes() {
       Object ref = bulking_;
       if (ref instanceof String) {
-        com.google.protobuf.ByteString b = 
+        com.google.protobuf.ByteString b =
             com.google.protobuf.ByteString.copyFromUtf8(
                 (String) ref);
         bulking_ = b;
@@ -337,8 +356,7 @@ public final class SendModule {
           .equals(other.getBulking())) return false;
       if (!getData()
           .equals(other.getData())) return false;
-      if (!unknownFields.equals(other.unknownFields)) return false;
-      return true;
+      return unknownFields.equals(other.unknownFields);
     }
 
     @Override
@@ -647,7 +665,7 @@ public final class SendModule {
           getTokenBytes() {
         Object ref = token_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (String) ref);
           token_ = b;
@@ -670,7 +688,7 @@ public final class SendModule {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+
         token_ = value;
         onChanged();
         return this;
@@ -684,7 +702,7 @@ public final class SendModule {
        * @return This builder for chaining.
        */
       public Builder clearToken() {
-        
+
         token_ = getDefaultInstance().getToken();
         onChanged();
         return this;
@@ -704,7 +722,7 @@ public final class SendModule {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-        
+
         token_ = value;
         onChanged();
         return this;
@@ -743,7 +761,7 @@ public final class SendModule {
           getBulkingBytes() {
         Object ref = bulking_;
         if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
+          com.google.protobuf.ByteString b =
               com.google.protobuf.ByteString.copyFromUtf8(
                   (String) ref);
           bulking_ = b;
@@ -766,7 +784,7 @@ public final class SendModule {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+
         bulking_ = value;
         onChanged();
         return this;
@@ -780,7 +798,7 @@ public final class SendModule {
        * @return This builder for chaining.
        */
       public Builder clearBulking() {
-        
+
         bulking_ = getDefaultInstance().getBulking();
         onChanged();
         return this;
@@ -800,7 +818,7 @@ public final class SendModule {
     throw new NullPointerException();
   }
   checkByteStringIsUtf8(value);
-        
+
         bulking_ = value;
         onChanged();
         return this;
@@ -832,7 +850,7 @@ public final class SendModule {
         if (value == null) {
     throw new NullPointerException();
   }
-  
+
         data_ = value;
         onChanged();
         return this;
@@ -846,7 +864,7 @@ public final class SendModule {
        * @return This builder for chaining.
        */
       public Builder clearData() {
-        
+
         data_ = getDefaultInstance().getData();
         onChanged();
         return this;
@@ -903,19 +921,6 @@ public final class SendModule {
     }
 
   }
-
-  private static final com.google.protobuf.Descriptors.Descriptor
-    internal_static_Request_descriptor;
-  private static final 
-    com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_Request_fieldAccessorTable;
-
-  public static com.google.protobuf.Descriptors.FileDescriptor
-      getDescriptor() {
-    return descriptor;
-  }
-  private static  com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
   static {
     String[] descriptorData = {
       "\n\035com/tools/protobuf/Send.proto\"7\n\007Reque" +

@@ -9,7 +9,6 @@ import static com.androidx.briefness.homepage.service.NotificationService.enqueu
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -20,13 +19,12 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
-import com.androidx.briefness.homepage.module.Module;
+import com.androidx.briefness.homepage.module.ReceiveModule;
 import com.androidx.briefness.homepage.module.SendModule;
 import com.androidx.briefness.homepage.service.NotificationService;
 import com.androidx.http.use.Rn;
 import com.androidx.reduce.tools.Idle;
 import com.androidx.reduce.tools.Secure;
-import com.androidx.reduce.tools.Storage;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.protobuf.ByteString;
@@ -83,7 +81,6 @@ public final class NetworkRequestActivity extends BaseActivity {
         map.put("id", "123");
         enqueue = Rn.initWebSocket(wsUrl(), map);
         enqueue.setMsgCallback((code, msg, data) -> publicKey = data.toStringUtf8());
-        Log.i("地址", Storage.Locality.generateDownloadPath("cigarette","历史纪录",".xlsx"));
 //            initView();
 //            KeyPair key = Secure.RSA.keyPair();
 //            String k1;
@@ -104,6 +101,7 @@ public final class NetworkRequestActivity extends BaseActivity {
     public void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
+        enqueue.close();
     }
 
     @OnClick(R.id.title_return_image)
@@ -132,7 +130,6 @@ public final class NetworkRequestActivity extends BaseActivity {
 //                .setSendTime(Convert.Timestamp.refining(System.currentTimeMillis(), DATE_FORMAT10))
 //                .build();
 //        enqueue.send(1, request.toByteArray());
-
     }
 
     @OnClick(R.id.network_send1)
@@ -157,9 +154,9 @@ public final class NetworkRequestActivity extends BaseActivity {
                 .setData(ByteString.copyFromUtf8(encode))
                 .build();
         Rn.sendBytes(url1(), request.toByteArray(), data -> {
-            Module.Result result = Module.Result.parseFrom(data);
-            if (result.getCode() == 0) {
-                if (Secure.RSA.verify(result.getPuk(), result.getToken(), result.getSign())){
+            ReceiveModule.Result result = ReceiveModule.Result.parseFrom(data);
+            if (result.getCode() == 1) {
+                if (Secure.RSA.verify(result.getPuk(), result.getToken(), result.getSign())) {
                     String aesKey = Secure.RSA.decryptPublic(publicKey, result.getToken());
                     String decode = Secure.AES.decrypt(aesKey, result.getData());
                     JsonObject json1 = new Gson().fromJson(decode, JsonObject.class);
@@ -168,7 +165,6 @@ public final class NetworkRequestActivity extends BaseActivity {
             } else toasts.setMsg(result.getMsg()).showError();
         });
     }
-
 
 
 }

@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion 32
     buildToolsVersion '30.0.3'
 
     defaultConfig {
         applicationId "com.androidx.briefness"
         minSdkVersion 24
-        targetSdkVersion 31
+        targetSdkVersion 32
         versionCode 3
         versionName "3.0.0"
         multiDexEnabled true
@@ -84,6 +84,7 @@ dependencies {
 //    implementation(name: 'reduce', ext: 'aar')
     // bindView
     implementation 'com.jakewharton:butterknife:10.2.3'
+    implementation 'com.android.volley:volley:1.2.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
     implementation 'com.github.Justson.AgentWeb:agentweb-core:v4.1.9-androidx'
 
@@ -92,4 +93,7 @@ dependencies {
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.22'
 
     implementation 'com.tencent:mmkv-static:1.2.11'
+
+    implementation 'com.google.protobuf:protoc:3.18.1'
+    implementation 'com.google.protobuf:protobuf-java:3.18.1'
 }

@@ -699,7 +699,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
         }
 
         View tabView = mTabsContainer.getChildAt(position);
-        MsgView tipView = (MsgView) tabView.findViewById(R.id.rtv_msg_tip);
+      MsgView tipView = tabView.findViewById(R.id.rtv_msg_tip);
         if (tipView != null) {
             UnreadMsgUtils.show(tipView, num);
 
@@ -732,8 +732,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
             position = mTabCount - 1;
         }
 
-        View tabView = mTabsContainer.getChildAt(position);
-        MsgView tipView = (MsgView) tabView.findViewById(R.id.rtv_msg_tip);
+      View tabView = mTabsContainer.getChildAt(position);
+      MsgView tipView = tabView.findViewById(R.id.rtv_msg_tip);
         if (tipView != null) {
             tipView.setVisibility(View.GONE);
         }
@@ -746,8 +746,8 @@ public class SlidingTabLayout extends HorizontalScrollView {
         if (position >= mTabCount) {
             position = mTabCount - 1;
         }
-        View tabView = mTabsContainer.getChildAt(position);
-        MsgView tipView = (MsgView) tabView.findViewById(R.id.rtv_msg_tip);
+      View tabView = mTabsContainer.getChildAt(position);
+      MsgView tipView = tabView.findViewById(R.id.rtv_msg_tip);
         if (tipView != null) {
             AppCompatTextView tv_tab_title = tabView.findViewById(R.id.tv_tab_title);
             paint.setTextSize(mTextsize);
@@ -768,7 +768,7 @@ public class SlidingTabLayout extends HorizontalScrollView {
             position = mTabCount - 1;
         }
         View tabView = mTabsContainer.getChildAt(position);
-        return (MsgView) tabView.findViewById(R.id.rtv_msg_tip);
+      return tabView.findViewById(R.id.rtv_msg_tip);
     }
 
     private OnTabSelectListener mListener;

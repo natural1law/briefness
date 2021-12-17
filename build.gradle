@@ -5,9 +5,9 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.20"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10"
         classpath 'com.github.dcendents:android-maven-gradle-plugin:2.1'
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.17' //as3.0以下的要0.8.0版本
+        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.18' //as3.0以下的要0.8.0版本
     }
 }
 
