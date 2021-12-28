@@ -1,5 +1,9 @@
 package com.androidx.http.net.socket;
 
+import static com.androidx.http.net.socket.WebConfiguration.getConnect;
+import static com.androidx.http.net.socket.WebConfiguration.getDisconnect;
+import static com.androidx.http.net.socket.WebConfiguration.getException;
+
 import android.annotation.SuppressLint;
 import android.os.Handler;
 import android.os.Looper;
@@ -55,8 +59,11 @@ public final class SocketRequest implements Enqueue {
       if (actionListener != null) data.getActionListener().online(data.getUser());
       return false;
     } else if (message.what == 0) {
-      if (loginCallback != null) data.getLoginCallback().onSuccess();
-      if (actionListener != null) data.getActionListener().online(data.getUser());
+      if (loginCallback != null && actionListener != null) {
+        data.getLoginCallback().onSuccess();
+        data.getActionListener().online(data.getUser());
+      } else if (loginCallback != null) data.getLoginCallback().onSuccess();
+      else if (actionListener != null) data.getActionListener().online(data.getUser());
       return false;
     } else if (message.what == 1) {
       try {
@@ -80,66 +87,66 @@ public final class SocketRequest implements Enqueue {
 
     @Override
     public void onClosing(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
-            occlude();
-            Log.e("socket断开连接", reason);
-        }
+      occlude();
+      Log.e("socket断开连接", reason);
+    }
 
-        @Override
-        public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
-            reconnect();
-            Log.e("socket连接异常", Log.getStackTraceString(t));
-        }
+    @Override
+    public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, @Nullable Response response) {
+      reconnect();
+      Log.e("socket连接异常", Log.getStackTraceString(t));
+    }
 
-        @Override
-        public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
-          ResModule res = new Gson().fromJson(text, ResModule.class);
-            if (String.valueOf(res.getMsg()).equals(WebConfiguration.getConnect())) {
-                Message message1 = handler.obtainMessage();
-                message1.what = 0;
-                if (loginCallback != null && actionListener != null) {
-                    message1.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
-                } else if (loginCallback == null && actionListener != null) {
-                    message1.obj = new DataModule(res.getUser(), actionListener);
-                } else if (loginCallback != null) {
-                    message1.obj = new DataModule(res.getMsg(), loginCallback);
-                }
-                handler.sendMessage(message1);
-            } else if (String.valueOf(res.getMsg()).equals(WebConfiguration.getException())) {
-                Message message3 = handler.obtainMessage();
-                message3.what = -3;
-                if (loginCallback != null && actionListener != null) {
-                    message3.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
-                } else if (loginCallback == null && actionListener != null) {
-                    message3.obj = new DataModule(res.getUser(), actionListener);
-                } else if (loginCallback != null) {
-                    message3.obj = new DataModule(res.getMsg(), loginCallback);
-                }
-                handler.sendMessage(message3);
-            } else if (String.valueOf(res.getMsg()).equals(WebConfiguration.getDisconnect())) {
-                Message message4 = handler.obtainMessage();
-                message4.what = -2;
-                if (loginCallback != null && actionListener != null) {
-                    message4.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
-                } else if (loginCallback == null && actionListener != null) {
-                    message4.obj = new DataModule(res.getUser(), actionListener);
-                } else if (loginCallback != null) {
-                    message4.obj = new DataModule(res.getMsg(), loginCallback);
-                }
-                handler.sendMessage(message4);
-            } else {
-                webSocket.close(NORMAL_CLOSE, "close");
-                Message message2 = handler.obtainMessage();
-                message2.what = -1;
-                if (loginCallback != null && actionListener != null) {
-                    message2.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
-                } else if (loginCallback == null && actionListener != null) {
-                    message2.obj = new DataModule(res.getUser(), actionListener);
-                } else if (loginCallback != null) {
-                    message2.obj = new DataModule(res.getMsg(), loginCallback);
-                }
-                handler.sendMessage(message2);
-            }
+    @Override
+    public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
+      ResModule res = new Gson().fromJson(text, ResModule.class);
+      if (String.valueOf(res.getMsg()).equals(getConnect())) {
+        Message message1 = handler.obtainMessage();
+        message1.what = 0;
+        if (loginCallback != null && actionListener != null) {
+          message1.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
+        } else if (actionListener != null) {
+          message1.obj = new DataModule(res.getUser(), actionListener);
+        } else if (loginCallback != null) {
+          message1.obj = new DataModule(res.getMsg(), loginCallback);
         }
+        handler.sendMessage(message1);
+      } else if (String.valueOf(res.getMsg()).equals(getException())) {
+        Message message3 = handler.obtainMessage();
+        message3.what = -3;
+        if (loginCallback != null && actionListener != null) {
+          message3.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
+        } else if (loginCallback == null && actionListener != null) {
+          message3.obj = new DataModule(res.getUser(), actionListener);
+        } else if (loginCallback != null) {
+          message3.obj = new DataModule(res.getMsg(), loginCallback);
+        }
+        handler.sendMessage(message3);
+      } else if (String.valueOf(res.getMsg()).equals(getDisconnect())) {
+        Message message4 = handler.obtainMessage();
+        message4.what = -2;
+        if (loginCallback != null && actionListener != null) {
+          message4.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
+        } else if (loginCallback == null && actionListener != null) {
+          message4.obj = new DataModule(res.getUser(), actionListener);
+        } else if (loginCallback != null) {
+          message4.obj = new DataModule(res.getMsg(), loginCallback);
+        }
+        handler.sendMessage(message4);
+      } else {
+        webSocket.close(NORMAL_CLOSE, "close");
+        Message message2 = handler.obtainMessage();
+        message2.what = -1;
+        if (loginCallback != null && actionListener != null) {
+          message2.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
+        } else if (loginCallback == null && actionListener != null) {
+          message2.obj = new DataModule(res.getUser(), actionListener);
+        } else if (loginCallback != null) {
+          message2.obj = new DataModule(res.getMsg(), loginCallback);
+        }
+        handler.sendMessage(message2);
+      }
+    }
 
     @Override
     public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString bytes) {
@@ -151,7 +158,6 @@ public final class SocketRequest implements Enqueue {
 
     }
   };
-  private boolean isSend = false;//发送状态
 
   public SocketRequest() {
     lock = new ReentrantLock();
@@ -163,9 +169,7 @@ public final class SocketRequest implements Enqueue {
     try {
       OkHttpClient client = HttpNetwork.builder().getClient();
       ExecutorService server = client.dispatcher().executorService();
-      if (server.isShutdown()) {
-        server.shutdown();
-      }
+      if (server.isShutdown()) server.shutdown();
       lock.lockInterruptibly();
       okWebSocket = client.newWebSocket(WebConfiguration.getRequest(), webSocketListener);
     } catch (Exception e) {
@@ -192,59 +196,59 @@ public final class SocketRequest implements Enqueue {
 
   @Override
   public boolean send(int type, byte[] msg) {
-    return sendMessage(MessageModule.Request.newBuilder()
-        .setType(type)
-        .setData(msg == null ? com.google.protobuf.ByteString.copyFromUtf8("") : com.google.protobuf.ByteString.copyFrom(msg))
-        .build()
-        .toByteArray());
+    MessageModule.Request request = MessageModule.Request.newBuilder()
+        .setType(type).setData(com.google.protobuf.ByteString.copyFrom(msg)).build();
+    if (okWebSocket == null) return false;
+    else return okWebSocket.send(ByteString.of(request.toByteArray()));
   }
 
-    @Override
-    public boolean send(ByteString bs) {
-        return sendMessage(bs);
-    }
+  @Override
+  public boolean send(byte[] msg) {
+    if (okWebSocket == null) return false;
+    else return okWebSocket.send(ByteString.of(msg));
+  }
 
-    @Override
-    public void close() {
-        occlude();
-        if (okWebSocket != null) {
-            okWebSocket.close(ABNORMAL_CLOSE, "leave");
-            okWebSocket = null;
-        }
-    }
+  @Override
+  public boolean send(ByteString msg) {
+    if (okWebSocket == null) return false;
+    else return okWebSocket.send(msg);
+  }
 
-    @Override
-    public int reconnectCount() {
-        return reconnectCount;
+  @Override
+  public void close() {
+    occlude();
+    if (okWebSocket != null) {
+      okWebSocket.close(ABNORMAL_CLOSE, "leave");
+      okWebSocket = null;
     }
+  }
 
-    @Override
-    public WebSocket getWebSocket() {
-        return okWebSocket;
-    }
+  @Override
+  public int reconnectCount() {
+    return reconnectCount;
+  }
 
-    @Override
-    public void setActionListener(ActionListener listener) {
-        actionListener = listener;
-    }
+  @Override
+  public WebSocket getWebSocket() {
+    return okWebSocket;
+  }
 
-    @Override
-    public void setMsgCallback(MsgCallback callback) {
-        msgCallback = callback;
-    }
+  @Override
+  public Enqueue setActionListener(ActionListener listener) {
+    actionListener = listener;
+    return this;
+  }
 
-    @Override
-    public void setLoginCallback(LoginCallback callback) {
-        loginCallback = callback;
-    }
+  @Override
+  public Enqueue setMsgCallback(MsgCallback callback) {
+    msgCallback = callback;
+    return this;
+  }
 
-    private boolean sendMessage(Object msg) {
-        if (okWebSocket != null) {
-            if (msg instanceof byte[]) isSend = okWebSocket.send(ByteString.of((byte[]) msg));
-            else if (msg instanceof ByteString) isSend = okWebSocket.send((ByteString) msg);
-            if (!isSend) reconnect();
-        }
-        return isSend;
-    }
+  @Override
+  public Enqueue setLoginCallback(LoginCallback callback) {
+    loginCallback = callback;
+    return this;
+  }
 
 }

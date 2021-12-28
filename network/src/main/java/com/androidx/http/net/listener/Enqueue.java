@@ -17,6 +17,13 @@ public interface Enqueue {
      *
      * @return 成功/失败
      */
+    boolean send(byte[] msg);
+
+    /**
+     * 发送
+     *
+     * @return 成功/失败
+     */
     boolean send(ByteString bs);
 
     /**
@@ -37,16 +44,16 @@ public interface Enqueue {
     /**
      * 在线/离线
      */
-    void setActionListener(ActionListener listener);
+    Enqueue setActionListener(ActionListener listener);
 
     /**
      * 消息回调
      */
-    void setMsgCallback(MsgCallback callback);
+    Enqueue setMsgCallback(MsgCallback callback);
 
     /**
      * 登录回调
      */
-    void setLoginCallback(LoginCallback callback);
+    Enqueue setLoginCallback(LoginCallback callback);
 
 }
