@@ -16,8 +16,8 @@ import com.androidx.http.net.listener.Enqueue;
 import com.androidx.http.net.listener.LoginCallback;
 import com.androidx.http.net.listener.MsgCallback;
 import com.androidx.http.net.module.DataModule;
-import com.androidx.http.net.module.ResModule;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.module.protobuf.MessageModule;
 
 import org.jetbrains.annotations.NotNull;
@@ -48,7 +48,6 @@ public final class SocketRequest implements Enqueue {
     DataModule data = (DataModule) message.obj;
     if (message.what == -1) {
       if (loginCallback != null) data.getLoginCallback().onFailure(data.getMsg());
-      if (actionListener != null) data.getActionListener().online(data.getUser());
       return false;
     } else if (message.what == -2) {
       if (loginCallback != null) data.getLoginCallback().onFailure(data.getMsg());
@@ -99,52 +98,46 @@ public final class SocketRequest implements Enqueue {
 
     @Override
     public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
-      ResModule res = new Gson().fromJson(text, ResModule.class);
-      if (String.valueOf(res.getMsg()).equals(getConnect())) {
+      JsonObject res = new Gson().fromJson(text, JsonObject.class);
+      if (res.get("msg").getAsString().equals(getConnect())) {
         Message message1 = handler.obtainMessage();
         message1.what = 0;
         if (loginCallback != null && actionListener != null) {
-          message1.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
+          message1.obj = new DataModule(res.get("user").getAsString(), res.get("msg").getAsString(), loginCallback, actionListener);
         } else if (actionListener != null) {
-          message1.obj = new DataModule(res.getUser(), actionListener);
+          message1.obj = new DataModule(res.get("user").getAsString(), actionListener);
         } else if (loginCallback != null) {
-          message1.obj = new DataModule(res.getMsg(), loginCallback);
+          message1.obj = new DataModule(res.get("msg").getAsString(), loginCallback);
         }
         handler.sendMessage(message1);
-      } else if (String.valueOf(res.getMsg()).equals(getException())) {
+      } else if (res.get("msg").getAsString().equals(getException())) {
         Message message3 = handler.obtainMessage();
         message3.what = -3;
         if (loginCallback != null && actionListener != null) {
-          message3.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
+          message3.obj = new DataModule(res.get("user").getAsString(), res.get("msg").getAsString(), loginCallback, actionListener);
         } else if (loginCallback == null && actionListener != null) {
-          message3.obj = new DataModule(res.getUser(), actionListener);
+          message3.obj = new DataModule(res.get("user").getAsString(), actionListener);
         } else if (loginCallback != null) {
-          message3.obj = new DataModule(res.getMsg(), loginCallback);
+          message3.obj = new DataModule(res.get("msg").getAsString(), loginCallback);
         }
         handler.sendMessage(message3);
-      } else if (String.valueOf(res.getMsg()).equals(getDisconnect())) {
+      } else if (res.get("msg").getAsString().equals(getDisconnect())) {
         Message message4 = handler.obtainMessage();
         message4.what = -2;
         if (loginCallback != null && actionListener != null) {
-          message4.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
+          message4.obj = new DataModule(res.get("user").getAsString(), res.get("msg").getAsString(), loginCallback, actionListener);
         } else if (loginCallback == null && actionListener != null) {
-          message4.obj = new DataModule(res.getUser(), actionListener);
+          message4.obj = new DataModule(res.get("user").getAsString(), actionListener);
         } else if (loginCallback != null) {
-          message4.obj = new DataModule(res.getMsg(), loginCallback);
+          message4.obj = new DataModule(res.get("msg").getAsString(), loginCallback);
         }
         handler.sendMessage(message4);
       } else {
-        webSocket.close(NORMAL_CLOSE, "close");
         Message message2 = handler.obtainMessage();
         message2.what = -1;
-        if (loginCallback != null && actionListener != null) {
-          message2.obj = new DataModule(res.getUser(), res.getMsg(), loginCallback, actionListener);
-        } else if (loginCallback == null && actionListener != null) {
-          message2.obj = new DataModule(res.getUser(), actionListener);
-        } else if (loginCallback != null) {
-          message2.obj = new DataModule(res.getMsg(), loginCallback);
-        }
+        message2.obj = new DataModule(res.get("msg").getAsString(), loginCallback);
         handler.sendMessage(message2);
+        webSocket.close(NORMAL_CLOSE, "close");
       }
     }
 
