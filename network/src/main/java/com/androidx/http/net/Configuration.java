@@ -1,39 +1,24 @@
 package com.androidx.http.net;
 
 import java.io.Serializable;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public final class Configuration implements Serializable {
 
     private Configuration() {
     }
 
-    private static String ssl = "";
-    private static String showRequest = "";
-    private static volatile Map<String, String> headers = new ConcurrentHashMap<>();
+    public static String ssl = "";//HTTPS 加密套接字协议
+    public static drhListener listener;//显示请求头信息
+    public static int count = 3;//重连次数
+    public static int timeout = 180;//超时时间
+    public static int interval = 15;//ping帧心跳间隔
+    public static int maxConnCount = 1024;//最大连接池
+    public static int alive = 30;//连接池的连接活跃时间（默认设置半小时）
+    public static int compress = 0;//0-所有消息压缩(默认1024)
+    public static boolean reconnection = true;//异常重新连接
 
-    public static String getSsl() {
-        return ssl;
+    public interface drhListener {
+        void value(String rh);
     }
 
-    public static String getShowRequest() {
-        return showRequest;
-    }
-
-    public static Map<String, String> getHeaders() {
-        return headers;
-    }
-
-    public static void setHeaders(Map<String, String> header) {
-        headers = header;
-    }
-
-    public static void setSsl(String certification) {
-        Configuration.ssl = ssl;
-    }
-
-    public static void setShowRequest(String showRequest) {
-        Configuration.showRequest = showRequest;
-    }
 }

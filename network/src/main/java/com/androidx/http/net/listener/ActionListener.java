@@ -5,4 +5,5 @@ public interface ActionListener {
     void online(String user);
 
     void offline(String user);
+
 }

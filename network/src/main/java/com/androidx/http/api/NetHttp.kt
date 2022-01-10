@@ -4,6 +4,7 @@ package com.androidx.http.api
 
 import com.androidx.http.net.HttpRequest
 import com.androidx.http.net.listener.Callback
+import com.androidx.http.net.listener.DownloadListener
 import com.androidx.http.net.listener.HttpRequestListener
 import com.androidx.http.net.listener.Response
 import com.google.gson.JsonObject
@@ -20,7 +21,10 @@ class NetHttp private constructor() {
         const val DEL_MAP = 5
         const val DEL_JSON = 6
         const val FROM_JSON = 7
+        const val UPLOAD = 8
+        const val DOWNLOAD = 9
 
+        @JvmStatic
         fun builder(): Builder {
             synchronized(Builder::class.java) { return Singleton.getInstance()!! }
         }
@@ -38,7 +42,9 @@ class NetHttp private constructor() {
         internal var json = JsonObject()
         internal var bytes: ByteArray? = null
         internal var response: Response? = null
+        internal var listener: DownloadListener? = null
         internal var callback: Callback? = null
+        internal var filePath: String? = null
 
         fun setMaxAnewCount(maxAnewCount: Int?): Builder {
             this.maxAnewCount = maxAnewCount
@@ -82,6 +88,16 @@ class NetHttp private constructor() {
 
         fun setCallback(callback: Callback?): Builder {
             this.callback = callback
+            return builder
+        }
+
+        fun setListener(listener: DownloadListener?): Builder {
+            this.listener = listener
+            return builder
+        }
+
+        fun setFile(path: String?): Builder {
+            this.filePath = path
             return builder
         }
 
@@ -135,6 +151,19 @@ class NetHttp private constructor() {
                 builder.json,
                 builder.maxAnewCount!!,
                 builder.response
+            )
+            UPLOAD -> requestListener.upload(
+                builder.host,
+                builder.filePath,
+                builder.jsonKey,
+                builder.maxAnewCount!!,
+                builder.response,
+            )
+            DOWNLOAD -> requestListener.download(
+                builder.host,
+                builder.filePath,
+                builder.maxAnewCount!!,
+                builder.listener
             )
         }
     }

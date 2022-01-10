@@ -11,11 +11,14 @@ import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.file.Path;
@@ -29,6 +32,112 @@ import java.nio.file.Paths;
 public final class Storage {
 
     private Storage() {
+    }
+
+    /**
+     * 保存文件
+     *
+     * @param outPath 输出地址(保存在手机中的地址)
+     * @param is      文件流
+     */
+    public static File write(String outPath, InputStream is) {
+        try {
+            BufferedInputStream bis = new BufferedInputStream(is);
+            FileOutputStream fos = new FileOutputStream(outPath);
+            BufferedOutputStream bos = new BufferedOutputStream(fos);
+            int n;
+            while ((n = bis.read()) != -1) bos.write(n);
+            bos.flush();
+            bos.close();
+            fos.close();
+            bis.close();
+            is.close();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) return Paths.get(outPath).toFile();
+            else return new File(outPath);
+        } catch (Exception e) {
+            Log.e(Storage.class.getName(), Log.getStackTraceString(e));
+            return null;
+        }
+    }
+
+    /**
+     * 本地缓存
+     */
+    public static final class Cache {
+
+        public static <D> void writeFile(Context c, String fileName, D data) {
+            try {
+                write(c, fileName, data);
+            } catch (Exception e) {
+                Log.e("本地缓存写入异常", Log.getStackTraceString(e));
+            }
+        }
+
+        public static String readFile(Context context, String fileName) {
+            if (exists(context, fileName)) {
+                try {
+                    return read(context, fileName);
+                } catch (Exception e) {
+                    Log.e("本地缓存读取异常", Log.getStackTraceString(e));
+                    return null;
+                }
+            } else {
+                return null;
+            }
+        }
+
+        /**
+         * 保存数据
+         */
+        private static <D> void write(Context c, String f, D d) throws Exception {
+            //设置文件名称，以及存储方式
+            FileOutputStream out = c.openFileOutput(f, Context.MODE_PRIVATE);
+            //创建一个OutputStreamWriter对象，传入BufferedWriter的构造器中
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
+            //向文件中写入数据
+            if (d instanceof String) {
+                writer.write(String.valueOf(d));
+            } else if (d instanceof Byte) {
+                writer.write((Byte) d);
+            } else if (d instanceof Integer) {
+                writer.write((Integer) d);
+            } else if (d instanceof char[]) {
+                writer.write((char[]) d);
+            } else {
+                Log.w("存储工具", "未匹配到数据类型");
+            }
+            out.flush();
+            writer.close();
+            out.close();
+        }
+
+        /**
+         * 获取数据
+         */
+        private static String read(Context c, String f) throws Exception {
+            FileInputStream in = c.openFileInput(f);
+            //设置将要打开的存储文件名称
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            StringBuilder content = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) content.append(line);
+            reader.close();
+            in.close();
+            return content.toString();
+        }
+
+        /**
+         * 检验文件是否存在
+         */
+        private static boolean exists(Context c, String f) {
+            boolean flag = false;
+            if (f != null) {
+                File file = new File(c.getFilesDir(), f);
+                if (file.exists()) flag = file.delete();
+            }
+            return flag;
+        }
+
     }
 
     /**
@@ -65,6 +174,7 @@ public final class Storage {
                 return Log.getStackTraceString(e);
             }
         }
+
         /**
          *
          */
@@ -88,6 +198,7 @@ public final class Storage {
                 return Log.getStackTraceString(e);
             }
         }
+
         /**
          *
          */
@@ -111,6 +222,7 @@ public final class Storage {
                 return Log.getStackTraceString(e);
             }
         }
+
         /**
          *
          */
@@ -251,86 +363,5 @@ public final class Storage {
         }
 
     }
-
-    /**
-     * 本地缓存
-     */
-    public static final class Cache {
-
-        public static <D> void writeFile(Context c, String fileName, D data) {
-            try {
-                write(c, fileName, data);
-            } catch (Exception e) {
-                Log.e("本地缓存写入异常", Log.getStackTraceString(e));
-            }
-        }
-
-        public static String readFile(Context context, String fileName) {
-            if (exists(context, fileName)) {
-                try {
-                    return read(context, fileName);
-                } catch (Exception e) {
-                    Log.e("本地缓存读取异常", Log.getStackTraceString(e));
-                    return null;
-                }
-            } else {
-                return null;
-            }
-        }
-
-        /**
-         * 保存数据
-         */
-        private static <D> void write(Context c, String f, D d) throws Exception {
-            //设置文件名称，以及存储方式
-            FileOutputStream out = c.openFileOutput(f, Context.MODE_PRIVATE);
-            //创建一个OutputStreamWriter对象，传入BufferedWriter的构造器中
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
-            //向文件中写入数据
-            if (d instanceof String) {
-                writer.write(String.valueOf(d));
-            } else if (d instanceof Byte) {
-                writer.write((Byte) d);
-            } else if (d instanceof Integer) {
-                writer.write((Integer) d);
-            } else if (d instanceof char[]) {
-                writer.write((char[]) d);
-            } else {
-                Log.w("存储工具", "未匹配到数据类型");
-            }
-            out.flush();
-            writer.close();
-            out.close();
-        }
-
-        /**
-         * 获取数据
-         */
-        private static String read(Context c, String f) throws Exception {
-            FileInputStream in = c.openFileInput(f);
-            //设置将要打开的存储文件名称
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            StringBuilder content = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) content.append(line);
-            reader.close();
-            in.close();
-            return content.toString();
-        }
-
-        /**
-         * 检验文件是否存在
-         */
-        private static boolean exists(Context c, String f) {
-            boolean flag = false;
-            if (f != null) {
-                File file = new File(c.getFilesDir(), f);
-                if (file.exists()) flag = file.delete();
-            }
-            return flag;
-        }
-
-    }
-
 
 }

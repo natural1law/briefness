@@ -9,4 +9,5 @@ public interface LoginCallback {
     default void onFailure(String msg) {
         Log.e("请求异常", msg);
     }
+
 }

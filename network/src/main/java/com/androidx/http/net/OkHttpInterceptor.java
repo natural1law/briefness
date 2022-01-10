@@ -3,8 +3,6 @@ package com.androidx.http.net;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -12,12 +10,7 @@ import okhttp3.Response;
 
 public final class OkHttpInterceptor implements Interceptor {
 
-
-    private final Map<String, String> headers = new ConcurrentHashMap<>();
-
     private OkHttpInterceptor() {
-        headers.clear();
-        headers.putAll(Configuration.getHeaders());
     }
 
     protected static OkHttpInterceptor getInstance(){
@@ -53,8 +46,6 @@ public final class OkHttpInterceptor implements Interceptor {
         Request.Builder rb = request.newBuilder();
         rb.addHeader("Connection", "Upgrade, HTTP2-Settings")
                 .addHeader("Upgrade", "h2c");
-        headers.forEach(rb::addHeader);
-        Configuration.setShowRequest(rb.build().toString());
         //响应
         return chain.proceed(rb.build());
     }
