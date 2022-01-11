@@ -15,6 +15,9 @@ import com.androidx.briefness.R;
 import com.androidx.echarts.base.BaseWebActivity;
 import com.androidx.http.use.Rn;
 import com.androidx.reduce.tools.Idle;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -79,7 +82,11 @@ public final class EchartsActivity extends BaseWebActivity {
         titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
         Map<String, Object> map = new ConcurrentHashMap<>();
         String url = "http://hapi.syyfkj.cn/app/v1/";
-        super.initWeb(webView).setLoadListener(() -> Rn.sendMapPost(url, map, data -> super.setCallJs("callJS", data)));
+        super.initWeb(webView).setLoadListener(() -> Rn.sendMapPost(url, map, data -> {
+            JsonObject json = new Gson().fromJson(String.valueOf(data), new TypeToken<JsonObject>() {
+            }.getType());
+            super.setCallJs("callJS", json);
+        }));
     }
 
     @OnClick(R.id.activity_echarts)

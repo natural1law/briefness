@@ -30,7 +30,6 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.protobuf.ByteString;
 
-import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -172,22 +171,6 @@ public final class NetworkRequestActivity extends BaseActivity {
             } else toasts.setMsg(result.getMsg()).showError();
         });
 
-    }
-
-    private static final class A implements Serializable {
-
-        private int code;
-        private String msg;
-        private String data;
-
-        @Override
-        public String toString() {
-            return "A{" +
-                    "code=" + code +
-                    ", msg='" + msg + '\'' +
-                    ", data='" + data + '\'' +
-                    '}';
-        }
     }
 
 }

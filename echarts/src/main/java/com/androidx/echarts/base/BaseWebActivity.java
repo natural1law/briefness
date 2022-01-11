@@ -1,5 +1,9 @@
 package com.androidx.echarts.base;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+import static com.just.agentweb.AgentWeb.SecurityType.STRICT_CHECK;
+import static com.just.agentweb.DefaultWebClient.OpenOtherPageWays.ASK;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,22 +22,17 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.gson.Gson;
+import com.androidx.echarts.listener.OnLoadListener;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.just.agentweb.AgentWeb;
 import com.just.agentweb.WebChromeClient;
 import com.just.agentweb.WebViewClient;
 
 import java.util.Map;
 
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-import static com.just.agentweb.AgentWeb.SecurityType.STRICT_CHECK;
-import static com.just.agentweb.DefaultWebClient.OpenOtherPageWays.ASK;
-
 public abstract class BaseWebActivity extends AppCompatActivity {
 
-    public AgentWeb agentWeb;
+    protected AgentWeb agentWeb;
     private ViewGroup viewGroup;
     private OnLoadListener loadListener;
     private static final String URL = "file:///android_asset/";
@@ -131,7 +130,7 @@ public abstract class BaseWebActivity extends AppCompatActivity {
      * @param view 传入AgentWeb 的父控件
      */
     @SuppressLint("SetJavaScriptEnabled")
-    public <T extends ViewGroup> BaseWebActivity initWeb(T view) {
+    protected <T extends ViewGroup> BaseWebActivity initWeb(T view) {
         initWeb(view, -1);
         return this;
     }
@@ -143,7 +142,7 @@ public abstract class BaseWebActivity extends AppCompatActivity {
      * @param pb   进度条宽度
      */
     @SuppressLint("SetJavaScriptEnabled")
-    public <T extends ViewGroup> BaseWebActivity initWeb(T view, int pb) {
+    protected <T extends ViewGroup> BaseWebActivity initWeb(T view, int pb) {
         initWeb(view, pb, null, null);
         return this;
     }
@@ -155,7 +154,7 @@ public abstract class BaseWebActivity extends AppCompatActivity {
      * @param pb   进度条宽度
      */
     @SuppressLint("SetJavaScriptEnabled")
-    public <T extends ViewGroup> BaseWebActivity initWeb(T view, int pb, WebChromeClient wcc) {
+    protected <T extends ViewGroup> BaseWebActivity initWeb(T view, int pb, WebChromeClient wcc) {
         initWeb(view, pb, wcc, null);
         return this;
     }
@@ -167,7 +166,7 @@ public abstract class BaseWebActivity extends AppCompatActivity {
      * @param pb   进度条宽度
      */
     @SuppressLint("SetJavaScriptEnabled")
-    public <T extends ViewGroup> BaseWebActivity initWeb(T view, int pb, WebViewClient wvc) {
+    protected <T extends ViewGroup> BaseWebActivity initWeb(T view, int pb, WebViewClient wvc) {
         initWeb(view, pb, null, wvc);
         return this;
     }
@@ -178,7 +177,7 @@ public abstract class BaseWebActivity extends AppCompatActivity {
      * @param view 传入AgentWeb 的父控件
      */
     @SuppressLint("SetJavaScriptEnabled")
-    public <T extends ViewGroup> BaseWebActivity initWeb(T view, int pb, WebChromeClient wcc, WebViewClient wvc) {
+    protected <T extends ViewGroup> BaseWebActivity initWeb(T view, int pb, WebChromeClient wcc, WebViewClient wvc) {
         this.viewGroup = view;
         agentWeb = AgentWeb.with(this)
                 .setAgentWebParent(view, new ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT))//传入AgentWeb 的父控件 ，如果父控件为 RelativeLayout ， 那么第二参数需要传入 RelativeLayout.LayoutParams ,第一个参数和第二个参数应该对应。
@@ -207,14 +206,14 @@ public abstract class BaseWebActivity extends AppCompatActivity {
     /**
      * 开始加载
      */
-    public void setStart(String suffix) {
+    protected void setStart(String suffix) {
         agentWeb.getUrlLoader().loadUrl(URL + suffix);
     }
 
     /**
      * 开始加载
      */
-    public void setStart(String url, String suffix) {
+    protected void setStart(String url, String suffix) {
         if (url == null || suffix == null) Log.e("开始加载", "参数为空");
         agentWeb.getUrlLoader().loadUrl(url + suffix);
     }
@@ -224,7 +223,7 @@ public abstract class BaseWebActivity extends AppCompatActivity {
      *
      * @param map 请求头信息
      */
-    public void setStart(String url, Map<String, String> map) {
+    protected void setStart(String url, Map<String, String> map) {
         if (url == null || map == null) Log.e("开始加载", "参数为空");
         agentWeb.getUrlLoader().loadUrl(url, map);
     }
@@ -232,14 +231,14 @@ public abstract class BaseWebActivity extends AppCompatActivity {
     /**
      * 重新加载
      */
-    public void setReload() {
+    protected void setReload() {
         agentWeb.getUrlLoader().reload();
     }
 
     /**
      * 停止加载
      */
-    public void setStop() {
+    protected void setStop() {
         agentWeb.getUrlLoader().stopLoading();
     }
 
@@ -256,13 +255,16 @@ public abstract class BaseWebActivity extends AppCompatActivity {
      * @param way  js中的方法名（函数名）
      * @param data 数据
      */
-    public <J> void setCallJs(String way, J data) {
-        JsonObject json = new Gson().fromJson(String.valueOf(data), new TypeToken<JsonObject>() {
-        }.getType());
-        agentWeb.getJsAccessEntrace().callJs("javascript:" + way + "(" + json + ")");
+    protected void setCallJs(String way, JsonObject data) {
+        agentWeb.getJsAccessEntrace().callJs("javascript:" + way + "(" + data + ")");
     }
 
-    public interface OnLoadListener {
-        void onLoad();
+    protected void setCallJs(String way, JsonObject data1, JsonObject data2) {
+        agentWeb.getJsAccessEntrace().callJs("javascript:" + way + "(" + data1 + "," + data2 + ")");
     }
+
+    protected void setCallJs(String way, JsonObject data1, JsonObject data2, JsonObject data3) {
+        agentWeb.getJsAccessEntrace().callJs("javascript:" + way + "(" + data1 + "," + data2 + "," + data3 + ")");
+    }
+
 }

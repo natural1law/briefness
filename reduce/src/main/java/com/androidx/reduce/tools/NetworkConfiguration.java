@@ -8,6 +8,7 @@ import android.net.NetworkCapabilities;
 import android.net.NetworkRequest;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.util.Log;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -132,7 +133,7 @@ public final class NetworkConfiguration {
             }
             return "";
         } catch (SocketException e) {
-            return e.getMessage();
+            return Log.getStackTraceString(e);
         }
     }
 
@@ -144,7 +145,7 @@ public final class NetworkConfiguration {
             int ip = wm.getConnectionInfo().getIpAddress();
             return (ip & 0xFF) + "." + ((ip >> 8) & 0xFF) + "." + ((ip >> 16) & 0xFF) + "." + (ip >> 24 & 0xFF);
         } catch (Exception e) {
-            return e.getMessage();
+            return Log.getStackTraceString(e);
         }
     }
 
