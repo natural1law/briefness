@@ -26,9 +26,13 @@ import com.androidx.http.net.socket.WebConfiguration;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import java.io.ByteArrayInputStream;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import okhttp3.Interceptor;
+import okio.Buffer;
 
 /**
  * 请求网络
@@ -42,8 +46,22 @@ public final class Rn {
     /**
      * 设置SSL证书
      */
-    public static void setSsl(String certification) {
-        ssl = certification;
+    public static void setSsl(String rsaCertification, String entrustRootCertificate) {
+        ssl = new Buffer()
+                .writeUtf8(rsaCertification)
+                .writeUtf8(entrustRootCertificate)
+                .inputStream();
+    }
+
+    public static void setSsl(String cerStr) {
+        ssl = new ByteArrayInputStream(cerStr.getBytes());
+    }
+
+    /**
+     * 设置拦截器
+     */
+    public static void setInterceptor(Interceptor interceptor) {
+        Configuration.interceptor = interceptor;
     }
 
     /**

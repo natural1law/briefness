@@ -2,6 +2,7 @@ package com.androidx.http.net;
 
 import static com.androidx.http.net.Configuration.alive;
 import static com.androidx.http.net.Configuration.compress;
+import static com.androidx.http.net.Configuration.interceptor;
 import static com.androidx.http.net.Configuration.interval;
 import static com.androidx.http.net.Configuration.listener;
 import static com.androidx.http.net.Configuration.maxConnCount;
@@ -25,9 +26,8 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import javax.net.ssl.SSLSocketFactory;
-
 import okhttp3.Call;
+import okhttp3.CipherSuite;
 import okhttp3.ConnectionPool;
 import okhttp3.ConnectionSpec;
 import okhttp3.FormBody;
@@ -63,7 +63,17 @@ public final class HttpNetwork implements HttpNetworkListener {
     }
 
     private OkHttpClient.Builder client() {
-        SSLSocketFactory ssf = TrustManagers.createSSLSocketFactory();
+        ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.MODERN_TLS)
+                .tlsVersions(TlsVersion.TLS_1_3, TlsVersion.TLS_1_2)
+                .cipherSuites(
+                        CipherSuite.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
+                        CipherSuite.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
+                        CipherSuite.TLS_DHE_RSA_WITH_AES_128_GCM_SHA256)
+                .allEnabledCipherSuites()
+                .build();
+        // 兼容http接口
+        ConnectionSpec spec1 = new ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS).build();
+        ConnectionSpec spec2 = new ConnectionSpec.Builder(ConnectionSpec.CLEARTEXT).build();
         OkHttpClient.Builder client = new OkHttpClient.Builder()
                 .dns(new HttpDns())
                 .retryOnConnectionFailure(reconnection)//连接重连
@@ -72,24 +82,17 @@ public final class HttpNetwork implements HttpNetworkListener {
                 .connectTimeout(timeout, TimeUnit.SECONDS)//设置超时时间(单位秒)
                 .readTimeout(timeout, TimeUnit.SECONDS)//设置读取超时时间(单位秒)
                 .writeTimeout(timeout, TimeUnit.SECONDS)//设置写入超时时间(单位秒)
-                .addInterceptor(OkHttpInterceptor.getInstance())//拦截器
+                .addInterceptor(interceptor == null ? OkHttpInterceptor.getInstance() : interceptor)//拦截器
                 .addNetworkInterceptor(chain -> {//网络拦截器
                     Request req = chain.request().newBuilder().build();
                     if (listener != null) listener.value(req.toString());
                     return chain.proceed(req);
                 })
+                .connectionSpecs(Arrays.asList(spec, spec1, spec2))
                 .protocols(Arrays.asList(Protocol.HTTP_2, Protocol.HTTP_1_1))
                 .connectionPool(new ConnectionPool(maxConnCount, alive, TimeUnit.MINUTES))//创建连接池
                 .hostnameVerifier((hostname, session) -> hostname.equalsIgnoreCase(session.getPeerHost()));//IP主机校验
-        if (ssf != null) client.sslSocketFactory(ssf, TrustManagers.getInstance());//内置证书校验
-        ConnectionSpec spec = new ConnectionSpec.Builder(ConnectionSpec.COMPATIBLE_TLS)
-                .tlsVersions(TlsVersion.TLS_1_3, TlsVersion.TLS_1_2, TlsVersion.TLS_1_1, TlsVersion.TLS_1_0)
-                .allEnabledCipherSuites()
-                .build();
-        // 兼容http接口
-        ConnectionSpec spec1 = new ConnectionSpec.Builder(ConnectionSpec.CLEARTEXT).build();
-        client.connectionSpecs(Arrays.asList(spec, spec1));
-        if (!ssl.equals("")) TrustManagers.setCertificate(client, ssl);
+        if (ssl != null) TrustManagers.createSSL(client, ssl);
         return client;
     }
 

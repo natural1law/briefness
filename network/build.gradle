@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-parcelize'
     id 'com.google.protobuf'
     id 'com.github.dcendents.android-maven'
+    id 'com.google.osdetector'
 }
 
 android {

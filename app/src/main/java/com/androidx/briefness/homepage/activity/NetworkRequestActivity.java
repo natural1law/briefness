@@ -133,8 +133,10 @@ public final class NetworkRequestActivity extends BaseActivity {
 
     @OnClick(R.id.network_send)
     public void send() {
-        String path1 = Storage.Locality.generateDownloadPath("/default/", System.currentTimeMillis() + ".png");
-        Rn.sendDownload("http://192.168.1.92:9981/api/user/download.android", path1, (file, duration) -> toasts.i("文件耗时", duration + "毫秒"));
+//        String path1 = Storage.Locality.generateDownloadPath("/default/", System.currentTimeMillis() + ".png");
+        String path1 = Storage.Locality.generatePicturesPath("", "1.jpg");
+        Rn.sendUpload("http://192.168.1.92:9981/api/user/upload.android", path1, data -> toasts.setMsg(data).showSuccess());
+        Rn.show();
     }
 
     @OnClick(R.id.network_send1)

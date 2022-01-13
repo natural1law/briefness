@@ -13,7 +13,7 @@ public final class OkHttpInterceptor implements Interceptor {
     private OkHttpInterceptor() {
     }
 
-    protected static OkHttpInterceptor getInstance(){
+    protected static OkHttpInterceptor getInstance() {
         return SingletonHolder.newInstance();
     }
 
@@ -41,12 +41,10 @@ public final class OkHttpInterceptor implements Interceptor {
     @NotNull
     @Override
     public Response intercept(@NotNull Chain chain) throws IOException {
-        //请求
-        Request request = chain.request();
-        Request.Builder rb = request.newBuilder();
-        rb.addHeader("Connection", "Upgrade, HTTP2-Settings")
-                .addHeader("Upgrade", "h2c");
-        //响应
-        return chain.proceed(rb.build());
+        Request request = chain.request().newBuilder()
+                .addHeader("Connection", "Upgrade, HTTP2-Settings")
+                .addHeader("Upgrade", "h2c")
+                .build();//请求
+        return chain.proceed(request);//响应
     }
 }
