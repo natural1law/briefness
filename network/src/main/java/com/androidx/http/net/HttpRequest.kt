@@ -74,6 +74,8 @@ class HttpRequest : HttpRequestListener {
                 if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
                     currentConnect++
                     hnl.getCall(call.request()).enqueue(this)
+                } else if (e is SocketTimeoutException && -1 == maxAnewCount) {
+                    hnl.getCall(call.request()).enqueue(this)
                 }
             }
 
@@ -98,6 +100,8 @@ class HttpRequest : HttpRequestListener {
                 // 如果超时并未超过指定次数，则重新连接
                 if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
                     currentConnect++
+                    hnl.getCall(call.request()).enqueue(this)
+                } else if (e is SocketTimeoutException && -1 == maxAnewCount) {
                     hnl.getCall(call.request()).enqueue(this)
                 }
             }
@@ -124,6 +128,8 @@ class HttpRequest : HttpRequestListener {
                 if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
                     currentConnect++
                     hnl.getCall(call.request()).enqueue(this)
+                } else if (e is SocketTimeoutException && -1 == maxAnewCount) {
+                    hnl.getCall(call.request()).enqueue(this)
                 }
             }
 
@@ -148,6 +154,8 @@ class HttpRequest : HttpRequestListener {
                 // 如果超时并未超过指定次数，则重新连接
                 if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
                     currentConnect++
+                    hnl.getCall(call.request()).enqueue(this)
+                } else if (e is SocketTimeoutException && -1 == maxAnewCount) {
                     hnl.getCall(call.request()).enqueue(this)
                 }
             }
@@ -174,6 +182,8 @@ class HttpRequest : HttpRequestListener {
                 if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
                     currentConnect++
                     hnl.getCall(call.request()).enqueue(this)
+                } else if (e is SocketTimeoutException && -1 == maxAnewCount) {
+                    hnl.getCall(call.request()).enqueue(this)
                 }
             }
 
@@ -198,6 +208,8 @@ class HttpRequest : HttpRequestListener {
                 // 如果超时并未超过指定次数，则重新连接
                 if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
                     currentConnect++
+                    hnl.getCall(call.request()).enqueue(this)
+                } else if (e is SocketTimeoutException && -1 == maxAnewCount) {
                     hnl.getCall(call.request()).enqueue(this)
                 }
             }
@@ -225,6 +237,8 @@ class HttpRequest : HttpRequestListener {
                 if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
                     currentConnect++
                     hnl.getCall(call.request()).enqueue(this)
+                } else if (e is SocketTimeoutException && -1 == maxAnewCount) {
+                    hnl.getCall(call.request()).enqueue(this)
                 }
             }
 
@@ -251,6 +265,8 @@ class HttpRequest : HttpRequestListener {
                 // 如果超时并未超过指定次数，则重新连接
                 if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
                     currentConnect++
+                    hnl.getCall(call.request()).enqueue(this)
+                } else if (e is SocketTimeoutException && -1 == maxAnewCount) {
                     hnl.getCall(call.request()).enqueue(this)
                 }
             }
@@ -280,6 +296,8 @@ class HttpRequest : HttpRequestListener {
                 // 如果超时并未超过指定次数，则重新连接
                 if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
                     currentConnect++
+                    hnl.getCall(call.request()).enqueue(this)
+                } else if (e is SocketTimeoutException && -1 == maxAnewCount) {
                     hnl.getCall(call.request()).enqueue(this)
                 }
             }

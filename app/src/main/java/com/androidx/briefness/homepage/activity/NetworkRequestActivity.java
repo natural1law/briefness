@@ -25,18 +25,21 @@ import com.androidx.briefness.homepage.service.NotificationService;
 import com.androidx.http.use.Rn;
 import com.androidx.reduce.tools.Idle;
 import com.androidx.reduce.tools.Secure;
-import com.androidx.reduce.tools.Storage;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.google.protobuf.ByteString;
 
+import java.util.List;
 import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import okhttp3.Request;
 
 /**
  * @date 2021/04/30
@@ -62,9 +65,7 @@ public final class NetworkRequestActivity extends BaseActivity {
 
     private static native String wsUrl();
 
-    private static native String ios();
-
-    private static native String publicKey();
+    private static native String rsa(String key, String value);
 
     @Override
     protected void onCreate() {
@@ -84,12 +85,11 @@ public final class NetworkRequestActivity extends BaseActivity {
 //          toasts.i("webSocket1", msg);
 //          toasts.i("webSocket2", data);
 //        });
-
-//        Map<String, Object> map = new WeakHashMap<>();
-//        map.put("id", "123");
-//        enqueue = Rn.initWebSocket(wsUrl(), map)
-//                .setLoginCallback(() -> toasts.i("webSocket", "连接成功"))
-//                .setMsgCallback((code, msg, data) -> publicKey = data.toStringUtf8());
+        Map<String, Object> map = new WeakHashMap<>();
+        map.put("id", "123");
+        enqueue = Rn.initWebSocket(wsUrl(), map)
+                .setLoginCallback(() -> toasts.i("webSocket", "连接成功"))
+                .setMsgCallback((code, msg, data) -> publicKey = Secure.Base64.decode(data.toStringUtf8()));
 
 //            initView();
 //            KeyPair key = Secure.RSA.keyPair();
@@ -134,9 +134,13 @@ public final class NetworkRequestActivity extends BaseActivity {
     @OnClick(R.id.network_send)
     public void send() {
 //        String path1 = Storage.Locality.generateDownloadPath("/default/", System.currentTimeMillis() + ".png");
-        String path1 = Storage.Locality.generatePicturesPath("", "1.jpg");
-        Rn.sendUpload("http://192.168.1.92:9981/api/user/upload.android", path1, data -> toasts.setMsg(data).showSuccess());
-        Rn.show();
+//        String path1 = Storage.Locality.generatePicturesPath("", "1.jpg");
+//        Rn.sendUpload("http://192.168.1.92:9981/api/user/upload.android", path1, data -> toasts.setMsg(data).showSuccess());
+//        Rn.show();
+        Rn.sendMapGetList("", null, new TypeToken<List<JsonObject>>() {
+        }, data -> {
+
+        });
     }
 
     @OnClick(R.id.network_send1)
@@ -151,25 +155,32 @@ public final class NetworkRequestActivity extends BaseActivity {
     @OnClick(R.id.network_send2)
     public void send2() {
         String key = Secure.AES.key();
-        String rsaKey = Secure.RSA.encryptPublic(publicKey, key);
         JsonObject json = new JsonObject();
         json.addProperty("mobile", "15555555555");
         json.addProperty("pass", "123456");
         String encode = Secure.AES.encrypt(key, json.toString());
         SendModule.Request request = SendModule.Request.newBuilder()
-                .setToken(rsaKey)
                 .setData(ByteString.copyFromUtf8(encode))
                 .build();
+
+        Rn.setInterceptor(chain -> {
+            Request req = chain.request().newBuilder()
+                    .addHeader("Connection", "Upgrade, HTTP2-Settings")
+                    .addHeader("Upgrade", "h2c")
+                    .addHeader("key", rsa(publicKey, key))
+                    .build();//请求
+            return chain.proceed(req);//响应
+        });
+
         Rn.sendBytes(url1(), request.toByteArray(), data -> {
             ReceiveModule.Result result = ReceiveModule.Result.parseFrom(data);
-            toasts.i("msg", result.getData());
             if (result.getCode() == 1) {
-                if (Secure.RSA.verify(result.getPuk(), result.getToken(), result.getSign())) {
+                if (Secure.RSA.verify(publicKey, result.getToken(), result.getSign())) {
                     String aesKey = Secure.RSA.decryptPublic(publicKey, result.getToken());
                     String decode = Secure.AES.decrypt(aesKey, result.getData());
-                    JsonObject json1 = new Gson().fromJson(decode, JsonObject.class);
-                    contentView.setText(json1.toString());
-                } else contentView.setText("数据被篡改");
+                    JsonObject resData = new Gson().fromJson(decode, JsonObject.class);
+                    contentView.setText(resData.toString());
+                } else contentView.setText("无效数据");
             } else toasts.setMsg(result.getMsg()).showError();
         });
 

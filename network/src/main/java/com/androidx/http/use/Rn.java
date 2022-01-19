@@ -25,6 +25,7 @@ import com.androidx.http.net.socket.SocketRequest;
 import com.androidx.http.net.socket.WebConfiguration;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayInputStream;
 import java.util.Map;
@@ -72,7 +73,7 @@ public final class Rn {
     }
 
     /**
-     * 设置重连次数
+     * 设置重连次数 (-1~无限次 0不重连)
      */
     public static void setAnewCount(int count) {
         Configuration.count = count;
@@ -120,29 +121,12 @@ public final class Rn {
         Configuration.reconnection = reconnection;
     }
 
-    /**
-     * 设置状态
-     *
-     * @param connect    成功状态key
-     * @param disconnect 连接状态key
-     * @param exception  断开状态key
-     */
-    public static void setResState(String connect, String disconnect, String exception) {
-        executor.execute(() -> WebConfiguration.statebuilder()
-                .setConnect(connect)
-                .setDisconnect(disconnect)
-                .setException(exception)
-                .build());
-    }
-
-    /**
-     * 初始化webSocket
-     *
-     * @param url   请求地址
-     * @param param 请求参数
-     */
     public static Enqueue initWebSocket(String url, Map<String, Object> param) {
         return initWebSocket(url, param, 10);//默认重连十秒间隔
+    }
+
+    public static Enqueue initWebSocket(String url, Map<String, Object> param, long time) {
+        return initWebSocket(url, param, time, "connect", "disconnect", "exception");//默认重连十秒间隔
     }
 
     /**
@@ -152,12 +136,14 @@ public final class Rn {
      * @param param 请求参数
      * @param time  重连间隔时间（秒）
      */
-    public static Enqueue initWebSocket(String url, Map<String, Object> param, long time) {
-        WebConfiguration.statebuilder().build();
+    public static Enqueue initWebSocket(String url, Map<String, Object> param, long time, String connect, String disconnect, String exception) {
         WebConfiguration.builder()
                 .setUrl(url)
                 .setParam(param)
                 .setReconnectInterval(time)
+                .setConnect(connect)
+                .setDisconnect(disconnect)
+                .setException(exception)
                 .build()
                 .get();
         return Proxys.build(new SocketRequest()).getProxy();
@@ -214,6 +200,22 @@ public final class Rn {
     }
 
     /**
+     * @param url   请求地址
+     * @param param 发送数据
+     * @param type  数据返回list类型
+     * @param rt    结果回调
+     */
+    public static <C> void sendMapGetList(String url, Map<String, Object> param, TypeToken<C> type, ResponseType<C> rt) {
+        executor.execute(() -> NetHttp.builder()
+                .setHosts(url)
+                .setMaxAnewCount(Configuration.count)
+                .setMode(GET_MAP)
+                .setMap(param)
+                .setCallback((Response) data -> rt.onSuccess(new Gson().fromJson(data, type.getType())))
+                .build());
+    }
+
+    /**
      * json发送post请求
      *
      * @param url      请求地址
@@ -243,6 +245,22 @@ public final class Rn {
                 .setMaxAnewCount(Configuration.count)
                 .setJson(param)
                 .setCallback((Response) data -> rt.onSuccess(new Gson().fromJson(data, type)))
+                .build());
+    }
+
+    /**
+     * @param url   请求地址
+     * @param param 发送数据
+     * @param type  数据返回list类型
+     * @param rt    结果回调
+     */
+    public static <C> void sendJsonPostList(String url, JsonObject param, TypeToken<C> type, ResponseType<C> rt) {
+        executor.execute(() -> NetHttp.builder()
+                .setHosts(url)
+                .setMode(POST_JSON)
+                .setMaxAnewCount(Configuration.count)
+                .setJson(param)
+                .setCallback((Response) data -> rt.onSuccess(new Gson().fromJson(data, type.getType())))
                 .build());
     }
 
@@ -280,6 +298,22 @@ public final class Rn {
     }
 
     /**
+     * @param url   请求地址
+     * @param param 发送数据
+     * @param type  数据返回list类型
+     * @param rt    结果回调
+     */
+    public static <C> void sendMapPostList(String url, Map<String, Object> param, TypeToken<C> type, ResponseType<C> rt) {
+        executor.execute(() -> NetHttp.builder()
+                .setHosts(url)
+                .setMode(POST_MAP)
+                .setMap(param)
+                .setMaxAnewCount(Configuration.count)
+                .setCallback((Response) data -> rt.onSuccess(new Gson().fromJson(data, type.getType())))
+                .build());
+    }
+
+    /**
      * http发送请求
      *
      * @param url      请求地址
@@ -309,6 +343,22 @@ public final class Rn {
                 .setMaxAnewCount(Configuration.count)
                 .setMap(param)
                 .setCallback((Response) data -> rt.onSuccess(new Gson().fromJson(data, type)))
+                .build());
+    }
+
+    /**
+     * @param url   请求地址
+     * @param param 发送数据
+     * @param type  数据返回list类型
+     * @param rt    结果回调
+     */
+    public static <C> void sendMapDeleteList(String url, Map<String, Object> param, TypeToken<C> type, ResponseType<C> rt) {
+        executor.execute(() -> NetHttp.builder()
+                .setHosts(url)
+                .setMode(DEL_MAP)
+                .setMaxAnewCount(Configuration.count)
+                .setMap(param)
+                .setCallback((Response) data -> rt.onSuccess(new Gson().fromJson(data, type.getType())))
                 .build());
     }
 
@@ -346,6 +396,22 @@ public final class Rn {
     }
 
     /**
+     * @param url   请求地址
+     * @param param 发送数据
+     * @param type  数据返回list类型
+     * @param rt    结果回调
+     */
+    public static <C> void sendJsonDeleteList(String url, JsonObject param, TypeToken<C> type, ResponseType<C> rt) {
+        executor.execute(() -> NetHttp.builder()
+                .setHosts(url)
+                .setMode(DEL_JSON)
+                .setJson(param)
+                .setMaxAnewCount(Configuration.count)
+                .setCallback((Response) data -> rt.onSuccess(new Gson().fromJson(data, type.getType())))
+                .build());
+    }
+
+    /**
      * http发送请求
      *
      * @param url      请求地址
@@ -377,6 +443,23 @@ public final class Rn {
                 .setMaxAnewCount(Configuration.count)
                 .setJson(param)
                 .setCallback((Response) data -> rt.onSuccess(new Gson().fromJson(data, type)))
+                .build());
+    }
+
+    /**
+     * @param url   请求地址
+     * @param param 发送数据
+     * @param type  数据返回list类型
+     * @param rt    结果回调
+     */
+    public static <C> void sendJsonFromList(String url, String key, JsonObject param, TypeToken<C> type, ResponseType<C> rt) {
+        executor.execute(() -> NetHttp.builder()
+                .setJsonKey(key)
+                .setHosts(url)
+                .setMode(FROM_JSON)
+                .setMaxAnewCount(Configuration.count)
+                .setJson(param)
+                .setCallback((Response) data -> rt.onSuccess(new Gson().fromJson(data, type.getType())))
                 .build());
     }
 

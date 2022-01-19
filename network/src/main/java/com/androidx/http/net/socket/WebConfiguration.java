@@ -2,6 +2,7 @@ package com.androidx.http.net.socket;
 
 import android.net.Uri;
 
+import java.lang.ref.WeakReference;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.LinkedHashMap;
@@ -20,16 +21,13 @@ public class WebConfiguration {
 
     private static Uri uri;
     private static long reconnectInterval;
-    private Builder builder;
-    private static StateBuilder stateBuilder;
+    private static WeakReference<Builder> builder2;
+    private final Builder builder1;
 
     private WebConfiguration(Builder builder) {
-        this.builder = builder;
+        this.builder1 = builder;
+        builder2 = new WeakReference<>(builder);
         request = new Request.Builder();
-    }
-
-    private WebConfiguration(StateBuilder builder) {
-        stateBuilder = builder;
     }
 
     protected static long getReconnectInterval() {
@@ -37,15 +35,15 @@ public class WebConfiguration {
     }
 
     protected static String getException() {
-        return stateBuilder.exception;
+        return builder2.get().exception;
     }
 
     protected static String getConnect() {
-        return stateBuilder.connect;
+        return builder2.get().connect;
     }
 
     protected static String getDisconnect() {
-        return stateBuilder.disconnect;
+        return builder2.get().disconnect;
     }
 
     protected static Request getRequest() {
@@ -68,9 +66,9 @@ public class WebConfiguration {
 
     public void get() {
         MAP.clear();
-        uri = builder.uri;
-        reconnectInterval = builder.reconnectInterval;
-        MAP.putAll(builder.map);
+        uri = builder1.uri;
+        reconnectInterval = builder1.reconnectInterval;
+        MAP.putAll(builder1.map);
     }
 
 
@@ -85,6 +83,9 @@ public class WebConfiguration {
         private Uri uri;
         private long reconnectInterval;
         private Map<String, Object> map;
+        private String connect = "connect";
+        private String disconnect = "disconnect";
+        private String exception = "exception";
 
         /**
          * 访问地址
@@ -111,41 +112,31 @@ public class WebConfiguration {
          *
          * @param map 参数
          */
-
         public Builder setParam(Map<String, Object> map) {
             this.map = map;
             return builder;
         }
 
-        public WebConfiguration build() {
-            synchronized (WebConfiguration.class) {
-                return new WebConfiguration(builder);
-            }
-        }
-    }
-
-    public static final class StateBuilder {
-
-        private final StateBuilder builder;
-        private String connect = "connect";
-        private String disconnect = "disconnect";
-        private String exception = "exception";
-
-        private StateBuilder() {
-            this.builder = this;
-        }
-
-        public StateBuilder setConnect(String connect) {
+        /**
+         * 成功连接状态
+         */
+        public Builder setConnect(String connect) {
             this.connect = connect;
             return builder;
         }
 
-        public StateBuilder setDisconnect(String disconnect) {
+        /**
+         * 断开连接状态
+         */
+        public Builder setDisconnect(String disconnect) {
             this.disconnect = disconnect;
             return builder;
         }
 
-        public StateBuilder setException(String exception) {
+        /**
+         * 异常状态
+         */
+        public Builder setException(String exception) {
             this.exception = exception;
             return builder;
         }
@@ -161,7 +152,4 @@ public class WebConfiguration {
         return new Builder();
     }
 
-    public static StateBuilder statebuilder() {
-        return new StateBuilder();
-    }
 }
