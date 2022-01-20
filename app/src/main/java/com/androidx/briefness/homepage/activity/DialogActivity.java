@@ -105,11 +105,9 @@ public final class DialogActivity extends BaseActivity {
 
     @OnClick(R.id.activity_dialog3)
     public void dialog3() {
-        String[] name = {"相机", "相册"};
-        DialogDefault.camera(aThis, name, (position, dialog) -> {
-            toasts.i("选择", position);
-            toasts.setMsg(name[position]).showSuccess();
-            dialog.cancel();
+        DialogDefault.camera(aThis, photos -> {
+            toasts.i("Uri", photos.get(0).uri);
+            toasts.i("Path", photos.get(0).path);
         });
     }
 

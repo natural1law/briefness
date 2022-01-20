@@ -27,6 +27,6 @@
         android:layout_height="1dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:background="#E3E3E3" />
+        android:background="#CCE3E3E3" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -1,6 +1,7 @@
 package com.androidx.view.dialog.adapter;
 
 import android.annotation.SuppressLint;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ public final class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.Hold
     private int textColor;
     private int textSize;
     private DialogServlet dt;
+    private HolderView holder;
     private OnClickCameraListener listener;
 
     @NonNull
@@ -30,9 +32,10 @@ public final class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.Hold
 
     @Override
     public void onBindViewHolder(@NonNull HolderView holder, int position) {
+        this.holder = holder;
         holder.textView.setText(data[position]);
         holder.textView.setTextColor(textColor);
-        holder.textView.setTextSize(textSize);
+        holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
         holder.layoutView.setOnClickListener(v -> listener.ok(position, dt));
         if (holder.getAdapterPosition() + 1 == data.length) holder.v.setVisibility(View.GONE);
         else holder.v.setVisibility(View.VISIBLE);
@@ -44,9 +47,12 @@ public final class CameraAdapter extends RecyclerView.Adapter<CameraAdapter.Hold
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(String[] data) {
+    public void setData(String... data) {
         this.data = data;
-        notifyDataSetChanged();
+    }
+
+    public HolderView getHolder() {
+        return holder;
     }
 
     public void setTextColor(int textColor) {

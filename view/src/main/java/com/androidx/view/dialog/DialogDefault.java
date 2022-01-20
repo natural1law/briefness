@@ -3,10 +3,13 @@ package com.androidx.view.dialog;
 import static android.view.Gravity.BOTTOM;
 import static android.view.Gravity.CENTER;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.CountDownTimer;
+import android.view.View;
 
 import androidx.annotation.ColorRes;
+import androidx.annotation.IntRange;
 import androidx.annotation.Size;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +23,13 @@ import com.androidx.view.dialog.adapter.ListAdapter;
 import com.androidx.view.dialog.listener.OnClickCameraListener;
 import com.androidx.view.dialog.listener.OnClickCountDownTimeListener;
 import com.androidx.view.dialog.listener.OnClickTriggerListener;
+import com.androidx.view.dialog.listener.OnResultPhotoListener;
+import com.androidx.view.scan.GlideEngine;
+import com.huantansheng.easyphotos.EasyPhotos;
+import com.huantansheng.easyphotos.callback.SelectCallback;
+import com.huantansheng.easyphotos.models.album.entity.Photo;
+
+import java.util.ArrayList;
 
 public final class DialogDefault {
 
@@ -66,24 +76,21 @@ public final class DialogDefault {
 
     /**
      * 相机选择器
-     *
-     * @param datas    按钮名称
-     * @param listener 完成
      */
-    public static void camera(Context context, String[] datas, OnClickCameraListener listener) {
-        camera(context, datas, R.color.cameraText, 20, listener);
+    public static void camera(Context context, OnResultPhotoListener pathListener) {
+        camera(context, R.color.cameraFontColor, 20, 1, pathListener);
     }
 
     /**
      * 相机选择器
      *
-     * @param datas        按钮名称
      * @param contentColor 按钮颜色
      * @param contentSize  按钮大小
-     * @param listener     完成
      */
-    public static void camera(Context context, String[] datas, @ColorRes int contentColor, @Size int contentSize, OnClickCameraListener listener) {
-        DialogServlet dialog = DialogCall.builder()
+    public static void camera(Context context, @ColorRes int contentColor
+            , @IntRange(from = 6, to = 36) int contentSize, @IntRange(from = 1, to = 9) int maxCount
+            , OnResultPhotoListener pathListener) {
+        DialogServlet ds = DialogCall.builder()
                 .setLayoutView(R.layout.dialog_camera)
                 .setLayoutViewId(R.id.dialog_frame)
                 .setCanceled(false)
@@ -91,18 +98,68 @@ public final class DialogDefault {
                 .setLayoutGravity(BOTTOM)
                 .build()
                 .get(context);
-        dialog.setText(R.id.camera_cancel, "取消");
-        dialog.setOnClickListener(R.id.camera_cancel, listener::no);
-        RecyclerView rv = dialog.getView(R.id.camera_rv);
         CameraAdapter adapter = new CameraAdapter();
-        rv.setLayoutManager(new LinearLayoutManager(context));
+        RecyclerView rv = ds.getView(R.id.camera_rv);
+        rv.setHasFixedSize(true);
+        rv.setItemViewCacheSize(5);
         rv.setAdapter(adapter);
-        adapter.setDt(dialog);
-        adapter.setData(datas);
-        adapter.setTextColor(contentColor);
+        rv.setDrawingCacheEnabled(true);
+        LinearLayoutManager manager;
+        rv.setLayoutManager(manager = new LinearLayoutManager(context));
+        rv.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+        manager.setRecycleChildrenOnDetach(true);
+        adapter.setDt(ds);
+        adapter.setData("相机", "相册");
+        adapter.setTextColor(context.getResources().getColor(contentColor, context.getTheme()));
         adapter.setTextSize(contentSize);
-        adapter.setListener(listener);
-        dialog.show();
+        adapter.setListener((position, dialog) -> {
+            switch (position + 1) {
+                case 1:
+                    EasyPhotos.createCamera((Activity) context, false)
+                            .setFileProviderAuthority("com.lk.cmf.fileProvider")
+                            .start(new SelectCallback() {
+                                @Override
+                                public void onResult(ArrayList<Photo> photos, boolean isOriginal) {
+                                    if (pathListener != null) pathListener.onPhoto(photos);
+                                }
+
+                                @Override
+                                public void onCancel() {
+                                    if (pathListener != null) pathListener.cancel();
+                                }
+                            });
+                    break;
+                case 2:
+                    EasyPhotos.createAlbum((Activity) context, true, false, GlideEngine.getInstance())
+                            .setFileProviderAuthority("com.lk.cmf.fileProvider")
+                            .setCount(maxCount)
+                            .setVideo(true)
+                            .setGif(true)
+                            .setMinWidth(48)
+                            .setMinHeight(48)
+                            .setOriginalMenu(false, true, "原图不可用")
+                            .start(new SelectCallback() {
+                                @Override
+                                public void onResult(ArrayList<Photo> photos, boolean isOriginal) {
+                                    if (pathListener != null) pathListener.onPhoto(photos);
+                                }
+
+                                @Override
+                                public void onCancel() {
+                                    if (pathListener != null) pathListener.cancel();
+                                }
+                            });
+                default:
+                    break;
+            }
+            dialog.cancel();
+        });
+        ds.setText(R.id.camera_cancel, "取消");
+        ds.setOnClickListener(R.id.camera_cancel, d -> {
+            adapter.onViewRecycled(adapter.getHolder());
+            d.cancel();
+        });
+        ds.show();
     }
 
     /**
@@ -112,7 +169,7 @@ public final class DialogDefault {
      * @param listener 完成
      */
     public static void list(Context context, String[] datas, OnClickCameraListener listener) {
-        list(context, datas, R.color.cameraText, 20, listener);
+        list(context, datas, R.color.cameraFontColor, 20, listener);
     }
 
     /**

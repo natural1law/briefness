@@ -6,5 +6,5 @@
     <color name="gray">#FAFAFA</color>
     <color name="code">#ABD4FF</color>
     <color name="hint">#8E8E8E</color>
-    <color name="cameraText">#006cff</color>
+    <color name="cameraFontColor">#006cff</color>
 </resources>
