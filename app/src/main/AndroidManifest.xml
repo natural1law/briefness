@@ -42,6 +42,8 @@
         <activity android:name=".homepage.activity.PageRecyclerViewActivity" />
         <!--长按菜单演示-->
         <activity android:name=".homepage.activity.MenuActivity" />
+        <!--刷新列表演示-->
+        <activity android:name=".homepage.activity.RefreshActivity" />
 
         <service
             android:name=".homepage.service.NotificationService"
