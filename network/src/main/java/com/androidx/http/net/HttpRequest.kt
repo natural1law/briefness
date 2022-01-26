@@ -253,12 +253,13 @@ class HttpRequest : HttpRequestListener {
     @Strictfp
     override fun upload(
         url: String,
+        param: Map<String, Any>,
         key: String,
         path: String,
         maxAnewCount: Int,
         resonse: com.androidx.http.net.listener.Response?
     ) {
-        hnl.uploadRequest(url, key, path).enqueue(object : Callback {
+        hnl.uploadRequest(url, param, key, path).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 val obj = MsgModule(Log.getStackTraceString(e), resonse!!)
                 handler.sendMessage(handler.obtainMessage(-1, obj))

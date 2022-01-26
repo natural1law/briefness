@@ -23,7 +23,7 @@ interface HttpNetworkListener {
 
     fun postRequestProto(url: String, bytes: ByteArray): Call
 
-    fun uploadRequest(url: String, key: String, path: String): Call
+    fun uploadRequest(url: String, map: Map<String, Any>, key: String, path: String): Call
 
     fun downloadRequest(url: String, downloadListener: DownloadListener): Call
 

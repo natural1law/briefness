@@ -154,6 +154,7 @@ class NetHttp private constructor() {
             )
             UPLOAD -> requestListener.upload(
                 builder.host,
+                builder.map,
                 builder.jsonKey,
                 builder.filePath,
                 builder.maxAnewCount!!,

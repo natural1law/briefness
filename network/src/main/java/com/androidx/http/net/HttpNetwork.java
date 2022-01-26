@@ -184,15 +184,15 @@ public final class HttpNetwork implements HttpNetworkListener {
      * @param path 文件
      */
     @Override
-    public Call uploadRequest(@NonNull String url, @NonNull String key, @NonNull String path) {
+    public Call uploadRequest(@NonNull String url, @NonNull Map<String, ?> map, @NonNull String key, @NonNull String path) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             File file = Paths.get(path).toFile();
             RequestBody rb = RequestBody.create(file, FILE);
-            MultipartBody mb = new MultipartBody.Builder()
+            MultipartBody.Builder mb = new MultipartBody.Builder()
                     .setType(MultipartBody.FORM)
-                    .addFormDataPart(key, file.getName(), rb)
-                    .build();
-            return client().build().newCall(request.post(mb).url(url).build());
+                    .addFormDataPart(key, file.getName(), rb);
+            map.forEach((k, v) -> mb.addFormDataPart(k, String.valueOf(v)));
+            return client().build().newCall(request.post(mb.build()).url(url).build());
         } else {
             File file = new File(path);
             RequestBody rb = RequestBody.create(file, FILE);

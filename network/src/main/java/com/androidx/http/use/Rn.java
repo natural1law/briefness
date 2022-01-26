@@ -29,6 +29,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayInputStream;
 import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -470,13 +471,24 @@ public final class Rn {
      * @param path 文件地址
      */
     public static void sendUpload(String url, String path, Response response) {
-        sendUpload(url, "file", path, response);
+        sendUpload(url, new WeakHashMap<>(), "file", path, response);
     }
 
-    public static void sendUpload(String url, String key, String path, Response response) {
+    /**
+     * 上传文件
+     *
+     * @param url  请求地址
+     * @param path 文件地址
+     */
+    public static void sendUpload(String url, Map<String, Object> param, String path, Response response) {
+        sendUpload(url, param, "file", path, response);
+    }
+
+    public static void sendUpload(String url, Map<String, Object> param, String key, String path, Response response) {
         executor.execute(() -> NetHttp.builder()
                 .setHosts(url)
                 .setFile(path)
+                .setMap(param)
                 .setJsonKey(key)
                 .setMode(UPLOAD)
                 .setMaxAnewCount(Configuration.count)

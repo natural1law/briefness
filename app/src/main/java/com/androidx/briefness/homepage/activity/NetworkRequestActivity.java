@@ -25,12 +25,11 @@ import com.androidx.briefness.homepage.service.NotificationService;
 import com.androidx.http.use.Rn;
 import com.androidx.reduce.tools.Idle;
 import com.androidx.reduce.tools.Secure;
+import com.androidx.reduce.tools.Storage;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 import com.google.protobuf.ByteString;
 
-import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -137,9 +136,13 @@ public final class NetworkRequestActivity extends BaseActivity {
 //        String path1 = Storage.Locality.generatePicturesPath("", "1.jpg");
 //        Rn.sendUpload("http://192.168.1.92:9981/api/user/upload.android", path1, data -> toasts.setMsg(data).showSuccess());
 //        Rn.show();
-        Rn.sendMapGetList("", null, new TypeToken<List<JsonObject>>() {
-        }, data -> {
-
+        String url = "http://192.168.1.94:8081/app/qualitySupervision/imgvideoUrl";
+        Map<String, Object> param = new WeakHashMap<>();
+        param.put("userId", "18841280510");
+        param.put("projectId", "965");
+        String path1 = Storage.Locality.generatePicturesPath("/WeiXin/", "1.jpg");
+        Rn.sendUpload(url, param, path1, data -> {
+            toasts.i("结果", data);
         });
     }
 
