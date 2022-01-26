@@ -106,6 +106,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
             Log.i("响应数据", String.valueOf(data));
         });
      ```
+     * POST请求-protobuf类型参数
      ```
         // SendModule.Request param = SendModule.Request.newBuilder()
         //        .setData(ByteString.copyFromUtf8(""))
@@ -118,6 +119,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
             Log.i("响应数据", String.valueOf(result));
         });
      ```
+     * POST请求-from表单形式提交
      ```
         JsonObject param = new JsonObject();
         param.addProperty("a", "1");
