@@ -56,7 +56,15 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
   ```
 
 ### 工具使用
-  **`暂不介绍，目前由作者自己使用，待框架稳定后在做介绍`**
+  **`
+    * 网络请求实例 *
+    Map<String, Object> param = new ConcurrentHashMap<>();
+        param.put("a", "1");
+        param.put("b", "2");
+        Rn.sendMapPost(url, param, data -> {
+            //data=响应的数据
+        });
+  `**
 
 ### 更新日志
   * [历史版本](https://github.com/natural1law/briefness/blob/master/HISTORY_VERSION.md "点击查看历史版本")
