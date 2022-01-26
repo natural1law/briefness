@@ -2,7 +2,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
 ======
 
 ### 工具目录
-   #### 图表统计
+   #### 图形统计
    * [图表统计](https://github.com/natural1law/briefness/blob/master/app/src/main/java/com/androidx/briefness/homepage/activity/EchartsActivity.java "点击查看使用`图表统计`功能代码")
    #### 网络请求
    * [网络请求（WebSocket长连接、http/https）](https://github.com/natural1law/briefness/blob/master/app/src/main/java/com/androidx/briefness/homepage/activity/NetworkRequestActivity.java "点击查看使用`网络请求`功能代码")
@@ -124,7 +124,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
         JsonObject param = new JsonObject();
         param.addProperty("a", "1");
         param.addProperty("b", "2");
-        Rn.sendJsonFrom(url, param, data -> {
+        Rn.sendJsonFrom(url, "key", param, data -> {
             /* 普通响应string类型数据 */
             Log.i("响应数据", String.valueOf(data));
         });
@@ -178,6 +178,181 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
 
             }
         });
+     ```
+  * 图形统计使用示例
+     * android-xml代码
+     ```
+        <?xml version="1.0" encoding="utf-8"?>
+        <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+                
+             <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/activity_web_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:overScrollMode="never"
+                android:scrollbars="none"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" />
+                
+         </androidx.constraintlayout.widget.ConstraintLayout>
+     ```
+     * android代码
+     ```
+        public final class EchartsActivity extends BaseWebActivity {
+        
+            @BindView(R.id.activity_web_layout)
+            public LinearLayoutCompat webView;
+            
+            private Unbinder unbinder;
+            private final EchartsActivity aThis = this;
+    
+            @Override
+            protected void onCreate(@Nullable Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                setContentView(R.layout.xxx);
+                unbinder = ButterKnife.bind(aThis);
+                super.initWeb(webView).setLoadListener(() -> {
+                   Map<String, Object> param = new ConcurrentHashMap<>();
+                   Rn.sendMapPost(url, param, data -> {
+                       JsonObject json = new Gson().fromJson(String.valueOf(data), JsonObject.class);
+                       super.setCallJs("callJS", json);
+                       super.setStart("index.html");
+                   });
+               });
+            } 
+            
+            @Override
+            public void onDestroy() {
+                super.onDestroy();
+                unbinder.unbind();
+            }
+        }
+     ```
+     * html代码(assets/index.html)
+     ```
+        <!DOCTYPE html>
+        <html style="width:100%; height:100%;">
+          <head>
+            <meta charset="UTF-8">
+            <script type="text/javascript" src="./echarts.min.js"></script>
+            <script type="text/javascript" src="./jquery.js"></script>
+          </head>
+          <body style="width: 98%; height: 95%;">
+            <div id="container" style="width: 100%; height: 100%;"></div>
+            <script type="text/javascript" src="./index.js"></script>
+          </body>
+        </html>
+     ```
+     * js代码(assets/index.js)
+     ```
+        //android代码中对应 super.setCallJs("callJS", json);
+        function callJS(param){
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('container'));
+        // 指定图表的配置项和数据
+        var option = {
+            title: {
+                    text: ''
+                },
+                tooltip: {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data: ['目标干球', '干球温度', '目标湿球', '湿球温度'],
+                    textStyle: {
+                        "fontSize": 18
+                    }
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                toolbox: {
+                    feature: {
+                        dataZoom: {
+                            yAxisIndex: 'none'
+                        },
+                        magicType: {type: ['line', 'bar']},
+                        restore: {}
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: param.times,
+                    axisLabel:{
+      //                  interval: 0
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    min:0,
+                    max: 80,
+                    axisLabel: {
+                        formatter: '{value} °C'
+                    }
+                },
+                series: [
+                    {
+                        name: '目标干球',
+                        type: 'line',
+                        smooth: true,
+                        lineStyle: {
+                            width: 1,
+                            type: 'dashed'
+                        },
+                        data: param.tdbList
+                    },
+                    {
+                        name: '干球温度',
+                        type: 'line',
+                        smooth: true,
+                        data: param.dbtList
+                    },
+                    {
+                        name: "目标湿球",
+                        type: 'line',
+                        smooth: true,
+                        lineStyle: {
+                            width: 1,
+                            type: 'dashed'
+                        },
+                        data: param.twbList
+                    },
+                    {
+                        name: "湿球温度",
+                        type: 'line',
+                        smooth: true,
+                        data: param.wbtList
+                    },
+                    {
+                        name: "火力档位",
+                        type: 'line',
+                        smooth: false,
+                        showSymbol: false,
+                        symbolSize: -1,
+                        lineStyle: {
+                            width: 0, // 线宽是0
+                            color: 'rgba(0, 0, 0, 0)' // 线的颜色是透明的
+                        },
+      //                  stack: '总量',
+                        data: param.gearsList
+                    }
+                ]
+        };
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option);
+     }
+
      ```
 
 ### 更新日志
