@@ -90,7 +90,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
         Map<String, Object> param = new WeakHashMap<>();
         param.put("a", "1");
         param.put("b", "2");
-        Rn.sendMapPOst(url, param, data -> {
+        Rn.sendMapPost(url, param, data -> {
             Log.i("响应数据", String.valueOf(data));
         });
      ```
@@ -98,10 +98,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
         JsonObject param = new JsonObject();
         param.addProperty("a", "1");
         param.addProperty("b", "2");
-        // Map<String, Object> param = new WeakHashMap<>();
-        // param.put("a", "1");
-        // param.put("b", "2");
-        Rn.sendMapPost(url, param, data -> {
+        Rn.sendJsonPost(url, param, data -> {
             /* 普通响应string类型数据 */
             Log.i("响应数据", String.valueOf(data));
         });
