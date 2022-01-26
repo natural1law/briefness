@@ -56,14 +56,125 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
   ```
 
 ### 工具使用
-  * 网络请求使用示例
+  * 网络请求使用示例(DELETE请求--同GET请求)
      * GET请求
      ```
         Map<String, Object> param = new WeakHashMap<>();
         param.put("a", "1");
         param.put("b", "2");
         Rn.sendMapGet(url, param, data -> {
-            Log.i("响应数据", data);
+            /* 普通响应数据(string类型) */
+            Log.i("响应数据", String.valueOf(data));
+        });
+     ```
+     ```
+        Map<String, Object> param = new WeakHashMap<>();
+        param.put("a", "1");
+        param.put("b", "2");
+        Rn.sendMapGet(url, param, JsonObject.class, data -> {
+            /* 设置响应数据类型(json、map、bean) */
+            Log.i("响应数据", data.get("").getAsString());
+        });
+     ```
+     ```
+        Map<String, Object> param = new WeakHashMap<>();
+        param.put("a", "1");
+        param.put("b", "2");
+        Rn.sendMapGetList(url, param, new TypeToken<List<JsonObject>>(){}, data -> {
+            /* 设置响应数据类型(json、map、bean、list) */
+            Log.i("响应数据", data.get(0).get("").getAsString());
+        });
+     ```
+     * POST请求
+     ```
+        Map<String, Object> param = new WeakHashMap<>();
+        param.put("a", "1");
+        param.put("b", "2");
+        Rn.sendMapPOst(url, param, data -> {
+            Log.i("响应数据", String.valueOf(data));
+        });
+     ```
+     ```
+        JsonObject param = new JsonObject();
+        param.addProperty("a", "1");
+        param.addProperty("b", "2");
+        // Map<String, Object> param = new WeakHashMap<>();
+        // param.put("a", "1");
+        // param.put("b", "2");
+        Rn.sendMapPost(url, param, data -> {
+            /* 普通响应string类型数据 */
+            Log.i("响应数据", String.valueOf(data));
+        });
+     ```
+     ```
+        // SendModule.Request param = SendModule.Request.newBuilder()
+        //        .setData(ByteString.copyFromUtf8(""))
+        //        .build();//protobuf
+        byte[] param = "123".getBytes();
+        Rn.sendBytes(url, param.toByteArray(), data -> {
+            /* 响应byte[]类型数据 */
+            String result = new String(data);
+            //ReceiveModule.Result result = ReceiveModule.Result.parseFrom(data);
+            Log.i("响应数据", String.valueOf(result));
+        });
+     ```
+     ```
+        JsonObject param = new JsonObject();
+        param.addProperty("a", "1");
+        param.addProperty("b", "2");
+        Rn.sendJsonFrom(url, param, data -> {
+            /* 普通响应string类型数据 */
+            Log.i("响应数据", String.valueOf(data));
+        });
+     ```
+     * 上传(图片、视频、文件等)
+     ```
+        //带参数(key默认file)
+        String url = "http://localhost:8080/a/b";
+        Map<String, Object> param = new WeakHashMap<>();
+        param.put("a", "1");
+        param.put("b", "2");
+        String path = Storage.Locality.generatePicturesPath("/WeiXin/", "1.jpg");
+        Rn.sendUpload(url, param, path, data -> {
+            Log.i("响应数据", String.valueOf(data));
+        });
+        //不带参数(key默认file)
+        Rn.sendUpload(url, path, data -> {
+            Log.i("响应数据", String.valueOf(data));
+        });
+        //完整参数
+        Rn.sendUpload(url, param, "key", path, data -> {
+            Log.i("响应数据", String.valueOf(data));
+        });
+     ```
+     * 下载(图片、视频、文件等)
+     ```
+         String path = "";//保存的地址
+         Rn.sendDownload(url, path, new DownloadListener() {
+            @Override
+            public void start() {//开始下载
+                
+            }
+
+            @Override
+            public void running(BigDecimal process) {//当前进度
+
+            }
+
+            @Override
+            public void finish(File file, double duration) {//下载完成(duration:总耗时)
+
+            }
+
+            @Override
+            public void error(String error) {//下载错误信息
+
+            }
+
+            @Override
+            public void fail(String fail) {//异常信息
+
+            }
         });
      ```
 
