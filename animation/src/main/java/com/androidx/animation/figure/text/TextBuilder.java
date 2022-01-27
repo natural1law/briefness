@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.animation.AccelerateInterpolator;
 
 import androidx.annotation.FloatRange;
@@ -18,7 +17,7 @@ import com.androidx.animation.base.BaseAnimator;
 
 public class TextBuilder extends BaseAnimator {
     private static final int BASE_ALPHA = 90;
-    private static final String DEFAULT_TEXT = "正在加载";
+    private static final String DEFAULT_TEXT = "正在加载中...";
     private Paint mTextPaint;
     private String mTextChars;
     private int mDrawTextCount = 0;
@@ -58,7 +57,7 @@ public class TextBuilder extends BaseAnimator {
 
     @Override
     protected void prepareStart(ValueAnimator floatValueAnimator) {
-        floatValueAnimator.setDuration(ceil(getAnimationDuration() * 0.5f));
+        floatValueAnimator.setDuration((long) (getAnimationDuration() * 0.8f));
         floatValueAnimator.setInterpolator(new AccelerateInterpolator());
     }
 
@@ -69,7 +68,7 @@ public class TextBuilder extends BaseAnimator {
 
     @Override
     protected void computeUpdateValue(ValueAnimator animation, @FloatRange(from = 0.0, to = 1.0) float animatedValue) {
-        mTextPaint.setAlpha((int) (animatedValue * 155) + BASE_ALPHA);
+        mTextPaint.setAlpha((int) (animatedValue * 180) + BASE_ALPHA);
     }
 
     @Override
