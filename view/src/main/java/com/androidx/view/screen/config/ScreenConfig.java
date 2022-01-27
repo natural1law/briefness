@@ -1,5 +1,8 @@
 package com.androidx.view.screen.config;
 
+import static android.graphics.PixelFormat.RGBA_8888;
+import static android.icu.text.IDNA.DEFAULT;
+
 import android.content.Context;
 import android.media.MediaRecorder;
 import android.os.Parcel;
@@ -13,9 +16,6 @@ import com.androidx.reduce.tools.Storage;
 
 import java.util.Objects;
 import java.util.UUID;
-
-import static android.graphics.PixelFormat.RGBA_8888;
-import static android.icu.text.IDNA.DEFAULT;
 
 /**
  * 屏幕配置
@@ -351,7 +351,7 @@ public final class ScreenConfig implements Parcelable {
          */
         private String picturePath() {
             String uuid = UUID.fromString(UUID.randomUUID().toString()).toString().replace("-", "");
-            return Storage.Locality.generatePicturesPath("default", uuid + ".png");
+            return Storage.Locality.generatePicturesPath("/" + uuid + ".png");
         }
 
         /**
@@ -359,7 +359,7 @@ public final class ScreenConfig implements Parcelable {
          */
         private String videoPath() {
             String uuid = UUID.fromString(UUID.randomUUID().toString()).toString().replace("-", "");
-            return Storage.Locality.generateVideoPath("default", uuid + ".mp4");
+            return Storage.Locality.generateVideoPath("/" + uuid + ".mp4");
         }
 
         private final Builder builder = this;
