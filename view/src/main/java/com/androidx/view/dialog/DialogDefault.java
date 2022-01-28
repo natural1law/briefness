@@ -116,7 +116,7 @@ public final class DialogDefault {
             switch (position + 1) {
                 case 1:
                     EasyPhotos.createCamera((Activity) context, false)
-                            .setFileProviderAuthority("com.lk.cmf.fileProvider")
+                            .setFileProviderAuthority("com.androidx.photo.fileProvider")
                             .start(new SelectCallback() {
                                 @Override
                                 public void onResult(ArrayList<Photo> photos, boolean isOriginal) {
@@ -131,7 +131,7 @@ public final class DialogDefault {
                     break;
                 case 2:
                     EasyPhotos.createAlbum((Activity) context, true, false, GlideEngine.getInstance())
-                            .setFileProviderAuthority("com.lk.cmf.fileProvider")
+                            .setFileProviderAuthority("com.androidx.photo.fileProvider")
                             .setCount(maxCount)
                             .setVideo(true)
                             .setGif(true)
