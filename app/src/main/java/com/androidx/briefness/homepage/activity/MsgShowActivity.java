@@ -1,5 +1,8 @@
 package com.androidx.briefness.homepage.activity;
 
+import static com.androidx.briefness.base.App.toasts;
+import static com.androidx.reduce.tools.Convert.Timestamp.getTime;
+
 import android.annotation.SuppressLint;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -56,7 +59,7 @@ public final class MsgShowActivity extends BaseActivity {
     }
 
     private void initView() {
-
+        toasts.i("当前日期", getTime(1643425433140L));
     }
 
 }

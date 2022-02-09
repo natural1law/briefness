@@ -3,14 +3,20 @@ package com.androidx.reduce.tools;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.icu.math.BigDecimal;
+import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
+
+import androidx.annotation.RequiresApi;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
 /**
@@ -75,8 +81,86 @@ public final class Convert {
         public static final String DATE_FORMAT18 = "HH:mm:ss";
         public static final String DATE_FORMAT19 = "yyyy/MM/dd";
         public static final String DATE_FORMAT20 = "yyyy-MM-dd";
+        public static final String DATE_FORMAT21 = "yyyy,MM,dd,HH,mm,ss";
 
         private Timestamp() {
+        }
+
+        /**
+         * 获取当前日期时间
+         *
+         * @param format 时间格式
+         */
+        @SuppressLint("SimpleDateFormat")
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        public static String getCurrentDatetime(String... format) {
+            return dispose(LocalDateTime.now(), format[0]);
+        }
+
+        @SuppressLint("SimpleDateFormat")
+        private static <Timestamp> String dispose(Timestamp timestamp, String format) {
+            try {
+                Date date;
+                SimpleDateFormat sdf = new SimpleDateFormat(format);
+                if (timestamp instanceof Long) {
+                    date = sdf.parse(sdf.format(timestamp));
+                } else if (timestamp instanceof String) {
+                    date = sdf.parse(sdf.format(timestamp));
+                } else {
+                    date = new Date();
+                }
+                assert date != null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    LocalDateTime datetime = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+                    return DateTimeFormatter.ofPattern(format).format(datetime);
+                } else {
+                    return new SimpleDateFormat(format).format(date);
+                }
+            } catch (Exception e) {
+                return Log.getStackTraceString(e);
+            }
+        }
+
+        /**
+         * 转换Date类型
+         */
+        @SuppressLint("SimpleDateFormat")
+        public static <D> Date toDate(D timestamp, String format) {
+            try {
+                Date date;
+                SimpleDateFormat sdf = new SimpleDateFormat(format);
+                if (timestamp instanceof Long) {
+                    date = sdf.parse(sdf.format(timestamp));
+                } else if (timestamp instanceof String) {
+                    date = sdf.parse(sdf.format(timestamp));
+                } else {
+                    date = new Date();
+                }
+                return date;
+            } catch (ParseException e) {
+                return new Date();
+            }
+        }
+
+        /**
+         * 时间戳转时间
+         */
+        public static <Timestamp> String getTime(Timestamp timestamp) {
+            return dispose(timestamp, DATE_FORMAT18);
+        }
+
+        /**
+         * 获取斜杠格式日期
+         */
+        public static <Timestamp> String getDateOblique(Timestamp timestamp) {
+            return dispose(timestamp, DATE_FORMAT19);
+        }
+
+        /**
+         * 获取正短格式日期
+         */
+        public static <Timestamp> String getDateStraight(Timestamp timestamp) {
+            return dispose(timestamp, DATE_FORMAT20);
         }
 
         /**
@@ -88,18 +172,6 @@ public final class Convert {
             long minutes = (mss % (1000 * 60 * 60)) / (1000 * 60);
             long seconds = (mss % (1000 * 60)) / 1000;
             return days + " 天 " + hours + " 时 " + minutes + " 分 " + seconds + " 秒 ";
-        }
-
-        /**
-         * 转换Date类型
-         */
-        @SuppressLint("SimpleDateFormat")
-        public static <D> Date toDate(D datetime, String format) {
-            try {
-                return new SimpleDateFormat(format).parse(String.valueOf(datetime));
-            } catch (ParseException e) {
-                return new Date();
-            }
         }
 
         /**
@@ -202,15 +274,15 @@ public final class Convert {
         private Scm() {
         }
 
-        public static <V>BigDecimal set(V value){
+        public static <V> BigDecimal set(V value) {
             return set(value, 0);
         }
 
-        public static <V>BigDecimal set(V value, int scale){
+        public static <V> BigDecimal set(V value, int scale) {
             return set(value, scale, BigDecimal.ROUND_HALF_UP);
         }
 
-        public static <V>BigDecimal set(V value, int scale, int round){
+        public static <V> BigDecimal set(V value, int scale, int round) {
             return new BigDecimal(String.valueOf(value)).setScale(scale, round);
         }
 
