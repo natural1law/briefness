@@ -351,54 +351,48 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
      }
 
      ```
-     * 截图工具使用
+  * 截图工具使用
+     * 初始化屏幕录制对象
      ```
      private ScreenRecording sr;
      
-     /**
-     * 初始化处对象
-     */
      @Override
      public void onCreate(@Nullable Bundle savedInstanceState) {
          super.onCreate(savedInstanceState);
          sr = ScreenRecording.build(aThis).setNotification(NotificationBar.setSystem(this, "正在使用录屏丨截屏功能", "", R.mipmap.radio_on));
      }
-    
-    /**
-     * 销毁对象
-     */
+    ```
+    * 销毁对象
+    ```
     @Override
     protected void onDestroy() {
         super.onDestroy();
         sr.onDestroy();
     }
-     
-    /**
-     * 调用的截图功能
-     */
+    ```
+    * 调用的截图功能
+    ```
     private void capture(){
        sr.onStartCapture((fileUrl, exists) -> {
            Log.i("截图地址-" + exists, fileUrl);
         });
     }
-    
-    /**
-     * 调用的录屏功能
-     */
+    ```
+    * 调用的录屏功能
+    ```
     private void startRecording(){
         sr.onStartRecording((fileUrl, exists) -> {
             Log.i("视频地址-" + exists, fileUrl);
         });
     }
+    ```
+    * 停止的录屏功能
+    ```
+    private void startRecording(){
+        sr.onStopRecording();
+    }
     
-    /**
-     * 停止的录屏功能
-     */
-     private void startRecording(){
-         sr.onStopRecording();
-     }
-    
-     ```
+    ```
 
 ### 更新日志
   * [历史版本](https://github.com/natural1law/briefness/blob/master/HISTORY_VERSION.md "点击查看历史版本")
