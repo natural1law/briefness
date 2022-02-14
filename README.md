@@ -56,8 +56,8 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
   ```
 
 ### 工具使用
-  * 网络请求使用示例(DELETE请求--同GET请求)
-     * GET请求
+   #### 网络请求使用示例(DELETE请求--同GET请求)
+   * GET请求
      ```
         Map<String, Object> param = new WeakHashMap<>();
         param.put("a", "1");
@@ -85,7 +85,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
             Log.i("响应数据", data.get(0).get("").getAsString());
         });
      ```
-     * POST请求
+   * POST请求
      ```
         Map<String, Object> param = new WeakHashMap<>();
         param.put("a", "1");
@@ -116,7 +116,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
             Log.i("响应数据", String.valueOf(result));
         });
      ```
-     * POST请求-from表单形式提交
+   * POST请求-from表单形式提交
      ```
         JsonObject param = new JsonObject();
         param.addProperty("a", "1");
@@ -126,7 +126,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
             Log.i("响应数据", String.valueOf(data));
         });
      ```
-     * 上传(图片、视频、文件等)
+   * 上传(图片、视频、文件等)
      ```
         //带参数(key默认file)
         String url = "http://localhost:8080/a/b";
@@ -146,7 +146,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
             Log.i("响应数据", String.valueOf(data));
         });
      ```
-     * 下载(图片、视频、文件等)
+   * 下载(图片、视频、文件等)
      ```
          String path = "";//保存的地址
          Rn.sendDownload(url, path, new DownloadListener() {
