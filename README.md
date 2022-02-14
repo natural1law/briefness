@@ -103,7 +103,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
             Log.i("响应数据", String.valueOf(data));
         });
      ```
-     * POST请求-protobuf类型参数
+   * POST请求-protobuf类型参数
      ```
         // SendModule.Request param = SendModule.Request.newBuilder()
         //        .setData(ByteString.copyFromUtf8(""))
@@ -200,7 +200,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
                 
          </androidx.constraintlayout.widget.ConstraintLayout>
      ```
-     * android代码
+   * android代码
      ```
         public final class EchartsActivity extends BaseWebActivity {
         
@@ -232,7 +232,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
             }
         }
      ```
-     * html代码(assets/index.html)
+   * html代码(assets/index.html)
      ```
         <!DOCTYPE html>
         <html style="width:100%; height:100%;">
@@ -247,7 +247,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
           </body>
         </html>
      ```
-     * js代码(assets/index.js)
+   * js代码(assets/index.js)
      ```
         //android代码中对应 super.setCallJs("callJS", json);
         function callJS(param){
