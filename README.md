@@ -56,7 +56,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
   ```
 
 ### 工具使用
-   ##### 网络请求使用示例[](#网络请求 "点击查看返回`网络请求`目录")
+   ##### 网络请求使用示例[目录](#网络请求 "点击返回`网络请求`目录位置")
    * GET请求
      ```
         Map<String, Object> param = new WeakHashMap<>();
@@ -176,7 +176,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
             }
         });
      ```
-   ##### 图形统计使用示例[](#图形统计 "点击查看返回`图形统计`目录")
+   ##### 图形统计使用示例[目录](#图形统计 "点击返回`图形统计`目录位置")
    * android-xml代码
      ```
         <?xml version="1.0" encoding="utf-8"?>
@@ -351,7 +351,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
      }
 
      ```
-   ##### 截图工具使用示例[](#屏幕录制和截图 "点击查看返回`屏幕录制和截图`目录")
+   ##### 截图工具使用示例[目录](#屏幕录制和截图 "点击返回`屏幕录制和截图`目录位置")
    * 初始化屏幕录制对象
      ```
      private ScreenRecording sr;
