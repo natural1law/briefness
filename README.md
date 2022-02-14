@@ -32,27 +32,27 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
 ### 使用依赖
   * 全部
   ```
-    implementation 'com.github.natural1law.briefness:3.4.2'
+    implementation 'com.github.natural1law.briefness:3.4.5'
   ```
   * 分支-网络请求
   ```
-  implementation 'com.github.natural1law.briefness:network:3.4.2'
+  implementation 'com.github.natural1law.briefness:network:3.4.5'
   ```
   * 分支-常用工具
   ```
-  implementation 'com.github.natural1law.briefness:reduce:3.4.2'
+  implementation 'com.github.natural1law.briefness:reduce:3.4.5'
   ```
   * 分支-图表统计
   ```
-  implementation 'com.github.natural1law.briefness:echarts:3.4.2'
+  implementation 'com.github.natural1law.briefness:echarts:3.4.5'
   ```
   * 分支-视图布局
   ```
-  implementation 'com.github.natural1law.briefness:view:3.4.2'
+  implementation 'com.github.natural1law.briefness:view:3.4.5'
   ```
   * 分支-加载动画（仿zyao89）
   ```
-  implementation 'com.github.natural1law.briefness:animation:3.4.2'
+  implementation 'com.github.natural1law.briefness:animation:3.4.5'
   ```
 
 ### 工具使用
@@ -350,6 +350,54 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
         myChart.setOption(option);
      }
 
+     ```
+     * 截图工具使用
+     ```
+     private ScreenRecording sr;
+     
+     /**
+     * 初始化处对象
+     */
+     @Override
+     public void onCreate(@Nullable Bundle savedInstanceState) {
+         super.onCreate(savedInstanceState);
+         sr = ScreenRecording.build(aThis).setNotification(NotificationBar.setSystem(this, "正在使用录屏丨截屏功能", "", R.mipmap.radio_on));
+     }
+    
+    /**
+     * 销毁对象
+     */
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sr.onDestroy();
+    }
+     
+    /**
+     * 调用的截图功能
+     */
+    private void capture(){
+       sr.onStartCapture((fileUrl, exists) -> {
+           Log.i("截图地址-" + exists, fileUrl);
+        });
+    }
+    
+    /**
+     * 调用的录屏功能
+     */
+    private void startRecording(){
+        sr.onStartRecording((fileUrl, exists) -> {
+            Log.i("视频地址-" + exists, fileUrl);
+        });
+    }
+    
+    /**
+     * 停止的录屏功能
+     */
+     private void startRecording(){
+         sr.onStopRecording();
+     }
+    
      ```
 
 ### 更新日志
