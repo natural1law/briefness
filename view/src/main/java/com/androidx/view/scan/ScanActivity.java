@@ -144,7 +144,6 @@ public final class ScanActivity extends AppCompatActivity implements QRCodeView.
                 .setCleanMenu(true)
                 .setGif(false)
                 .setCount(1)
-                .setOriginalMenu(false, true, "原图不可用")
                 .start(new SelectCallback() {
                     @Override
                     public void onResult(ArrayList<Photo> photos, boolean isOriginal) {

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.androidx.briefness.R;
 import com.androidx.briefness.homepage.activity.DialogActivity;
+import com.androidx.briefness.homepage.activity.DragViewActivity;
 import com.androidx.briefness.homepage.activity.EchartsActivity;
 import com.androidx.briefness.homepage.activity.MenuActivity;
 import com.androidx.briefness.homepage.activity.MsgShowActivity;
@@ -54,7 +55,7 @@ public final class HomePageFrag extends BaseFragment {
     private final List<String> list = new ArrayList<>();
     private final Bundle bundle = new Bundle();
     private final String[] arr = {"Toast功能演示", "dialog功能演示", "图表功能演示", "Tab导航栏功能演示",
-            "网络请求接口演示", "截屏录屏功能演示", "分页功能演示", "长按菜单演示", "刷新列表演示"};
+            "网络请求接口演示", "截屏录屏功能演示", "分页功能演示", "长按菜单演示", "刷新列表演示", "拖拽布局演示"};
 
     @Override
     protected View onCreateView() {
@@ -124,6 +125,7 @@ public final class HomePageFrag extends BaseFragment {
                 appThis.activity(context, RefreshActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(9))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
+                appThis.activity(context, DragViewActivity.class, bundle).start();
             } else if (list.get(position).equals(list.get(10))) {
                 bundle.putString(getResources().getString(R.string.title), list.get(position));
             } else if (list.get(position).equals(list.get(11))) {

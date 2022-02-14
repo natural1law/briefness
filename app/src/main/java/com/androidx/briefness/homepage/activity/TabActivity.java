@@ -47,8 +47,12 @@ public class TabActivity extends BaseActivity {
     private TabLayoutBar tabView;
 
     @Override
+    protected int layoutId() {
+        return R.layout.activity_tab;
+    }
+
+    @Override
     protected void onCreate() {
-        setContentView(R.layout.activity_tab);
         unbinder = ButterKnife.bind(aThis);
         initView();
     }

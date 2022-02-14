@@ -1,5 +1,7 @@
 package com.androidx.view.screen;
 
+import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
+
 import android.Manifest;
 import android.app.Notification;
 import android.app.Service;
@@ -25,8 +27,6 @@ import com.androidx.view.screen.intertaces.ScreenServiceListener;
 import com.androidx.view.screen.service.ScreenService;
 
 import java.lang.ref.WeakReference;
-
-import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 
 /**
  * 屏幕录制

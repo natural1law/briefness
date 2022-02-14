@@ -40,6 +40,11 @@ public final class ScreenCaptureActivity extends BaseActivity {
     private ScreenRecording sr;
 
     @Override
+    protected int layoutId() {
+        return R.layout.activity_screen_capture;
+    }
+
+    @Override
     protected void onCreate() {
         initView();
     }
@@ -62,7 +67,6 @@ public final class ScreenCaptureActivity extends BaseActivity {
     }
 
     private void initView() {
-        setContentView(R.layout.activity_screen_capture);
         unbinder = ButterKnife.bind(aThis);
         titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
         titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));

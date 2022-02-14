@@ -40,8 +40,12 @@ public final class MenuActivity extends BaseActivity {
     private final Point point = new Point();
 
     @Override
+    protected int layoutId() {
+        return R.layout.activity_menu;
+    }
+
+    @Override
     protected void onCreate() {
-        setContentView(R.layout.activity_menu);
         unbinder = ButterKnife.bind(aThis);
         titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
         titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));

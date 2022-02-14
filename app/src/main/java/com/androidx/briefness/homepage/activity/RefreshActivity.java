@@ -3,6 +3,7 @@ package com.androidx.briefness.homepage.activity;
 import static com.androidx.briefness.base.App.toasts;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -43,8 +44,12 @@ public final class RefreshActivity extends BaseActivity {
     private static native String url();
 
     @Override
+    protected int layoutId() {
+        return R.layout.activity_refresh;
+    }
+
+    @Override
     protected void onCreate() {
-        setContentView(R.layout.activity_refresh);
         unbinder = ButterKnife.bind(aThis);
         titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
         titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));
@@ -62,6 +67,7 @@ public final class RefreshActivity extends BaseActivity {
 
     @OnClick(R.id.title_return_image)
     public void imageReturn() {
+        setResult(5, new Intent().putExtra("haha", "你好"));
         finish();
     }
 

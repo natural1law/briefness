@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 
+import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,6 +29,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
+    protected abstract @LayoutRes
+    int layoutId();
+
     protected abstract void onCreate();
 
     @Override
@@ -38,6 +42,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         getWindow().setNavigationBarColor(getResources().getColor(R.color.gray, getTheme()));
         super.onCreate(savedInstanceState);
         try {
+            setContentView(layoutId());
             this.onCreate();
         } catch (Exception e) {
             toasts.e(getClass().getName(), e);

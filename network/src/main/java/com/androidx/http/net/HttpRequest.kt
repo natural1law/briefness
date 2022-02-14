@@ -12,9 +12,10 @@ import com.google.gson.JsonObject
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.Response
-import java.io.*
+import java.io.File
+import java.io.IOException
+import java.io.InputStream
 import java.net.SocketTimeoutException
-import java.util.*
 
 class HttpRequest : HttpRequestListener {
 

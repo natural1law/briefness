@@ -67,8 +67,12 @@ public final class NetworkRequestActivity extends BaseActivity {
     private static native String rsa(String key, String value);
 
     @Override
+    protected int layoutId() {
+        return R.layout.activity_network;
+    }
+
+    @Override
     protected void onCreate() {
-        setContentView(R.layout.activity_network);
         unbinder = ButterKnife.bind(aThis);
         titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
         titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));

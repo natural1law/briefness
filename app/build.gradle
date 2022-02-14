@@ -41,9 +41,14 @@ android {
             proguardFiles 'proguard-rules.pro'
         }
     }
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
     sourceSets {
         main {
-            jniLibs.srcDirs = ['lib']
+            jniLibs.srcDirs = ['libs']
             java.srcDirs = ['src/main/java', 'src/main/cpp']
         }
     }
@@ -81,6 +86,8 @@ dependencies {
     implementation project(path: ':network')
     implementation project(path: ':echarts')
     implementation project(path: ':animation')
+
+    implementation "com.bear:ScreenShotTools:1.0"
 //    implementation(name: 'reduce', ext: 'aar')
     // bindView
     implementation 'com.jakewharton:butterknife:10.2.3'

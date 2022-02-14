@@ -1,6 +1,5 @@
 package com.androidx.briefness.homepage.activity;
 
-import static com.androidx.briefness.base.App.appThis;
 import static com.androidx.briefness.base.App.toasts;
 import static com.androidx.view.scan.ScanActivity.RESULT_KEY;
 
@@ -39,11 +38,16 @@ public final class DialogActivity extends BaseActivity {
     @BindView(R.id.title_text)
     public AppCompatTextView titleView;
     private Unbinder unbinder;
+
     private ActivityResultLauncher<Intent> launcher;
 
     @Override
+    protected int layoutId() {
+        return R.layout.activity_dialog;
+    }
+
+    @Override
     protected void onCreate() {
-        setContentView(R.layout.activity_dialog);
         unbinder = ButterKnife.bind(aThis);
         initView();
     }
@@ -78,11 +82,10 @@ public final class DialogActivity extends BaseActivity {
         titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
 
         launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            if (result.getData() != null) {
-                Log.i("回调码", String.valueOf(result.getResultCode()));
-                Log.i("回调数据", String.valueOf(result.getData().getStringExtra(RESULT_KEY)));
-            }
+            Log.i("回调码", String.valueOf(result.getResultCode()));
+            Log.i("回调数据", String.valueOf(result.getData().getStringExtra(RESULT_KEY)));
         });
+
     }
 
     @OnClick(R.id.activity_dialog)
@@ -100,7 +103,7 @@ public final class DialogActivity extends BaseActivity {
 
     @OnClick(R.id.activity_dialog2)
     public void dialog2() {
-        appThis.resultActivity(aThis, ScanActivity.class, launcher).start();
+        launcher.launch(new Intent(aThis, ScanActivity.class));
     }
 
     @OnClick(R.id.activity_dialog3)

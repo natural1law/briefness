@@ -33,7 +33,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 @SuppressLint("NonConstantResourceId")
-public class PageRecyclerViewActivity extends BaseActivity {
+public final class PageRecyclerViewActivity extends BaseActivity {
 
     private final AppCompatActivity aThis = this;
     @BindView(R.id.title_layout)
@@ -70,8 +70,12 @@ public class PageRecyclerViewActivity extends BaseActivity {
     }
 
     @Override
+    protected int layoutId() {
+        return R.layout.activity_pagerecyclerview;
+    }
+
+    @Override
     protected void onCreate() {
-        setContentView(R.layout.activity_pagerecyclerview);
         unbinder = ButterKnife.bind(aThis);
         titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
         titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));
