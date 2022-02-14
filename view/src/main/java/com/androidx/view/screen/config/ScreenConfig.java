@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.androidx.reduce.tools.Storage;
 
+import org.jetbrains.annotations.Range;
+
 import java.util.Objects;
 import java.util.UUID;
 
@@ -36,14 +38,12 @@ public final class ScreenConfig implements Parcelable {
     private final int basicsHeight;
     /*设置屏幕密度*/
     private final int basicsDpi;
-
     /*设置截图储存地址*/
     private final String captureUrl;
     /*设置截图格式*/
     private final int captureFormat;
     /*设置图片最大获取缓存数*/
     private final int captureMaxImages;
-
     /*设置声音来源*/
     private final int videoAudioSource;
     /*设置视频来源*/
@@ -60,6 +60,8 @@ public final class ScreenConfig implements Parcelable {
     private final int videoFrameRate;
     /*设置码率*/
     private final int videoEncodingBitRate;
+
+    private final int captureRate;
 
     public AppCompatActivity getActivity() {
         return activity;
@@ -137,6 +139,7 @@ public final class ScreenConfig implements Parcelable {
         videoEncoder = in.readInt();
         videoFrameRate = in.readInt();
         videoEncodingBitRate = in.readInt();
+        captureRate = in.readInt();
     }
 
     private ScreenConfig(Builder builder) {
@@ -164,6 +167,11 @@ public final class ScreenConfig implements Parcelable {
         this.videoEncoder = builder.videoEncoder;
         this.videoFrameRate = builder.videoFrameRate;
         this.videoEncodingBitRate = builder.videoEncodingBitRate;
+        this.captureRate = builder.captureRate;
+    }
+
+    public int getCaptureRate() {
+        return captureRate;
     }
 
     @Override
@@ -188,6 +196,7 @@ public final class ScreenConfig implements Parcelable {
         dest.writeInt(videoEncoder);
         dest.writeInt(videoFrameRate);
         dest.writeInt(videoEncodingBitRate);
+        dest.writeInt(captureRate);
     }
 
     public static final class Builder {
@@ -200,14 +209,12 @@ public final class ScreenConfig implements Parcelable {
         private int basicsHeight = 1280;
         /*设置屏幕密度*/
         private int basicsDpi = 2;
-
         /*设置截图储存地址*/
         private String captureUrl = picturePath();
         /*设置截图格式*/
         private int captureFormat = RGBA_8888;
         /*设置图片最大获取缓存数*/
-        private int captureMaxImages = 10;
-
+        private int captureMaxImages = 3;
         /*设置声音来源*/
         private int videoAudioSource = MediaRecorder.AudioSource.VOICE_COMMUNICATION;
         /*设置视频来源*/
@@ -224,6 +231,10 @@ public final class ScreenConfig implements Parcelable {
         private int videoFrameRate = 30;
         /*设置码率*/
         private int videoEncodingBitRate = 2;
+        /*
+         * 设置图片帧率
+         */
+        private int captureRate = 50;// 0~100
 
         /**
          * 获取activity对象
@@ -360,6 +371,13 @@ public final class ScreenConfig implements Parcelable {
         private String videoPath() {
             String uuid = UUID.fromString(UUID.randomUUID().toString()).toString().replace("-", "");
             return Storage.Locality.generateVideoPath("/" + uuid + ".mp4");
+        }
+
+        /**
+         * 设置图片帧率
+         */
+        public void setCaptureRate(@Range(from = 0, to = 100) int captureRate) {
+            this.captureRate = captureRate;
         }
 
         private final Builder builder = this;

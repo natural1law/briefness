@@ -79,7 +79,7 @@ public final class ScreenCaptureActivity extends BaseActivity {
     @OnClick(R.id.activity_dialog)
     public void dialog() {
         sr.onStartCapture((fileUrl, exists) -> {
-            Log.i("截图地址", fileUrl);
+            Log.i("截图地址" + exists, fileUrl);
             if (exists) toasts.setMsg("已将图片保存至文件管理中").showSuccess();
             else toasts.setMsg("图片保存失败").showError();
         });

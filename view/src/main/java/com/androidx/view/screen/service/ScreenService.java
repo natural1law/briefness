@@ -1,7 +1,5 @@
 package com.androidx.view.screen.service;
 
-import static java.lang.Boolean.TRUE;
-
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.Service;
@@ -17,6 +15,7 @@ import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
 import android.os.Binder;
 import android.os.Build;
+import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -26,13 +25,12 @@ import com.androidx.view.screen.config.ScreenConfig;
 import com.androidx.view.screen.intertaces.ScreenCallbackListener;
 import com.androidx.view.screen.intertaces.ScreenServiceListener;
 
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -44,7 +42,7 @@ public class ScreenService extends Service implements ScreenServiceListener {
     private VirtualDisplay dmr;//视频虚拟图形
     private VirtualDisplay dir;//静态虚拟图形
     private ScreenCallbackListener callback;//状态回调
-    private Image image;
+    private ImageReader imageReader;
 
     private static final String SC = "ScreenCapture";
     private static final String SR = "MediaRecorder";
@@ -74,9 +72,15 @@ public class ScreenService extends Service implements ScreenServiceListener {
     }
 
     @Override
+    @SuppressLint("WrongConstant")
     public void startCapture(ScreenCallbackListener callback, ScreenConfig config) {
         try {
             this.callback = callback;
+            int w = config.getBasicsWidth();
+            int h = config.getBasicsHeight();
+            int f = config.getCaptureFormat();
+            int i = config.getCaptureMaxImages();
+            imageReader = ImageReader.newInstance(w, h, f, i);
             createImageReader(config);
         } catch (Exception e) {
             callback.onFailing(Log.getStackTraceString(e));
@@ -127,61 +131,52 @@ public class ScreenService extends Service implements ScreenServiceListener {
      */
     @SuppressLint("WrongConstant")
     private void createImageReader(ScreenConfig config) {
+        Handler handler = new Handler(getMainLooper());
         int w = config.getBasicsWidth();
         int h = config.getBasicsHeight();
-        int f = config.getCaptureFormat();
-        int i = config.getCaptureMaxImages();
-        ImageReader imageReader = ImageReader.newInstance(w, h, f, i);
-        dir = mp.createVirtualDisplay(SC, w, h, f, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR,
-                imageReader.getSurface(), new VirtualDisplay.Callback() {
-                }, null);
+        int dpi = config.getBasicsDpi();
+        int virtual = DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR;
+        dir = mp.createVirtualDisplay(SC, w, h, dpi, virtual, imageReader.getSurface(), null, handler);
         imageReader.setOnImageAvailableListener(reader -> executor.execute(() -> {
             try {
-                String url = config.getCaptureUrl();
+                File file = new File(config.getCaptureUrl());
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    reader.discardFreeBuffers();
+                }
+                Image image = reader.acquireNextImage();
                 // 获取数据
-                image = reader.acquireLatestImage();
-                System.out.println(image);
                 int width = image.getWidth();
                 int height = image.getHeight();
                 Image.Plane[] plane = image.getPlanes();
-                ByteBuffer buffer = plane[0].getBuffer();
-                // 重新计算Bitmap宽度，防止Bitmap显示错位
-                int pixelStride = plane[0].getPixelStride();
-                int rowStride = plane[0].getRowStride();
-                int rowPadding = rowStride - pixelStride * width;
-                int bitmapWidth = width + rowPadding / pixelStride;
-                // 创建Bitmap
+                int size = plane.length - 1;
+                int bitmapWidth = width + (plane[size].getRowStride() - plane[size].getPixelStride() * width) / plane[size].getPixelStride();
+                // 创建并压缩Bitmap
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 Bitmap bitmap = Bitmap.createBitmap(bitmapWidth, height, Bitmap.Config.ARGB_8888);
-                bitmap.copyPixelsFromBuffer(buffer);
-                ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.PNG, 80, bos);
-                bos.flush();
-                bos.close();
-                buffer.clear();
+                bitmap.copyPixelsFromBuffer(plane[size].getBuffer());
+                image.close();
+                dir.release();
+                bitmap.compress(Bitmap.CompressFormat.PNG, config.getCaptureRate(), baos);
                 bitmap.recycle();
-                if (image != null) image.close();
-
+                baos.flush();
+                baos.close();
+                //储存图片
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    Path path = Paths.get(url);
-                    if (Files.notExists(path)) {
-                        File file = Files.write(Files.createFile(path), bos.toByteArray()).toFile();
-                        callback.onSuccess(file.getPath(), file.exists());
-                    }
+                    Files.write(Paths.get(file.getPath()), baos.toByteArray());
                 } else {
-                    File file = new File(url);
-                    if (!file.exists()) if (!file.mkdirs()) if (file.setWritable(TRUE)) {
-                        FileOutputStream fos = new FileOutputStream(file, true);
-                        fos.write(bos.toByteArray());
-                        fos.flush();
-                        fos.close();
-                        callback.onSuccess(file.getPath(), file.exists());
-                    }
+                    FileOutputStream fos = new FileOutputStream(file, false);
+                    BufferedOutputStream bos = new BufferedOutputStream(fos);
+                    bos.write(baos.toByteArray());
+                    bos.flush();
+                    bos.close();
+                    fos.flush();
+                    fos.close();
                 }
-                if (dir != null) dir.release();
+                callback.onSuccess(file.getPath(), file.exists());
             } catch (Exception e) {
                 Log.e("创建屏幕截图异常", Log.getStackTraceString(e));
             }
-        }), null);
+        }), handler);
     }
 
     /**
