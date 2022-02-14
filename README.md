@@ -375,7 +375,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
     private void capture(){
        sr.onStartCapture((fileUrl, exists) -> {
            Log.i("截图地址-" + exists, fileUrl);
-        });
+       });
     }
     ```
     * 调用的录屏功能
@@ -391,7 +391,6 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
     private void startRecording(){
         sr.onStopRecording();
     }
-    
     ```
 
 ### 更新日志
