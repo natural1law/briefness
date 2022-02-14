@@ -5,7 +5,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
    #### 图形统计
    * [图表统计](https://github.com/natural1law/briefness/blob/master/app/src/main/java/com/androidx/briefness/homepage/activity/EchartsActivity.java "点击查看使用`图表统计`功能代码")
    #### 网络请求
-   * [网络请求（WebSocket长连接、http/https）](https://github.com/natural1law/briefness/blob/master/app/src/main/java/com/androidx/briefness/homepage/activity/NetworkRequestActivity.java "点击查看使用`网络请求`功能代码")
+   * [网络请求（WebSocket长连接、http/https）](#网络请求使用示例(DELETE请求--同GET请求) "点击查看使用`网络请求`功能代码")
    #### 常用工具
    * [正则表达式](https://github.com/natural1law/briefness/ "点击查看使用`正则表达式`功能代码")
    * [数据安全加密](https://github.com/natural1law/briefness/ "点击查看使用`安全加密`功能代码")
