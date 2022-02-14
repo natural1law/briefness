@@ -28,7 +28,7 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
    * [屏幕录制和截图](https://github.com/natural1law/briefness/blob/master/app/src/main/java/com/androidx/briefness/homepage/activity/ScreenCaptureActivity.java "点击查看使用`屏幕录制和截图`功能代码")
    * [头部导航栏](https://github.com/natural1law/briefness/blob/master/app/src/main/java/com/androidx/briefness/homepage/activity/TabActivity.java "点击查看使用`头部导航栏`功能代码")
    #### 加载动画（仿zyao89）
-   * [加载动画](https://github.com/natural1law/briefness/ "点击查看使用`加载动画`功能代码")
+   * [加载动画][3]
 ### 使用依赖
   * 全部
   ```
