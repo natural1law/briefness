@@ -6,6 +6,7 @@ import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -252,7 +253,7 @@ public final class This implements ThisListener, LauncherStartListener {
     /**
      * 启动service（无参）
      */
-    public <T extends Activity> ThisListener service(@NonNull Context c, @NonNull Class<T> c1) {
+    public <T extends Service> ThisListener service(@NonNull Context c, @NonNull Class<T> c1) {
         return service(c, c1, null);
     }
 
@@ -267,7 +268,7 @@ public final class This implements ThisListener, LauncherStartListener {
     /**
      * 启动service（带参）
      */
-    public <T extends Activity> ThisListener service(@NonNull Context c, @NonNull Class<T> c1, Bundle b) {
+    public <T extends Service> ThisListener service(@NonNull Context c, @NonNull Class<T> c1, Bundle b) {
         run = () -> {
             Intent intent = new Intent(c, c1).addFlags(FLAG_ACTIVITY_NEW_TASK);
             if (b != null) intent.putExtras(b);
