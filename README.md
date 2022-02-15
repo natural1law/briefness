@@ -7,8 +7,8 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
    #### 网络请求
    * [网络请求（WebSocket长连接、http/https）](#网络请求使用示例 "点击查看使用`网络请求`功能代码")
    #### 常用工具
-   * [正则表达式](# "点击查看使用`正则表达式`功能代码")
-   * [数据安全加密](# "点击查看使用`安全加密`功能代码")
+   * [正则表达式](#正则表达式使用示例 "点击查看使用`正则表达式`功能代码")
+   * [数据安全加密](#数据安全加密使用示例 "点击查看使用`安全加密`功能代码")
    * [excel导出](# "点击查看使用`excel导出`功能代码")
    * [生成验证码](# "点击查看使用`生成验证码`功能代码")
    * [短信倒计时](# "点击查看使用`短信倒计时`功能代码")
@@ -391,6 +391,139 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
      private void startRecording(){
          sr.onStopRecording();
      }
+     ```
+   ##### 正则表达式使用示例
+   * 默认
+     ```
+     public void estimate() {
+         String mobile = "13344445555";
+         if(!Regular.isMobile(mobile)){//条件不成立
+             
+         } else {//条件成立
+         
+         }
+     }
+     ```
+   * 自定义
+     ```
+     public void estimate() {
+         String mobile = "13344445555";
+         String regex = "^((13[0-9])|(14[5,7]|[9])|(15[0-3,5-9])|(17[0-8])|(18[0-9])|(19[8-9]))\d{8}$";
+         if(!Regular.isMobile(regex, mobile)){//条件不成立
+             
+         } else {//条件成立
+         
+         }
+     }
+     ```
+   ##### 数据安全加密使用示例
+   * MD5
+     ```
+       /**
+        * 含随机盐(48位)
+        */
+       public void example(){
+           String pass = "123456";
+           Log.i("MD5加密数据", Secure.MD5.encrypt(pass));
+       }
+     ```
+     ```
+       /**
+        * 非含随机盐(48位)
+        */
+       public void example(){
+           String pass = "123456";
+           String salt = "0";
+           Log.i("MD5加密数据", Secure.MD5.encrypt(pass, salt));
+       }
+     ```
+     ```
+       public void example(){
+           String pass = "123456";
+           String md5Pass = Secure.MD5.encrypt(pass);
+           Log.i("MD5数据校验", Secure.MD5.verify(pass, md5Pass));
+       }
+     ```
+   * AES
+     ```
+       private final String key = Secure.AES.key();
+     ```
+     ```
+       public void example(){
+           String pass = "123456";
+           String aesPass = Secure.AES.encrypt(key, pass);
+           Log.i("AES数据加密", aesPass);
+       }
+     ```
+     ```
+       public void example(){
+           String pass = "123456";
+           String aesPass = Secure.AES.decrypt(pass);
+           Log.i("AES数据解密", aesPass);
+       }
+     ```
+   * RSA
+     ```
+       private String puk;
+       private String prk;
+       
+       public void example(){
+           KeyPair key = Secure.RSA.keyPair();
+           puk = Secure.RSA.publicKey(key);//公钥
+           prk = Secure.RSA.privateKey(key);//私钥
+       }
+     ```
+     ```
+       public void example(){
+           String data = "123456";
+           String enData = Secure.RSA.encryptPublic(puk, data);//公钥加密
+           Log.i("RSA公钥加密数据", enData);
+           String deData = Secure.RSA.decryptPrivate(prk, enData);//私钥解密
+           Log.i("RSA私钥解密数据", deData);
+       }
+     ```
+     ```
+       public void example(){
+           String data = "123456";
+           String enData = Secure.RSA.encryptPrivate(puk, data);//私钥加密
+           Log.i("RSA公钥加密数据", enData);
+           String deData = Secure.RSA.decryptPublic(prk, enData);//公钥解密
+           Log.i("RSA私钥解密数据", deData);
+       }
+     ```
+     ```
+       public void example(){
+           String data = "123456";
+           String enData = Secure.RSA.encryptPrivate(prk, data);//私钥加密
+           Log.i("RSA公钥加密数据", enData);
+           String sign = Secure.RSA.sign(prk, enData);
+           Log.i("RSA加密数据签名", sign);
+           String deData = Secure.RSA.decryptPublic(puk, enData);//公钥解密
+           Log.i("RSA私钥解密数据", deData);
+           String verify = Secure.RSA.verify(puk, enData, sign);//公钥解密
+           Log.i("RSA私钥数据校验", verify);
+       }
+     ```
+   * Base64
+     ```
+       public void example(){
+           String data = "123456";
+           String enData = Secure.Base64.encode(data);
+           Log.i("Base64加密数据", enData);
+           String deData = Secure.RSA.decode(enData);
+           Log.i("Base64解密数据", deData);
+       }
+     ```
+   * SHA1
+     ```
+       public void example(){
+           String data = "123456";
+           Log.i("SHA1加密数据", Secure.SHA1.encrypt(data));
+           Log.i("SHA224加密数据", Secure.SHA224.encrypt(data));
+           Log.i("SHA256加密数据", Secure.SHA256.encrypt(data));
+           Log.i("SHA384加密数据", Secure.SHA384.encrypt(data));
+           Log.i("SHA512加密数据", Secure.SHA512.encrypt(data));
+       }
      ```
 ### 更新日志
   * [历史版本](https://github.com/natural1law/briefness/blob/master/HISTORY_VERSION.md "点击查看历史版本")
