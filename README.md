@@ -485,21 +485,21 @@ Android开发工具 [![](https://jitpack.io/v/natural1law/briefness.svg)](https:
      ```
        public void example(){
            String data = "123456";
-           String enData = Secure.RSA.encryptPrivate(puk, data);//私钥加密
-           Log.i("RSA公钥加密数据", enData);
-           String deData = Secure.RSA.decryptPublic(prk, enData);//公钥解密
-           Log.i("RSA私钥解密数据", deData);
+           String enData = Secure.RSA.encryptPrivate(prk, data);//私钥加密
+           Log.i("RSA私钥加密数据", enData);
+           String deData = Secure.RSA.decryptPublic(puk, enData);//公钥解密
+           Log.i("RSA公钥解密数据", deData);
        }
      ```
      ```
        public void example(){
            String data = "123456";
            String enData = Secure.RSA.encryptPrivate(prk, data);//私钥加密
-           Log.i("RSA公钥加密数据", enData);
+           Log.i("RSA私钥加密数据", enData);
            String sign = Secure.RSA.sign(prk, enData);
-           Log.i("RSA加密数据签名", sign);
+           Log.i("RSA加密数据私钥签名", sign);
            String deData = Secure.RSA.decryptPublic(puk, enData);//公钥解密
-           Log.i("RSA私钥解密数据", deData);
+           Log.i("RSA公钥解密数据", deData);
            String verify = Secure.RSA.verify(puk, enData, sign);//公钥解密
            Log.i("RSA私钥数据校验", verify);
        }
