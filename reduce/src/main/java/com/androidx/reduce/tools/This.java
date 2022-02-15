@@ -274,6 +274,23 @@ public final class This implements ThisListener, LauncherStartListener {
         return resultAction(action, null, launcher);
     }
 
+    /**
+     * 调用系统图库功能
+     */
+    public ThisListener resultAction(ActivityResultLauncher<Intent> launcher) {
+        return resultAction(Intent.ACTION_GET_CONTENT, "image/*", launcher);
+    }
+
+    public ThisListener resultAction(String action, String type, ActivityResultLauncher<Intent> launcher) {
+        run = () -> {
+            Intent intent = new Intent(action);
+            if (type != null) intent.setType(type);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            launcher.launch(intent);
+        };
+        return this;
+    }
+
     public static void resultListener(Context context, Intent intent, LauncherListener listener) {
         if (intent.getData() != null) {
             Uri uri = intent.getData();
@@ -317,23 +334,6 @@ public final class This implements ThisListener, LauncherStartListener {
             }
         }
         return launcher;
-    }
-
-    public ThisListener resultAction(String action, String type, ActivityResultLauncher<Intent> launcher) {
-        run = () -> {
-            Intent intent = new Intent(action);
-            if (type != null) intent.setType(type);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            launcher.launch(intent);
-        };
-        return this;
-    }
-
-    /**
-     * 调用系统图库功能
-     */
-    public ThisListener resultAction(ActivityResultLauncher<Intent> launcher) {
-        return resultAction(Intent.ACTION_GET_CONTENT, "image/*", launcher);
     }
 
     private static final class Singleton {
