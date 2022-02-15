@@ -194,4 +194,16 @@ public final class Regular {
         return matcher.matches();
     }
 
+    /**
+     * 正则·自定义
+     */
+    public static Boolean isCustom(String regex, String parameter) {
+        // 设定查看模式
+        Pattern pattern = Pattern.compile(regex);
+        // 判断parameter是否匹配，返回匹配结果
+        Matcher matcher = pattern.matcher(parameter);
+        // 返回结果（true）
+        return matcher.matches();
+    }
+
 }
