@@ -11,8 +11,10 @@ import android.hardware.display.VirtualDisplay;
 import android.media.Image;
 import android.media.ImageReader;
 import android.media.MediaRecorder;
+import android.media.MediaScannerConnection;
 import android.media.projection.MediaProjection;
 import android.media.projection.MediaProjectionManager;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -43,6 +45,7 @@ public class ScreenService extends Service implements ScreenServiceListener {
     private VirtualDisplay dir;//静态虚拟图形
     private ScreenCallbackListener callback;//状态回调
     private ImageReader imageReader;
+    private MediaScannerConnection msc;//扫描器
 
     private static final String SC = "ScreenCapture";
     private static final String SR = "MediaRecorder";
@@ -172,6 +175,19 @@ public class ScreenService extends Service implements ScreenServiceListener {
                     fos.flush();
                     fos.close();
                 }
+                //通知文管理器刷新图库
+                msc = new MediaScannerConnection(this, new MediaScannerConnection.MediaScannerConnectionClient() {
+                    @Override
+                    public void onMediaScannerConnected() {
+                        if (msc.isConnected()) msc.scanFile(config.getCaptureUrl(), "image/*");
+                    }
+
+                    @Override
+                    public void onScanCompleted(String path, Uri uri) {
+                        msc.disconnect();
+                    }
+                });
+                msc.connect();
                 callback.onSuccess(file.getPath(), file.exists());
             } catch (Exception e) {
                 Log.e("创建屏幕截图异常", Log.getStackTraceString(e));

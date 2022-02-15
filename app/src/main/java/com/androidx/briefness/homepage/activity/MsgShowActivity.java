@@ -114,7 +114,7 @@ public final class MsgShowActivity extends BaseActivity {
             ScreenShotTools.Companion.getInstance().takeCapture(this, layoutView, screenBitmap -> {
                 assert screenBitmap != null;
                 toasts.i("数据", screenBitmap.getFilePath());
-                appThis.resultAction(aThis, launcher).start();
+                appThis.resultAction(launcher).start();
             });
         }, 2000);
 

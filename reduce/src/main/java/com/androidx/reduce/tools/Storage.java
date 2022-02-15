@@ -247,6 +247,50 @@ public final class Storage {
             }
         }
 
+        public static String generateDCIMPath(String... files) {
+            try {
+                sb.delete(0, sb.length());
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath());
+                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
+                    Path path = Paths.get(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
+                    File file = Paths.get(path.getParent().toString()).toFile();
+                    if (!file.exists()) System.out.println(file.mkdirs());
+                } else {
+                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath());
+                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
+                    File file = new File(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
+                    if (!file.exists()) System.out.println(file.mkdirs());
+                }
+                return sb.toString();
+            } catch (Exception e) {
+                return Log.getStackTraceString(e);
+            }
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.Q)
+        public static String generateScreenshotsPath(String... files) {
+            try {
+                sb.delete(0, sb.length());
+                String url = Environment.DIRECTORY_PICTURES + "/" + Environment.DIRECTORY_SCREENSHOTS;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    sb.append(Environment.getExternalStoragePublicDirectory(url).getAbsolutePath());
+                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
+                    Path path = Paths.get(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
+                    File file = Paths.get(path.getParent().toString()).toFile();
+                    if (!file.exists()) System.out.println(file.mkdirs());
+                } else {
+                    sb.append(Environment.getExternalStoragePublicDirectory(url).getAbsolutePath());
+                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
+                    File file = new File(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
+                    if (!file.exists()) System.out.println(file.mkdirs());
+                }
+                return sb.toString();
+            } catch (Exception e) {
+                return Log.getStackTraceString(e);
+            }
+        }
+
         /**
          * 生成存储地址(下载空间)
          *
@@ -340,19 +384,29 @@ public final class Storage {
         /**
          * 将文件保存到本地存储中
          *
-         * @param msg 将要保存的数据
-         * @param url 保存地址 (Storage.Locality.generateDownloadPath("log.txt"))
-         * @param <M> 消息类型
+         * @param data 将要保存的数据
+         * @param url  保存地址 (Storage.Locality.generateDownloadPath("log.txt"))
+         * @param <M>  消息类型
          */
-        public static <M> boolean toFile(M msg, String url) {
+        public static <M> boolean toFile(M data, String url) {
             try {
-                String m;
-                if (msg instanceof Throwable) m = Log.getStackTraceString((Throwable) msg);
-                else m = String.valueOf(msg);
                 FileOutputStream fos = new FileOutputStream(url);
-                BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
-                writer.write(m, 0, m.length());
+                OutputStreamWriter osw = new OutputStreamWriter(fos);
+                BufferedWriter writer = new BufferedWriter(osw);
+                if (data instanceof char[]) {
+                    char[] parseData = (char[]) data;
+                    writer.write(parseData, 0, parseData.length);
+                } else if (data instanceof String) {
+                    String parseData = String.valueOf(data);
+                    writer.write(parseData, 0, parseData.length());
+                } else {
+                    Log.e(Locality.class.getName(), "数据类型不匹配");
+                    return false;
+                }
+                writer.flush();
                 writer.close();
+                osw.flush();
+                osw.close();
                 fos.flush();
                 fos.close();
                 return true;

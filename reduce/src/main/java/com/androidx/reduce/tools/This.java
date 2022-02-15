@@ -22,7 +22,6 @@ import android.util.Log;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
 
 import com.androidx.reduce.listener.LauncherListener;
@@ -48,26 +47,6 @@ public final class This implements ThisListener, LauncherStartListener {
 
     private This() {
         handler = new Handler(Looper.myLooper());
-    }
-
-    /**
-     * 初始化回调方法
-     */
-    public static ActivityResultLauncher<Intent> initLauncher(@NonNull Context context, LauncherResultListener resultListener) {
-        launcherContext = new WeakReference<>(context);
-        ActivityResultLauncher<Intent> launcher = null;
-        if (resultListener != null) {
-            ActivityResultContracts.StartActivityForResult forResult = new ActivityResultContracts.StartActivityForResult();
-            if (context instanceof FragmentActivity) {
-                FragmentActivity activity = (FragmentActivity) context;
-                launcher = activity.registerForActivityResult(forResult, result -> {
-                    if (result != null && result.getData() != null) {
-                        resultListener.callback(result.getResultCode(), result.getData());
-                    }
-                });
-            }
-        }
-        return launcher;
     }
 
     public void delay(Runnable run, long t) {
@@ -96,30 +75,6 @@ public final class This implements ThisListener, LauncherStartListener {
         if (run != null) handler.removeCallbacks(run);
         handler.removeCallbacksAndMessages(null);
         handler = null;
-    }
-
-    public static void resultListener(Context context, Intent intent, LauncherListener listener) {
-        if (intent.getData() != null) {
-            Uri uri = intent.getData();
-            if (DocumentsContract.isDocumentUri(context, uri)) {
-                String documentId = DocumentsContract.getDocumentId(uri);
-                String[] selectionArgs = {documentId.split(":")[1]};
-                String selection = MediaStore.Images.Media._ID + "=?";
-                listener.callback(getDataColumn(context, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection, selectionArgs));
-            } else if ("content".equalsIgnoreCase(uri.getScheme())) {
-                listener.callback(getDataColumn(context, uri, null, null));
-            }
-        }
-    }
-
-    private static String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {
-        String[] projection = new String[]{MediaStore.Images.Media.DATA};
-        @SuppressLint("Recycle")
-        Cursor cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            int columnIndex = cursor.getColumnIndexOrThrow(projection[0]);
-            return cursor.getString(columnIndex);
-        } else return "";
     }
 
     @Override
@@ -319,10 +274,56 @@ public final class This implements ThisListener, LauncherStartListener {
         return resultAction(action, null, launcher);
     }
 
+    public static void resultListener(Context context, Intent intent, LauncherListener listener) {
+        if (intent.getData() != null) {
+            Uri uri = intent.getData();
+            if (DocumentsContract.isDocumentUri(context, uri)) {
+                String documentId = DocumentsContract.getDocumentId(uri);
+                String[] selectionArgs = {documentId.split(":")[1]};
+                String selection = MediaStore.Images.Media._ID + "=?";
+                listener.callback(getDataColumn(context, selection, selectionArgs));
+            } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+                listener.callback(getDataColumn(context, null, null));
+            }
+        }
+    }
+
+    private static String getDataColumn(Context context, String selection, String[] selectionArgs) {
+        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+        String[] projection = new String[]{MediaStore.Images.Media.DATA};
+        @SuppressLint("Recycle")
+        Cursor cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndexOrThrow(projection[0]);
+            return cursor.getString(columnIndex);
+        } else return "";
+    }
+
+    /**
+     * 初始化回调方法
+     */
+    public static ActivityResultLauncher<Intent> initLauncher(@NonNull Context context, LauncherResultListener resultListener) {
+        launcherContext = new WeakReference<>(context);
+        ActivityResultLauncher<Intent> launcher = null;
+        if (resultListener != null) {
+            ActivityResultContracts.StartActivityForResult forResult = new ActivityResultContracts.StartActivityForResult();
+            if (context instanceof FragmentActivity) {
+                FragmentActivity activity = (FragmentActivity) context;
+                launcher = activity.registerForActivityResult(forResult, result -> {
+                    if (result != null && result.getData() != null) {
+                        resultListener.callback(result.getResultCode(), result.getData());
+                    }
+                });
+            }
+        }
+        return launcher;
+    }
+
     public ThisListener resultAction(String action, String type, ActivityResultLauncher<Intent> launcher) {
         run = () -> {
             Intent intent = new Intent(action);
             if (type != null) intent.setType(type);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
             launcher.launch(intent);
         };
         return this;
@@ -331,8 +332,8 @@ public final class This implements ThisListener, LauncherStartListener {
     /**
      * 调用系统图库功能
      */
-    public ThisListener resultAction(AppCompatActivity context, ActivityResultLauncher<Intent> launcher) {
-        return resultAction("android.intent.action.GET_CONTENT", "image/*", launcher);
+    public ThisListener resultAction(ActivityResultLauncher<Intent> launcher) {
+        return resultAction(Intent.ACTION_GET_CONTENT, "image/*", launcher);
     }
 
     private static final class Singleton {
