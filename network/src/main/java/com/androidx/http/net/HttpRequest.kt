@@ -281,6 +281,35 @@ class HttpRequest : HttpRequestListener {
         })
     }
 
+    override fun upload(
+        url: String,
+        param: MutableMap<String, Any>,
+        key: String,
+        pathList: MutableList<String>,
+        maxAnewCount: Int,
+        resonse: com.androidx.http.net.listener.Response?
+    ) {
+        hnl.uploadRequest(url, param, key, pathList).enqueue(object : Callback {
+            override fun onFailure(call: Call, e: IOException) {
+                val obj = MsgModule(Log.getStackTraceString(e), resonse!!)
+                handler.sendMessage(handler.obtainMessage(-1, obj))
+                // 如果超时并未超过指定次数，则重新连接
+                if (e is SocketTimeoutException && currentConnect < maxAnewCount) {
+                    currentConnect++
+                    hnl.getCall(call.request()).enqueue(this)
+                } else if (e is SocketTimeoutException && -1 == maxAnewCount) {
+                    hnl.getCall(call.request()).enqueue(this)
+                }
+            }
+
+            @Throws(Exception::class)
+            override fun onResponse(call: Call, response: Response) {
+                val obj = response.body?.let { MsgModule(it.string(), resonse!!) }
+                handler.sendMessage(handler.obtainMessage(0, obj))
+            }
+        })
+    }
+
     @Strictfp
     override fun download(
         url: String,

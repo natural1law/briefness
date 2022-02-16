@@ -86,12 +86,10 @@ public final class ScreenCaptureActivity extends BaseActivity {
         titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
         sr = ScreenRecording.build(aThis).setNotification(NotificationBar.setSystem(aThis, "正在使用录屏丨截屏功能", "", R.mipmap.radio_on));
 
-        launcher = This.initLauncher(aThis, (resultCode, intent) -> {
-            This.resultListener(aThis, intent, data -> {
-                File file = new File(data);
-                toasts.i("回调数据", file.getPath());
-            });
-        });
+        launcher = This.initLauncher(aThis, (resultCode, intent) -> This.resultListener(aThis, intent, data -> {
+            File file = new File(data);
+            toasts.i("回调数据", file.getPath());
+        }));
         appThis.resultAction(launcher).start();
     }
 

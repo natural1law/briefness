@@ -28,6 +28,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
 import java.io.ByteArrayInputStream;
+import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 import java.util.concurrent.Executor;
@@ -602,6 +603,41 @@ public final class Rn {
         executor.execute(() -> NetHttp.builder()
                 .setHosts(url)
                 .setFile(path)
+                .setMap(param)
+                .setJsonKey(key)
+                .setMode(UPLOAD)
+                .setMaxAnewCount(Configuration.count)
+                .setCallback((Response) data -> {
+                    try {
+                        if (response != null) response.onSuccess(data);
+                    } catch (Exception e) {
+                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                    }
+                })
+                .build());
+    }
+
+    public static void sendUpload(String url, List<String> pathList, Response response) {
+        sendUpload(url, new WeakHashMap<>(), pathList, response);
+    }
+
+    public static void sendUpload(String url, Map<String, Object> param, List<String> pathList, Response response) {
+        sendUpload(url, param, "file", pathList, response);
+    }
+
+    /**
+     * 上传多个文件
+     *
+     * @param url      请求地址
+     * @param param    参数
+     * @param key      文件参数key
+     * @param pathList 文件地址集合
+     * @param response 数据回调
+     */
+    public static void sendUpload(String url, Map<String, Object> param, String key, List<String> pathList, Response response) {
+        executor.execute(() -> NetHttp.builder()
+                .setHosts(url)
+                .setFilePathList(pathList)
                 .setMap(param)
                 .setJsonKey(key)
                 .setMode(UPLOAD)

@@ -358,6 +358,14 @@ public final class ScreenConfig implements Parcelable {
         }
 
         /**
+         * 设置图片帧率
+         */
+        public Builder setCaptureRate(@Range(from = 0, to = 100) int captureRate) {
+            this.captureRate = captureRate;
+            return builder;
+        }
+
+        /**
          * 默认截图地址
          */
         private String picturePath() {
@@ -371,13 +379,6 @@ public final class ScreenConfig implements Parcelable {
         private String videoPath() {
             String uuid = UUID.fromString(UUID.randomUUID().toString()).toString().replace("-", "");
             return Storage.Locality.generateVideoPath("/" + uuid + ".mp4");
-        }
-
-        /**
-         * 设置图片帧率
-         */
-        public void setCaptureRate(@Range(from = 0, to = 100) int captureRate) {
-            this.captureRate = captureRate;
         }
 
         private final Builder builder = this;

@@ -23,6 +23,7 @@ class NetHttp private constructor() {
         const val FROM_JSON = 7
         const val UPLOAD = 8
         const val DOWNLOAD = 9
+        const val UPLOAD_MANY = 10
 
         @JvmStatic
         fun builder(): Builder {
@@ -45,6 +46,7 @@ class NetHttp private constructor() {
         internal var listener: DownloadListener? = null
         internal var callback: Callback? = null
         internal var filePath: String? = null
+        internal var filePathList: List<String?> = ArrayList()
 
         fun setMaxAnewCount(maxAnewCount: Int?): Builder {
             this.maxAnewCount = maxAnewCount
@@ -98,6 +100,11 @@ class NetHttp private constructor() {
 
         fun setFile(path: String?): Builder {
             this.filePath = path
+            return builder
+        }
+
+        fun setFilePathList(path: List<String?>): Builder {
+            this.filePathList = path
             return builder
         }
 
@@ -165,6 +172,14 @@ class NetHttp private constructor() {
                 builder.filePath,
                 builder.maxAnewCount!!,
                 builder.listener
+            )
+            UPLOAD_MANY -> requestListener.upload(
+                builder.host,
+                builder.map,
+                builder.jsonKey,
+                builder.filePathList,
+                builder.maxAnewCount!!,
+                builder.response,
             )
         }
     }

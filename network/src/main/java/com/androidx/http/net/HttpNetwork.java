@@ -10,8 +10,6 @@ import static com.androidx.http.net.Configuration.reconnection;
 import static com.androidx.http.net.Configuration.ssl;
 import static com.androidx.http.net.Configuration.timeout;
 
-import android.os.Build;
-
 import androidx.annotation.NonNull;
 
 import com.androidx.http.net.listener.DownloadListener;
@@ -22,7 +20,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -183,25 +183,38 @@ public final class HttpNetwork implements HttpNetworkListener {
      * @param url  上传地址
      * @param path 文件
      */
+    @NonNull
     @Override
     public Call uploadRequest(@NonNull String url, @NonNull Map<String, ?> map, @NonNull String key, @NonNull String path) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            File file = Paths.get(path).toFile();
-            RequestBody rb = RequestBody.create(file, FILE);
-            MultipartBody.Builder mb = new MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart(key, file.getName(), rb);
+        File file;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            file = Paths.get(path).toFile();
+        } else file = new File(path);
+        MultipartBody.Builder mb = new MultipartBody.Builder();
+        RequestBody rb = RequestBody.create(file, FILE);
+        mb.setType(MultipartBody.FORM).addFormDataPart(key, file.getName(), rb);
+        map.forEach((k, v) -> mb.addFormDataPart(k, String.valueOf(v)));
+        return client().build().newCall(request.post(mb.build()).url(url).build());
+    }
+
+    /**
+     * 多文件上传
+     */
+    @NonNull
+    @Override
+    public Call uploadRequest(@NonNull String url, @NonNull Map<String, ?> map, @NonNull String key, @NonNull List<String> pathList) {
+        List<File> files = new ArrayList<>();
+        pathList.forEach(path -> {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                files.add(Paths.get(path).toFile());
+            } else files.add(new File(path));
+        });
+        MultipartBody.Builder mb = new MultipartBody.Builder();
+        files.forEach(file -> {
+            mb.setType(MultipartBody.FORM).addFormDataPart(key, file.getName(), RequestBody.create(file, FILE));
             map.forEach((k, v) -> mb.addFormDataPart(k, String.valueOf(v)));
-            return client().build().newCall(request.post(mb.build()).url(url).build());
-        } else {
-            File file = new File(path);
-            RequestBody rb = RequestBody.create(file, FILE);
-            MultipartBody mb = new MultipartBody.Builder()
-                    .setType(MultipartBody.FORM)
-                    .addFormDataPart(key, file.getName(), rb)
-                    .build();
-            return client().build().newCall(request.post(mb).url(url).build());
-        }
+        });
+        return client().build().newCall(request.post(mb.build()).url(url).build());
     }
 
     /**
@@ -209,6 +222,7 @@ public final class HttpNetwork implements HttpNetworkListener {
      *
      * @param url 下载地址
      */
+    @NonNull
     @Override
     public Call downloadRequest(@NonNull String url, @NonNull DownloadListener downloadListener) {
         OkHttpClient.Builder client = client().addInterceptor(chain -> {
