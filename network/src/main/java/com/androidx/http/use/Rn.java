@@ -9,6 +9,7 @@ import static com.androidx.http.api.NetHttp.POST_BYTES;
 import static com.androidx.http.api.NetHttp.POST_JSON;
 import static com.androidx.http.api.NetHttp.POST_MAP;
 import static com.androidx.http.api.NetHttp.UPLOAD;
+import static com.androidx.http.api.NetHttp.UPLOAD_MANY;
 import static com.androidx.http.net.Configuration.ssl;
 
 import android.util.Log;
@@ -640,7 +641,7 @@ public final class Rn {
                 .setFilePathList(pathList)
                 .setMap(param)
                 .setJsonKey(key)
-                .setMode(UPLOAD)
+                .setMode(UPLOAD_MANY)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback((Response) data -> {
                     try {
