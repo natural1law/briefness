@@ -1,7 +1,8 @@
 Android开发工具
 ======
-    
-======
+***
+> 此工具使用兼容Android API 24 = 7.0版本以上(包括7.0)
+***
 ### 工具目录
    #### 图形统计
    * [图表统计](#图形统计使用示例 "点击查看使用`图表统计`功能代码")
@@ -11,25 +12,25 @@ Android开发工具
    * [正则表达式](#正则表达式使用示例 "点击查看使用`正则表达式`功能代码")
    * [数据安全加密](#数据安全加密使用示例 "点击查看使用`安全加密`功能代码")
    * [excel导出](#excel导出使用示例 "点击查看使用`excel导出`功能代码")
-   * [生成验证码](# "点击查看使用`生成验证码`功能代码")
-   * [短信倒计时](# "点击查看使用`短信倒计时`功能代码")
-   * [延时点击](# "点击查看使用`延时点击`功能代码")
-   * [轻量缓存](# "点击查看使用`轻量缓存`功能代码")
-   * [动态代理](# "点击查看使用`动态代理`功能代码")
-   * [网络状态](# "点击查看使用`网络状态`功能代码")
-   * [文件存储](# "点击查看使用`文件存储`功能代码")
-   * [activirt跳转](# "点击查看使用`activirt跳转`功能代码")
-   * [toast提示](# "点击查看使用`toast提示`功能代码")
+   * [生成验证码](#生成验证码使用示例 "点击查看使用`生成验证码`功能代码")
+   * [短信倒计时](#短信倒计时使用示例 "点击查看使用`短信倒计时`功能代码")
+   * [延时点击](#延时点击使用示例 "点击查看使用`延时点击`功能代码")
+   * [SharedPreferences缓存封装](#SharedPreferences缓存使用示例 "点击查看使用`轻量缓存`功能代码")
+   * [动态代理](#动态代理使用示例 "点击查看使用`动态代理`功能代码")
+   * [网络状态](#网络状态使用示例 "点击查看使用`网络状态`功能代码")
+   * [文件存储](#文件存储使用示例 "点击查看使用`文件存储`功能代码")
+   * [activirt跳转](#activirt跳转使用示例 "点击查看使用`activirt跳转`功能代码")
+   * [toast提示](#toast提示使用示例 "点击查看使用`toast提示`功能代码")
    #### 视图布局
-   * [底部导航栏](# "点击查看使用`底部导航栏`功能代码")
-   * [对话框](# "点击查看使用`对话框`功能代码")
-   * [菜单框](# "点击查看使用`菜单框`功能代码")
-   * [分页列表](# "点击查看使用`分页列表`功能代码")
-   * [扫描二维码](# "点击查看使用`扫描二维码`功能代码")
+   * [底部导航栏](#底部导航栏使用示例 "点击查看使用`底部导航栏`功能代码")
+   * [对话框](#对话框使用示例 "点击查看使用`对话框`功能代码")
+   * [菜单框](#菜单框使用示例 "点击查看使用`菜单框`功能代码")
+   * [分页列表](#分页列表使用示例 "点击查看使用`分页列表`功能代码")
+   * [扫描二维码](#扫描二维码或条形码使用示例 "点击查看使用`扫描二维码`功能代码")
    * [屏幕录制和截图](#截图工具使用示例 "点击查看使用`屏幕录制和截图`功能代码")
-   * [头部导航栏](# "点击查看使用`头部导航栏`功能代码")
+   * [头部导航栏](#头部导航栏使用示例 "点击查看使用`头部导航栏`功能代码")
    #### 加载动画（仿zyao89）
-   * [加载动画](#工具使用)
+   * [加载动画](#加载动画使用示例 "点击查看使用`加载动画`功能代码")
 ### 使用依赖
   * 全部
   ```
@@ -480,7 +481,8 @@ Android开发工具
        Log.i("SHA384加密数据", Secure.SHA384.encrypt(data));
        Log.i("SHA512加密数据", Secure.SHA512.encrypt(data));
      ```
-   ##### excel使用示例 (目前只是导出简单excel, 后续会慢慢完善)
+   ##### excel使用示例
+   > 目前只是导出简单excel, 后续会慢慢完善
    * 导出
      ```
        File file = new File(Storage.Locality.generateDownloadPath("/包名/", "包名/", 文件名.后缀名));//保存地址
@@ -492,9 +494,104 @@ Android开发工具
        // boolean isSuccess = Excel.write(uri, "titleName", header, data);
        Log.i("导出是否成功", String.ofValue(isSuccess));
      ```
-   ##### 生成验证码
+   ##### 生成验证码使用示例
+   * 生成随机验证码
      ```
-       
+       Captcha.getInstance().lineNumber(1)//干扰线
+                .backColor(0xdf)//背景颜色
+                .fontSize(15)//字体大小
+                .size(0, 0)//布局宽高
+                .type(CHARS)//类型 NUMBER(纯数字)、LETTER(纯英文)、CHARS(数字和英文混合)
+                .codeLength(6)//验证码长度
+                .into(imageView);//存放显示验证码的对象
      ```
+   ##### 短信倒计时使用示例
+     ```
+       CountDown cd = CountDown.builder()
+                .setView(textView)//textView的对象
+                .setMillisInFuture(60 * 1000)//总时长
+                .setFinishWordage("重新获取")//完成时的内容
+                .setPrefixWordage("还剩")//未完成显示的内容前缀
+                .setSuffixWordage("s")//未完成显示的内容后缀
+                .build();
+        cd.onFinish();//停止倒计时
+     ```
+   ##### 延时点击使用示例
+     ```
+       if (Idle.isClick()){//默认0.8秒内不能触发}
+       if (Idle.isClick(2000)){//默认2秒内不能触发}
+     ```
+   ##### SharedPreferences缓存使用示例
+   > SharedPreferences二次封装, 只是为了缩短代码引用
+   
+     ```
+       MicroCache mc = MicroCache.getInstance(aThis);
+       mc.setApply("1", "1");
+       mc.setCommit("2", "2");
+       Log.i("Apply的值", mc.getString("1"));
+       Log.i("Commit的值", mc.getString("2"));
+     ```
+   ##### 动态代理使用示例
+     ```
+       public interface A {
+        void c();
+       }
+
+       private enum B implements A {
+           b;
+           @Override
+           public void c() {
+           }
+       }
+       private void initView() {
+           A a = Proxys.build(B.b).getProxy();
+           a.c();
+       }
+     ```
+   ##### 网络状态使用示例
+     ```
+       NetworkConfiguration nc = NetworkConfiguration.build(this);
+       Log.i("获取运营商网络IP地址", nc.getMobileIp());
+       Log.i("获取WIFI网络IP地址", nc.getWifiIp());
+       Log.i("判断连通性", String.valueOf(nc.isConnected()));
+       Log.i("判断以太网", String.valueOf(nc.isEtherLink()));
+       Log.i("判断运营商网络", String.valueOf(nc.isMobile()));
+       Log.i("判断WIFI网络", String.valueOf(nc.isWiFi()));
+       Log.i("判断VPN网络", String.valueOf(nc.isVPN()));
+     ```
+   ##### 文件存储使用示例
+   * 保存文件
+     ```
+       File file = new File("url");//资源地址
+       String path = Storage.Locality.generatePicturesPath("/", "test.jpg");//保存地址
+       FileInputStream fis = new FileInputStream(file);
+       Storage.write(path, fis);
+     ```
+   * 缓存数据
+     ```
+       /* 名称相同数据会覆盖 */
+       Storage.Cache.write(this, "test", "你好");//缓存string数据
+       Storage.Cache.write(this, "test", 1);//缓存int数据
+       Storage.Cache.write(this, "test", 'a');//缓存char数据
+       String data = Storage.Cache.read(this, "test");//读取数据
+     ```
+   * 获取本地url
+     ```
+       Log.i("创建视频文件", Storage.Locality.generateVideoPath());
+       Log.i("创建音频文件", Storage.Locality.generateMusicPath());
+       Log.i("创建文档文件", Storage.Locality.generateDocumentsPath());
+       Log.i("创建下载文件", Storage.Locality.generateDownloadPath());
+       Log.i("创建图片文件", Storage.Locality.generateDCIMPath());
+       Log.i("创建图片文件", Storage.Locality.generatePicturesPath());
+       Log.i("创建截图文件", Storage.Locality.generateScreenshotsPath());
+     ```
+   ##### activirt跳转使用示例
+   ##### 底部导航栏使用示例
+   ##### 对话框使用示例
+   ##### 菜单框使用示例
+   ##### 分页列表使用示例
+   ##### 扫描二维码或条形码使用示例
+   ##### 头部导航栏使用示例
+   ##### 加载动画使用示例
 ### 更新日志
   * [历史版本](https://github.com/natural1law/briefness/blob/master/HISTORY_VERSION.md "点击查看历史版本")
