@@ -1,7 +1,8 @@
 Android开发工具
 ======
 ***
-> 此工具使用兼容Android API 24 = 7.0版本以上(包括7.0)
+> 此工具使用兼容Android API 24 = 7.0版本以上(包括7.0) 
+> 此工具如有问题欢迎大家指教留言。
 ***
 ### 工具目录
    #### 图形统计
@@ -562,10 +563,13 @@ Android开发工具
    ##### 文件存储使用示例
    * 保存文件
      ```
-       File file = new File("url");//资源地址
-       String path = Storage.Locality.generatePicturesPath("/", "test.jpg");//保存地址
-       FileInputStream fis = new FileInputStream(file);
-       Storage.write(path, fis);
+       String path = Storage.Locality.generatePicturesPath("/test.txt");//保存地址并创建(内容为空)
+       Storage.write(path, "你好");
+     ```
+   * 读取文件
+     ```
+       String path = Storage.Locality.generatePicturesPath("/test.txt");//保存地址并创建
+       Storage.readDecode(path);
      ```
    * 缓存数据
      ```
@@ -586,11 +590,282 @@ Android开发工具
        Log.i("创建截图文件", Storage.Locality.generateScreenshotsPath());
      ```
    ##### activirt跳转使用示例
+   * 调用文件管理器中的图片（单选）
+     ```
+       launcher = This.initLauncher(aThis, (resultCode, intent) -> This.resultListener(aThis, intent, data -> {
+            File file = new File(data);
+            toasts.i("回调数据", file.isFile());
+
+        }));//此方法必须放到主UI线程中(onCreate、onStart等方法中)，不然异常
+        this.resultAction(launcher).start();//随意使用
+     ```
+   * 有返回值的activity
+     ```
+       launcher = This.initLauncher(this, (resultCode, intent) -> {
+
+       });//此方法必须放到主UI线程中(onCreate、onStart等方法中)，不然异常
+       
+       This.build().startLauncher(MsgShowActivity.class, launcher).execute();//MsgShowActivity.class目标activity
+     ```
+   * 跳转目标activity中（主要解决在子线程执行异常同时简化使用时代码）
+     ```
+       This.build().activity(this, MsgShowActivity.class).start();
+     ```
+     ```
+       Bundle bundle = new Bundle();
+       bundle.putString("", "");
+       This.build().activity(this, MsgShowActivity.class, bundle).start();//带参数跳转
+     ```
+     ```
+       This.build().activity(this, MsgShowActivity.class, true).start();跳转后关闭当前页面
+     ```
    ##### 底部导航栏使用示例
+   * 调用
+     ```
+       public class MainActivity extends BaseActivity {
+
+         private final MainActivity aThis = this;
+
+         @Override
+         protected int layoutId() { return R.layout.activity_main; }
+
+         @Override
+         protected void onCreate() {
+             //底部导航栏
+             NavigationBar.builder(aThis)
+                    .setMenu(R.menu.nav_menu_default)//选项菜单
+                    .setAddFragment(new HomePageFrag())//添加fragment对象
+                    .setAddFragment(new MyPageFrag())//添加顺序影响显示顺序
+                    .setAddMenuItem(R.id.first, R.id.second)//位置影响显示顺序
+                    .setBackgroundColor(R.color.gray)//背景颜色
+                    .build();
+         }
+     }
+     ```
+   * fragment对象创建
+     ```
+       public final class HomePageFrag extends BaseFragment {//默认Fragment也可以
+           @Override
+           protected int layoutId() { return R.layout.frag_homepage; }
+           
+           @Override
+           protected void onCreateView(View view) {
+           }
+           
+           @Override
+           protected void initUI() {
+           }
+       }
+     ```
+   * mainActivity布局
+     ```
+       <?xml version="1.0" encoding="utf-8"?>
+       <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+           xmlns:tools="http://schemas.android.com/tools"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:orientation="vertical"
+           tools:context=".base.MainActivity">
+
+           <!-- 必须添加 -->
+           <include layout="@layout/nav_layout" />
+
+       </FrameLayout>
+     ```
+   * 选项菜单
+     ```
+       <?xml version="1.0" encoding="utf-8"?>
+       <menu xmlns:android="http://schemas.android.com/apk/res/android"
+           xmlns:tools="http://schemas.android.com/tools"
+           tools:ignore="MissingDefaultResource">
+ 
+           <item
+               android:id="@+id/first"
+               android:icon="@drawable/nav_icon1"
+               android:title="首页" />
+
+           <item
+               android:id="@+id/second"
+               android:icon="@drawable/nav_icon4"
+               android:title="我的"
+               tools:ignore="HardcodedText" />
+
+       </menu>
+     ```
    ##### 对话框使用示例
+   * 不带取消dialog
+     ```
+       DialogDefault.console(aThis, "content", dialog -> {
+           toasts.setMsg("确认").showSuccess();
+           dialog.cancel();
+       });
+     ```
+   * 带取消dialog
+     ```
+       DialogDefault.alert(aThis, "title", "content", dialog -> {
+           toasts.setMsg("确认").showSuccess();
+           dialog.cancel();
+       });
+     ```
+     ```
+       DialogDefault.alert(aThis, "title", "content", new OnClickTriggerListener() {
+           @Override
+           public void ok(DialogServlet dialog) {
+               toasts.setMsg("确认").showSuccess();
+               dialog.cancel();
+           }
+           @Override
+           public void no(DialogServlet dialog) {
+               toasts.setMsg("取消").showSuccess();
+               dialog.cancel();
+           }
+       });
+     ```
+   * 相机相册选择dialog(单选)
+     ```
+       DialogDefault.camera(aThis, photos -> {
+           toasts.i("Uri", photos.get(0).uri);
+           toasts.i("Path", photos.get(0).path);
+       });
+     ```
+   * dialog倒计时关闭
+     ```
+       DialogDefault.countDownTime(aThis, "正在加载", "还有", 60, "秒加载完成", () -> {
+           toasts.setMsg("加载完成").showSuccess();
+           toasts.i("正在加载", "加载完成");
+       });
+     ```
+   * 自定义dialog
+     ```
+       DialogCall.builder()
+                .setLayoutView(R.layout.dialog_alert)
+                .setLayoutViewId(R.id.dialog_frame)
+                .setCanceled(false)
+                .setCancelable(false)
+                .setLayoutGravity(CENTER)
+                .build()
+                .get(context)
+                .setText(R.id.dialog_title, title)
+                .setText(R.id.dialog_content, content)
+                .setOnClickListener(R.id.dialog_affirm, listener)
+                .setOnClickListener(R.id.dialog_quit, listener::no)
+                .show();
+     ```
+     ```
+       <?xml version="1.0" encoding="utf-8"?>
+       <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+           xmlns:tools="http://schemas.android.com/tools"
+           android:id="@+id/dialog_frame"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           android:layout_marginStart="40dp"
+           android:layout_marginEnd="40dp"
+           android:background="@drawable/border_dialog_cue"
+           android:orientation="vertical">
+
+           <androidx.appcompat.widget.AppCompatTextView
+               android:id="@+id/dialog_title"
+               android:layout_width="match_parent"
+               android:layout_height="55dp"
+               android:padding="15dp"
+               android:text="标题"
+               android:textColor="@color/hint"
+               android:textSize="18sp"
+               android:textStyle="bold"
+               tools:ignore="HardcodedText" />
+
+           <androidx.appcompat.widget.AppCompatTextView
+               android:id="@+id/dialog_content"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:layout_marginTop="55dp"
+               android:layout_marginBottom="50dp"
+               android:gravity="center_horizontal"
+               android:padding="10dp"
+               android:text="内容"
+               android:textColor="#282222"
+               android:textSize="15sp"
+               android:textStyle="normal"
+               tools:ignore="HardcodedText" />
+
+           <androidx.appcompat.widget.AppCompatTextView
+               android:id="@+id/dialog_affirm"
+               android:layout_width="match_parent"
+               android:layout_height="50dp"
+               android:layout_gravity="bottom"
+               android:layout_marginTop="140dp"
+               android:background="@drawable/border_bottom"
+               android:gravity="center"
+               android:text="确认"
+               android:textColor="#ffffff"
+               android:textSize="14sp"
+               tools:ignore="HardcodedText,RtlSymmetry,TextContrastCheck" />
+
+        </FrameLayout>
+     ```
    ##### 菜单框使用示例
+     ```
+       private final Point point = new Point();
+     ```
+     ```
+       FloatMenu menu = new FloatMenu(aThis);
+           menu.inflate(R.menu.setting, Convert.Pixel.get(aThis).dp(150));
+           menu.setOnItemClickListener((v, position) -> {
+               switch (position) {
+                  case 0:
+                      break;
+                  case 1:
+                      break;
+              }
+              menu.dismiss();
+          });
+       // menu.show();
+       menu.show(point);
+     ```
+     ```
+       @Override
+       public boolean dispatchTouchEvent(MotionEvent ev) {
+           if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+               point.x = (int) ev.getRawX();
+               point.y = (int) ev.getRawY();
+           }
+           return super.dispatchTouchEvent(ev);
+       }
+     ```
+     ```
+       <?xml version="1.0" encoding="utf-8"?>
+       <menu xmlns:app="http://schemas.android.com/apk/res-auto"
+           xmlns:tools="http://schemas.android.com/tools">
+ 
+           <item
+               app:icon="@mipmap/frame7"
+               app:menu_title="第一条"
+               tools:ignore="MenuTitle" />
+
+           <item
+               app:icon="@mipmap/frame9"
+               app:menu_title="第二条"
+               tools:ignore="MenuTitle" />
+      </menu>
+     ```
    ##### 分页列表使用示例
+     ```
+     
+     ```
    ##### 扫描二维码或条形码使用示例
+     ```
+       private ActivityResultLauncher<Intent> launcher;
+     ```
+     ```
+       This.initLauncher(aThis, (resultCode, intent) -> {
+            Log.i("回调码", String.valueOf(resultCode));
+            Log.i("回调数据", String.valueOf(intent.getStringExtra(RESULT_KEY)));
+       });
+     ```
+     ```
+       This.build().startLauncher(ScanActivity.class, launcher).execute();
+     ```
    ##### 头部导航栏使用示例
    ##### 加载动画使用示例
 ### 更新日志
