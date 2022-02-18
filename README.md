@@ -36,27 +36,27 @@ Android开发工具
 ### 使用依赖
   * 全部
   ```
-    implementation 'com.github.natural1law.briefness:3.4.9'
+    implementation 'com.github.natural1law.briefness:3.5'
   ```
   * 分支-网络请求
   ```
-  implementation 'com.github.natural1law.briefness:network:3.4.9'
+  implementation 'com.github.natural1law.briefness:network:3.5'
   ```
   * 分支-常用工具
   ```
-  implementation 'com.github.natural1law.briefness:reduce:3.4.9'
+  implementation 'com.github.natural1law.briefness:reduce:3.5'
   ```
   * 分支-图表统计
   ```
-  implementation 'com.github.natural1law.briefness:echarts:3.4.9'
+  implementation 'com.github.natural1law.briefness:echarts:3.5'
   ```
   * 分支-视图布局
   ```
-  implementation 'com.github.natural1law.briefness:view:3.4.9'
+  implementation 'com.github.natural1law.briefness:view:3.5'
   ```
   * 分支-加载动画（仿zyao89）
   ```
-  implementation 'com.github.natural1law.briefness:animation:3.4.9'
+  implementation 'com.github.natural1law.briefness:animation:3.5'
   ```
 
 ### 工具使用
@@ -518,6 +518,7 @@ Android开发工具
                 .into(imageView);//存放显示验证码的对象
      ```
    ##### 短信倒计时使用示例
+   * 调用
      ```
        CountDown cd = CountDown.builder()
                 .setView(textView)//textView的对象
@@ -529,13 +530,14 @@ Android开发工具
         cd.onFinish();//停止倒计时
      ```
    ##### 延时点击使用示例
+   * 调用
      ```
        if (Idle.isClick()){//默认0.8秒内不能触发}
        if (Idle.isClick(2000)){//默认2秒内不能触发}
      ```
    ##### SharedPreferences缓存使用示例
    > SharedPreferences二次封装, 只是为了缩短代码引用
-   
+   * 调用
      ```
        MicroCache mc = MicroCache.getInstance(aThis);
        mc.setApply("1", "1");
@@ -544,6 +546,7 @@ Android开发工具
        Log.i("Commit的值", mc.getString("2"));
      ```
    ##### 动态代理使用示例
+   * 调用
      ```
        public interface A {
         void c();
@@ -561,6 +564,7 @@ Android开发工具
        }
      ```
    ##### 网络状态使用示例
+   * 调用
      ```
        NetworkConfiguration nc = NetworkConfiguration.build(this);
        Log.i("获取运营商网络IP地址", nc.getMobileIp());
@@ -1026,10 +1030,11 @@ Android开发工具
         tabView.execute();
      ```
    ##### RecyclerView刷新和加载使用示例
+   * 调用
      ```
-        
      ```
    ##### 加载动画使用示例
+   > [ZLoading项目地址](https://github.com/zyao89/ZLoading)
    * 布局
      ```
        <com.androidx.animation.view.ProgressView
