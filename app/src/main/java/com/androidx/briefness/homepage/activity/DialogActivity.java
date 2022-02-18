@@ -1,5 +1,6 @@
 package com.androidx.briefness.homepage.activity;
 
+import static com.androidx.briefness.base.App.appThis;
 import static com.androidx.briefness.base.App.toasts;
 import static com.androidx.view.scan.ScanActivity.RESULT_KEY;
 
@@ -12,13 +13,13 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
 import com.androidx.reduce.tools.Idle;
+import com.androidx.reduce.tools.This;
 import com.androidx.view.dialog.DialogDefault;
 import com.androidx.view.scan.ScanActivity;
 
@@ -81,9 +82,9 @@ public final class DialogActivity extends BaseActivity {
         imageView.setColorFilter(R.color.black);
         titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
 
-        launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
-            Log.i("回调码", String.valueOf(result.getResultCode()));
-            Log.i("回调数据", String.valueOf(result.getData().getStringExtra(RESULT_KEY)));
+        launcher = This.initLauncher(aThis, (resultCode, intent) -> {
+            Log.i("回调码", String.valueOf(resultCode));
+            Log.i("回调数据", intent.getStringExtra(RESULT_KEY));
         });
 
     }
@@ -103,7 +104,7 @@ public final class DialogActivity extends BaseActivity {
 
     @OnClick(R.id.activity_dialog2)
     public void dialog2() {
-        launcher.launch(new Intent(aThis, ScanActivity.class));
+        appThis.startLauncher(ScanActivity.class, launcher).execute();
     }
 
     @OnClick(R.id.activity_dialog3)

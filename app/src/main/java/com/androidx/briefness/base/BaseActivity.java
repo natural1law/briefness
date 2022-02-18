@@ -29,8 +29,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class BaseActivity extends AppCompatActivity {
 
-    protected abstract @LayoutRes
-    int layoutId();
+    @LayoutRes
+    protected abstract int layoutId();
 
     protected abstract void onCreate();
 

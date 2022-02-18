@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/l0"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/title_layout"
+        layout="@layout/title_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.androidx.view.drag.DragLayoutView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/a1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="50dp"
+            android:background="#34C0FF"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="#98F14A"
+            tools:ignore="SpeakableTextPresentCheck" />
+
+    </com.androidx.view.drag.DragLayoutView>
+
+    <!--    <com.androidx.view.drag.DragView-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_marginTop="0dp">-->
+
+    <!--        <androidx.appcompat.widget.LinearLayoutCompat-->
+    <!--            android:layout_width="50dp"-->
+    <!--            android:layout_height="50dp"-->
+    <!--            android:background="#34C0FF"-->
+    <!--            tools:ignore="SpeakableTextPresentCheck" />-->
+
+    <!--        <androidx.appcompat.widget.LinearLayoutCompat-->
+    <!--            android:layout_width="50dp"-->
+    <!--            android:layout_height="50dp"-->
+    <!--            android:background="#98F14A"-->
+    <!--            tools:ignore="SpeakableTextPresentCheck" />-->
+
+    <!--        <androidx.appcompat.widget.LinearLayoutCompat-->
+    <!--            android:layout_width="50dp"-->
+    <!--            android:layout_height="50dp"-->
+    <!--            android:background="#98F14A"-->
+    <!--            tools:ignore="SpeakableTextPresentCheck" />-->
+
+    <!--        <androidx.appcompat.widget.LinearLayoutCompat-->
+    <!--            android:layout_width="50dp"-->
+    <!--            android:layout_height="50dp"-->
+    <!--            android:background="#34C0FF"-->
+    <!--            tools:ignore="SpeakableTextPresentCheck" />-->
+
+    <!--    </com.androidx.view.drag.DragView>-->
+
+</androidx.appcompat.widget.LinearLayoutCompat>

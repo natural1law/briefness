@@ -120,7 +120,7 @@ public final class NetworkConfiguration {
     /**
      * 移动网络IP地址
      */
-    public String ipMobile() {
+    public String getMobileIp() {
         try {
             for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
                 NetworkInterface nif = en.nextElement();
@@ -140,7 +140,7 @@ public final class NetworkConfiguration {
     /**
      * WifiIP地址
      */
-    public String ipWifi() {
+    public String getWifiIp() {
         try {
             int ip = wm.getConnectionInfo().getIpAddress();
             return (ip & 0xFF) + "." + ((ip >> 8) & 0xFF) + "." + ((ip >> 16) & 0xFF) + "." + (ip >> 24 & 0xFF);

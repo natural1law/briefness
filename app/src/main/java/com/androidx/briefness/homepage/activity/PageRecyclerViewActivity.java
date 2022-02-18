@@ -43,7 +43,7 @@ public final class PageRecyclerViewActivity extends BaseActivity {
     @BindView(R.id.title_text)
     public AppCompatTextView titleView;
     @BindView(R.id.listview)
-    public PaginationRecycleView listView;
+    public PaginationRecycleView<JsonObject> listView;
     private Unbinder unbinder;
 
     /**
@@ -110,6 +110,9 @@ public final class PageRecyclerViewActivity extends BaseActivity {
         listView.setAdapterAndManager(new PageAdapter(), new LinearLayoutManager(aThis));
         indifference(1);
         listView.setListener(this::indifference);
+        listView.setListener(position -> {
+
+        });
     }
 
     private void indifference(int lot) {

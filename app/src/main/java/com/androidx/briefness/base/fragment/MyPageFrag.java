@@ -30,13 +30,17 @@ public final class MyPageFrag extends BaseFragment {
     private Unbinder unbinder;
 
     @Override
-    protected View onCreateView() {
-        return setRootView(R.layout.frag_my);
+    protected int layoutId() {
+        return R.layout.frag_my;
     }
 
     @Override
-    protected void onViewCreated(View view) {
+    protected void onCreateView(View view) {
         unbinder = ButterKnife.bind(this, view);
+    }
+
+    @Override
+    protected void initUI() {
         titleLayout.setBackgroundColor(context.getResources().getColor(R.color.gray, context.getTheme()));
         titleView.setTextColor(getResources().getColor(R.color.black1, context.getTheme()));
         returnView.setVisibility(View.GONE);

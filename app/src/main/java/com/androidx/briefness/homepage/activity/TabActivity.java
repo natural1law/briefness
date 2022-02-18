@@ -43,6 +43,7 @@ public class TabActivity extends BaseActivity {
     public SegmentTabLayout segmentTabLayout;
     @BindView(R.id.vp2)
     public ViewPager2 viewPager2;
+
     private Unbinder unbinder;
     private TabLayoutBar tabView;
 
@@ -94,7 +95,6 @@ public class TabActivity extends BaseActivity {
                 .setTitles("Common", "Sliding", "Segment")
                 .setFragments(new CommonFragment(), new SlidingFragment(), new SegmentFragment())
                 .initBuild();
-
         tabView.execute();
 
     }

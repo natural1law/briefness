@@ -18,11 +18,15 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 /**
  * 存储工具
@@ -61,69 +65,140 @@ public final class Storage {
     }
 
     /**
+     * 将文件保存到本地存储中
+     *
+     * @param url  保存地址 (Storage.Locality.generateDownloadPath("log.txt"))
+     * @param data 将要保存的数据
+     * @param <D>  消息类型
+     */
+    public static <D> boolean write(String url, D data) {
+        try {
+            FileOutputStream fos = new FileOutputStream(url);
+            OutputStreamWriter osw = new OutputStreamWriter(fos);
+            BufferedWriter writer = new BufferedWriter(osw);
+            if (data instanceof char[]) {
+                char[] parseData = (char[]) data;
+                writer.write(parseData, 0, parseData.length);
+            } else {
+                String parseData = String.valueOf(data);
+                writer.write(parseData, 0, parseData.length());
+            }
+            writer.flush();
+            writer.close();
+            osw.close();
+            fos.close();
+            return true;
+        } catch (Exception e) {
+            Log.e(Locality.class.getName(), Log.getStackTraceString(e));
+            return false;
+        }
+    }
+
+    /**
+     * 读取文件
+     */
+    public static String read(String url) {
+        try {
+            String line, content = "";
+            BufferedReader reader;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                Path path = Paths.get(url);
+                reader = Files.newBufferedReader(path);
+            } else {
+                FileReader fr = new FileReader(url);
+                reader = new BufferedReader(fr);
+                fr.close();
+            }
+            while ((line = reader.readLine()) != null) {
+                if (line.length() > 0) content = line;
+            }
+            reader.close();
+            return content;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * 加密保存文件
+     */
+    public static <D> boolean writeEncode(String url, D data) {
+        String enData = Secure.Base64.encode(String.valueOf(data));
+        return write(url, Secure.Base64.encode(enData));
+    }
+
+    /**
+     * 解密获取文件
+     */
+    public static String readDecode(String url) {
+        String data = Secure.Base64.decode(read(url));
+        return Secure.Base64.decode(data);
+    }
+
+    /**
      * 本地缓存
      */
     public static final class Cache {
 
-        public static <D> void writeFile(Context c, String fileName, D data) {
-            try {
-                write(c, fileName, data);
-            } catch (Exception e) {
-                Log.e("本地缓存写入异常", Log.getStackTraceString(e));
-            }
+        public static <D> boolean write(Context c, String fileName, D data) {
+            return saveWrite(c, fileName, data);
         }
 
-        public static String readFile(Context context, String fileName) {
-            if (exists(context, fileName)) {
-                try {
-                    return read(context, fileName);
-                } catch (Exception e) {
-                    Log.e("本地缓存读取异常", Log.getStackTraceString(e));
-                    return null;
-                }
-            } else {
-                return null;
-            }
+        public static String read(Context context, String fileName) {
+            if (exists(context, fileName)) return saveRead(context, fileName);
+            else return null;
         }
 
         /**
          * 保存数据
          */
-        private static <D> void write(Context c, String f, D d) throws Exception {
-            //设置文件名称，以及存储方式
-            FileOutputStream out = c.openFileOutput(f, Context.MODE_PRIVATE);
-            //创建一个OutputStreamWriter对象，传入BufferedWriter的构造器中
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out));
-            //向文件中写入数据
-            if (d instanceof String) {
-                writer.write(String.valueOf(d));
-            } else if (d instanceof Byte) {
-                writer.write((Byte) d);
-            } else if (d instanceof Integer) {
-                writer.write((Integer) d);
-            } else if (d instanceof char[]) {
-                writer.write((char[]) d);
-            } else {
-                Log.w("存储工具", "未匹配到数据类型");
+        private static <D> boolean saveWrite(Context c, String fileName, D data) {
+            try {
+                //设置文件名称，以及存储方式
+                FileOutputStream out = c.openFileOutput(fileName, Context.MODE_PRIVATE);
+                OutputStreamWriter osw = new OutputStreamWriter(out);
+                BufferedWriter writer = new BufferedWriter(osw);
+                if (data instanceof char[]) {
+                    char[] parseData = (char[]) data;
+                    writer.write(parseData, 0, parseData.length);
+                } else if (data instanceof String) {
+                    String parseData = String.valueOf(data);
+                    writer.write(parseData, 0, parseData.length());
+                } else if (data instanceof Integer) {
+                    writer.write((int) data);
+                } else {
+                    Log.e(Locality.class.getName(), "数据类型不匹配");
+                    return false;
+                }
+                writer.flush();
+                writer.close();
+                osw.close();
+                out.close();
+                return true;
+            } catch (Exception e) {
+                Log.e(Locality.class.getName(), Log.getStackTraceString(e));
+                return false;
             }
-            out.flush();
-            writer.close();
-            out.close();
         }
 
         /**
          * 获取数据
          */
-        private static String read(Context c, String f) throws Exception {
-            FileInputStream in = c.openFileInput(f);
-            //设置将要打开的存储文件名称
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            StringBuilder content = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) content.append(line);
-            reader.close();
-            in.close();
-            return content.toString();
+        private static String saveRead(Context c, String f) {
+            try {
+                FileInputStream in = c.openFileInput(f);
+                //设置将要打开的存储文件名称
+                BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                StringBuilder content = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) content.append(line);
+                reader.close();
+                in.close();
+                return content.toString();
+            } catch (Exception e) {
+                Log.e(Storage.class.getName(), Log.getStackTraceString(e));
+                return null;
+            }
         }
 
         /**
@@ -156,68 +231,9 @@ public final class Storage {
          */
         public static String generateVideoPath(String... files) {
             try {
-                sb.delete(0, sb.length());
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath());
-                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
-                    Path path = Paths.get(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
-                    File file = Paths.get(path.getParent().toString()).toFile();
-                    if (!file.exists()) System.out.println(file.mkdirs());
-                } else {
-                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath());
-                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
-                    File file = new File(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
-                    if (!file.exists()) System.out.println(file.mkdirs());
-                }
-                return sb.toString();
-            } catch (Exception e) {
-                return Log.getStackTraceString(e);
-            }
-        }
-
-        /**
-         *
-         */
-        public static String generatePicturesPath(String... files) {
-            try {
-                sb.delete(0, sb.length());
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
-                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
-                    Path path = Paths.get(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
-                    File file = Paths.get(path.getParent().toString()).toFile();
-                    if (!file.exists()) System.out.println(file.mkdirs());
-                } else {
-                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath());
-                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
-                    File file = new File(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
-                    if (!file.exists()) System.out.println(file.mkdirs());
-                }
-                return sb.toString();
-            } catch (Exception e) {
-                return Log.getStackTraceString(e);
-            }
-        }
-
-        /**
-         *
-         */
-        public static String generateDownloadPath(String... files) {
-            try {
-                sb.delete(0, sb.length());
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
-                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
-                    Path path = Paths.get(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
-                    File file = Paths.get(path.getParent().toString()).toFile();
-                    if (!file.exists()) System.out.println(file.mkdirs());
-                } else {
-                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath());
-                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
-                    File file = new File(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
-                    if (!file.exists()) System.out.println(file.mkdirs());
-                }
-                return sb.toString();
+                String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES).getAbsolutePath();
+                if (files == null || files.length == 0) return defaultValue(root, ".mp4");
+                else return baseGenerate(root, files);
             } catch (Exception e) {
                 return Log.getStackTraceString(e);
             }
@@ -228,20 +244,35 @@ public final class Storage {
          */
         public static String generateMusicPath(String... files) {
             try {
-                sb.delete(0, sb.length());
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath());
-                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
-                    Path path = Paths.get(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
-                    File file = Paths.get(path.getParent().toString()).toFile();
-                    if (!file.exists()) System.out.println(file.mkdirs());
-                } else {
-                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath());
-                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
-                    File file = new File(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
-                    if (!file.exists()) System.out.println(file.mkdirs());
-                }
-                return sb.toString();
+                String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
+                if (files == null || files.length == 0) return defaultValue(root, ".mp3");
+                else return baseGenerate(root, files);
+            } catch (Exception e) {
+                return Log.getStackTraceString(e);
+            }
+        }
+
+        /**
+         *
+         */
+        public static String generateDocumentsPath(String... files) {
+            try {
+                String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS).getAbsolutePath();
+                if (files == null || files.length == 0) return defaultValue(root, ".txt");
+                else return baseGenerate(root, files);
+            } catch (Exception e) {
+                return Log.getStackTraceString(e);
+            }
+        }
+
+        /**
+         *
+         */
+        public static String generateDownloadPath(String... files) {
+            try {
+                String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).getAbsolutePath();
+                if (files == null || files.length == 0) return defaultValue(root, ".txt");
+                else return baseGenerate(root, files);
             } catch (Exception e) {
                 return Log.getStackTraceString(e);
             }
@@ -249,20 +280,22 @@ public final class Storage {
 
         public static String generateDCIMPath(String... files) {
             try {
-                sb.delete(0, sb.length());
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath());
-                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
-                    Path path = Paths.get(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
-                    File file = Paths.get(path.getParent().toString()).toFile();
-                    if (!file.exists()) System.out.println(file.mkdirs());
-                } else {
-                    sb.append(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath());
-                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
-                    File file = new File(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
-                    if (!file.exists()) System.out.println(file.mkdirs());
-                }
-                return sb.toString();
+                String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM).getAbsolutePath();
+                if (files == null || files.length == 0) return defaultValue(root, ".jpg");
+                else return baseGenerate(root, files);
+            } catch (Exception e) {
+                return Log.getStackTraceString(e);
+            }
+        }
+
+        /**
+         *
+         */
+        public static String generatePicturesPath(String... files) {
+            try {
+                String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).getAbsolutePath();
+                if (files == null || files.length == 0) return defaultValue(root, ".png");
+                else return baseGenerate(root, files);
             } catch (Exception e) {
                 return Log.getStackTraceString(e);
             }
@@ -271,21 +304,9 @@ public final class Storage {
         @RequiresApi(api = Build.VERSION_CODES.Q)
         public static String generateScreenshotsPath(String... files) {
             try {
-                sb.delete(0, sb.length());
-                String url = Environment.DIRECTORY_PICTURES + "/" + Environment.DIRECTORY_SCREENSHOTS;
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    sb.append(Environment.getExternalStoragePublicDirectory(url).getAbsolutePath());
-                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
-                    Path path = Paths.get(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
-                    File file = Paths.get(path.getParent().toString()).toFile();
-                    if (!file.exists()) System.out.println(file.mkdirs());
-                } else {
-                    sb.append(Environment.getExternalStoragePublicDirectory(url).getAbsolutePath());
-                    for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
-                    File file = new File(sb.substring(sb.indexOf("/"), sb.indexOf(".") - 1));
-                    if (!file.exists()) System.out.println(file.mkdirs());
-                }
-                return sb.toString();
+                String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_SCREENSHOTS).getAbsolutePath();
+                if (files == null || files.length == 0) return defaultValue(root, ".jpg");
+                else return baseGenerate(root, files);
             } catch (Exception e) {
                 return Log.getStackTraceString(e);
             }
@@ -299,14 +320,8 @@ public final class Storage {
          */
         @RequiresApi(api = Build.VERSION_CODES.Q)
         public static Uri generateDownLoadPath(Context c, String... param) {
-            ContentResolver cr = c.getContentResolver();
-            Uri uri = MediaStore.Downloads.EXTERNAL_CONTENT_URI;
-            ContentValues values = new ContentValues();
             String path = Environment.DIRECTORY_DOWNLOADS + "/" + param[0];
-            values.put(MediaStore.Downloads.RELATIVE_PATH, path);
-            values.put(MediaStore.Downloads.DISPLAY_NAME, param[1] + "." + param[2]);
-            values.put(MediaStore.Downloads.TITLE, path);
-            return cr.insert(uri, values);
+            return baseGenerateUri(c, path, param);
         }
 
         /**
@@ -317,14 +332,8 @@ public final class Storage {
          */
         @RequiresApi(api = Build.VERSION_CODES.Q)
         public static Uri generatePicturesPath(Context c, String... param) {
-            ContentResolver cr = c.getContentResolver();
-            Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-            ContentValues values = new ContentValues();
             String path = Environment.DIRECTORY_PICTURES + "/" + param[0];
-            values.put(MediaStore.Images.Media.RELATIVE_PATH, path);
-            values.put(MediaStore.Images.Media.DISPLAY_NAME, param[1] + "." + param[2]);
-            values.put(MediaStore.Images.Media.TITLE, path);
-            return cr.insert(uri, values);
+            return baseGenerateUri(c, path, param);
         }
 
         /**
@@ -335,14 +344,8 @@ public final class Storage {
          */
         @RequiresApi(api = Build.VERSION_CODES.Q)
         public static Uri generateScreenshotsPath(Context c, String... param) {
-            ContentResolver cr = c.getContentResolver();
-            Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-            ContentValues values = new ContentValues();
             String path = Environment.DIRECTORY_SCREENSHOTS + "/" + param[0];
-            values.put(MediaStore.Images.Media.RELATIVE_PATH, path);
-            values.put(MediaStore.Images.Media.DISPLAY_NAME, param[1] + "." + param[2]);
-            values.put(MediaStore.Images.Media.TITLE, path);
-            return cr.insert(uri, values);
+            return baseGenerateUri(c, path, param);
         }
 
         /**
@@ -353,14 +356,8 @@ public final class Storage {
          */
         @RequiresApi(api = Build.VERSION_CODES.Q)
         public static Uri generateVideoPath(Context c, String... param) {
-            ContentResolver cr = c.getContentResolver();
-            Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-            ContentValues values = new ContentValues();
             String path = Environment.DIRECTORY_MOVIES + "/" + param[0];
-            values.put(MediaStore.Video.Media.RELATIVE_PATH, path);
-            values.put(MediaStore.Video.Media.DISPLAY_NAME, param[1] + "." + param[2]);
-            values.put(MediaStore.Video.Media.TITLE, path);
-            return cr.insert(uri, values);
+            return baseGenerateUri(c, path, param);
         }
 
         /**
@@ -371,51 +368,57 @@ public final class Storage {
          */
         @RequiresApi(api = Build.VERSION_CODES.Q)
         public static Uri generateAudioPath(Context c, String... param) {
+            String path = Environment.DIRECTORY_MUSIC + "/" + param[0];
+            return baseGenerateUri(c, path, param);
+        }
+
+        private static String defaultValue(String root, String suffix) throws IOException {
+            File file;
+            String uuid = UUID.randomUUID().toString().replace("-", "");
+            String url = root + "/default/" + uuid + suffix;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                Path path = Paths.get(url);
+                file = path.toFile();
+                File parent = path.getParent().toFile();
+                if (!parent.exists()) System.out.println(parent.mkdirs());
+            } else {
+                file = new File(url);
+                File parent = new File(String.valueOf(file.getParent()));
+                if (!parent.exists()) System.out.println(parent.mkdirs());
+            }
+            if (!file.isFile()) System.out.println(file.createNewFile());
+            return file.getPath();
+        }
+
+        private static String baseGenerate(String root, String... files) throws IOException {
+            File file;
+            sb.delete(0, sb.length());
+            sb.append(root);
+            for (String s : files) sb.append(s.contains(".") ? "" : "/").append(s);
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                Path path = Paths.get(sb.toString());
+                file = path.toFile();
+                File parent = path.getParent().toFile();
+                if (!parent.exists()) System.out.println(parent.mkdirs());
+            } else {
+                file = new File(sb.toString());
+                File parent = new File(String.valueOf(file.getParent()));
+                if (!parent.exists()) System.out.println(parent.mkdirs());
+            }
+            if (!file.isFile()) System.out.println(file.createNewFile());
+            return file.getPath();
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.Q)
+        private static Uri baseGenerateUri(Context c, String path, String... param) {
             ContentResolver cr = c.getContentResolver();
             Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
             ContentValues values = new ContentValues();
-            String path = Environment.DIRECTORY_MUSIC + "/" + param[0];
             values.put(MediaStore.Audio.Media.RELATIVE_PATH, path);
             values.put(MediaStore.Audio.Media.DISPLAY_NAME, param[1] + "." + param[2]);
             values.put(MediaStore.Audio.Media.TITLE, path);
             return cr.insert(uri, values);
         }
-
-        /**
-         * 将文件保存到本地存储中
-         *
-         * @param data 将要保存的数据
-         * @param url  保存地址 (Storage.Locality.generateDownloadPath("log.txt"))
-         * @param <M>  消息类型
-         */
-        public static <M> boolean toFile(M data, String url) {
-            try {
-                FileOutputStream fos = new FileOutputStream(url);
-                OutputStreamWriter osw = new OutputStreamWriter(fos);
-                BufferedWriter writer = new BufferedWriter(osw);
-                if (data instanceof char[]) {
-                    char[] parseData = (char[]) data;
-                    writer.write(parseData, 0, parseData.length);
-                } else if (data instanceof String) {
-                    String parseData = String.valueOf(data);
-                    writer.write(parseData, 0, parseData.length());
-                } else {
-                    Log.e(Locality.class.getName(), "数据类型不匹配");
-                    return false;
-                }
-                writer.flush();
-                writer.close();
-                osw.flush();
-                osw.close();
-                fos.flush();
-                fos.close();
-                return true;
-            } catch (Exception e) {
-                Log.e(Locality.class.getName(), Log.getStackTraceString(e));
-                return false;
-            }
-        }
-
     }
 
 }

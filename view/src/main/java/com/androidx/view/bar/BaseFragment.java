@@ -1,5 +1,6 @@
 package com.androidx.view.bar;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,40 +21,48 @@ import androidx.fragment.app.Fragment;
 public abstract class BaseFragment extends Fragment {
 
     private volatile View rootView;
-    private LayoutInflater inflater;
-    private ViewGroup container;
     protected Context context;
+    protected Activity aThis;
 
-    protected View setRootView(@LayoutRes int layoutId) {
-        if (rootView == null) rootView = inflater.inflate(layoutId, container, false);
+    private View setRootView(LayoutInflater inflater, ViewGroup container) {
+        if (rootView == null) rootView = inflater.inflate(layoutId(), container, false);
         else ((ViewGroup) rootView.getParent()).removeView(rootView);
         return rootView;
     }
 
-    protected abstract View onCreateView();
+    @LayoutRes
+    protected abstract int layoutId();
 
-    protected abstract void onViewCreated(View view);
+    protected abstract void onCreateView(View view);
+
+    protected abstract void initUI();
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
+        this.aThis = (Activity) context;
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        this.inflater = inflater;
-        this.container = container;
-        return this.onCreateView();
+        try {
+            View view;
+            this.onCreateView(view = this.setRootView(inflater, container));
+            return view;
+        } catch (Exception e) {
+            Log.e(getClass().getName(), Log.getStackTraceString(e));
+            return this.setRootView(inflater, container);
+        }
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         try {
-            this.onViewCreated(view);
-        }catch (Exception e){
+            initUI();
+        } catch (Exception e) {
             Log.e(getClass().getName(), Log.getStackTraceString(e));
         }
     }

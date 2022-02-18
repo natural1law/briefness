@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 
 import androidx.annotation.ColorRes;
+import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.LinearLayoutCompat;
@@ -29,13 +30,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class PaginationRecycleView extends LinearLayoutCompat {
+public class PaginationRecycleView<T> extends LinearLayoutCompat {
 
     private final RecyclerView rv;
     private final PaginationIndicator pi;
     private final ProgressView progress;
 
-    private Adapter<?, ?> adapter;
+    private Adapter<T> adapter;
     private OnChangedListener listener;
 
     public PaginationRecycleView(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -80,26 +81,26 @@ public class PaginationRecycleView extends LinearLayoutCompat {
 
     /* START ----------------------------------SET--GET------------------------------------------- */
 
-    public void setAdapterAndManager(Adapter<?, ?> adapter, RecyclerView.LayoutManager manager) {
+    public void setAdapterAndManager(Adapter<T> adapter, RecyclerView.LayoutManager manager) {
         this.adapter = adapter;
         adapter.pi = pi;
         rv.setLayoutManager(manager);
-        rv.setAdapter(adapter.innerAdapter);
+        rv.setAdapter(adapter);
         rv.setHasFixedSize(true);
         rv.setAnimation(null);
         pi.setOnChangedListener(c -> listener.onPageSelectedChanged(c));
     }
 
-    public void addItem(int assign, List<?> datas) {
+    public void addItem(int assign, List<T> datas) {
         adapter.addItem(assign, datas);
     }
 
-    public void addItem(int assign, List<?> datas, int total) {
+    public void addItem(int assign, List<T> datas, int total) {
         if (total == 0) total = 1;
         adapter.addItem(assign, datas, total);
     }
 
-    private void clear() {
+    public void clear() {
         adapter.clear();
     }
 
@@ -204,28 +205,27 @@ public class PaginationRecycleView extends LinearLayoutCompat {
 
     /* START ----------------------------------ADAPTER-------------------------------------------- */
 
-    @SuppressLint("NotifyDataSetChanged")
-    @SuppressWarnings({"ConstantConditions", "unchecked"})
-    public static abstract class Adapter<T, H extends HolderView> {
+    public static abstract class Adapter<T> extends InnerAdapter<T> {
 
-        protected final InnerAdapter innerAdapter = new InnerAdapter();
         private final Map<Integer, List<T>> dataMap = new ConcurrentHashMap<>();
         private final List<T> dataList = new ArrayList<>();
         private PaginationIndicator pi;
 
-        private void addItem(int assign, List<?> datas) {
+        private void addItem(int assign, List<T> datas) {
             addItem(assign, datas, datas.size());
         }
 
-        private void addItem(int assign, List<?> datas, int total) {
+        @SuppressLint("NotifyDataSetChanged")
+        private void addItem(int assign, List<T> datas, int total) {
             try {
                 dataList.clear();
-                dataMap.put(assign <= 0 ? 1 : assign, (List<T>) datas);
+                dataMap.put(assign <= 0 ? 1 : assign, datas);
                 if (dataMap.get(assign) != null) {
-                    dataList.addAll(dataMap.get(assign));
+                    List<T> data = dataMap.get(assign);
+                    if (data != null) dataList.addAll(data);
                     pi.setTotalCount(total);
                 }
-                innerAdapter.notifyDataSetChanged();
+                notifyDataSetChanged();
             } catch (Exception e) {
                 Log.e("PaginationRecycleView.Adapter异常", Log.getStackTraceString(e));
             }
@@ -234,38 +234,50 @@ public class PaginationRecycleView extends LinearLayoutCompat {
         /**
          * 清空数据
          */
+        @SuppressLint("NotifyDataSetChanged")
         private void clear() {
             dataMap.clear();
-            innerAdapter.notifyDataSetChanged();
+            notifyDataSetChanged();
         }
 
-        public int getItemCount() {
+        @Override
+        protected T data(int position) {
+            return dataList.get(position);
+        }
+
+        @Override
+        protected int size() {
             return dataList.isEmpty() ? 0 : dataList.size();
         }
 
-        protected abstract H createHolderView(@NonNull ViewGroup parent);
+    }
 
-        protected abstract void bindHolderView(H holder, T data);
+    private static abstract class InnerAdapter<T> extends RecyclerView.Adapter<HolderView> {
 
-        protected final class InnerAdapter extends RecyclerView.Adapter<H> {
+        @LayoutRes
+        protected abstract int onLayoutId();
 
-            @NonNull
-            @Override
-            public H onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                return Adapter.this.createHolderView(parent);
-            }
+        protected abstract void onBindHolderView(HolderView holder, T data);
 
-            @Override
-            public void onBindViewHolder(@NonNull H holder, int position) {
-                Adapter.this.bindHolderView(holder, dataList.get(position));
-            }
+        protected abstract T data(int position);
 
-            @Override
-            public int getItemCount() {
-                return Adapter.this.getItemCount();
-            }
+        protected abstract int size();
+
+        @NonNull
+        @Override
+        public HolderView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            return HolderView.createHolderView(parent, onLayoutId());
         }
 
+        @Override
+        public void onBindViewHolder(@NonNull HolderView holder, int position) {
+            this.onBindHolderView(holder, data(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return size();
+        }
     }
 
     /* END ------------------------------------ADAPTER-------------------------------------------- */

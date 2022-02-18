@@ -58,13 +58,17 @@ public final class HomePageFrag extends BaseFragment {
             "网络请求接口演示", "截屏录屏功能演示", "分页功能演示", "长按菜单演示", "刷新列表演示", "拖拽布局演示"};
 
     @Override
-    protected View onCreateView() {
-        return setRootView(R.layout.frag_homepage);
+    protected int layoutId() {
+        return R.layout.frag_homepage;
     }
 
     @Override
-    protected void onViewCreated(View view) {
+    protected void onCreateView(View view) {
         unbinder = ButterKnife.bind(this, view);
+    }
+
+    @Override
+    protected void initUI() {
         initView();
         initData();
         initListener();

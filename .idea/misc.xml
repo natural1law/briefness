@@ -6,18 +6,26 @@
         <entry key="..\:/androidWords/briefness/app/src/main/res/layout/activity_dialog.xml" value="0.25136612021857924" />
         <entry key="..\:/androidWords/briefness/app/src/main/res/layout/activity_dragview.xml" value="0.25136612021857924" />
         <entry key="..\:/androidWords/briefness/app/src/main/res/layout/activity_echarts.xml" value="0.13446824789594491" />
+        <entry key="..\:/androidWords/briefness/app/src/main/res/layout/activity_main.xml" value="0.2735655737704918" />
         <entry key="..\:/androidWords/briefness/app/src/main/res/layout/activity_menu.xml" value="0.2459016393442623" />
         <entry key="..\:/androidWords/briefness/app/src/main/res/layout/activity_msg_show.xml" value="0.25136612021857924" />
         <entry key="..\:/androidWords/briefness/app/src/main/res/layout/activity_pagerecyclerview.xml" value="0.2459016393442623" />
         <entry key="..\:/androidWords/briefness/app/src/main/res/layout/activity_refresh.xml" value="0.25" />
+        <entry key="..\:/androidWords/briefness/app/src/main/res/layout/activity_tab.xml" value="0.2735655737704918" />
+        <entry key="..\:/androidWords/briefness/app/src/main/res/layout/adapter_page.xml" value="0.2735655737704918" />
         <entry key="..\:/androidWords/briefness/app/src/main/res/layout/adapter_refresh.xml" value="0.2459016393442623" />
+        <entry key="..\:/androidWords/briefness/app/src/main/res/menu/nav_menu_default.xml" value="0.2714285714285714" />
         <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/dashboard.xml" value="0.2833976833976834" />
         <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/ic_index_dashboard.xml" value="0.2548611111111111" />
         <entry key="..\:/androidWords/briefness/view/src/main/res/layout/activity_scan.xml" value="0.274609375" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/layout/dialog_alert.xml" value="0.2735655737704918" />
         <entry key="..\:/androidWords/briefness/view/src/main/res/layout/dialog_camera.xml" value="0.274609375" />
         <entry key="..\:/androidWords/briefness/view/src/main/res/layout/dialog_count_down_time.xml" value="0.13446824789594491" />
         <entry key="..\:/androidWords/briefness/view/src/main/res/layout/item_camera.xml" value="0.274609375" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/layout/layout_recycler.xml" value="0.2735655737704918" />
         <entry key="..\:/androidWords/briefness/view/src/main/res/layout/layout_refresh_recycler_view.xml" value="0.22" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/layout/nav_layout.xml" value="0.2735655737704918" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/menu/nav_menu.xml" value="0.274609375" />
         <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/activity_dialog.xml" value="0.25" />
         <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/activity_echarts.xml" value="0.17806484295845998" />
         <entry key="..\:/androidWorks/briefness/app/src/main/res/layout/activity_main.xml" value="0.13446824789594491" />
