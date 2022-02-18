@@ -1,9 +1,9 @@
 Android开发工具
 ======
-***
-> 此工具使用兼容Android API 24 = 7.0版本以上(包括7.0) 
-> 此工具如有问题欢迎大家指教留言。
-***
+> 此工具使用兼容Android API 24 = 7.0版本以上(包括7.0)、JDK1.8或以上
+> 这里有很多工具是根据大佬们的工具进行二次封装的。 有些是没适配Androidx的, 有些是API较低的, 还有些是调用复杂的。所以我进行简单化后使用
+> 此工具如有问题欢迎大家指教。
+======
 ### 工具目录
    #### 图形统计
    * [图表统计](#图形统计使用示例 "点击查看使用`图表统计`功能代码")
@@ -30,6 +30,7 @@ Android开发工具
    * [扫描二维码](#扫描二维码或条形码使用示例 "点击查看使用`扫描二维码`功能代码")
    * [屏幕录制和截图](#截图工具使用示例 "点击查看使用`屏幕录制和截图`功能代码")
    * [头部导航栏](#头部导航栏使用示例 "点击查看使用`头部导航栏`功能代码")
+   * [RecyclerView刷新和加载](#RecyclerView刷新和加载使用示例 "点击查看使用`RecyclerView刷新和加载`功能代码")
    #### 加载动画（仿zyao89）
    * [加载动画](#加载动画使用示例 "点击查看使用`加载动画`功能代码")
 ### 使用依赖
@@ -178,6 +179,16 @@ Android开发工具
 
             }
         });
+     ```
+   * WebSocket
+     ```
+        public static Enqueue enqueue;
+        
+        enqueue = Rn.initWebSocket(wsUrl(), param)
+                .setLoginCallback(() -> toasts.i("webSocket", "连接成功"))
+                .setMsgCallback((code, msg, data) -> publicKey = Secure.Base64.decode(data.toStringUtf8()));
+                
+        enqueue.send();
      ```
    ##### 图形统计使用示例
    * android-xml代码
@@ -619,6 +630,27 @@ Android开发工具
      ```
        This.build().activity(this, MsgShowActivity.class, true).start();跳转后关闭当前页面
      ```
+   ##### toast提示使用示例
+   > 引用Toasty进行二次封装/[Toasty项目地址](https://github.com/GrenderG/Toasty)
+   * Toast
+     ```
+       Toasts toasts = Toasts.builder(aThis).setDebug(true);//true 开启日志输出(.e无效, 只对log好使, 默认true)
+       toasts.setMsg("成功").showSuccess();
+       toasts.setMsg("失败").showError();
+       toasts.setMsg("无").showNormal();
+       toasts.setMsg("提示").showInfo();
+       toasts.setMsg("警告").showWarning();
+       toasts.setMsg("原生").showOriginal();
+     ```
+   * Log
+     ```
+        toasts.i("TAG", "你好!");
+        toasts.e("TAG", "你好!");
+        toasts.d("TAG", "你好!");
+        toasts.w("TAG", "你好!");
+        toasts.v("TAG", "你好!");
+        toasts.wtf("TAG", "你好!");
+     ```
    ##### 底部导航栏使用示例
    * 调用
      ```
@@ -805,11 +837,11 @@ Android开发工具
         </FrameLayout>
      ```
    ##### 菜单框使用示例
-   
+   * 声明point
      ```
        private final Point point = new Point();
      ```
-     
+   * 调用
      ```
        FloatMenu menu = new FloatMenu(aThis);
            menu.inflate(R.menu.setting, Convert.Pixel.get(aThis).dp(150));
@@ -825,7 +857,7 @@ Android开发工具
        // menu.show();
        menu.show(point);
      ```
-     
+   * 获取屏幕坐标
      ```
        @Override
        public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -836,7 +868,7 @@ Android开发工具
            return super.dispatchTouchEvent(ev);
        }
      ```
-     
+   * menu
      ```
        <?xml version="1.0" encoding="utf-8"?>
        <menu xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -854,26 +886,161 @@ Android开发工具
       </menu>
      ```
    ##### 分页列表使用示例
+   * 布局
      ```
-     
+       <com.androidx.view.page.PaginationRecycleView
+           android:id="@+id/listview"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent"
+           android:layout_marginTop="100dp"
+           android:orientation="vertical"
+           android:overScrollMode="never"
+           android:scrollbars="none"
+           app:count="7"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toBottomOf="@+id/title_layout"
+           app:progressAnimation="SnakeCircleBuilder"
+           app:progressColor="@color/irs" />
+     ```
+   * 调用
+     ```
+       @BindView(R.id.listview)
+       public PaginationRecycleView<JsonObject> listView;
+       
+       listView.setAdapterAndManager(new PageAdapter(), new LinearLayoutManager(aThis));
+       listView.setListener(position -> {//position当前页码
+           listView.addItem(position, jsonList, 99);//jsonList数据集合/99数据总和
+           listView.loadingFinish();//加载完成
+       });
+     ```
+   * adapter
+     ```
+       public final class PageAdapter extends PaginationRecycleView.Adapter<JsonObject> {
+
+           @Override
+           protected int onLayoutId() {
+               return R.layout.adapter_page;
+           }
+
+           @Override
+           protected void onBindHolderView(HolderView holder, JsonObject json) {
+               holder.setText(R.id.info, json.get("name").getAsString());
+               holder.setOnClickListener(R.id.info, view -> holder.setFlexible(R.id.info1));
+           }
+       }
      ```
    ##### 扫描二维码或条形码使用示例
-   
+   * 声明
      ```
        private ActivityResultLauncher<Intent> launcher;
      ```
-     
+   * 回调
      ```
        This.initLauncher(aThis, (resultCode, intent) -> {
             Log.i("回调码", String.valueOf(resultCode));
             Log.i("回调数据", String.valueOf(intent.getStringExtra(RESULT_KEY)));
        });
      ```
-     
+   * 调用
      ```
        This.build().startLauncher(ScanActivity.class, launcher).execute();
      ```
    ##### 头部导航栏使用示例
+   * 布局
+     ```
+         <?xml version="1.0" encoding="utf-8"?>
+         <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:tl="http://schemas.android.com/apk/res-auto"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:ignore="MissingDefaultResource">
+
+             <com.androidx.view.tab.layout.SegmentTabLayout
+                 android:id="@+id/sliding"
+                 android:layout_width="match_parent"
+                 android:layout_height="50dp"
+                 android:background="@color/gray"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintTop_toBottomOf="@+id/title_layout"
+                 tl:tl_divider_color="#1A000000"
+                 tl:tl_divider_padding="13dp"
+                 tl:tl_divider_width="1dp"
+                 tl:tl_indicator_color="#7ADFFF"
+                 tl:tl_indicator_height="1.5dp"
+                 tl:tl_indicator_width_equal_title="true"
+                 tl:tl_tab_padding="22dp"
+                 tl:tl_tab_space_equal="true"
+                 tl:tl_textSelectColor="#7ADFFF"
+                 tl:tl_textUnselectColor="@color/black1"
+                 tl:tl_underline_color="#1A000000"
+                 tl:tl_underline_height="1dp" />
+
+             <androidx.viewpager2.widget.ViewPager2
+                 android:id="@+id/vp2"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:layout_marginTop="100dp"
+                 android:layout_weight="1"
+                 android:overScrollMode="never"
+                 android:scrollbars="none"
+                 app:layout_constraintBottom_toBottomOf="parent"
+                 app:layout_constraintEnd_toEndOf="parent"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintTop_toBottomOf="@+id/sliding" />
+
+         </androidx.constraintlayout.widget.ConstraintLayout>
+     ```
+   * 声明
+     ```
+       @BindView(R.id.sliding)
+       public SegmentTabLayout segmentTabLayout;// CommonTabLayout、SlidingTabLayout
+       @BindView(R.id.vp2)
+       public ViewPager2 viewPager2;
+       
+       private TabLayoutBar tabView;
+     ```
+   * 销毁
+     ```
+       @Override
+       public void onDestroy() {
+           super.onDestroy();
+           tabView.destroy();
+       }
+     ```
+   * 调用
+     ```
+       tabView = TabLayoutBar.builder()
+                .setActivity(aThis)
+                .setViewPager2(viewPager2)
+                .setTabLayout(segmentTabLayout)
+                .setTitles("Common", "Sliding", "Segment")
+                .setFragments(new CommonFragment(), new SlidingFragment(), new SegmentFragment())
+                .initBuild();
+        tabView.execute();
+     ```
+   ##### RecyclerView刷新和加载使用示例
+     ```
+        
+     ```
    ##### 加载动画使用示例
+   * 布局
+     ```
+       <com.androidx.animation.view.ProgressView
+           android:id="@+id/progress"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:layout_gravity="center"
+           app:layout_constraintBottom_toBottomOf="parent"
+           app:layout_constraintEnd_toEndOf="parent"
+           app:layout_constraintStart_toStartOf="parent"
+           app:layout_constraintTop_toTopOf="parent"
+           app:progressColor="@color/irs"
+           app:progressType="STAIRS_PATH" />
+     ```
 ### 更新日志
   * [历史版本](https://github.com/natural1law/briefness/blob/master/HISTORY_VERSION.md "点击查看历史版本")
