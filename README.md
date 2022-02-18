@@ -805,9 +805,11 @@ Android开发工具
         </FrameLayout>
      ```
    ##### 菜单框使用示例
+   
      ```
        private final Point point = new Point();
      ```
+     
      ```
        FloatMenu menu = new FloatMenu(aThis);
            menu.inflate(R.menu.setting, Convert.Pixel.get(aThis).dp(150));
@@ -823,6 +825,7 @@ Android开发工具
        // menu.show();
        menu.show(point);
      ```
+     
      ```
        @Override
        public boolean dispatchTouchEvent(MotionEvent ev) {
@@ -833,6 +836,7 @@ Android开发工具
            return super.dispatchTouchEvent(ev);
        }
      ```
+     
      ```
        <?xml version="1.0" encoding="utf-8"?>
        <menu xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -854,15 +858,18 @@ Android开发工具
      
      ```
    ##### 扫描二维码或条形码使用示例
+   
      ```
        private ActivityResultLauncher<Intent> launcher;
      ```
+     
      ```
        This.initLauncher(aThis, (resultCode, intent) -> {
             Log.i("回调码", String.valueOf(resultCode));
             Log.i("回调数据", String.valueOf(intent.getStringExtra(RESULT_KEY)));
        });
      ```
+     
      ```
        This.build().startLauncher(ScanActivity.class, launcher).execute();
      ```
