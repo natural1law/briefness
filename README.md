@@ -1,6 +1,6 @@
 Android开发工具
 ======
-> 此工具使用兼容Android API 24 = 7.0版本以上(包括7.0)、JDK1.8或以上
+> 此工具使用兼容Android API 24 = 7.0版本以上(包括7.0)、JDK1.8或以上</br>
 > 这里有很多工具是根据大佬们的工具进行二次封装的。 有些是没适配Androidx的, 有些是API较低的, 还有些是调用复杂的。所以我进行简单化后使用</br>
 > 此工具如有问题欢迎大家指教。
 ***
@@ -783,6 +783,7 @@ Android开发工具
                 .setOnClickListener(R.id.dialog_quit, listener::no)
                 .show();
      ```
+     </br>
      ```
        <?xml version="1.0" encoding="utf-8"?>
        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -837,6 +838,7 @@ Android开发工具
         </FrameLayout>
      ```
    ##### 菜单框使用示例
+   > [FloatMenu项目地址](https://github.com/GrenderG/Toasty)
    * 声明point
      ```
        private final Point point = new Point();
@@ -1042,5 +1044,6 @@ Android开发工具
            app:progressColor="@color/irs"
            app:progressType="STAIRS_PATH" />
      ```
+     </br>
 ### 更新日志
   * [历史版本](https://github.com/natural1law/briefness/blob/master/HISTORY_VERSION.md "点击查看历史版本")
