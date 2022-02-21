@@ -1,27 +1,22 @@
 package com.androidx.briefness.homepage.activity;
 
-import static com.androidx.briefness.base.App.appThis;
 import static com.androidx.briefness.base.App.toasts;
-import static com.androidx.view.scan.ScanActivity.RESULT_KEY;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.Intent;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
 import com.androidx.reduce.tools.Idle;
-import com.androidx.reduce.tools.This;
 import com.androidx.view.dialog.DialogDefault;
-import com.androidx.view.scan.ScanActivity;
+import com.androidx.view.scan.ScanTools;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,8 +34,6 @@ public final class DialogActivity extends BaseActivity {
     @BindView(R.id.title_text)
     public AppCompatTextView titleView;
     private Unbinder unbinder;
-
-    private ActivityResultLauncher<Intent> launcher;
 
     @Override
     protected int layoutId() {
@@ -82,9 +75,9 @@ public final class DialogActivity extends BaseActivity {
         imageView.setColorFilter(R.color.black);
         titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
 
-        launcher = This.initLauncher(aThis, (resultCode, intent) -> {
+        ScanTools.callback(aThis, (resultCode, data) -> {
             Log.i("回调码", String.valueOf(resultCode));
-            Log.i("回调数据", intent.getStringExtra(RESULT_KEY));
+            Log.i("回调数据", data);
         });
 
     }
@@ -104,7 +97,7 @@ public final class DialogActivity extends BaseActivity {
 
     @OnClick(R.id.activity_dialog2)
     public void dialog2() {
-        appThis.startLauncher(ScanActivity.class, launcher).execute();
+        ScanTools.start();
     }
 
     @OnClick(R.id.activity_dialog3)
