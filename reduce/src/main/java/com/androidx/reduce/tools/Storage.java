@@ -164,8 +164,6 @@ public final class Storage {
                 } else if (data instanceof String) {
                     String parseData = String.valueOf(data);
                     writer.write(parseData, 0, parseData.length());
-                } else if (data instanceof Integer) {
-                    writer.write((int) data);
                 } else {
                     Log.e(Locality.class.getName(), "数据类型不匹配");
                     return false;

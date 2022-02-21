@@ -74,7 +74,7 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation fileTree(include: ['*.?ar'], dir: 'libs')
 //    implementation(name: 'BaiduLBS_AndroidSDK_Lib', ext: 'aar')
     //noinspection DifferentStdlibGradleVersion
     implementation 'androidx.multidex:multidex:2.0.1'
