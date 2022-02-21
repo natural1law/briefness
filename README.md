@@ -32,27 +32,27 @@ Android开发工具
 ### 使用依赖
   * 全部
   ```
-    implementation 'com.github.natural1law.briefness:3.5.2'
+    implementation 'com.github.natural1law.briefness:3.5.3'
   ```
   * 分支-网络请求
   ```
-  implementation 'com.github.natural1law.briefness:network:3.5.2'
+  implementation 'com.github.natural1law.briefness:network:3.5.3'
   ```
   * 分支-常用工具
   ```
-  implementation 'com.github.natural1law.briefness:reduce:3.5.2'
+  implementation 'com.github.natural1law.briefness:reduce:3.5.3'
   ```
   * 分支-图表统计
   ```
-  implementation 'com.github.natural1law.briefness:echarts:3.5.2'
+  implementation 'com.github.natural1law.briefness:echarts:3.5.3'
   ```
   * 分支-视图布局
   ```
-  implementation 'com.github.natural1law.briefness:view:3.5.2'
+  implementation 'com.github.natural1law.briefness:view:3.5.3'
   ```
   * 分支-加载动画（仿zyao89）
   ```
-  implementation 'com.github.natural1law.briefness:animation:3.5.2'
+  implementation 'com.github.natural1law.briefness:animation:3.5.3'
   ```
 
 ### 工具使用
@@ -934,20 +934,16 @@ Android开发工具
        }
      ```
    ##### 扫描二维码或条形码使用示例
-   * 声明
-     ```
-       private ActivityResultLauncher<Intent> launcher;
-     ```
    * 回调
      ```
-       This.initLauncher(aThis, (resultCode, intent) -> {
-            Log.i("回调码", String.valueOf(resultCode));
-            Log.i("回调数据", String.valueOf(intent.getStringExtra(RESULT_KEY)));
+       ScanTools.callback(aThis, (resultCode, data) -> {
+           Log.i("回调码", String.valueOf(resultCode));
+           Log.i("回调数据", data);
        });
      ```
    * 调用
      ```
-       This.build().startLauncher(ScanActivity.class, launcher).execute();
+       ScanTools.start();
      ```
    ##### Tab导航栏使用示例
    * 布局
