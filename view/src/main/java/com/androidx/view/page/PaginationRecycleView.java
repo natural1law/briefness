@@ -35,6 +35,7 @@ public class PaginationRecycleView<T> extends LinearLayoutCompat {
     private final RecyclerView rv;
     private final PaginationIndicator pi;
     private final ProgressView progress;
+    protected Context context;
 
     private Adapter<T> adapter;
     private OnChangedListener listener;
@@ -45,6 +46,7 @@ public class PaginationRecycleView<T> extends LinearLayoutCompat {
 
     private PaginationRecycleView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        this.context = context;
         View layoutView = inflate(context, R.layout.layout_recycler, this);
         rv = layoutView.findViewById(R.id.pagination);
         pi = layoutView.findViewById(R.id.indicator);
@@ -254,6 +256,8 @@ public class PaginationRecycleView<T> extends LinearLayoutCompat {
 
     private static abstract class InnerAdapter<T> extends RecyclerView.Adapter<HolderView> {
 
+        protected Context context;
+
         @LayoutRes
         protected abstract int onLayoutId();
 
@@ -266,6 +270,7 @@ public class PaginationRecycleView<T> extends LinearLayoutCompat {
         @NonNull
         @Override
         public HolderView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            this.context = parent.getContext();
             return HolderView.createHolderView(parent, onLayoutId());
         }
 
