@@ -32,27 +32,27 @@ Android开发工具
 ### 使用依赖
   * 全部
   ```
-    implementation 'com.github.natural1law.briefness:3.5.1'
+    implementation 'com.github.natural1law.briefness:3.5.2'
   ```
   * 分支-网络请求
   ```
-  implementation 'com.github.natural1law.briefness:network:3.5.1'
+  implementation 'com.github.natural1law.briefness:network:3.5.2'
   ```
   * 分支-常用工具
   ```
-  implementation 'com.github.natural1law.briefness:reduce:3.5.1'
+  implementation 'com.github.natural1law.briefness:reduce:3.5.2'
   ```
   * 分支-图表统计
   ```
-  implementation 'com.github.natural1law.briefness:echarts:3.5.1'
+  implementation 'com.github.natural1law.briefness:echarts:3.5.2'
   ```
   * 分支-视图布局
   ```
-  implementation 'com.github.natural1law.briefness:view:3.5.1'
+  implementation 'com.github.natural1law.briefness:view:3.5.2'
   ```
   * 分支-加载动画（仿zyao89）
   ```
-  implementation 'com.github.natural1law.briefness:animation:3.5.1'
+  implementation 'com.github.natural1law.briefness:animation:3.5.2'
   ```
 
 ### 工具使用
@@ -783,7 +783,7 @@ Android开发工具
                 .setOnClickListener(R.id.dialog_quit, listener::no)
                 .show();
      ```
-     </br>
+   * 自定义布局
      ```
        <?xml version="1.0" encoding="utf-8"?>
        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
