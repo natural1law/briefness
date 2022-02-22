@@ -25,7 +25,6 @@ import com.androidx.http.net.socket.Proxys;
 import com.androidx.http.net.socket.SocketRequest;
 import com.androidx.http.net.socket.WebConfiguration;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
@@ -47,13 +46,6 @@ import okio.Buffer;
 public final class Rn {
 
     private static volatile Executor executor = Executors.newWorkStealingPool();
-
-    private static final Gson GSON = new GsonBuilder()
-            .enableComplexMapKeySerialization()
-            .serializeNulls()
-            .setPrettyPrinting()
-            .setVersion(1.0)
-            .create();
 
     /**
      * 设置SSL证书
@@ -248,7 +240,7 @@ public final class Rn {
                     @Override
                     public void onSuccess(String data) {
                         try {
-                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type));
+                            if (rt != null) rt.onSuccess(new Gson().fromJson(data, type));
                         } catch (Exception e) {
                             Log.e(Rn.class.getName(), Log.getStackTraceString(e));
                         }
@@ -283,7 +275,7 @@ public final class Rn {
                     @Override
                     public void onSuccess(String data) {
                         try {
-                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type.getType()));
+                            if (rt != null) rt.onSuccess(new Gson().fromJson(data, type.getType()));
                         } catch (Exception e) {
                             Log.e(Rn.class.getName(), Log.getStackTraceString(e));
                         }
@@ -354,7 +346,7 @@ public final class Rn {
                     @Override
                     public void onSuccess(String data) {
                         try {
-                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type));
+                            if (rt != null) rt.onSuccess(new Gson().fromJson(data, type));
                         } catch (Exception e) {
                             Log.e(Rn.class.getName(), Log.getStackTraceString(e));
                         }
@@ -389,7 +381,7 @@ public final class Rn {
                     @Override
                     public void onSuccess(String data) {
                         try {
-                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type.getType()));
+                            if (rt != null) rt.onSuccess(new Gson().fromJson(data, type.getType()));
                         } catch (Exception e) {
                             Log.e(Rn.class.getName(), Log.getStackTraceString(e));
                         }
@@ -460,7 +452,7 @@ public final class Rn {
                     @Override
                     public void onSuccess(String data) {
                         try {
-                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type));
+                            if (rt != null) rt.onSuccess(new Gson().fromJson(data, type));
                         } catch (Exception e) {
                             Log.e(Rn.class.getName(), Log.getStackTraceString(e));
                         }
@@ -495,7 +487,7 @@ public final class Rn {
                     @Override
                     public void onSuccess(String data) {
                         try {
-                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type.getType()));
+                            if (rt != null) rt.onSuccess(new Gson().fromJson(data, type.getType()));
                         } catch (Exception e) {
                             Log.e(Rn.class.getName(), Log.getStackTraceString(e));
                         }
@@ -566,7 +558,7 @@ public final class Rn {
                     @Override
                     public void onSuccess(String data) {
                         try {
-                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type));
+                            if (rt != null) rt.onSuccess(new Gson().fromJson(data, type));
                         } catch (Exception e) {
                             Log.e(Rn.class.getName(), Log.getStackTraceString(e));
                         }
@@ -601,7 +593,7 @@ public final class Rn {
                     @Override
                     public void onSuccess(String data) {
                         try {
-                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type.getType()));
+                            if (rt != null) rt.onSuccess(new Gson().fromJson(data, type.getType()));
                         } catch (Exception e) {
                             Log.e(Rn.class.getName(), Log.getStackTraceString(e));
                         }
@@ -672,7 +664,7 @@ public final class Rn {
                     @Override
                     public void onSuccess(String data) {
                         try {
-                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type));
+                            if (rt != null) rt.onSuccess(new Gson().fromJson(data, type));
                         } catch (Exception e) {
                             Log.e(Rn.class.getName(), Log.getStackTraceString(e));
                         }
@@ -707,7 +699,7 @@ public final class Rn {
                     @Override
                     public void onSuccess(String data) {
                         try {
-                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type.getType()));
+                            if (rt != null) rt.onSuccess(new Gson().fromJson(data, type.getType()));
                         } catch (Exception e) {
                             Log.e(Rn.class.getName(), Log.getStackTraceString(e));
                         }
@@ -780,7 +772,7 @@ public final class Rn {
                     @Override
                     public void onSuccess(String data) {
                         try {
-                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type));
+                            if (rt != null) rt.onSuccess(new Gson().fromJson(data, type));
                         } catch (Exception e) {
                             Log.e(Rn.class.getName(), Log.getStackTraceString(e));
                         }
@@ -816,7 +808,7 @@ public final class Rn {
                     @Override
                     public void onSuccess(String data) {
                         try {
-                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type.getType()));
+                            if (rt != null) rt.onSuccess(new Gson().fromJson(data, type.getType()));
                         } catch (Exception e) {
                             Log.e(Rn.class.getName(), Log.getStackTraceString(e));
                         }

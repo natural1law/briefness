@@ -110,14 +110,11 @@ public final class PageRecyclerViewActivity extends BaseActivity {
         listView.setAdapterAndManager(new PageAdapter(), new LinearLayoutManager(aThis));
         indifference(1);
         listView.setListener(this::indifference);
-        listView.setListener(position -> {
-
-        });
     }
 
     private void indifference(int lot) {
         Map<String, Object> param = new WeakHashMap<>();
-        String uid = "aa216858cbd80fd21931d1bcd170f4a4";
+        String uid = "e952919e57adac28313875f2d991b5cd";
         String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
         String var = "ca2882680429c6549f0ed4c047c20778" + 1009 + lot + "" + uid + timestamp;
         param.put("j", 1009);//接口id
@@ -131,22 +128,20 @@ public final class PageRecyclerViewActivity extends BaseActivity {
         param.put("u", uid);
         param.put("t", timestamp);
         param.put("k", MD5(var));
-        Rn.sendMapPost("http://hapi1.syyfkj.cn/app/v1_1/", param, bakeData -> {
+        Rn.sendMapPost("http://hapi1.syyfkj.cn/app/v1_1/", param, JsonObject.class, data -> {
+            Log.i("数据", data.toString());
             if (listView != null) listView.loadingFinish();
-            JsonObject bakeJson = new Gson().fromJson(bakeData, new TypeToken<JsonObject>() {
-            }.getType());
-            if (bakeJson.get("c").getAsInt() == 0) {
-                List<JsonObject> jsonList = new Gson().fromJson(bakeJson.get("d"), new TypeToken<List<JsonObject>>() {
+            if (data.get("c").getAsInt() == 0) {
+                List<JsonObject> jsonList = new Gson().fromJson(data.get("d"), new TypeToken<List<JsonObject>>() {
                 }.getType());
-                listView.addItem(lot, jsonList, bakeJson.get("t").getAsInt());
-                Log.i("数据", String.valueOf(bakeJson.get("t").getAsInt()));
+                listView.addItem(lot, jsonList, data.get("t").getAsInt());
             }
         });
     }
 
     private void attention(int lot) {
         Map<String, Object> param = new WeakHashMap<>();
-        String uid = "aa216858cbd80fd21931d1bcd170f4a4";
+        String uid = "e952919e57adac28313875f2d991b5cd";
         String timestamp = String.valueOf(System.currentTimeMillis() / 1000);
         String var = "ca2882680429c6549f0ed4c047c20778" + 1013 + lot + "" + uid + timestamp;
         param.put("j", 1013);//接口id

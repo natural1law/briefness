@@ -276,7 +276,11 @@ public class PaginationRecycleView<T> extends LinearLayoutCompat {
 
         @Override
         public void onBindViewHolder(@NonNull HolderView holder, int position) {
-            this.onBindHolderView(holder, data(position));
+            try {
+                this.onBindHolderView(holder, data(position));
+            } catch (Exception e) {
+                Log.e(getClass().getName(), Log.getStackTraceString(e));
+            }
         }
 
         @Override

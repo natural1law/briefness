@@ -24,6 +24,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
+import com.androidx.reduce.listener.HostListener;
 import com.androidx.reduce.listener.LauncherListener;
 import com.androidx.reduce.listener.LauncherResultListener;
 import com.androidx.reduce.listener.LauncherStartListener;
@@ -35,56 +36,56 @@ import java.lang.ref.WeakReference;
  * @date 2021/06/09
  */
 @SuppressWarnings("unused")
-public final class This implements ThisListener, LauncherStartListener {
+public final class This implements ThisListener, LauncherStartListener, HostListener {
 
     private static WeakReference<Context> launcherContext;
     private static volatile Runnable run;
-    private Handler handler;
+    private static HostListener host;
+    private volatile Handler handler;
 
     public static This build() {
         return Singleton.builder();
     }
 
     private This() {
-        handler = new Handler(Looper.myLooper());
+
     }
 
-    public void delay(Runnable run, long t) {
-        handler.postDelayed(run, t);
+    public static void delay(Runnable run, long t) {
+        new Handler(Looper.getMainLooper()).postDelayed(run, t);
     }
 
-    public void atTime(Runnable run, long t) {
-        handler.postAtTime(run, t);
+    public static void atTime(Runnable run, long t) {
+        new Handler(Looper.getMainLooper()).postAtTime(run, t);
     }
 
     @Override
     public void start() {
-        if (run != null && handler != null) handler.post(run);
-    }
-
-    @Override
-    public void reset() {
-        if (handler == null) {
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) host.execute();
+        else if (run != null) {
             handler = new Handler(Looper.getMainLooper());
-            if (run != null) handler.post(run);
+            handler.post(run);
         }
     }
 
     @Override
     public void stop() {
-        if (run != null) handler.removeCallbacks(run);
-        handler.removeCallbacksAndMessages(null);
-        handler = null;
+        if (run != null && handler != null) {
+            handler.removeCallbacks(run);
+            handler.removeCallbacksAndMessages(null);
+        }
     }
 
     @Override
     public void delayStart(long delayTime) {
-        if (run != null && handler != null) handler.postDelayed(run, delayTime);
+        if (Looper.getMainLooper().getThread() != Thread.currentThread()) {
+            if (run != null && handler != null) handler.postDelayed(run, delayTime);
+        }
     }
 
     @Override
     public void execute() {
-        if (run != null && handler != null) handler.post(run);
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) host.execute();
     }
 
     public <T extends Activity> LauncherStartListener startLauncher(Class<T> target, ActivityResultLauncher<Intent> launcher) {
@@ -104,29 +105,31 @@ public final class This implements ThisListener, LauncherStartListener {
     }
 
     public <T extends Activity> LauncherStartListener startLauncher(Class<T> target, Bundle bundle, boolean isFinish, boolean isAnimation, ActivityResultLauncher<Intent> launcher) {
-        run = () -> {
-            try {
-                if (launcherContext.get() != null) {
-                    Intent intent = new Intent(launcherContext.get(), target);
-                    if (launcherContext.get() instanceof FragmentActivity) {
-                        FragmentActivity activity = (FragmentActivity) launcherContext.get();
-                        if (isAnimation) {
-                            intent.putExtras(ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
-                            if (isFinish) activity.finishAfterTransition();
-                        } else {
-                            if (isFinish) activity.finish();
-                        }
-                        if (bundle != null && !bundle.isEmpty()) {
-                            if (launcher != null) launcher.launch(intent.putExtras(bundle));
-                        } else {
-                            if (launcher != null) launcher.launch(intent);
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            host = () -> {
+                try {
+                    if (launcherContext.get() != null) {
+                        Intent intent = new Intent(launcherContext.get(), target);
+                        if (launcherContext.get() instanceof FragmentActivity) {
+                            FragmentActivity activity = (FragmentActivity) launcherContext.get();
+                            if (isAnimation) {
+                                intent.putExtras(ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
+                                if (isFinish) activity.finishAfterTransition();
+                            } else {
+                                if (isFinish) activity.finish();
+                            }
+                            if (bundle != null && !bundle.isEmpty()) {
+                                if (launcher != null) launcher.launch(intent.putExtras(bundle));
+                            } else {
+                                if (launcher != null) launcher.launch(intent);
+                            }
                         }
                     }
+                } catch (Exception e) {
+                    Log.e(getClass().getName(), Log.getStackTraceString(e));
                 }
-            } catch (Exception e) {
-                Log.e(getClass().getName(), Log.getStackTraceString(e));
-            }
-        };
+            };
+        }
         return this;
     }
 
@@ -169,39 +172,43 @@ public final class This implements ThisListener, LauncherStartListener {
      * 启动activity
      */
     public <T extends Activity> ThisListener activity(@NonNull Context context, @NonNull Class<T> target, Bundle bundle, boolean isFinish, boolean isAnimation) {
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            host = () -> executorActivity(context, target, bundle, isFinish, isAnimation);
+        } else run = () -> executorActivity(context, target, bundle, isFinish, isAnimation);
+        return this;
+
+    }
+
+    private <T extends Activity> void executorActivity(@NonNull Context context, @NonNull Class<T> target, Bundle bundle, boolean isFinish, boolean isAnimation) {
         try {
-            run = () -> {
-                Intent intent = new Intent(context, target);
-                if (context instanceof FragmentActivity) {
-                    FragmentActivity activity = (FragmentActivity) context;
-                    if (isAnimation) {
-                        intent.putExtras(ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
-                        if (isFinish) activity.finishAfterTransition();
-                    } else {
-                        if (isFinish) activity.finish();
-                    }
-                    if (bundle != null) activity.startActivity(intent.putExtras(bundle));
-                    else activity.startActivity(intent);
-                } else if (context instanceof Activity) {
-                    Activity activity = (Activity) context;
-                    if (bundle != null) {
-                        activity.startActivityForResult(intent.putExtras(bundle), bundle.getInt("requestCode", 0));
-                    } else activity.startActivity(intent);
-                    if (isAnimation) {
-                        intent.putExtras(ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
-                        if (isFinish) activity.finishAfterTransition();
-                    } else {
-                        if (isFinish) activity.finish();
-                    }
+            Intent intent = new Intent(context, target);
+            if (context instanceof FragmentActivity) {
+                FragmentActivity activity = (FragmentActivity) context;
+                if (isAnimation) {
+                    intent.putExtras(ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
+                    if (isFinish) activity.finishAfterTransition();
                 } else {
-                    if (bundle != null) context.startActivity(intent, bundle);
-                    else context.startActivity(intent);
+                    if (isFinish) activity.finish();
                 }
-            };
-            return this;
+                if (bundle != null) activity.startActivity(intent.putExtras(bundle));
+                else activity.startActivity(intent);
+            } else if (context instanceof Activity) {
+                Activity activity = (Activity) context;
+                if (bundle != null) {
+                    activity.startActivityForResult(intent.putExtras(bundle), bundle.getInt("requestCode", 0));
+                } else activity.startActivity(intent);
+                if (isAnimation) {
+                    intent.putExtras(ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
+                    if (isFinish) activity.finishAfterTransition();
+                } else {
+                    if (isFinish) activity.finish();
+                }
+            } else {
+                if (bundle != null) context.startActivity(intent, bundle);
+                else context.startActivity(intent);
+            }
         } catch (Exception e) {
             Log.e(getClass().getName(), Log.getStackTraceString(e));
-            return this;
         }
     }
 
@@ -216,7 +223,11 @@ public final class This implements ThisListener, LauncherStartListener {
      * 停止service（无参）
      */
     public ThisListener serviceStop(@NonNull Context c, @NonNull Class<?> c1) {
-        run = () -> c.stopService(new Intent(c, c1).addFlags(FLAG_ACTIVITY_NEW_TASK));
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            host = () -> c.stopService(new Intent(c, c1).addFlags(FLAG_ACTIVITY_NEW_TASK));
+        } else {
+            run = () -> c.stopService(new Intent(c, c1).addFlags(FLAG_ACTIVITY_NEW_TASK));
+        }
         return this;
     }
 
@@ -224,11 +235,19 @@ public final class This implements ThisListener, LauncherStartListener {
      * 启动service（带参）
      */
     public <T extends Service> ThisListener service(@NonNull Context c, @NonNull Class<T> c1, Bundle b) {
-        run = () -> {
-            Intent intent = new Intent(c, c1).addFlags(FLAG_ACTIVITY_NEW_TASK);
-            if (b != null) intent.putExtras(b);
-            c.startService(intent);
-        };
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            host = () -> {
+                Intent intent = new Intent(c, c1).addFlags(FLAG_ACTIVITY_NEW_TASK);
+                if (b != null) intent.putExtras(b);
+                c.startService(intent);
+            };
+        } else {
+            run = () -> {
+                Intent intent = new Intent(c, c1).addFlags(FLAG_ACTIVITY_NEW_TASK);
+                if (b != null) intent.putExtras(b);
+                c.startService(intent);
+            };
+        }
         return this;
     }
 
@@ -243,11 +262,19 @@ public final class This implements ThisListener, LauncherStartListener {
      * 启动service（带参）
      */
     public ThisListener bindService(@NonNull Context c, @NonNull Class<?> c1, Bundle b, ServiceConnection c2) {
-        run = () -> {
-            Intent intent = new Intent(c, c1);
-            if (b != null) intent.putExtras(b);
-            c.bindService(intent, c2, BIND_AUTO_CREATE);
-        };
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            host = () -> {
+                Intent intent = new Intent(c, c1);
+                if (b != null) intent.putExtras(b);
+                c.bindService(intent, c2, BIND_AUTO_CREATE);
+            };
+        } else {
+            run = () -> {
+                Intent intent = new Intent(c, c1);
+                if (b != null) intent.putExtras(b);
+                c.bindService(intent, c2, BIND_AUTO_CREATE);
+            };
+        }
         return this;
     }
 
@@ -262,8 +289,11 @@ public final class This implements ThisListener, LauncherStartListener {
      * 启动sendBroadcast（带参）
      */
     public ThisListener broadcast(@NonNull Context c, String action, Bundle b) {
-        run = () -> c.sendBroadcast(new Intent(action).putExtras(b == null ? new Bundle() : b));
-
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            host = () -> c.sendBroadcast(new Intent(action).putExtras(b == null ? new Bundle() : b));
+        } else {
+            run = () -> c.sendBroadcast(new Intent(action).putExtras(b == null ? new Bundle() : b));
+        }
         return this;
     }
 
@@ -282,13 +312,17 @@ public final class This implements ThisListener, LauncherStartListener {
     }
 
     public ThisListener resultAction(String action, String type, ActivityResultLauncher<Intent> launcher) {
-        run = () -> {
-            Intent intent = new Intent(action);
-            if (type != null) intent.setType(type);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            launcher.launch(intent);
-        };
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            host = () -> executorResultAction(action, type, launcher);
+        } else run = () -> executorResultAction(action, type, launcher);
         return this;
+    }
+
+    private void executorResultAction(String action, String type, ActivityResultLauncher<Intent> launcher) {
+        Intent intent = new Intent(action);
+        if (type != null) intent.setType(type);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        launcher.launch(intent);
     }
 
     public static void resultListener(Context context, Intent intent, LauncherListener listener) {

@@ -84,8 +84,8 @@ public class PaginationIndicator extends FrameLayout {
 
     private void notifyChange() {
         try {
-            if (onChangedListener != null) onChangedListener.onPageSelectedChanged(currentPage);
             totalPageCount = totalCount % pageCount > 0 ? totalCount / pageCount + 1 : totalCount / pageCount;
+            if (onChangedListener != null) onChangedListener.onPageSelectedChanged(currentPage);
             geneNumberTextView();
             updatePageCode();
         } catch (Exception e) {
@@ -162,8 +162,7 @@ public class PaginationIndicator extends FrameLayout {
                 int number = Integer.parseInt(textView.getText().toString().trim());
                 if (number == currentPage) return;
                 currentPage = number;
-                if (onChangedListener != null)
-                    onChangedListener.onPageSelectedChanged(number);
+                if (onChangedListener != null) onChangedListener.onPageSelectedChanged(number);
                 updatePageCode();
             });
             textViews.add(textView);

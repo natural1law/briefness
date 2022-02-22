@@ -19,7 +19,6 @@ import es.dmoral.toasty.Toasty;
 public final class Toasts implements ToastListener {
 
     private static volatile Toasts instance;
-    private static volatile Handler handler = new Handler(Looper.getMainLooper());
 
     private volatile WeakReference<Context> wrc;
     private String msg = "";
@@ -213,7 +212,12 @@ public final class Toasts implements ToastListener {
      */
     @Override
     public void showNormal() {
-        handler.post(() -> Toasty.normal(wrc.get(), msg, duration, icon, withIcon).show());
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            Toasty.normal(wrc.get(), msg, duration, icon, withIcon).show();
+        } else {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(() -> Toasty.normal(wrc.get(), msg, duration, icon, withIcon).show());
+        }
     }
 
     /**
@@ -221,7 +225,12 @@ public final class Toasts implements ToastListener {
      */
     @Override
     public void showSuccess() {
-        handler.post(() -> Toasty.success(wrc.get(), msg, duration, withIcon).show());
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            Toasty.success(wrc.get(), msg, duration, withIcon).show();
+        } else {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(() -> Toasty.success(wrc.get(), msg, duration, withIcon).show());
+        }
     }
 
     /**
@@ -229,7 +238,12 @@ public final class Toasts implements ToastListener {
      */
     @Override
     public void showError() {
-        handler.post(() -> Toasty.error(wrc.get(), msg, duration, withIcon).show());
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            Toasty.error(wrc.get(), msg, duration, withIcon).show();
+        } else {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(() -> Toasty.error(wrc.get(), msg, duration, withIcon).show());
+        }
     }
 
     /**
@@ -237,7 +251,12 @@ public final class Toasts implements ToastListener {
      */
     @Override
     public void showWarning() {
-        handler.post(() -> Toasty.warning(wrc.get(), msg, duration, withIcon).show());
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            Toasty.warning(wrc.get(), msg, duration, withIcon).show();
+        } else {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(() -> Toasty.warning(wrc.get(), msg, duration, withIcon).show());
+        }
     }
 
     /**
@@ -245,7 +264,12 @@ public final class Toasts implements ToastListener {
      */
     @Override
     public void showInfo() {
-        handler.post(() -> Toasty.info(wrc.get(), msg, duration, withIcon).show());
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            Toasty.info(wrc.get(), msg, duration, withIcon).show();
+        } else {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(() -> Toasty.info(wrc.get(), msg, duration, withIcon).show());
+        }
     }
 
     /**
@@ -253,7 +277,12 @@ public final class Toasts implements ToastListener {
      */
     @Override
     public void showOriginal() {
-        handler.post(() -> Toast.makeText(wrc.get(), msg, duration).show());
+        if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
+            Toast.makeText(wrc.get(), msg, duration).show();
+        } else {
+            Handler handler = new Handler(Looper.getMainLooper());
+            handler.post(() -> Toast.makeText(wrc.get(), msg, duration).show());
+        }
     }
 
 }
