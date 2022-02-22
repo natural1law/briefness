@@ -7,7 +7,7 @@ public interface Response {
     void onSuccess(String data);
 
     default void onFailure(String msg) {
-        Log.e("请求异常", msg);
+        Log.e(getClass().getName(), msg);
     }
 
 }

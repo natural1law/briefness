@@ -25,6 +25,7 @@ import com.androidx.http.net.socket.Proxys;
 import com.androidx.http.net.socket.SocketRequest;
 import com.androidx.http.net.socket.WebConfiguration;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 
@@ -46,6 +47,13 @@ import okio.Buffer;
 public final class Rn {
 
     private static volatile Executor executor = Executors.newWorkStealingPool();
+
+    private static final Gson GSON = new GsonBuilder()
+            .enableComplexMapKeySerialization()
+            .serializeNulls()
+            .setPrettyPrinting()
+            .setVersion(1.0)
+            .create();
 
     /**
      * 设置SSL证书
@@ -165,11 +173,24 @@ public final class Rn {
                 .setMode(POST_BYTES)
                 .setBytes(param)
                 .setMaxAnewCount(Configuration.count)
-                .setCallback((Callback) data -> {
-                    try {
-                        if (callback != null) callback.onSuccess(data);
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Callback() {
+                    @Override
+                    public void onSuccess(byte[] data) {
+                        try {
+                            if (callback != null) callback.onSuccess(data);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Callback.super.onFailure(msg);
+                        try {
+                            if (callback != null) callback.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -188,11 +209,24 @@ public final class Rn {
                 .setMode(GET_MAP)
                 .setMap(param)
                 .setMaxAnewCount(Configuration.count)
-                .setCallback((Response) data -> {
-                    try {
-                        if (response != null) response.onSuccess(data);
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (response != null) response.onSuccess(data);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (response != null) response.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -210,11 +244,24 @@ public final class Rn {
                 .setMaxAnewCount(Configuration.count)
                 .setMode(GET_MAP)
                 .setMap(param)
-                .setCallback((Response) data -> {
-                    try {
-                        if (rt != null) rt.onSuccess(new Gson().fromJson(data, type));
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type));
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (rt != null) rt.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -232,11 +279,24 @@ public final class Rn {
                 .setMaxAnewCount(Configuration.count)
                 .setMode(GET_MAP)
                 .setMap(param)
-                .setCallback((Response) data -> {
-                    try {
-                        if (rt != null) rt.onSuccess(new Gson().fromJson(data, type.getType()));
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type.getType()));
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (rt != null) rt.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -255,11 +315,24 @@ public final class Rn {
                 .setMode(POST_JSON)
                 .setJson(param)
                 .setMaxAnewCount(Configuration.count)
-                .setCallback((Response) data -> {
-                    try {
-                        if (response != null) response.onSuccess(data);
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (response != null) response.onSuccess(data);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (response != null) response.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -277,11 +350,24 @@ public final class Rn {
                 .setMode(POST_JSON)
                 .setMaxAnewCount(Configuration.count)
                 .setJson(param)
-                .setCallback((Response) data -> {
-                    try {
-                        if (rt != null) rt.onSuccess(new Gson().fromJson(data, type));
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type));
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (rt != null) rt.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -299,11 +385,24 @@ public final class Rn {
                 .setMode(POST_JSON)
                 .setMaxAnewCount(Configuration.count)
                 .setJson(param)
-                .setCallback((Response) data -> {
-                    try {
-                        if (rt != null) rt.onSuccess(new Gson().fromJson(data, type.getType()));
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type.getType()));
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (rt != null) rt.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -322,11 +421,24 @@ public final class Rn {
                 .setMode(POST_MAP)
                 .setMap(param)
                 .setMaxAnewCount(Configuration.count)
-                .setCallback((Response) data -> {
-                    try {
-                        if (response != null) response.onSuccess(data);
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (response != null) response.onSuccess(data);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (response != null) response.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -344,11 +456,24 @@ public final class Rn {
                 .setMode(POST_MAP)
                 .setMap(param)
                 .setMaxAnewCount(Configuration.count)
-                .setCallback((Response) data -> {
-                    try {
-                        if (rt != null) rt.onSuccess(new Gson().fromJson(data, type));
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type));
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (rt != null) rt.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -366,11 +491,24 @@ public final class Rn {
                 .setMode(POST_MAP)
                 .setMap(param)
                 .setMaxAnewCount(Configuration.count)
-                .setCallback((Response) data -> {
-                    try {
-                        if (rt != null) rt.onSuccess(new Gson().fromJson(data, type.getType()));
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type.getType()));
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (rt != null) rt.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -389,11 +527,24 @@ public final class Rn {
                 .setMode(DEL_MAP)
                 .setMap(param)
                 .setMaxAnewCount(Configuration.count)
-                .setCallback((Response) data -> {
-                    try {
-                        if (response != null) response.onSuccess(data);
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (response != null) response.onSuccess(data);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (response != null) response.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -411,11 +562,24 @@ public final class Rn {
                 .setMode(DEL_MAP)
                 .setMaxAnewCount(Configuration.count)
                 .setMap(param)
-                .setCallback((Response) data -> {
-                    try {
-                        if (rt != null) rt.onSuccess(new Gson().fromJson(data, type));
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type));
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (rt != null) rt.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -433,11 +597,24 @@ public final class Rn {
                 .setMode(DEL_MAP)
                 .setMaxAnewCount(Configuration.count)
                 .setMap(param)
-                .setCallback((Response) data -> {
-                    try {
-                        if (rt != null) rt.onSuccess(new Gson().fromJson(data, type.getType()));
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type.getType()));
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (rt != null) rt.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -456,11 +633,24 @@ public final class Rn {
                 .setMode(DEL_JSON)
                 .setJson(param)
                 .setMaxAnewCount(Configuration.count)
-                .setCallback((Response) data -> {
-                    try {
-                        if (response != null) response.onSuccess(data);
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (response != null) response.onSuccess(data);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (response != null) response.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -478,11 +668,24 @@ public final class Rn {
                 .setMode(DEL_JSON)
                 .setJson(param)
                 .setMaxAnewCount(Configuration.count)
-                .setCallback((Response) data -> {
-                    try {
-                        if (rt != null) rt.onSuccess(new Gson().fromJson(data, type));
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type));
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (rt != null) rt.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -500,11 +703,24 @@ public final class Rn {
                 .setMode(DEL_JSON)
                 .setJson(param)
                 .setMaxAnewCount(Configuration.count)
-                .setCallback((Response) data -> {
-                    try {
-                        if (rt != null) rt.onSuccess(new Gson().fromJson(data, type.getType()));
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type.getType()));
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (rt != null) rt.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -524,11 +740,24 @@ public final class Rn {
                 .setMaxAnewCount(Configuration.count)
                 .setMode(FROM_JSON)
                 .setJson(param)
-                .setCallback((Response) data -> {
-                    try {
-                        if (response != null) response.onSuccess(data);
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (response != null) response.onSuccess(data);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (response != null) response.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -547,11 +776,24 @@ public final class Rn {
                 .setMode(FROM_JSON)
                 .setMaxAnewCount(Configuration.count)
                 .setJson(param)
-                .setCallback((Response) data -> {
-                    try {
-                        if (rt != null) rt.onSuccess(new Gson().fromJson(data, type));
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type));
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (rt != null) rt.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -570,11 +812,24 @@ public final class Rn {
                 .setMode(FROM_JSON)
                 .setMaxAnewCount(Configuration.count)
                 .setJson(param)
-                .setCallback((Response) data -> {
-                    try {
-                        if (rt != null) rt.onSuccess(new Gson().fromJson(data, type.getType()));
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (rt != null) rt.onSuccess(GSON.fromJson(data, type.getType()));
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (rt != null) rt.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -608,11 +863,24 @@ public final class Rn {
                 .setJsonKey(key)
                 .setMode(UPLOAD)
                 .setMaxAnewCount(Configuration.count)
-                .setCallback((Response) data -> {
-                    try {
-                        if (response != null) response.onSuccess(data);
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (response != null) response.onSuccess(data);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (response != null) response.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());
@@ -643,11 +911,24 @@ public final class Rn {
                 .setJsonKey(key)
                 .setMode(UPLOAD_MANY)
                 .setMaxAnewCount(Configuration.count)
-                .setCallback((Response) data -> {
-                    try {
-                        if (response != null) response.onSuccess(data);
-                    } catch (Exception e) {
-                        Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                .setCallback(new Response() {
+                    @Override
+                    public void onSuccess(String data) {
+                        try {
+                            if (response != null) response.onSuccess(data);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(String msg) {
+                        Response.super.onFailure(msg);
+                        try {
+                            if (response != null) response.onFailure(msg);
+                        } catch (Exception e) {
+                            Log.e(Rn.class.getName(), Log.getStackTraceString(e));
+                        }
                     }
                 })
                 .build());

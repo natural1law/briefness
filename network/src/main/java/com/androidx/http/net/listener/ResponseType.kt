@@ -4,4 +4,8 @@ sealed interface ResponseType<C> {
 
     fun onSuccess(data: C)
 
+    fun onFailure(msg: String) {
+
+    }
+
 }
