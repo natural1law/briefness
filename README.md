@@ -32,27 +32,27 @@ Android开发工具
 ### 使用依赖
   * 全部
   ```
-    implementation 'com.github.natural1law.briefness:3.5.3'
+    implementation 'com.github.natural1law.briefness:3.5.5'
   ```
   * 分支-网络请求
   ```
-  implementation 'com.github.natural1law.briefness:network:3.5.3'
+  implementation 'com.github.natural1law.briefness:network:3.5.5'
   ```
   * 分支-常用工具
   ```
-  implementation 'com.github.natural1law.briefness:reduce:3.5.3'
+  implementation 'com.github.natural1law.briefness:reduce:3.5.5'
   ```
   * 分支-图表统计
   ```
-  implementation 'com.github.natural1law.briefness:echarts:3.5.3'
+  implementation 'com.github.natural1law.briefness:echarts:3.5.5'
   ```
   * 分支-视图布局
   ```
-  implementation 'com.github.natural1law.briefness:view:3.5.3'
+  implementation 'com.github.natural1law.briefness:view:3.5.5'
   ```
   * 分支-加载动画（仿zyao89）
   ```
-  implementation 'com.github.natural1law.briefness:animation:3.5.3'
+  implementation 'com.github.natural1law.briefness:animation:3.5.5'
   ```
 
 ### 工具使用
@@ -494,7 +494,7 @@ Android开发工具
        // File file = new File(Storage.Locality.generateDownloadPath("/包名/包名/", 文件名.后缀名));//保存地址
        // Uri uri = Storage.Locality.generateDownLoadPath(aThis, "包名/", "文件名", "文件后缀名(.xlsx)");
        List<String> header = new ArrayList<>();
-       List<Mao<String, Object> data = new ArrayList<>();
+       List<Map<String, Object> data = new ArrayList<>();
        boolean isSuccess = Excel.write(file, "titleName", header, data);
        // boolean isSuccess = Excel.write(uri, "titleName", header, data);
        Log.i("导出是否成功", String.ofValue(isSuccess));
