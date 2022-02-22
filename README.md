@@ -430,13 +430,10 @@ Android开发工具
      ```
      ```
        String pass = "123456";
-       String aesPass = Secure.AES.encrypt(key, pass);
-       Log.i("AES数据加密", aesPass);
-     ```
-     ```
-       String pass = "123456";
-       String aesPass = Secure.AES.decrypt(pass);
-       Log.i("AES数据解密", aesPass);
+       String enPass = Secure.AES.encrypt(key, pass);
+       Log.i("AES数据加密", enPass);
+       String dePass = Secure.AES.decrypt(key, enPass);
+       Log.i("AES数据解密", dePass);
      ```
    * RSA
      ```
