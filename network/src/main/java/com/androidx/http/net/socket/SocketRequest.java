@@ -51,11 +51,11 @@ public final class SocketRequest implements Enqueue {
             return false;
         } else if (message.what == -2) {
             if (loginCallback != null) data.getLoginCallback().onFailure(data.getMsg());
-            if (actionListener != null) data.getActionListener().online(data.getUser());
+            if (actionListener != null) data.getActionListener().offline(data.getUser());
             return false;
         } else if (message.what == -3) {
             if (loginCallback != null) data.getLoginCallback().onFailure(data.getMsg());
-            if (actionListener != null) data.getActionListener().online(data.getUser());
+            if (actionListener != null) data.getActionListener().offline(data.getUser());
             return false;
         } else if (message.what == 0) {
             if (loginCallback != null && actionListener != null) {
