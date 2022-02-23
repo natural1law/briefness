@@ -197,6 +197,20 @@ public final class HttpNetwork implements HttpNetworkListener {
         return client().build().newCall(request.post(mb.build()).url(url).build());
     }
 
+    @NonNull
+    @Override
+    public Call uploadRequest(@NonNull String url, @NonNull JsonObject json, @NonNull String key, @NonNull String path) {
+        File file;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            file = Paths.get(path).toFile();
+        } else file = new File(path);
+        MultipartBody.Builder mb = new MultipartBody.Builder();
+        RequestBody rb = RequestBody.create(file, FILE);
+        mb.setType(MultipartBody.FORM).addFormDataPart(key, file.getName(), rb);
+        json.keySet().forEach(k -> mb.addFormDataPart(k, json.get(k).getAsString()));
+        return client().build().newCall(request.post(mb.build()).url(url).build());
+    }
+
     /**
      * 多文件上传
      */
@@ -213,6 +227,23 @@ public final class HttpNetwork implements HttpNetworkListener {
         files.forEach(file -> {
             mb.setType(MultipartBody.FORM).addFormDataPart(key, file.getName(), RequestBody.create(file, FILE));
             map.forEach((k, v) -> mb.addFormDataPart(k, String.valueOf(v)));
+        });
+        return client().build().newCall(request.post(mb.build()).url(url).build());
+    }
+
+    @NonNull
+    @Override
+    public Call uploadRequest(@NonNull String url, @NonNull JsonObject json, @NonNull String key, @NonNull List<String> pathList) {
+        List<File> files = new ArrayList<>();
+        pathList.forEach(path -> {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                files.add(Paths.get(path).toFile());
+            } else files.add(new File(path));
+        });
+        MultipartBody.Builder mb = new MultipartBody.Builder();
+        files.forEach(file -> {
+            mb.setType(MultipartBody.FORM).addFormDataPart(key, file.getName(), RequestBody.create(file, FILE));
+            json.keySet().forEach(k -> mb.addFormDataPart(k, json.get(k).getAsString()));
         });
         return client().build().newCall(request.post(mb.build()).url(url).build());
     }

@@ -23,7 +23,11 @@ public interface HttpRequestListener {
 
     void upload(String url, Map<String, Object> param, String key, String path, int maxAnewCount, Response response);
 
+    void upload(String url, JsonObject param, String key, String path, int maxAnewCount, Response response);
+
     void upload(String url, Map<String, Object> param, String key, List<String> pathList, int maxAnewCount, Response response);
+
+    void upload(String url, JsonObject param, String key, List<String> pathList, int maxAnewCount, Response response);
 
     void download(String url, String outPath, int maxAnewCount, DownloadListener listener);
 

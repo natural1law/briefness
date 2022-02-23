@@ -25,7 +25,11 @@ interface HttpNetworkListener {
 
     fun uploadRequest(url: String, map: Map<String, Any>, key: String, path: String): Call
 
+    fun uploadRequest(url: String, json: JsonObject, key: String, path: String): Call
+
     fun uploadRequest(url: String, map: Map<String, Any>, key: String, pathList: List<String>): Call
+
+    fun uploadRequest(url: String, json: JsonObject, key: String, pathList: List<String>): Call
 
     fun downloadRequest(url: String, downloadListener: DownloadListener): Call
 

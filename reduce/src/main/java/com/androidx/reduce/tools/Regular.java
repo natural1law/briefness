@@ -32,8 +32,10 @@ public final class Regular {
     private static final String DATE = "^[1-9]{4}(-|\\. |/)(([0][1-9])|([1][0-2]))(-|\\. |/)(([0][1-9])|([1][1-9])|([2][1-9])|[3][0-1])$";
     // 时间验证
     private static final String TIME = "^([1-9]:)|([0-1][0-9]:)|([0-2][0-3]:)([0-5][0-9]:)([0-5][0-9])$";
-    //空白字符验证
+    // 空白字符验证
     private static final String SPACE = "\\s+";
+    // https验证
+    private static final String HTTPS = "(https?|http|ftp|file)://[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]";
 
     private Regular() {
     }
@@ -188,6 +190,18 @@ public final class Regular {
     public static Boolean isTime(String parameter) {
         // 设定查看模式
         Pattern pattern = Pattern.compile(TIME);
+        // 判断parameter是否匹配，返回匹配结果
+        Matcher matcher = pattern.matcher(parameter);
+        // 返回结果（true）
+        return matcher.matches();
+    }
+
+    /**
+     * 正则·时间校验
+     */
+    public static Boolean isHttp(String parameter) {
+        // 设定查看模式
+        Pattern pattern = Pattern.compile(HTTPS);
         // 判断parameter是否匹配，返回匹配结果
         Matcher matcher = pattern.matcher(parameter);
         // 返回结果（true）

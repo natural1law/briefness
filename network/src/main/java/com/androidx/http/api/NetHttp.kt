@@ -21,9 +21,11 @@ class NetHttp private constructor() {
         const val DEL_MAP = 5
         const val DEL_JSON = 6
         const val FROM_JSON = 7
-        const val UPLOAD = 8
+        const val UPLOAD_MAP = 8
         const val DOWNLOAD = 9
-        const val UPLOAD_MANY = 10
+        const val UPLOAD_JSON = 10
+        const val UPLOAD_MANY_MAP = 11
+        const val UPLOAD_MANY_JSON = 12
 
         @JvmStatic
         fun builder(): Builder {
@@ -159,9 +161,17 @@ class NetHttp private constructor() {
                 builder.maxAnewCount!!,
                 builder.response
             )
-            UPLOAD -> requestListener.upload(
+            UPLOAD_MAP -> requestListener.upload(
                 builder.host,
                 builder.map,
+                builder.jsonKey,
+                builder.filePath,
+                builder.maxAnewCount!!,
+                builder.response,
+            )
+            UPLOAD_JSON -> requestListener.upload(
+                builder.host,
+                builder.json,
                 builder.jsonKey,
                 builder.filePath,
                 builder.maxAnewCount!!,
@@ -173,9 +183,17 @@ class NetHttp private constructor() {
                 builder.maxAnewCount!!,
                 builder.listener
             )
-            UPLOAD_MANY -> requestListener.upload(
+            UPLOAD_MANY_MAP -> requestListener.upload(
                 builder.host,
                 builder.map,
+                builder.jsonKey,
+                builder.filePathList,
+                builder.maxAnewCount!!,
+                builder.response,
+            )
+            UPLOAD_MANY_JSON -> requestListener.upload(
+                builder.host,
+                builder.json,
                 builder.jsonKey,
                 builder.filePathList,
                 builder.maxAnewCount!!,
