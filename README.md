@@ -931,6 +931,7 @@ Android开发工具
        }
      ```
    ##### 扫描二维码或条形码使用示例
+   > [扫描二维码项目地址](https://github.com/bingoogolapple/BGAQRCode-Android)
    * 回调
      ```
        ScanTools.callback(aThis, (resultCode, data) -> {
