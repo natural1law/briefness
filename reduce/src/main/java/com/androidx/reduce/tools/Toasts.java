@@ -1,6 +1,5 @@
 package com.androidx.reduce.tools;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -15,17 +14,16 @@ import java.lang.ref.WeakReference;
 import es.dmoral.toasty.Toasty;
 
 @SuppressWarnings("ALL")
-@SuppressLint("InflateParams")
 public final class Toasts implements ToastListener {
 
     private static volatile Toasts instance;
 
-    private volatile WeakReference<Context> wrc;
+    private static boolean debug = true;
     private String msg = "";
     private int duration;
     private Drawable icon;
     private boolean withIcon;
-    private boolean debug = false;
+    private final WeakReference<Context> wrc;
 
     private Toasts(Context context) {
         this.wrc = new WeakReference<>(context);
@@ -38,18 +36,26 @@ public final class Toasts implements ToastListener {
         return instance;
     }
 
+    public static boolean isDebug() {
+        return debug;
+    }
+
     /**
      * debug调试
      *
      * @param state true--启动debug，false--关闭debug
      */
-    public Toasts setDebug(boolean state) {
-        this.debug = state;
-        return this;
+    public static void setDebug(boolean state) {
+        debug = state;
     }
 
-    public boolean isDebug() {
-        return debug;
+    /**
+     * 默认标记
+     *
+     * @param msg 内容
+     */
+    public static <M> void d(M msg) {
+        d("SystemLog", msg);
     }
 
     /**
@@ -58,30 +64,30 @@ public final class Toasts implements ToastListener {
      * @param mark 标记
      * @param msg  内容
      */
-    public <V, M> void d(V mark, M msg) {
-        if (debug) {
-            if (msg instanceof Throwable) {
-                Log.d(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
-            } else {
-                Log.d(String.valueOf(mark), String.valueOf(msg));
-            }
-        }
+    public static <V extends String, M> void d(V mark, M msg) {
+        if (debug) if (msg instanceof Throwable) {
+            Log.d(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
+        } else Log.d(String.valueOf(mark), String.valueOf(msg));
+    }
+
+    public static <M> void i(M msg) {
+        i("SystemLog", msg);
     }
 
     /**
-     * 模式D
+     * 模式I
      *
      * @param mark 标记
      * @param msg  内容
      */
-    public <V, M> void i(V mark, M msg) {
-        if (debug) {
-            if (msg instanceof Throwable) {
-                Log.i(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
-            } else {
-                Log.i(String.valueOf(mark), String.valueOf(msg));
-            }
-        }
+    public static <V extends String, M> void i(V mark, M msg) {
+        if (debug) if (msg instanceof Throwable) {
+            Log.i(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
+        } else Log.i(String.valueOf(mark), String.valueOf(msg));
+    }
+
+    public static <M> void w(M msg) {
+        w("SystemLog", msg);
     }
 
     /**
@@ -90,14 +96,14 @@ public final class Toasts implements ToastListener {
      * @param mark 标记
      * @param msg  内容
      */
-    public <V, M> void w(V mark, M msg) {
-        if (debug) {
-            if (msg instanceof Throwable) {
-                Log.w(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
-            } else {
-                Log.w(String.valueOf(mark), String.valueOf(msg));
-            }
-        }
+    public static <V extends String, M> void w(V mark, M msg) {
+        if (debug) if (msg instanceof Throwable) {
+            Log.w(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
+        } else Log.w(String.valueOf(mark), String.valueOf(msg));
+    }
+
+    public static <M> void e(M msg) {
+        e("SystemLog", msg);
     }
 
     /**
@@ -106,12 +112,14 @@ public final class Toasts implements ToastListener {
      * @param mark 标记
      * @param msg  内容
      */
-    public <V, M> void e(V mark, M msg) {
+    public static <V extends String, M> void e(V mark, M msg) {
         if (msg instanceof Throwable) {
             Log.e(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
-        } else {
-            Log.e(String.valueOf(mark), String.valueOf(msg));
-        }
+        } else Log.e(String.valueOf(mark), String.valueOf(msg));
+    }
+
+    public static <M> void v(M msg) {
+        v("SystemLog", msg);
     }
 
     /**
@@ -120,14 +128,14 @@ public final class Toasts implements ToastListener {
      * @param mark 标记
      * @param msg  内容
      */
-    public <V, M> void v(V mark, M msg) {
-        if (debug) {
-            if (msg instanceof Throwable) {
-                Log.v(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
-            } else {
-                Log.v(String.valueOf(mark), String.valueOf(msg));
-            }
-        }
+    public static <V extends String, M> void v(V mark, M msg) {
+        if (debug) if (msg instanceof Throwable) {
+            Log.v(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
+        } else Log.v(String.valueOf(mark), String.valueOf(msg));
+    }
+
+    public static <M> void wtf(M msg) {
+        wtf("SystemLog", msg);
     }
 
     /**
@@ -136,14 +144,10 @@ public final class Toasts implements ToastListener {
      * @param mark 标记
      * @param msg  内容
      */
-    public <V, M> void wtf(V mark, M msg) {
-        if (debug) {
-            if (msg instanceof Throwable) {
-                Log.wtf(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
-            } else {
-                Log.wtf(String.valueOf(mark), String.valueOf(msg));
-            }
-        }
+    public static <V extends String, M> void wtf(V mark, M msg) {
+        if (debug) if (msg instanceof Throwable) {
+            Log.wtf(String.valueOf(mark), Log.getStackTraceString((Throwable) msg));
+        } else Log.wtf(String.valueOf(mark), String.valueOf(msg));
     }
 
     /**

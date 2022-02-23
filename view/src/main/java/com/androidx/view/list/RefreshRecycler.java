@@ -70,7 +70,10 @@ public final class RefreshRecycler {
                     @Override
                     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                         pageCode = 1;
-                        adapter.sizeListener = size -> totalPage = totalPage(size, pageCount);
+                        adapter.sizeListener = size -> {
+                            totalPage = totalPage(size, pageCount);
+                            if (pageCode == totalPage) refreshLayout.finishLoadMoreWithNoMoreData();
+                        };
                         initListener.onChange(refreshLayout, adapter, pageCode, true);
                     }
                 });
@@ -121,7 +124,10 @@ public final class RefreshRecycler {
                     @Override
                     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                         pageCode = 1;
-                        adapter.sizeListener = size -> totalPage = totalPage(size, pageCount);
+                        adapter.sizeListener = size -> {
+                            totalPage = totalPage(size, pageCount);
+                            if (pageCode == totalPage) refreshLayout.finishLoadMoreWithNoMoreData();
+                        };
                         initListener.onChange(refreshLayout, adapter, pageCode, true);
                     }
                 });
@@ -171,7 +177,10 @@ public final class RefreshRecycler {
                     @Override
                     public void onRefresh(@NonNull RefreshLayout refreshLayout) {
                         pageCode = 1;
-                        adapter.sizeListener = size -> totalPage = totalPage(size, pageCount);
+                        adapter.sizeListener = size -> {
+                            totalPage = totalPage(size, pageCount);
+                            if (pageCode == totalPage) refreshLayout.finishLoadMoreWithNoMoreData();
+                        };
                         initListener.onChange(refreshLayout, adapter, pageCode, true);
                     }
                 });

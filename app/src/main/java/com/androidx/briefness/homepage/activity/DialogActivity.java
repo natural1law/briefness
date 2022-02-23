@@ -15,6 +15,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
 import com.androidx.reduce.tools.Idle;
+import com.androidx.reduce.tools.Toasts;
 import com.androidx.view.dialog.DialogDefault;
 import com.androidx.view.scan.ScanTools;
 
@@ -103,8 +104,8 @@ public final class DialogActivity extends BaseActivity {
     @OnClick(R.id.activity_dialog3)
     public void dialog3() {
         DialogDefault.camera(aThis, photos -> {
-            toasts.i("Uri", photos.get(0).uri);
-            toasts.i("Path", photos.get(0).path);
+            Toasts.i("Uri", photos.get(0).uri);
+            Toasts.i("Path", photos.get(0).path);
         });
     }
 
@@ -112,7 +113,7 @@ public final class DialogActivity extends BaseActivity {
     public void dialog5() {
         String[] name = {"条目1", "条目2", "条目3", "条目4", "条目5"};
         DialogDefault.list(aThis, name, (position, dialog) -> {
-            toasts.i("选择", position);
+            Toasts.i("选择", position);
             toasts.setMsg(name[position]).showSuccess();
             dialog.cancel();
         });
@@ -122,7 +123,7 @@ public final class DialogActivity extends BaseActivity {
     public void dialog6() {
         DialogDefault.countDownTime(aThis, "正在加载", "还有", 60, "秒加载完成", () -> {
             toasts.setMsg("加载完成").showSuccess();
-            toasts.i("正在加载", "加载完成");
+            Toasts.i("正在加载", "加载完成");
         });
     }
 

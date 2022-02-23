@@ -1,6 +1,5 @@
 package com.androidx.briefness.homepage.activity;
 
-import static com.androidx.briefness.base.App.toasts;
 import static com.google.android.material.transition.MaterialContainerTransform.FADE_MODE_THROUGH;
 
 import android.annotation.SuppressLint;
@@ -17,6 +16,7 @@ import androidx.appcompat.widget.LinearLayoutCompat;
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
 import com.androidx.reduce.tools.Idle;
+import com.androidx.reduce.tools.Toasts;
 import com.google.android.material.transition.platform.MaterialContainerTransform;
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback;
 
@@ -95,7 +95,7 @@ public final class DragViewActivity extends BaseActivity {
         try {
             onNewActivityCreated(aThis);
         } catch (Exception e) {
-            toasts.e(getClass().getName(), e);
+            Toasts.e(getClass().getName(), e);
         }
     }
 

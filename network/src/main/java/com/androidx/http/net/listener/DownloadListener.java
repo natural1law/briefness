@@ -10,14 +10,12 @@ public interface DownloadListener {
      * 下载开始
      */
     default void start() {
-
     }
 
     /**
      * 下载中
      */
     default void running(BigDecimal process) {
-
     }
 
     /**
@@ -29,14 +27,14 @@ public interface DownloadListener {
      * 下载错误
      */
     default void error(String error) {
-        Log.e("下载错误", error);
+        Log.e(getClass().getName(), error);
     }
 
     /**
      * 下载失败
      */
     default void fail(String fail) {
-        Log.e("下载失败", fail);
+        Log.e(getClass().getName(), fail);
     }
 
 }

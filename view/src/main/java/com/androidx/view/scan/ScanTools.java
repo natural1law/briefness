@@ -26,7 +26,7 @@ public final class ScanTools {
             try {
                 resultListener.callback(resultCode, intent.getStringExtra(RESULT_KEY));
             } catch (Exception e) {
-                Toasts.builder(context).e(ScanTools.class.getName(), e);
+                Toasts.e(ScanTools.class.getName(), e);
             }
         });
     }

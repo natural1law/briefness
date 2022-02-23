@@ -1,7 +1,5 @@
 package com.androidx.briefness.base;
 
-import static com.androidx.briefness.base.App.toasts;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -21,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.androidx.briefness.R;
 import com.androidx.reduce.tools.Astrict;
+import com.androidx.reduce.tools.Toasts;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -45,7 +44,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             setContentView(layoutId());
             this.onCreate();
         } catch (Exception e) {
-            toasts.e(getClass().getName(), e);
+            Toasts.e(getClass().getName(), e);
         }
     }
 

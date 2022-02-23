@@ -20,6 +20,7 @@ import com.androidx.briefness.base.BaseActivity;
 import com.androidx.reduce.tools.Idle;
 import com.androidx.reduce.tools.Storage;
 import com.androidx.reduce.tools.This;
+import com.androidx.reduce.tools.Toasts;
 import com.androidx.view.screen.NotificationBar;
 import com.androidx.view.screen.ScreenRecording;
 import com.androidx.view.screen.config.ScreenConfig;
@@ -88,7 +89,7 @@ public final class ScreenCaptureActivity extends BaseActivity {
 
         launcher = This.initLauncher(aThis, (resultCode, intent) -> This.resultListener(aThis, intent, data -> {
             File file = new File(data);
-            toasts.i("回调数据", file.getPath());
+            Toasts.i("回调数据", file.getPath());
         }));
         appThis.resultAction(launcher).start();
     }

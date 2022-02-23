@@ -181,7 +181,7 @@ Android开发工具
         public static Enqueue enqueue;
         
         enqueue = Rn.initWebSocket(wsUrl(), param)
-                .setLoginCallback(() -> toasts.i("webSocket", "连接成功"))
+                .setLoginCallback(() -> Toasts.i("webSocket", "连接成功"))
                 .setMsgCallback((code, msg, data) -> publicKey = Secure.Base64.decode(data.toStringUtf8()));
                 
         enqueue.send();
@@ -602,7 +602,7 @@ Android开发工具
      ```
        launcher = This.initLauncher(aThis, (resultCode, intent) -> This.resultListener(aThis, intent, data -> {
             File file = new File(data);
-            toasts.i("回调数据", file.isFile());
+            Toasts.i("回调数据", file.isFile());
 
         }));//此方法必须放到主UI线程中(onCreate、onStart等方法中)，不然异常
         this.resultAction(launcher).start();//随意使用
@@ -631,7 +631,7 @@ Android开发工具
    > 引用Toasty进行二次封装/[Toasty项目地址](https://github.com/GrenderG/Toasty)
    * Toast
      ```
-       Toasts toasts = Toasts.builder(aThis).setDebug(true);//true 开启日志输出(.e无效, 只对log好使, 默认true)
+       Toasts toasts = Toasts.builder(aThis);
        toasts.setMsg("成功").showSuccess();
        toasts.setMsg("失败").showError();
        toasts.setMsg("无").showNormal();
@@ -641,12 +641,13 @@ Android开发工具
      ```
    * Log
      ```
-        toasts.i("TAG", "你好!");
-        toasts.e("TAG", "你好!");
-        toasts.d("TAG", "你好!");
-        toasts.w("TAG", "你好!");
-        toasts.v("TAG", "你好!");
-        toasts.wtf("TAG", "你好!");
+        Toasts.setDebug(false); //true 开启日志输出(e无效, 默认true)
+        Toasts.i("TAG", "你好!");
+        Toasts.e("TAG", "你好!");
+        Toasts.d("TAG", "你好!");
+        Toasts.w("TAG", "你好!");
+        Toasts.v("TAG", "你好!");
+        Toasts.wtf("TAG", "你好!");
      ```
    ##### 底部导航栏使用示例
    * 调用
@@ -753,15 +754,15 @@ Android开发工具
    * 相机相册选择dialog(单选)
      ```
        DialogDefault.camera(aThis, photos -> {
-           toasts.i("Uri", photos.get(0).uri);
-           toasts.i("Path", photos.get(0).path);
+           Toasts.i("Uri", photos.get(0).uri);
+           Toasts.i("Path", photos.get(0).path);
        });
      ```
    * dialog倒计时关闭
      ```
        DialogDefault.countDownTime(aThis, "正在加载", "还有", 60, "秒加载完成", () -> {
            toasts.setMsg("加载完成").showSuccess();
-           toasts.i("正在加载", "加载完成");
+           Toasts.i("正在加载", "加载完成");
        });
      ```
    * 自定义dialog

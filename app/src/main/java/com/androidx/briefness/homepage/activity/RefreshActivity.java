@@ -14,6 +14,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
 import com.androidx.http.use.Rn;
+import com.androidx.reduce.tools.Toasts;
 import com.androidx.view.list.HolderView;
 import com.androidx.view.list.RefreshAdapter;
 import com.androidx.view.list.RefreshRecycler;
@@ -72,9 +73,9 @@ public final class RefreshActivity extends BaseActivity {
     }
 
     private void initData() {
-
         List<String> list1 = new ArrayList<>(Arrays.asList("json5", "json6", "json7", "json8"));
         RefreshRecycler.execute(aThis, new Adapter(), (refresh, adapter, pageCode, status) -> {
+            Toasts.i("页码", pageCode);
             Map<String, Object> param = new ConcurrentHashMap<>();
             param.put("userName", "18604900857");
             param.put("password", "LNgz@082");
@@ -91,7 +92,7 @@ public final class RefreshActivity extends BaseActivity {
                 }
             });
         }, (module) -> {
-            toasts.i("条目数据", module);
+            Toasts.i("条目数据", module);
             toasts.setMsg(module).showSuccess();
         });
 
@@ -106,8 +107,9 @@ public final class RefreshActivity extends BaseActivity {
 
         @Override
         protected void dispose(@NonNull HolderView holder, int position, String model) {
-            holder.setText(R.id.a, model);
-            holder.setOnClickListener(R.id.a, view -> setOnClickItemListener(position));
+            int a = R.id.a;
+            holder.setText(a, model);
+            holder.setOnClickListener(a, view -> setOnClickItemListener(position));
         }
 
     }

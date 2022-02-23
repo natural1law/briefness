@@ -26,6 +26,7 @@ import com.androidx.http.use.Rn;
 import com.androidx.reduce.tools.Idle;
 import com.androidx.reduce.tools.Secure;
 import com.androidx.reduce.tools.Storage;
+import com.androidx.reduce.tools.Toasts;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.protobuf.ByteString;
@@ -83,26 +84,26 @@ public final class NetworkRequestActivity extends BaseActivity {
 //    Map<String, Object> map = new WeakHashMap<>();
 //    map.put("username", "18841280510");
 //    enqueue = Rn.initWebSocket("http://192.168.1.92:8082/cmp/push/notification", map)
-//        .setLoginCallback(() -> toasts.i("webSocket", "连接成功"))
+//        .setLoginCallback(() -> Toasts.i("webSocket", "连接成功"))
 //        .setMsgCallback((code, msg, data) -> {
-//          toasts.i("webSocket1", msg);
-//          toasts.i("webSocket2", data);
+//          Toasts.i("webSocket1", msg);
+//          Toasts.i("webSocket2", data);
 //        });
         Map<String, Object> map = new WeakHashMap<>();
         map.put("id", "123");
         enqueue = Rn.initWebSocket(wsUrl(), map)
-                .setLoginCallback(() -> toasts.i("webSocket", "连接成功"))
+                .setLoginCallback(() -> Toasts.i("webSocket", "连接成功"))
                 .setMsgCallback((code, msg, data) -> publicKey = Secure.Base64.decode(data.toStringUtf8()));
 
 //            initView();
 //            KeyPair key = Secure.RSA.keyPair();
 //            String k1;
-//            toasts.i("公钥", k1 =Secure.RSA.publicKey(key));
+//            Toasts.i("公钥", k1 =Secure.RSA.publicKey(key));
 //            String k2;
-//            toasts.i("私钥", k2 = Secure.RSA.privateKey(key));
+//            Toasts.i("私钥", k2 = Secure.RSA.privateKey(key));
 //            String v1;
-//            toasts.i("私钥加密", v1 = Secure.RSA.encryptPrivate(k2, "http://192.168.1.122:9981/api/user/login.ios"));
-//            toasts.i("公钥加密", Secure.RSA.decryptPublic(k1, v1));
+//            Toasts.i("私钥加密", v1 = Secure.RSA.encryptPrivate(k2, "http://192.168.1.122:9981/api/user/login.ios"));
+//            Toasts.i("公钥加密", Secure.RSA.decryptPublic(k1, v1));
     }
 
     @Override
@@ -146,8 +147,9 @@ public final class NetworkRequestActivity extends BaseActivity {
         param.put("projectId", "965");
         String path1 = Storage.Locality.generatePicturesPath("/WeiXin/", "1.jpg");
         Rn.sendUpload(url, param, path1, data -> {
-            toasts.i("结果", data);
+            Toasts.i("结果", data);
         });
+
     }
 
     @OnClick(R.id.network_send1)
@@ -156,7 +158,7 @@ public final class NetworkRequestActivity extends BaseActivity {
         param.put("userName", "18604900857");
         param.put("password", "LNgz@082");
         param.put("version", "1.1.6");
-        Rn.sendMapPost(url(), param, data -> toasts.i("msg", data));
+        Rn.sendMapPost(url(), param, data -> Toasts.i("msg", data));
     }
 
     @OnClick(R.id.network_send2)

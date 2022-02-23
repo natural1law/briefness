@@ -7,6 +7,8 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.androidx.reduce.tools.Toasts;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +21,8 @@ public abstract class RefreshAdapter<M> extends RecyclerView.Adapter<HolderView>
     /**
      * 布局ID
      */
-    protected abstract @LayoutRes
-    int layoutId();
+    @LayoutRes
+    protected abstract int layoutId();
 
     /**
      * 业务处理
@@ -58,7 +60,11 @@ public abstract class RefreshAdapter<M> extends RecyclerView.Adapter<HolderView>
 
     @Override
     public void onBindViewHolder(@NonNull HolderView holder, int position) {
-        dispose(holder, position, dataSources.get(position));
+        try {
+            dispose(holder, position, dataSources.get(position));
+        } catch (Exception e) {
+            Toasts.e(getClass().getName(), e);
+        }
     }
 
     @Override

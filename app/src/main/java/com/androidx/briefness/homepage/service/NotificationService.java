@@ -2,7 +2,6 @@ package com.androidx.briefness.homepage.service;
 
 import static android.provider.Telephony.Carriers.USER;
 import static com.androidx.briefness.base.App.kv;
-import static com.androidx.briefness.base.App.toasts;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
@@ -15,6 +14,7 @@ import androidx.annotation.Nullable;
 import com.androidx.briefness.R;
 import com.androidx.http.net.listener.Enqueue;
 import com.androidx.http.use.Rn;
+import com.androidx.reduce.tools.Toasts;
 import com.androidx.view.screen.NotificationBar;
 
 import java.util.Map;
@@ -47,7 +47,7 @@ public class NotificationService extends Service {
                 case 0:
                 default:
             }
-            toasts.i("收到数据" + code, msg);
+            Toasts.i("收到数据" + code, msg);
         });
         return super.onStartCommand(intent, flags, startId);
     }
