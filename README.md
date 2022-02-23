@@ -32,27 +32,27 @@ Android开发工具
 ### 使用依赖
   * 全部
   ```
-    implementation 'com.github.natural1law.briefness:3.5.5'
+    implementation 'com.github.natural1law.briefness:3.5.6'
   ```
   * 分支-网络请求
   ```
-  implementation 'com.github.natural1law.briefness:network:3.5.5'
+  implementation 'com.github.natural1law.briefness:network:3.5.6'
   ```
   * 分支-常用工具
   ```
-  implementation 'com.github.natural1law.briefness:reduce:3.5.5'
+  implementation 'com.github.natural1law.briefness:reduce:3.5.6'
   ```
   * 分支-图表统计
   ```
-  implementation 'com.github.natural1law.briefness:echarts:3.5.5'
+  implementation 'com.github.natural1law.briefness:echarts:3.5.6'
   ```
   * 分支-视图布局
   ```
-  implementation 'com.github.natural1law.briefness:view:3.5.5'
+  implementation 'com.github.natural1law.briefness:view:3.5.6'
   ```
   * 分支-加载动画（仿zyao89）
   ```
-  implementation 'com.github.natural1law.briefness:animation:3.5.5'
+  implementation 'com.github.natural1law.briefness:animation:3.5.6'
   ```
 
 ### 工具使用
@@ -932,6 +932,7 @@ Android开发工具
        }
      ```
    ##### 扫描二维码或条形码使用示例
+   > [扫描二维码项目地址](https://github.com/bingoogolapple/BGAQRCode-Android)
    * 回调
      ```
        ScanTools.callback(aThis, (resultCode, data) -> {
@@ -1020,8 +1021,67 @@ Android开发工具
         tabView.execute();
      ```
    ##### RecyclerView刷新和加载使用示例
-   * 调用
+   * code
      ```
+       RefreshRecycler.execute(aThis, new Adapter(), (refresh, adapter, pageCode, status) -> {
+            Toasts.i("当前页码", pageCode);
+            Map<String, Object> param = new ConcurrentHashMap<>();
+            param.put("pageCode", "pageCode");
+            Rn.sendMapPost(url(), param, JsonObject.class, data -> {
+                adapter.addTotalItem(data.get("total").getAsInt());
+                List<String> dataList = new Gson().fromJson(data.get("dataList"), new TypeToken<List<String>>() {
+                }.getType());
+                if (status) {
+                    adapter.addItem(dataList);
+                    refresh.finishRefresh();
+                } else {
+                    adapter.loadItem(dataList);
+                    refresh.finishLoadMore();
+                }
+            });
+        }, module -> {
+            Toasts.i("item数据", module);
+            toasts.setMsg(module).showSuccess();
+        });
+     ```
+   * adapter
+     ```
+       public static final class Adapter extends RefreshAdapter<String> {
+         @Override
+         protected int layoutId() { return R.layout.adapter_refresh; }
+         @Override
+         protected void dispose(@NonNull HolderView holder, int position, String model) {
+             int a = R.id.a;
+             holder.setText(a, model);
+             holder.setOnClickListener(a, view -> setOnClickItemListener(position));
+         }
+      }
+     ```
+   * layout
+     ```
+       <?xml version="1.0" encoding="utf-8"?>
+       <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+           xmlns:app="http://schemas.android.com/apk/res-auto"
+           android:layout_width="match_parent"
+           android:layout_height="match_parent">
+
+           <include
+               android:id="@+id/title_layout"
+               layout="@layout/title_bar"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toTopOf="parent" />
+
+           <include
+               layout="@layout/refresh_recycler_view"
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:layout_marginTop="50dp"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toBottomOf="@+id/title_layout" />
+       </androidx.constraintlayout.widget.ConstraintLayout>
      ```
    ##### 加载动画使用示例
    > [ZLoading项目地址](https://github.com/zyao89/ZLoading)
@@ -1038,7 +1098,7 @@ Android开发工具
            app:layout_constraintTop_toTopOf="parent"
            app:progressColor="@color/irs"
            app:progressType="STAIRS_PATH" />
-     ```
+      ```
      </br>
 ### 更新日志
   * [历史版本](https://github.com/natural1law/briefness/blob/master/HISTORY_VERSION.md "点击查看历史版本")
