@@ -18,6 +18,7 @@ import com.androidx.reduce.tools.Toasts;
 import com.androidx.view.list.HolderView;
 import com.androidx.view.list.RefreshAdapter;
 import com.androidx.view.list.RefreshRecycler;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -80,7 +81,7 @@ public final class RefreshActivity extends BaseActivity {
             param.put("userName", "18604900857");
             param.put("password", "LNgz@082");
             param.put("version", "1.1.6");
-            Rn.sendMapPost(url(), param, data -> {
+            Rn.sendMapPost(url(), param, JsonObject.class, data -> {
                 List<String> list = new ArrayList<>(Arrays.asList("json1", "json2", "json3", "json4"));
                 adapter.addTotalItem(11);
                 if (status) {
@@ -91,7 +92,8 @@ public final class RefreshActivity extends BaseActivity {
                     refresh.finishLoadMore();
                 }
             });
-        }, (module) -> {
+
+        }, module -> {
             Toasts.i("条目数据", module);
             toasts.setMsg(module).showSuccess();
         });

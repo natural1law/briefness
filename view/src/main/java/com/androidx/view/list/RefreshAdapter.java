@@ -1,6 +1,7 @@
 package com.androidx.view.list;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.ViewGroup;
 
 import androidx.annotation.LayoutRes;
@@ -15,6 +16,7 @@ import java.util.List;
 public abstract class RefreshAdapter<M> extends RecyclerView.Adapter<HolderView> implements OnAdapterListener<M> {
 
     private final List<M> dataSources = new ArrayList<>();
+    protected Context context;
     protected OnClickItemListener<M> itemListener;
     protected OnTotalSizeListener sizeListener;
 
@@ -52,9 +54,28 @@ public abstract class RefreshAdapter<M> extends RecyclerView.Adapter<HolderView>
         notifyDataSetChanged();
     }
 
+    @Override
+    @SuppressLint("NotifyDataSetChanged")
+    public void clear() {
+        if (!dataSources.isEmpty()) {
+            dataSources.clear();
+            notifyDataSetChanged();
+        }
+    }
+
+    @Override
+    @SuppressLint("NotifyDataSetChanged")
+    public void remove(int position) {
+        if (!dataSources.isEmpty()) {
+            dataSources.remove(position);
+            notifyDataSetChanged();
+        }
+    }
+
     @NonNull
     @Override
     public HolderView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        this.context = parent.getContext();
         return HolderView.createHolderView(parent, layoutId());
     }
 
@@ -75,7 +96,7 @@ public abstract class RefreshAdapter<M> extends RecyclerView.Adapter<HolderView>
     /**
      * 条目点击事件
      */
-    public void setOnClickItemListener(int position) {
+    protected void setOnClickItemListener(int position) {
         if (itemListener != null) itemListener.onClick(dataSources.get(position));
     }
 

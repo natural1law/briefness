@@ -19,4 +19,14 @@ public interface OnAdapterListener<T> {
      */
     void loadItem(List<T> datas);
 
+    /**
+     * 清空数据
+     */
+    void clear();
+
+    /**
+     * 移除数据
+     */
+    void remove(int position);
+
 }
