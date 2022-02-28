@@ -325,29 +325,46 @@ public final class This implements ThisListener, LauncherStartListener, HostList
         launcher.launch(intent);
     }
 
-    public static void resultListener(Context context, Intent intent, LauncherListener listener) {
+    public static void resultPictureListener(Context context, Intent intent, LauncherListener listener) {
         if (intent.getData() != null) {
             Uri uri = intent.getData();
             if (DocumentsContract.isDocumentUri(context, uri)) {
                 String documentId = DocumentsContract.getDocumentId(uri);
                 String[] selectionArgs = {documentId.split(":")[1]};
                 String selection = MediaStore.Images.Media._ID + "=?";
-                listener.callback(getDataColumn(context, selection, selectionArgs));
+                listener.callback(getDataColumn(context, selection, true, selectionArgs));
             } else if ("content".equalsIgnoreCase(uri.getScheme())) {
-                listener.callback(getDataColumn(context, null, null));
+                listener.callback(getDataColumn(context, null, true, null));
             }
         }
     }
 
-    private static String getDataColumn(Context context, String selection, String[] selectionArgs) {
-        Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-        String[] projection = new String[]{MediaStore.Images.Media.DATA};
+    public static void resultMoviesListener(Context context, Intent intent, LauncherListener listener) {
+        if (intent.getData() != null) {
+            Uri uri = intent.getData();
+            if (DocumentsContract.isDocumentUri(context, uri)) {
+                String documentId = DocumentsContract.getDocumentId(uri);
+                String[] selectionArgs = {documentId.split(":")[1]};
+                String selection = MediaStore.Video.Media._ID + "=?";
+                listener.callback(getDataColumn(context, selection, false, selectionArgs));
+            } else if ("content".equalsIgnoreCase(uri.getScheme())) {
+                listener.callback(getDataColumn(context, null, false, null));
+            }
+        }
+    }
+
+    private static String getDataColumn(Context context, String selection, boolean isUri, String[] selectionArgs) {
+        String url;
+        Uri uri = isUri ? MediaStore.Images.Media.EXTERNAL_CONTENT_URI : MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+        String[] projection = new String[]{isUri ? MediaStore.Images.Media.DATA : MediaStore.Video.Media.DATA};
         @SuppressLint("Recycle")
         Cursor cursor = context.getContentResolver().query(uri, projection, selection, selectionArgs, null);
         if (cursor != null && cursor.moveToFirst()) {
             int columnIndex = cursor.getColumnIndexOrThrow(projection[0]);
-            return cursor.getString(columnIndex);
-        } else return "";
+            url = cursor.getString(columnIndex);
+            cursor.close();
+        } else url = "";
+        return url;
     }
 
     /**

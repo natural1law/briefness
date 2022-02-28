@@ -1,6 +1,8 @@
 package com.androidx.view.dialog.adapter;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,19 +22,20 @@ public final class ListAdapter extends RecyclerView.Adapter<ListAdapter.HolderVi
     private int textColor;
     private int textSize;
     private DialogServlet dt;
+    private Context context;
     private OnClickCameraListener listener;
 
     @NonNull
     @Override
     public HolderView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new HolderView(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_camera, parent, false));
+        return new HolderView(LayoutInflater.from(context = parent.getContext()).inflate(R.layout.item_camera, parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull HolderView holder, int position) {
         holder.textView.setText(data[position]);
-        holder.textView.setTextColor(textColor);
-        holder.textView.setTextSize(textSize);
+        holder.textView.setTextColor(context.getResources().getColor(textColor, context.getTheme()));
+        holder.textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
         holder.layoutView.setOnClickListener(v -> listener.ok(position, dt));
         if (holder.getAdapterPosition() + 1 == data.length) holder.v.setVisibility(View.GONE);
         else holder.v.setVisibility(View.VISIBLE);

@@ -46,6 +46,7 @@ public class ScreenService extends Service implements ScreenServiceListener {
     private ScreenCallbackListener callback;//状态回调
     private ImageReader imageReader;
     private MediaScannerConnection msc;//扫描器
+    private ScreenConfig recordingConfig;//录制视频配置
 
     private static final String SC = "ScreenCapture";
     private static final String SR = "MediaRecorder";
@@ -67,6 +68,7 @@ public class ScreenService extends Service implements ScreenServiceListener {
     public void startRecording(ScreenCallbackListener callback, ScreenConfig config) {
         try {
             this.callback = callback;
+            this.recordingConfig = config;
             mr = createMediaRecorder(config);
             mr.start();
         } catch (Exception e) {
@@ -96,6 +98,20 @@ public class ScreenService extends Service implements ScreenServiceListener {
             if (dmr != null) dmr.release();
             if (dir != null) dir.release();
             if (mr != null) mr.reset();
+            //通知文管理器刷新图库
+            msc = new MediaScannerConnection(this, new MediaScannerConnection.MediaScannerConnectionClient() {
+                @Override
+                public void onMediaScannerConnected() {
+                    if (msc.isConnected())
+                        msc.scanFile(recordingConfig.getVideoOutputFile(), "video/*");
+                }
+
+                @Override
+                public void onScanCompleted(String path, Uri uri) {
+                    msc.disconnect();
+                }
+            });
+            msc.connect();
         } catch (Exception e) {
             Log.e("停止录制异常", Log.getStackTraceString(e));
         }

@@ -92,7 +92,6 @@ public final class RefreshActivity extends BaseActivity {
                     refresh.finishLoadMore();
                 }
             });
-
         }, module -> {
             Toasts.i("条目数据", module);
             toasts.setMsg(module).showSuccess();

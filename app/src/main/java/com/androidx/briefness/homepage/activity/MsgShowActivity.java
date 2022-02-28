@@ -1,9 +1,12 @@
 package com.androidx.briefness.homepage.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
@@ -12,6 +15,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
 import com.androidx.reduce.tools.Idle;
+import com.androidx.reduce.tools.This;
+import com.androidx.reduce.tools.Toasts;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +42,7 @@ public final class MsgShowActivity extends BaseActivity {
     public ConstraintLayout layoutView;
 
     private Unbinder unbinder;
+    private ActivityResultLauncher<Intent> launcherMovies;
 
     @Override
     protected int layoutId() {
@@ -63,7 +71,23 @@ public final class MsgShowActivity extends BaseActivity {
         if (Idle.isClick()) finish();
     }
 
+    @OnClick(R.id.activity_test)
+    public void test() {
+        String type2 = "video/Movies/cmp/*";
+        This.build().resultAction(Intent.ACTION_GET_CONTENT, type2, launcherMovies).start();
+    }
+
     private void initView() {
+        launcherMovies = This.initLauncher(aThis, (resultCode, intent) -> This.resultMoviesListener(aThis, intent, data -> {
+            try {
+                if (!data.equals("")) {
+                    File file = new File(data);
+                    Toasts.i("视频地址1", file);
+                }
+            } catch (Exception e) {
+                Log.e("models数据", Log.getStackTraceString(e));
+            }
+        }));
 
     }
 
