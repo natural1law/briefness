@@ -32,7 +32,7 @@ Android开发工具
 ### 使用依赖
   * 全部
   ```
-    implementation 'com.github.natural1law.briefness:3.5.8'
+  implementation 'com.github.natural1law.briefness:3.5.8'
   ```
   * 分支-网络请求
   ```
