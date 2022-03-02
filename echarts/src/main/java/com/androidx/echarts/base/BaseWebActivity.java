@@ -131,7 +131,7 @@ public abstract class BaseWebActivity extends AppCompatActivity {
      */
     @SuppressLint("SetJavaScriptEnabled")
     protected <T extends ViewGroup> BaseWebActivity initWeb(T view) {
-        initWeb(view, -1);
+        initWeb(view, 1);
         return this;
     }
 

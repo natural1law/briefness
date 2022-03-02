@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="firstName">消息</string>
-    <string name="secondName">联系人</string>
-    <string name="thirdlyName">发现</string>
-    <string name="fourthlyName">我的</string>
+    <string name="firstName">首页</string>
+    <string name="secondName">次页</string>
+    <string name="thirdlyName">再页</string>
+    <string name="fourthlyName">末页</string>
     <string name="alnum">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890</string>
 </resources>
