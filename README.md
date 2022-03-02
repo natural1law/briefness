@@ -1,6 +1,6 @@
 Android开发工具
 ======
-> * 此工具使用兼容Android API 24 = 7.0版本以上(包括7.0)、JDK1.8或以上</br>
+> * 此工具使用兼容Android API 24(7.0)版本或以上、JDK1.8或以上</br>
 > * 这里有很多工具是根据大佬们的工具进行二次封装的。 有些是没适配Androidx的, 有些是API较低的, 还有些是调用复杂的。所以我进行简单化后使用</br>
 > * 此工具如有问题欢迎大家指教。</br>
 > * 作者很懒, 没留下示例图
@@ -32,27 +32,27 @@ Android开发工具
 ### 使用依赖
   * 全部
   ```
-    implementation 'com.github.natural1law.briefness:3.5.7'
+  implementation 'com.github.natural1law.briefness:3.5.8'
   ```
   * 分支-网络请求
   ```
-  implementation 'com.github.natural1law.briefness:network:3.5.7'
+  implementation 'com.github.natural1law.briefness:network:3.5.8'
   ```
   * 分支-常用工具
   ```
-  implementation 'com.github.natural1law.briefness:reduce:3.5.7'
+  implementation 'com.github.natural1law.briefness:reduce:3.5.8'
   ```
   * 分支-图表统计
   ```
-  implementation 'com.github.natural1law.briefness:echarts:3.5.7'
+  implementation 'com.github.natural1law.briefness:echarts:3.5.8'
   ```
   * 分支-视图布局
   ```
-  implementation 'com.github.natural1law.briefness:view:3.5.7'
+  implementation 'com.github.natural1law.briefness:view:3.5.8'
   ```
   * 分支-加载动画（仿zyao89）
   ```
-  implementation 'com.github.natural1law.briefness:animation:3.5.7'
+  implementation 'com.github.natural1law.briefness:animation:3.5.8'
   ```
 
 ### 工具使用
@@ -187,6 +187,9 @@ Android开发工具
         enqueue.send();
      ```
    ##### 图形统计使用示例
+   > [echarts官网](https://echarts.apache.org/zh/index.html) </br>
+   > [echarts Github](https://github.com/apache/echarts) </br>
+   > [AgentWeb](https://github.com/Justson/AgentWeb/) </br>
    * android-xml代码
      ```
         <?xml version="1.0" encoding="utf-8"?>
@@ -666,7 +669,6 @@ Android开发工具
                     .setMenu(R.menu.nav_menu_default)//选项菜单
                     .setAddFragment(new HomePageFrag())//添加fragment对象
                     .setAddFragment(new MyPageFrag())//添加顺序影响显示顺序
-                    .setAddMenuItem(R.id.first, R.id.second)//位置影响显示顺序
                     .setBackgroundColor(R.color.gray)//背景颜色
                     .build();
          }
@@ -683,7 +685,7 @@ Android开发工具
            }
            
            @Override
-           protected void initUI() {
+           protected void onViewCreated(View view) {
            }
        }
      ```
