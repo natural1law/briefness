@@ -40,7 +40,7 @@ public final class MyPageFrag extends BaseFragment {
     }
 
     @Override
-    protected void initUI() {
+    protected void onViewCreated(View view) {
         titleLayout.setBackgroundColor(context.getResources().getColor(R.color.gray, context.getTheme()));
         titleView.setTextColor(getResources().getColor(R.color.black1, context.getTheme()));
         returnView.setVisibility(View.GONE);

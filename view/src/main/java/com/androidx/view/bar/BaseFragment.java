@@ -1,6 +1,5 @@
 package com.androidx.view.bar;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +11,7 @@ import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 
 /**
  * @author 李玄道
@@ -20,9 +20,9 @@ import androidx.fragment.app.Fragment;
 @SuppressWarnings({"RedundantSuppression", "unused"})
 public abstract class BaseFragment extends Fragment {
 
-    private volatile View rootView;
     protected Context context;
-    protected Activity aThis;
+    protected FragmentActivity aThis;
+    private volatile View rootView;
 
     private View setRootView(LayoutInflater inflater, ViewGroup container) {
         if (rootView == null) rootView = inflater.inflate(layoutId(), container, false);
@@ -35,13 +35,13 @@ public abstract class BaseFragment extends Fragment {
 
     protected abstract void onCreateView(View view);
 
-    protected abstract void initUI();
+    protected abstract void onViewCreated(View view);
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.context = context;
-        this.aThis = (Activity) context;
+        this.aThis = (FragmentActivity) context;
     }
 
     @Nullable
@@ -61,7 +61,7 @@ public abstract class BaseFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         try {
-            initUI();
+            onViewCreated(view);
         } catch (Exception e) {
             Log.e(getClass().getName(), Log.getStackTraceString(e));
         }

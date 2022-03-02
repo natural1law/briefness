@@ -68,7 +68,7 @@ public final class HomePageFrag extends BaseFragment {
     }
 
     @Override
-    protected void initUI() {
+    protected void onViewCreated(View view) {
         initView();
         initData();
         initListener();

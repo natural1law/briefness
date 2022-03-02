@@ -123,20 +123,17 @@ public final class Convert {
 
         /**
          * 转换Date类型
+         *
+         * @param timestamp 格式化日期时间(1970-01-01 00:00:00)
+         * @param format    日期格式
+         * @param <S>       String类型
+         * @return 返回date类型
          */
         @SuppressLint("SimpleDateFormat")
-        public static <D> Date toDate(D timestamp, String format) {
+        public static <S extends String> Date toDate(S timestamp, String format) {
             try {
-                Date date;
                 SimpleDateFormat sdf = new SimpleDateFormat(format);
-                if (timestamp instanceof Long) {
-                    date = sdf.parse(sdf.format(timestamp));
-                } else if (timestamp instanceof String) {
-                    date = sdf.parse(sdf.format(timestamp));
-                } else {
-                    date = new Date();
-                }
-                return date;
+                return sdf.parse(String.valueOf(timestamp));
             } catch (ParseException e) {
                 return new Date();
             }
