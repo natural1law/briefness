@@ -187,6 +187,9 @@ Android开发工具
         enqueue.send();
      ```
    ##### 图形统计使用示例
+   > [echarts官网](https://echarts.apache.org/zh/index.html)
+   > [echarts Github](https://github.com/apache/echarts)
+   > [AgentWeb](https://github.com/Justson/AgentWeb/)
    * android-xml代码
      ```
         <?xml version="1.0" encoding="utf-8"?>
@@ -666,7 +669,6 @@ Android开发工具
                     .setMenu(R.menu.nav_menu_default)//选项菜单
                     .setAddFragment(new HomePageFrag())//添加fragment对象
                     .setAddFragment(new MyPageFrag())//添加顺序影响显示顺序
-                    .setAddMenuItem(R.id.first, R.id.second)//位置影响显示顺序
                     .setBackgroundColor(R.color.gray)//背景颜色
                     .build();
          }
@@ -683,7 +685,7 @@ Android开发工具
            }
            
            @Override
-           protected void initUI() {
+           protected void onViewCreated(View view) {
            }
        }
      ```
