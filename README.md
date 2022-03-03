@@ -7,10 +7,10 @@ Android开发工具
 ***
 ### 工具目录
    * [图表统计](#图形统计使用示例 "点击查看使用`图表统计`功能代码")
-   * [网络请求（WebSocket长连接、http/https）](#网络请求使用示例 "点击查看使用`网络请求`功能代码")
+   * [网络请求（WebSocket、http、https）](#网络请求使用示例 "点击查看使用`网络请求`功能代码")
    * [正则表达式](#正则表达式使用示例 "点击查看使用`正则表达式`功能代码")
    * [数据安全](#数据安全使用示例 "点击查看使用`MD5、AES、RSA、Base64、SHA1`加密数据功能代码")
-   * [excel导出](#excel导出使用示例 "点击查看使用`excel导出`功能代码")
+   * [excel导出](#excel使用示例 "点击查看使用`excel导出`功能代码")
    * [生成验证码](#生成验证码使用示例 "点击查看使用`生成验证码`功能代码")
    * [短信倒计时](#短信倒计时使用示例 "点击查看使用`短信倒计时`功能代码")
    * [延时点击](#延时点击使用示例 "点击查看使用`延时点击`功能代码")
@@ -32,27 +32,27 @@ Android开发工具
 ### 使用依赖
   * 全部
   ```
-  implementation 'com.github.natural1law.briefness:3.5.8'
+  implementation 'com.github.natural1law.briefness:3.6.0'
   ```
   * 分支-网络请求
   ```
-  implementation 'com.github.natural1law.briefness:network:3.5.8'
+  implementation 'com.github.natural1law.briefness:network:3.6.0'
   ```
   * 分支-常用工具
   ```
-  implementation 'com.github.natural1law.briefness:reduce:3.5.8'
+  implementation 'com.github.natural1law.briefness:reduce:3.6.0'
   ```
   * 分支-图表统计
   ```
-  implementation 'com.github.natural1law.briefness:echarts:3.5.8'
+  implementation 'com.github.natural1law.briefness:echarts:3.6.0'
   ```
   * 分支-视图布局
   ```
-  implementation 'com.github.natural1law.briefness:view:3.5.8'
+  implementation 'com.github.natural1law.briefness:view:3.6.0'
   ```
   * 分支-加载动画（仿zyao89）
   ```
-  implementation 'com.github.natural1law.briefness:animation:3.5.8'
+  implementation 'com.github.natural1law.briefness:animation:3.6.0'
   ```
 
 ### 工具使用
