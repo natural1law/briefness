@@ -110,7 +110,7 @@ public final class DialogDefault {
         manager.setRecycleChildrenOnDetach(true);
         adapter.setDt(ds);
         adapter.setData("相机", "相册");
-        adapter.setTextColor(context.getResources().getColor(contentColor, context.getTheme()));
+        adapter.setTextColor(contentColor);
         adapter.setTextSize(contentSize);
         adapter.setListener((position, dialog) -> {
             switch (position + 1) {
