@@ -4,7 +4,6 @@ import static com.androidx.briefness.base.App.toasts;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.annotation.NonNull;
@@ -27,9 +26,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 @SuppressLint("NonConstantResourceId")
 public final class RefreshActivity extends BaseActivity {
@@ -41,7 +38,6 @@ public final class RefreshActivity extends BaseActivity {
     public AppCompatImageView imageView;
     @BindView(R.id.title_text)
     public AppCompatTextView titleView;
-    private Unbinder unbinder;
 
     private static native String url();
 
@@ -52,19 +48,8 @@ public final class RefreshActivity extends BaseActivity {
 
     @Override
     protected void onCreate() {
-        unbinder = ButterKnife.bind(aThis);
-        titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
-        titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));
-        imageView.setVisibility(View.VISIBLE);
-        imageView.setColorFilter(R.color.black);
-        titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
+        setTitle(titleLayout, imageView, titleView);
         initData();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unbinder.unbind();
     }
 
     @OnClick(R.id.title_return_image)
@@ -99,7 +84,7 @@ public final class RefreshActivity extends BaseActivity {
 
     }
 
-    public static final class Adapter extends RefreshAdapter<String> {
+    private static final class Adapter extends RefreshAdapter<String> {
 
         @Override
         protected int layoutId() {

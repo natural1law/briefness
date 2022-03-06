@@ -12,10 +12,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.FrameLayout;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.androidx.briefness.R;
 import com.androidx.reduce.tools.Astrict;
@@ -23,10 +26,16 @@ import com.androidx.reduce.tools.Toasts;
 
 import org.jetbrains.annotations.NotNull;
 
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
+
 /**
  * @date 2020/11/10
  */
+
 public abstract class BaseActivity extends AppCompatActivity {
+
+    private Unbinder unbinder;
 
     @LayoutRes
     protected abstract int layoutId();
@@ -42,6 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         try {
             setContentView(layoutId());
+            unbinder = ButterKnife.bind(this);
             this.onCreate();
         } catch (Exception e) {
             Toasts.e(getClass().getName(), e);
@@ -56,6 +66,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        unbinder.unbind();
     }
 
     @Override
@@ -131,6 +142,14 @@ public abstract class BaseActivity extends AppCompatActivity {
                 getSystemService(InputMethodManager.class).hideSoftInputFromWindow(v.getWindowToken(), 0);
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    protected void setTitle(FrameLayout layout, AppCompatImageView resultView, AppCompatTextView titleView) {
+        layout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
+        titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));
+        resultView.setVisibility(View.VISIBLE);
+        resultView.setColorFilter(R.color.black);
+        titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
     }
 
 }

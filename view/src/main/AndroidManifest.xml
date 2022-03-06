@@ -38,7 +38,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.androidx.photo.fileProvider"
+            android:authorities="com.androidx.view.photos.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

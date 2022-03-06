@@ -5,54 +5,46 @@ public final class MsgModule {
   private MsgModule() {
   }
 
-  public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistryLite registry) {
-  }
+    public static void registerAllExtensions(
+            com.google.protobuf.ExtensionRegistryLite registry) {
+    }
 
-  public static void registerAllExtensions(
-      com.google.protobuf.ExtensionRegistry registry) {
-    registerAllExtensions(
-        (com.google.protobuf.ExtensionRegistryLite) registry);
-  }
+    public interface MsgRequestOrBuilder extends
+            // @@protoc_insertion_point(interface_extends:MsgRequest)
+            com.google.protobuf.MessageLiteOrBuilder {
 
-  private static final com.google.protobuf.Descriptors.FileDescriptor
-      descriptor;
+        /**
+         * <pre>
+         * 请求码
+         * </pre>
+         *
+         * <code>sint32 code = 1;</code>
+         *
+         * @return The code.
+         */
+        int getCode();
 
-  public interface MsgRequestOrBuilder extends
-      // @@protoc_insertion_point(interface_extends:MsgRequest)
-      com.google.protobuf.MessageOrBuilder {
+        /**
+         * <pre>
+         *用户ID
+         * </pre>
+         *
+         * <code>string user_id = 2;</code>
+         * @return The userId.
+         */
+        String getUserId();
 
-    /**
-     * <pre>
-     *请求码
-     * </pre>
-     *
-     * <code>sint32 code = 1;</code>
-     * @return The code.
-     */
-    int getCode();
-
-    /**
-     * <pre>
-     * 用户ID
-     * </pre>
-     *
-     * <code>string user_id = 2;</code>
-     *
-     * @return The user_id.
-     */
-    String getUserId();
-
-    /**
-     * <pre>
-     *用户ID
-     * </pre>
-     *
-     * <code>string user_id = 2;</code>
-     * @return The bytes for user_id.
-     */
-    com.google.protobuf.ByteString
-    getUserIdBytes();
+        /**
+         * <pre>
+         * 用户ID
+         * </pre>
+         *
+         * <code>string user_id = 2;</code>
+         *
+         * @return The bytes for userId.
+         */
+        com.google.protobuf.ByteString
+        getUserIdBytes();
 
     /**
      * <pre>
@@ -64,652 +56,497 @@ public final class MsgModule {
      */
     com.google.protobuf.ByteString getData();
 
-    /**
-     * <pre>
-     *发送时间
-     * </pre>
-     *
-     * <code>string sendTime = 4;</code>
-     * @return The sendTime.
-     */
-    String getSendTime();
+        /**
+         * <pre>
+         *发送时间
+         * </pre>
+         *
+         * <code>string send_time = 4;</code>
+         * @return The sendTime.
+         */
+        String getSendTime();
 
-    /**
-     * <pre>
-     * 发送时间
-     * </pre>
-     *
-     * <code>string sendTime = 4;</code>
-     *
-     * @return The bytes for sendTime.
-     */
-    com.google.protobuf.ByteString
-    getSendTimeBytes();
-  }
-
-  private static final com.google.protobuf.Descriptors.Descriptor
-      internal_static_MsgRequest_descriptor;
-  private static final
-  com.google.protobuf.GeneratedMessageV3.FieldAccessorTable
-      internal_static_MsgRequest_fieldAccessorTable;
-
-  public static com.google.protobuf.Descriptors.FileDescriptor
-  getDescriptor() {
-    return descriptor;
-  }
-
-  /**
-   * <pre>
-   * 请求结构体
-   * </pre>
-   * <p>
-   * Protobuf type {@code MsgRequest}
-   */
-  public static final class MsgRequest extends
-      com.google.protobuf.GeneratedMessageV3 implements
-      // @@protoc_insertion_point(message_implements:MsgRequest)
-      MsgRequestOrBuilder {
-  private static final long serialVersionUID = 0L;
-    // Use MsgRequest.newBuilder() to construct.
-    private MsgRequest(com.google.protobuf.GeneratedMessageV3.Builder<?> builder) {
-      super(builder);
-    }
-    private MsgRequest() {
-      userId_ = "";
-      data_ = com.google.protobuf.ByteString.EMPTY;
-      sendTime_ = "";
-    }
-
-    @Override
-    @SuppressWarnings({"unused"})
-    protected Object newInstance(
-        UnusedPrivateParameter unused) {
-      return new MsgRequest();
-    }
-
-    @Override
-    public final com.google.protobuf.UnknownFieldSet
-    getUnknownFields() {
-      return this.unknownFields;
-    }
-    private MsgRequest(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      this();
-      if (extensionRegistry == null) {
-        throw new NullPointerException();
-      }
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            case 8: {
-
-              code_ = input.readSInt32();
-              break;
-            }
-            case 18: {
-              String s = input.readStringRequireUtf8();
-
-              userId_ = s;
-              break;
-            }
-            case 26: {
-
-              data_ = input.readBytes();
-              break;
-            }
-            case 34: {
-              String s = input.readStringRequireUtf8();
-
-              sendTime_ = s;
-              break;
-            }
-            default: {
-              if (!parseUnknownField(
-                  input, unknownFields, extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return MsgModule.internal_static_MsgRequest_descriptor;
-    }
-
-    @Override
-    protected FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return MsgModule.internal_static_MsgRequest_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              MsgRequest.class, Builder.class);
-    }
-
-    public static final int CODE_FIELD_NUMBER = 1;
-    private int code_;
-    /**
-     * <pre>
-     *请求码
-     * </pre>
-     *
-     * <code>sint32 code = 1;</code>
-     * @return The code.
-     */
-    @Override
-    public int getCode() {
-      return code_;
-    }
-
-    public static final int USERID_FIELD_NUMBER = 2;
-    private volatile Object userId_;
-
-    /**
-     * <pre>
-     *用户ID
-     * </pre>
-     *
-     * <code>string user_id = 2;</code>
-     * @return The user_id.
-     */
-    @Override
-    public String getUserId() {
-      Object ref = userId_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        userId_ = s;
-        return s;
-      }
+        /**
+         * <pre>
+         * 发送时间
+         * </pre>
+         *
+         * <code>string send_time = 4;</code>
+         *
+         * @return The bytes for sendTime.
+         */
+        com.google.protobuf.ByteString
+        getSendTimeBytes();
     }
 
     /**
      * <pre>
-     *用户ID
+     * 请求结构体
      * </pre>
-     *
-     * <code>string user_id = 2;</code>
-     * @return The bytes for user_id.
-     */
-    @Override
-    public com.google.protobuf.ByteString
-        getUserIdBytes() {
-      Object ref = userId_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        userId_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    public static final int DATA_FIELD_NUMBER = 3;
-    private com.google.protobuf.ByteString data_;
-    /**
-     * <pre>
-     *数据信息
-     * </pre>
-     *
-     * <code>bytes data = 3;</code>
-     * @return The data.
-     */
-    @Override
-    public com.google.protobuf.ByteString getData() {
-      return data_;
-    }
-
-    public static final int SENDTIME_FIELD_NUMBER = 4;
-    private volatile Object sendTime_;
-    /**
-     * <pre>
-     *发送时间
-     * </pre>
-     *
-     * <code>string sendTime = 4;</code>
-     * @return The sendTime.
-     */
-    @Override
-    public String getSendTime() {
-      Object ref = sendTime_;
-      if (ref instanceof String) {
-        return (String) ref;
-      } else {
-        com.google.protobuf.ByteString bs =
-            (com.google.protobuf.ByteString) ref;
-        String s = bs.toStringUtf8();
-        sendTime_ = s;
-        return s;
-      }
-    }
-    /**
-     * <pre>
-     *发送时间
-     * </pre>
-     *
-     * <code>string sendTime = 4;</code>
-     * @return The bytes for sendTime.
-     */
-    @Override
-    public com.google.protobuf.ByteString
-        getSendTimeBytes() {
-      Object ref = sendTime_;
-      if (ref instanceof String) {
-        com.google.protobuf.ByteString b =
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (String) ref);
-        sendTime_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    private byte memoizedIsInitialized = -1;
-    @Override
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized == 1) return true;
-      if (isInitialized == 0) return false;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    @Override
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      if (code_ != 0) {
-        output.writeSInt32(1, code_);
-      }
-      if (!getUserIdBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 2, userId_);
-      }
-      if (!data_.isEmpty()) {
-        output.writeBytes(3, data_);
-      }
-      if (!getSendTimeBytes().isEmpty()) {
-        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, sendTime_);
-      }
-      unknownFields.writeTo(output);
-    }
-
-    @Override
-    public int getSerializedSize() {
-      int size = memoizedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (code_ != 0) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeSInt32Size(1, code_);
-      }
-      if (!getUserIdBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, userId_);
-      }
-      if (!data_.isEmpty()) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(3, data_);
-      }
-      if (!getSendTimeBytes().isEmpty()) {
-        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, sendTime_);
-      }
-      size += unknownFields.getSerializedSize();
-      memoizedSize = size;
-      return size;
-    }
-
-    @Override
-    public boolean equals(final Object obj) {
-      if (obj == this) {
-       return true;
-      }
-      if (!(obj instanceof MsgRequest)) {
-        return super.equals(obj);
-      }
-      MsgRequest other = (MsgRequest) obj;
-
-      if (getCode()
-          != other.getCode()) return false;
-      if (!getUserId()
-          .equals(other.getUserId())) return false;
-      if (!getData()
-          .equals(other.getData())) return false;
-      if (!getSendTime()
-          .equals(other.getSendTime())) return false;
-      return unknownFields.equals(other.unknownFields);
-    }
-
-    @Override
-    public int hashCode() {
-      if (memoizedHashCode != 0) {
-        return memoizedHashCode;
-      }
-      int hash = 41;
-      hash = (19 * hash) + getDescriptor().hashCode();
-      hash = (37 * hash) + CODE_FIELD_NUMBER;
-      hash = (53 * hash) + getCode();
-      hash = (37 * hash) + USERID_FIELD_NUMBER;
-      hash = (53 * hash) + getUserId().hashCode();
-      hash = (37 * hash) + DATA_FIELD_NUMBER;
-      hash = (53 * hash) + getData().hashCode();
-      hash = (37 * hash) + SENDTIME_FIELD_NUMBER;
-      hash = (53 * hash) + getSendTime().hashCode();
-      hash = (29 * hash) + unknownFields.hashCode();
-      memoizedHashCode = hash;
-      return hash;
-    }
-
-    public static MsgRequest parseFrom(
-        java.nio.ByteBuffer data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static MsgRequest parseFrom(
-        java.nio.ByteBuffer data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static MsgRequest parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static MsgRequest parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static MsgRequest parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static MsgRequest parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static MsgRequest parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static MsgRequest parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static MsgRequest parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input);
-    }
-    public static MsgRequest parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseDelimitedWithIOException(PARSER, input, extensionRegistry);
-    }
-    public static MsgRequest parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input);
-    }
-    public static MsgRequest parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return com.google.protobuf.GeneratedMessageV3
-          .parseWithIOException(PARSER, input, extensionRegistry);
-    }
-
-    @Override
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder() {
-      return DEFAULT_INSTANCE.toBuilder();
-    }
-    public static Builder newBuilder(MsgRequest prototype) {
-      return DEFAULT_INSTANCE.toBuilder().mergeFrom(prototype);
-    }
-    @Override
-    public Builder toBuilder() {
-      return this == DEFAULT_INSTANCE
-          ? new Builder() : new Builder().mergeFrom(this);
-    }
-
-    @Override
-    protected Builder newBuilderForType(
-        BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * <pre>
-     *请求结构体
-     * </pre>
-     *
+     * <p>
      * Protobuf type {@code MsgRequest}
      */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessageV3.Builder<Builder> implements
-        // @@protoc_insertion_point(builder_implements:MsgRequest)
+    public static final class MsgRequest extends
+            com.google.protobuf.GeneratedMessageLite<
+                    MsgRequest, MsgRequest.Builder> implements
+            // @@protoc_insertion_point(message_implements:MsgRequest)
+            MsgRequestOrBuilder {
+        private MsgRequest() {
+            userId_ = "";
+            data_ = com.google.protobuf.ByteString.EMPTY;
+            sendTime_ = "";
+        }
+
+        public static final int CODE_FIELD_NUMBER = 1;
+        private int code_;
+
+        /**
+         * <pre>
+         * 请求码
+         * </pre>
+         *
+         * <code>sint32 code = 1;</code>
+         *
+         * @return The code.
+         */
+        @Override
+        public int getCode() {
+            return code_;
+        }
+
+        public static final int USER_ID_FIELD_NUMBER = 2;
+        public static final int SEND_TIME_FIELD_NUMBER = 4;
+        private static volatile com.google.protobuf.Parser<MsgRequest> PARSER;
+
+        static {
+            MsgRequest defaultInstance = new MsgRequest();
+            // New instances are implicitly immutable so no need to make
+            // immutable.
+            DEFAULT_INSTANCE = defaultInstance;
+            com.google.protobuf.GeneratedMessageLite.registerDefaultInstance(
+                    MsgRequest.class, defaultInstance);
+        }
+
+        private String userId_;
+        private String sendTime_;
+
+        public static MsgRequest parseFrom(
+                java.nio.ByteBuffer data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+    }
+
+    public static MsgRequest parseFrom(
+            java.nio.ByteBuffer data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+        return com.google.protobuf.GeneratedMessageLite.parseFrom(
+                DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+
+        public static MsgRequest parseFrom(
+                com.google.protobuf.ByteString data)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return com.google.protobuf.GeneratedMessageLite.parseFrom(
+                    DEFAULT_INSTANCE, data);
+        }
+
+        public static final int DATA_FIELD_NUMBER = 3;
+        private com.google.protobuf.ByteString data_;
+
+        /**
+         * <pre>
+         * 数据信息
+         * </pre>
+         *
+         * <code>bytes data = 3;</code>
+         *
+         * @return The data.
+         */
+        @Override
+        public com.google.protobuf.ByteString getData() {
+            return data_;
+        }
+
+        public static MsgRequest parseFrom(
+                com.google.protobuf.ByteString data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws com.google.protobuf.InvalidProtocolBufferException {
+            return com.google.protobuf.GeneratedMessageLite.parseFrom(
+                    DEFAULT_INSTANCE, data, extensionRegistry);
+        }
+
+        public static MsgRequest parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+          DEFAULT_INSTANCE, data);
+        }
+
+        public static MsgRequest parseFrom(
+                byte[] data,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+              DEFAULT_INSTANCE, data, extensionRegistry);
+    }
+
+    public static MsgRequest parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+              DEFAULT_INSTANCE, input);
+    }
+
+        public static MsgRequest parseFrom(
+                java.io.InputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+              DEFAULT_INSTANCE, input, extensionRegistry);
+    }
+
+    public static MsgRequest parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return parseDelimitedFrom(DEFAULT_INSTANCE, input);
+    }
+
+        public static MsgRequest parseDelimitedFrom(
+                java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+            return parseDelimitedFrom(DEFAULT_INSTANCE, input, extensionRegistry);
+        }
+
+        public static MsgRequest parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return com.google.protobuf.GeneratedMessageLite.parseFrom(
+              DEFAULT_INSTANCE, input);
+        }
+
+        public static MsgRequest parseFrom(
+                com.google.protobuf.CodedInputStream input,
+                com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+                throws java.io.IOException {
+            return com.google.protobuf.GeneratedMessageLite.parseFrom(
+                    DEFAULT_INSTANCE, input, extensionRegistry);
+        }
+
+        public static Builder newBuilder() {
+            return (Builder) DEFAULT_INSTANCE.createBuilder();
+        }
+
+        public static Builder newBuilder(MsgRequest prototype) {
+            return (Builder) DEFAULT_INSTANCE.createBuilder(prototype);
+        }
+
+        public static com.google.protobuf.Parser<MsgRequest> parser() {
+            return DEFAULT_INSTANCE.getParserForType();
+        }
+
+        /**
+         * <pre>
+         * 请求码
+         * </pre>
+         *
+         * <code>sint32 code = 1;</code>
+         *
+         * @param value The code to set.
+         */
+        private void setCode(int value) {
+
+            code_ = value;
+        }
+
+        /**
+         * <pre>
+         * 请求码
+         * </pre>
+         *
+         * <code>sint32 code = 1;</code>
+         */
+        private void clearCode() {
+
+            code_ = 0;
+        }
+
+        /**
+         * <pre>
+         * 用户ID
+         * </pre>
+         *
+         * <code>string user_id = 2;</code>
+         *
+         * @return The userId.
+         */
+        @Override
+        public String getUserId() {
+            return userId_;
+        }
+
+        /**
+         * <pre>
+         * 用户ID
+         * </pre>
+         *
+         * <code>string user_id = 2;</code>
+         *
+         * @param value The userId to set.
+         */
+        private void setUserId(
+                String value) {
+            value.getClass();
+
+            userId_ = value;
+        }
+
+        /**
+         * <pre>
+         * 用户ID
+         * </pre>
+         *
+         * <code>string user_id = 2;</code>
+         *
+         * @return The bytes for userId.
+         */
+        @Override
+        public com.google.protobuf.ByteString
+        getUserIdBytes() {
+            return com.google.protobuf.ByteString.copyFromUtf8(userId_);
+        }
+
+        /**
+         * <pre>
+         * 用户ID
+         * </pre>
+         *
+         * <code>string user_id = 2;</code>
+         *
+         * @param value The bytes for userId to set.
+         */
+        private void setUserIdBytes(
+                com.google.protobuf.ByteString value) {
+            checkByteStringIsUtf8(value);
+            userId_ = value.toStringUtf8();
+
+        }
+
+        /**
+         * <pre>
+         * 用户ID
+         * </pre>
+         *
+         * <code>string user_id = 2;</code>
+         */
+        private void clearUserId() {
+
+            userId_ = getDefaultInstance().getUserId();
+        }
+
+        /**
+         * <pre>
+         * 数据信息
+         * </pre>
+         *
+         * <code>bytes data = 3;</code>
+         *
+         * @param value The data to set.
+         */
+        private void setData(com.google.protobuf.ByteString value) {
+            value.getClass();
+
+            data_ = value;
+        }
+
+        /**
+         * <pre>
+         * 数据信息
+         * </pre>
+         *
+         * <code>bytes data = 3;</code>
+         */
+        private void clearData() {
+
+            data_ = getDefaultInstance().getData();
+        }
+
+        /**
+         * <pre>
+         * 发送时间
+         * </pre>
+         *
+         * <code>string send_time = 4;</code>
+         *
+         * @return The sendTime.
+         */
+        @Override
+        public String getSendTime() {
+            return sendTime_;
+        }
+
+        /**
+         * <pre>
+         * 发送时间
+         * </pre>
+         *
+         * <code>string send_time = 4;</code>
+         *
+         * @param value The sendTime to set.
+         */
+        private void setSendTime(
+                String value) {
+            value.getClass();
+
+            sendTime_ = value;
+        }
+
+        /**
+         * <pre>
+         * 发送时间
+         * </pre>
+         *
+         * <code>string send_time = 4;</code>
+         *
+         * @return The bytes for sendTime.
+         */
+        @Override
+        public com.google.protobuf.ByteString
+        getSendTimeBytes() {
+            return com.google.protobuf.ByteString.copyFromUtf8(sendTime_);
+        }
+
+        /**
+         * <pre>
+         * 发送时间
+         * </pre>
+         *
+         * <code>string send_time = 4;</code>
+         *
+         * @param value The bytes for sendTime to set.
+         */
+        private void setSendTimeBytes(
+                com.google.protobuf.ByteString value) {
+            checkByteStringIsUtf8(value);
+            sendTime_ = value.toStringUtf8();
+
+        }
+
+
+        // @@protoc_insertion_point(class_scope:MsgRequest)
+        private static final MsgRequest DEFAULT_INSTANCE;
+
+        /**
+         * <pre>
+         * 发送时间
+         * </pre>
+         *
+         * <code>string send_time = 4;</code>
+         */
+        private void clearSendTime() {
+
+            sendTime_ = getDefaultInstance().getSendTime();
+        }
+
+        public static MsgRequest getDefaultInstance() {
+            return DEFAULT_INSTANCE;
+        }
+
+        @Override
+        @SuppressWarnings({"unchecked", "fallthrough"})
+        protected final Object dynamicMethod(
+                MethodToInvoke method,
+                Object arg0, Object arg1) {
+            switch (method) {
+                case NEW_MUTABLE_INSTANCE: {
+                    return new MsgRequest();
+                }
+                case NEW_BUILDER: {
+                    return new Builder();
+                }
+                case BUILD_MESSAGE_INFO: {
+                    Object[] objects = new Object[]{
+                            "code_",
+                            "userId_",
+                            "data_",
+                            "sendTime_",
+                    };
+                    String info =
+                            "\u0000\u0004\u0000\u0000\u0001\u0004\u0004\u0000\u0000\u0000\u0001\u000f\u0002\u0208" +
+                                    "\u0003\n\u0004\u0208";
+                    return newMessageInfo(DEFAULT_INSTANCE, info, objects);
+                }
+                // fall through
+                case GET_DEFAULT_INSTANCE: {
+                    return DEFAULT_INSTANCE;
+                }
+                case GET_PARSER: {
+                    com.google.protobuf.Parser<MsgRequest> parser = PARSER;
+                    if (parser == null) {
+                        synchronized (MsgRequest.class) {
+                            parser = PARSER;
+                            if (parser == null) {
+                                parser =
+                                        new DefaultInstanceBasedParser<MsgRequest>(
+                                                DEFAULT_INSTANCE);
+                                PARSER = parser;
+                            }
+                        }
+                    }
+                    return parser;
+                }
+                case GET_MEMOIZED_IS_INITIALIZED: {
+                    return (byte) 1;
+                }
+                case SET_MEMOIZED_IS_INITIALIZED: {
+                    return null;
+                }
+            }
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * <pre>
+         * 请求结构体
+         * </pre>
+         * <p>
+         * Protobuf type {@code MsgRequest}
+         */
+        public static final class Builder extends
+                com.google.protobuf.GeneratedMessageLite.Builder<
+                        MsgRequest, Builder> implements
+                // @@protoc_insertion_point(builder_implements:MsgRequest)
         MsgRequestOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return MsgModule.internal_static_MsgRequest_descriptor;
-      }
-
-      @Override
-      protected FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return MsgModule.internal_static_MsgRequest_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                MsgRequest.class, Builder.class);
-      }
-
       // Construct using MsgModule.MsgRequest.newBuilder()
       private Builder() {
-        maybeForceBuilderInitialization();
+        super(DEFAULT_INSTANCE);
       }
 
-      private Builder(
-          BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessageV3
-                .alwaysUseFieldBuilders) {
-        }
-      }
-      @Override
-      public Builder clear() {
-        super.clear();
-        code_ = 0;
 
-        userId_ = "";
+            /**
+             * <pre>
+             *请求码
+             * </pre>
+             *
+             * <code>sint32 code = 1;</code>
+             * @return The code.
+             */
+            @Override
+            public int getCode() {
+                return instance.getCode();
+            }
 
-        data_ = com.google.protobuf.ByteString.EMPTY;
-
-        sendTime_ = "";
-
-        return this;
-      }
-
-      @Override
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return MsgModule.internal_static_MsgRequest_descriptor;
-      }
-
-      @Override
-      public MsgRequest getDefaultInstanceForType() {
-        return MsgRequest.getDefaultInstance();
-      }
-
-      @Override
-      public MsgRequest build() {
-        MsgRequest result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      @Override
-      public MsgRequest buildPartial() {
-        MsgRequest result = new MsgRequest(this);
-        result.code_ = code_;
-        result.userId_ = userId_;
-        result.data_ = data_;
-        result.sendTime_ = sendTime_;
-        onBuilt();
-        return result;
-      }
-
-      @Override
-      public Builder clone() {
-        return super.clone();
-      }
-      @Override
-      public Builder setField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return super.setField(field, value);
-      }
-      @Override
-      public Builder clearField(
-          com.google.protobuf.Descriptors.FieldDescriptor field) {
-        return super.clearField(field);
-      }
-      @Override
-      public Builder clearOneof(
-          com.google.protobuf.Descriptors.OneofDescriptor oneof) {
-        return super.clearOneof(oneof);
-      }
-      @Override
-      public Builder setRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          int index, Object value) {
-        return super.setRepeatedField(field, index, value);
-      }
-      @Override
-      public Builder addRepeatedField(
-          com.google.protobuf.Descriptors.FieldDescriptor field,
-          Object value) {
-        return super.addRepeatedField(field, value);
-      }
-      @Override
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof MsgRequest) {
-          return mergeFrom((MsgRequest)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(MsgRequest other) {
-        if (other == MsgRequest.getDefaultInstance()) return this;
-        if (other.getCode() != 0) {
-          setCode(other.getCode());
-        }
-        if (!other.getUserId().isEmpty()) {
-          userId_ = other.userId_;
-          onChanged();
-        }
-        if (other.getData() != com.google.protobuf.ByteString.EMPTY) {
-          setData(other.getData());
-        }
-        if (!other.getSendTime().isEmpty()) {
-          sendTime_ = other.sendTime_;
-          onChanged();
-        }
-        this.mergeUnknownFields(other.unknownFields);
-        onChanged();
-        return this;
-      }
-
-      @Override
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      @Override
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        MsgRequest parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (MsgRequest) e.getUnfinishedMessage();
-          throw e.unwrapIOException();
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-
-      private int code_ ;
-      /**
+            /**
        * <pre>
        *请求码
        * </pre>
-       *
-       * <code>sint32 code = 1;</code>
-       * @return The code.
-       */
-      @Override
-      public int getCode() {
-        return code_;
-      }
-      /**
-       * <pre>
-       *请求码
-       * </pre>
-       *
-       * <code>sint32 code = 1;</code>
-       * @param value The code to set.
-       * @return This builder for chaining.
-       */
-      public Builder setCode(int value) {
-
-        code_ = value;
-        onChanged();
+             *
+             * <code>sint32 code = 1;</code>
+             * @param value The code to set.
+             * @return This builder for chaining.
+             */
+            public Builder setCode(int value) {
+                copyOnWrite();
+                instance.setCode(value);
         return this;
       }
       /**
@@ -721,13 +558,39 @@ public final class MsgModule {
        * @return This builder for chaining.
        */
       public Builder clearCode() {
-
-        code_ = 0;
-        onChanged();
-        return this;
+          copyOnWrite();
+          instance.clearCode();
+          return this;
       }
 
-      private Object userId_ = "";
+            /**
+       * <pre>
+       *用户ID
+       * </pre>
+       *
+       * <code>string user_id = 2;</code>
+             * @return The userId.
+             */
+            @Override
+            public String getUserId() {
+                return instance.getUserId();
+            }
+
+            /**
+             * <pre>
+             *用户ID
+             * </pre>
+             *
+             * <code>string user_id = 2;</code>
+       * @param value The userId to set.
+       * @return This builder for chaining.
+             */
+            public Builder setUserId(
+                    String value) {
+                copyOnWrite();
+                instance.setUserId(value);
+        return this;
+      }
 
       /**
        * <pre>
@@ -735,84 +598,27 @@ public final class MsgModule {
        * </pre>
        *
        * <code>string user_id = 2;</code>
-       * @return The user_id.
+       * @return The bytes for userId.
        */
-      public String getUserId() {
-        Object ref = userId_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          userId_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-
-      /**
-       * <pre>
-       * 用户ID
-       * </pre>
-       *
-       * <code>string user_id = 2;</code>
-       *
-       * @param value The user_id to set.
-       * @return This builder for chaining.
-       */
-      public Builder setUserId(
-          String value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-
-        userId_ = value;
-        onChanged();
-        return this;
-      }
-
-      /**
-       * <pre>
-       * 用户ID
-       * </pre>
-       *
-       * <code>string user_id = 2;</code>
-       *
-       * @return The bytes for user_id.
-       */
+      @Override
       public com.google.protobuf.ByteString
-          getUserIdBytes() {
-        Object ref = userId_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          userId_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
+      getUserIdBytes() {
+        return instance.getUserIdBytes();
       }
 
       /**
        * <pre>
-       * 用户ID
+       *用户ID
        * </pre>
        *
        * <code>string user_id = 2;</code>
-       *
-       * @param value The bytes for user_id to set.
+       * @param value The bytes for userId to set.
        * @return This builder for chaining.
        */
       public Builder setUserIdBytes(
           com.google.protobuf.ByteString value) {
-        if (value == null) {
-          throw new NullPointerException();
-        }
-        checkByteStringIsUtf8(value);
-
-        userId_ = value;
-        onChanged();
+        copyOnWrite();
+        instance.setUserIdBytes(value);
         return this;
       }
 
@@ -825,13 +631,11 @@ public final class MsgModule {
        * @return This builder for chaining.
        */
       public Builder clearUserId() {
-
-        userId_ = getDefaultInstance().getUserId();
-        onChanged();
+        copyOnWrite();
+        instance.clearUserId();
         return this;
       }
 
-      private com.google.protobuf.ByteString data_ = com.google.protobuf.ByteString.EMPTY;
       /**
        * <pre>
        *数据信息
@@ -842,25 +646,22 @@ public final class MsgModule {
        */
       @Override
       public com.google.protobuf.ByteString getData() {
-        return data_;
+          return instance.getData();
       }
-      /**
-       * <pre>
-       *数据信息
-       * </pre>
+
+            /**
+             * <pre>
+             *数据信息
+             * </pre>
        *
        * <code>bytes data = 3;</code>
-       * @param value The data to set.
-       * @return This builder for chaining.
-       */
-      public Builder setData(com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-
-        data_ = value;
-        onChanged();
-        return this;
+             * @param value The data to set.
+             * @return This builder for chaining.
+             */
+            public Builder setData(com.google.protobuf.ByteString value) {
+                copyOnWrite();
+                instance.setData(value);
+                return this;
       }
       /**
        * <pre>
@@ -871,176 +672,93 @@ public final class MsgModule {
        * @return This builder for chaining.
        */
       public Builder clearData() {
-
-        data_ = getDefaultInstance().getData();
-        onChanged();
-        return this;
+          copyOnWrite();
+          instance.clearData();
+          return this;
       }
 
-      private Object sendTime_ = "";
-      /**
-       * <pre>
-       *发送时间
-       * </pre>
-       *
-       * <code>string sendTime = 4;</code>
-       * @return The sendTime.
-       */
-      public String getSendTime() {
-        Object ref = sendTime_;
-        if (!(ref instanceof String)) {
-          com.google.protobuf.ByteString bs =
-              (com.google.protobuf.ByteString) ref;
-          String s = bs.toStringUtf8();
-          sendTime_ = s;
-          return s;
-        } else {
-          return (String) ref;
-        }
-      }
-      /**
-       * <pre>
-       *发送时间
-       * </pre>
-       *
-       * <code>string sendTime = 4;</code>
-       * @return The bytes for sendTime.
-       */
-      public com.google.protobuf.ByteString
-          getSendTimeBytes() {
-        Object ref = sendTime_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b =
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (String) ref);
-          sendTime_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <pre>
-       *发送时间
-       * </pre>
-       *
-       * <code>string sendTime = 4;</code>
-       * @param value The sendTime to set.
-       * @return This builder for chaining.
-       */
-      public Builder setSendTime(
-          String value) {
-        if (value == null) {
-    throw new NullPointerException();
+            /**
+             * <pre>
+             * 发送时间
+             * </pre>
+             *
+             * <code>string send_time = 4;</code>
+             *
+             * @return The sendTime.
+             */
+            @Override
+            public String getSendTime() {
+                return instance.getSendTime();
+            }
+
+            /**
+             * <pre>
+             * 发送时间
+             * </pre>
+             *
+             * <code>string send_time = 4;</code>
+             *
+             * @param value The sendTime to set.
+             * @return This builder for chaining.
+             */
+            public Builder setSendTime(
+                    String value) {
+                copyOnWrite();
+                instance.setSendTime(value);
+                return this;
+            }
+
+            /**
+             * <pre>
+             * 发送时间
+             * </pre>
+             *
+             * <code>string send_time = 4;</code>
+             *
+             * @return The bytes for sendTime.
+             */
+            @Override
+            public com.google.protobuf.ByteString
+            getSendTimeBytes() {
+                return instance.getSendTimeBytes();
+            }
+
+            /**
+             * <pre>
+             *发送时间
+             * </pre>
+             *
+             * <code>string send_time = 4;</code>
+             * @param value The bytes for sendTime to set.
+             * @return This builder for chaining.
+             */
+            public Builder setSendTimeBytes(
+                    com.google.protobuf.ByteString value) {
+                copyOnWrite();
+                instance.setSendTimeBytes(value);
+                return this;
+            }
+
+            /**
+             * <pre>
+             *发送时间
+             * </pre>
+             *
+             * <code>string send_time = 4;</code>
+             * @return This builder for chaining.
+             */
+            public Builder clearSendTime() {
+                copyOnWrite();
+                instance.clearSendTime();
+                return this;
+            }
+
+            // @@protoc_insertion_point(builder_scope:MsgRequest)
+    }
   }
 
-        sendTime_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *发送时间
-       * </pre>
-       *
-       * <code>string sendTime = 4;</code>
-       * @return This builder for chaining.
-       */
-      public Builder clearSendTime() {
 
-        sendTime_ = getDefaultInstance().getSendTime();
-        onChanged();
-        return this;
-      }
-      /**
-       * <pre>
-       *发送时间
-       * </pre>
-       *
-       * <code>string sendTime = 4;</code>
-       * @param value The bytes for sendTime to set.
-       * @return This builder for chaining.
-       */
-      public Builder setSendTimeBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-
-        sendTime_ = value;
-        onChanged();
-        return this;
-      }
-      @Override
-      public final Builder setUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.setUnknownFields(unknownFields);
-      }
-
-      @Override
-      public final Builder mergeUnknownFields(
-          final com.google.protobuf.UnknownFieldSet unknownFields) {
-        return super.mergeUnknownFields(unknownFields);
-      }
-
-
-      // @@protoc_insertion_point(builder_scope:MsgRequest)
-    }
-
-    // @@protoc_insertion_point(class_scope:MsgRequest)
-    private static final MsgRequest DEFAULT_INSTANCE;
-    static {
-      DEFAULT_INSTANCE = new MsgRequest();
-    }
-
-    public static MsgRequest getDefaultInstance() {
-      return DEFAULT_INSTANCE;
-    }
-
-    private static final com.google.protobuf.Parser<MsgRequest>
-        PARSER = new com.google.protobuf.AbstractParser<MsgRequest>() {
-      @Override
-      public MsgRequest parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new MsgRequest(input, extensionRegistry);
-      }
-    };
-
-    public static com.google.protobuf.Parser<MsgRequest> parser() {
-      return PARSER;
-    }
-
-    @Override
-    public com.google.protobuf.Parser<MsgRequest> getParserForType() {
-      return PARSER;
-    }
-
-    @Override
-    public MsgRequest getDefaultInstanceForType() {
-      return DEFAULT_INSTANCE;
-    }
-
-  }
   static {
-    String[] descriptorData = {
-      "\n\035com.module.protobuf/Msg.proto\"J\n\nMsgRe" +
-      "quest\022\014\n\004code\030\001 \001(\021\022\016\n\006userId\030\002 \001(\t\022\014\n\004d" +
-      "ata\030\003 \001(\014\022\020\n\010sendTime\030\004 \001(\tB\013B\tMsgModule" +
-      "b\006proto3"
-    };
-    descriptor = com.google.protobuf.Descriptors.FileDescriptor
-      .internalBuildGeneratedFileFrom(descriptorData,
-        new com.google.protobuf.Descriptors.FileDescriptor[] {
-        });
-    internal_static_MsgRequest_descriptor =
-      getDescriptor().getMessageTypes().get(0);
-    internal_static_MsgRequest_fieldAccessorTable = new
-      com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
-        internal_static_MsgRequest_descriptor,
-        new String[] { "Code", "UserId", "Data", "SendTime", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

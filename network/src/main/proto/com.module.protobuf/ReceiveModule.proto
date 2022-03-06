@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+//生成的java类所在的包名
+option java_outer_classname = "ReceiveModule";
+
+message ReceiveResult{
+  string msg = 1;
+  string sign = 2;
+  string puk = 3;
+  string token = 4;
+  string data = 5;
+  int32 code = 6;
+}

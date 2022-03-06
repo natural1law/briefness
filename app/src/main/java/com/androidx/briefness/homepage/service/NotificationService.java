@@ -54,7 +54,7 @@ public class NotificationService extends Service {
 
     @Override
     public void onDestroy() {
-        enqueue.close();
+        if (enqueue != null) enqueue.close();
         Intent intent = new Intent(this, NotificationService.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             this.startForegroundService(intent);

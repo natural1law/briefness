@@ -28,9 +28,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 @SuppressLint("NonConstantResourceId")
 public final class PageRecyclerViewActivity extends BaseActivity {
@@ -44,7 +42,6 @@ public final class PageRecyclerViewActivity extends BaseActivity {
     public AppCompatTextView titleView;
     @BindView(R.id.listview)
     public PaginationRecycleView<JsonObject> listView;
-    private Unbinder unbinder;
 
     /**
      * @param str 32位小写MD5
@@ -76,12 +73,7 @@ public final class PageRecyclerViewActivity extends BaseActivity {
 
     @Override
     protected void onCreate() {
-        unbinder = ButterKnife.bind(aThis);
-        titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
-        titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));
-        imageView.setVisibility(View.VISIBLE);
-        imageView.setColorFilter(R.color.black);
-        titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
+        setTitle(titleLayout, imageView, titleView);
         initView();
     }
 
@@ -93,12 +85,6 @@ public final class PageRecyclerViewActivity extends BaseActivity {
         } else {
             return super.onKeyDown(keyCode, event);
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        unbinder.unbind();
     }
 
     @OnClick(R.id.title_return_image)

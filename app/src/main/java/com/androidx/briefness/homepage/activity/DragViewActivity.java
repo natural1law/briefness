@@ -21,9 +21,7 @@ import com.google.android.material.transition.platform.MaterialContainerTransfor
 import com.google.android.material.transition.platform.MaterialContainerTransformSharedElementCallback;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 /**
  * @date 2022/02/09
@@ -41,7 +39,6 @@ public final class DragViewActivity extends BaseActivity {
     @BindView(R.id.l0)
     public LinearLayoutCompat l0View;
     private float moveX, moveY;
-    private Unbinder unbinder;
 
     public static void onWillCreateNewActivity(Activity activity, Intent intent) {
         View view = activity.findViewById(android.R.id.content);
@@ -71,18 +68,7 @@ public final class DragViewActivity extends BaseActivity {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate() {
-        unbinder = ButterKnife.bind(aThis);
-        titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
-        titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));
-        imageView.setVisibility(View.VISIBLE);
-        imageView.setColorFilter(R.color.black);
-        titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unbinder.unbind();
+        setTitle(titleLayout, imageView, titleView);
     }
 
     @OnClick(R.id.title_return_image)

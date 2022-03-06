@@ -10,7 +10,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,9 +35,7 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 import okhttp3.Request;
 
 /**
@@ -56,7 +53,7 @@ public final class NetworkRequestActivity extends BaseActivity {
     public AppCompatTextView titleView;
     @BindView(R.id.network_content)
     public AppCompatTextView contentView;
-    private Unbinder unbinder;
+
     private String publicKey;
 
     private static native String url();
@@ -74,12 +71,7 @@ public final class NetworkRequestActivity extends BaseActivity {
 
     @Override
     protected void onCreate() {
-        unbinder = ButterKnife.bind(aThis);
-        titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
-        titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));
-        imageView.setVisibility(View.VISIBLE);
-        imageView.setColorFilter(R.color.black);
-        titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
+        setTitle(titleLayout, imageView, titleView);
 
 //    Map<String, Object> map = new WeakHashMap<>();
 //    map.put("username", "18841280510");
@@ -114,7 +106,6 @@ public final class NetworkRequestActivity extends BaseActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unbinder.unbind();
         if (enqueue != null) enqueue.close();
     }
 
@@ -168,7 +159,7 @@ public final class NetworkRequestActivity extends BaseActivity {
         json.addProperty("mobile", "15555555555");
         json.addProperty("pass", "123456");
         String encode = Secure.AES.encrypt(key, json.toString());
-        SendModule.Request request = SendModule.Request.newBuilder()
+        SendModule.SendRequest request = SendModule.SendRequest.newBuilder()
                 .setData(ByteString.copyFromUtf8(encode))
                 .build();
 
@@ -182,7 +173,7 @@ public final class NetworkRequestActivity extends BaseActivity {
         });
 
         Rn.sendBytes(url1(), request.toByteArray(), data -> {
-            ReceiveModule.Result result = ReceiveModule.Result.parseFrom(data);
+            ReceiveModule.ReceiveResult result = ReceiveModule.ReceiveResult.parseFrom(data);
             if (result.getCode() == 1) {
                 if (Secure.RSA.verify(publicKey, result.getToken(), result.getSign())) {
                     String aesKey = Secure.RSA.decryptPublic(publicKey, result.getToken());

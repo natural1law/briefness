@@ -188,7 +188,6 @@ public class ScreenService extends Service implements ScreenServiceListener {
                     bos.write(baos.toByteArray());
                     bos.flush();
                     bos.close();
-                    fos.flush();
                     fos.close();
                 }
                 //通知文管理器刷新图库

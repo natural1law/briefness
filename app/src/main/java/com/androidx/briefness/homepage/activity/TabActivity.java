@@ -2,7 +2,6 @@ package com.androidx.briefness.homepage.activity;
 
 import android.annotation.SuppressLint;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.appcompat.widget.AppCompatImageView;
@@ -20,9 +19,7 @@ import com.androidx.view.tab.layout.SegmentTabLayout;
 import com.androidx.view.tab.use.TabLayoutBar;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 /**
  * Tab导航栏功能展示
@@ -44,7 +41,6 @@ public class TabActivity extends BaseActivity {
     @BindView(R.id.vp2)
     public ViewPager2 viewPager2;
 
-    private Unbinder unbinder;
     private TabLayoutBar tabView;
 
     @Override
@@ -54,7 +50,6 @@ public class TabActivity extends BaseActivity {
 
     @Override
     protected void onCreate() {
-        unbinder = ButterKnife.bind(aThis);
         initView();
     }
 
@@ -71,7 +66,6 @@ public class TabActivity extends BaseActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        unbinder.unbind();
         tabView.destroy();
     }
 
@@ -82,12 +76,7 @@ public class TabActivity extends BaseActivity {
 
     @SuppressLint("SetTextI18n")
     private void initView() {
-        titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
-        titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));
-        imageView.setVisibility(View.VISIBLE);
-        imageView.setColorFilter(R.color.black);
-        titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
-
+        setTitle(titleLayout, imageView, titleView);
         tabView = TabLayoutBar.builder()
                 .setActivity(aThis)
                 .setViewPager2(viewPager2)

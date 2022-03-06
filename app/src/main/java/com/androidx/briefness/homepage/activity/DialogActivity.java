@@ -6,7 +6,6 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.appcompat.widget.AppCompatImageView;
@@ -20,9 +19,7 @@ import com.androidx.view.dialog.DialogDefault;
 import com.androidx.view.scan.ScanTools;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 @SuppressLint("NonConstantResourceId")
 public final class DialogActivity extends BaseActivity {
@@ -34,7 +31,6 @@ public final class DialogActivity extends BaseActivity {
     public AppCompatImageView imageView;
     @BindView(R.id.title_text)
     public AppCompatTextView titleView;
-    private Unbinder unbinder;
 
     @Override
     protected int layoutId() {
@@ -43,7 +39,6 @@ public final class DialogActivity extends BaseActivity {
 
     @Override
     protected void onCreate() {
-        unbinder = ButterKnife.bind(aThis);
         initView();
     }
 
@@ -57,12 +52,6 @@ public final class DialogActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unbinder.unbind();
-    }
-
     @OnClick(R.id.title_return_image)
     public void imageReturn() {
         if (Idle.isClick()) finishAfterTransition();
@@ -70,11 +59,7 @@ public final class DialogActivity extends BaseActivity {
 
     @SuppressLint("SetTextI18n")
     private void initView() {
-        titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
-        titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));
-        imageView.setVisibility(View.VISIBLE);
-        imageView.setColorFilter(R.color.black);
-        titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
+        setTitle(titleLayout, imageView, titleView);
 
         ScanTools.callback(aThis, (resultCode, data) -> {
             Log.i("回调码", String.valueOf(resultCode));

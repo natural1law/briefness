@@ -55,7 +55,6 @@ public final class Storage {
             bos.close();
             fos.close();
             bis.close();
-            is.close();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) return Paths.get(outPath).toFile();
             else return new File(outPath);
         } catch (Exception e) {
@@ -115,6 +114,7 @@ public final class Storage {
             reader.close();
             return content;
         } catch (Exception e) {
+            Log.e(Locality.class.getName(), Log.getStackTraceString(e));
             return null;
         }
     }

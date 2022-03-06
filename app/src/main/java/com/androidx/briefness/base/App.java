@@ -24,6 +24,7 @@ public class App extends Application {
         super.attachBaseContext(base);
         MMKV.initialize(base);
         kv = MMKV.defaultMMKV();
+        kv.close();
         toasts = Toasts.builder(base);
         mc = MicroCache.getInstance(base);
         appThis = This.build();

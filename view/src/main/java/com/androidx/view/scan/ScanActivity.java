@@ -2,6 +2,7 @@ package com.androidx.view.scan;
 
 import static android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -147,7 +148,7 @@ public final class ScanActivity extends AppCompatActivity implements QRCodeView.
                 .start(new SelectCallback() {
                     @Override
                     public void onResult(ArrayList<Photo> photos, boolean isOriginal) {
-                        photos.forEach(photo -> zxView.decodeQRCode(photo.path));
+                        zxView.decodeQRCode(photos.get(0).path);
                     }
 
                     @Override
@@ -162,17 +163,18 @@ public final class ScanActivity extends AppCompatActivity implements QRCodeView.
      * 转换真实路径
      */
     private String realUri(Uri contentUri) {
-        Cursor cursor = null;
         try {
             String[] pro = {MediaStore.Images.Media.DATA};
-            cursor = aThis.getContentResolver().query(contentUri, pro, null, null, null);
+            @SuppressLint("Recycle")
+            Cursor cursor = aThis.getContentResolver().query(contentUri, pro, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
+            String url = cursor.getString(column_index);
+            cursor.close();
+            return url;
+        } catch (Exception e) {
+            Log.e(getClass().getName(), Log.getStackTraceString(e));
+            return "";
         }
     }
 

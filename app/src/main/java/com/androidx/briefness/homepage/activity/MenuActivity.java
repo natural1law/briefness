@@ -5,7 +5,6 @@ import static com.androidx.briefness.base.App.toasts;
 import android.annotation.SuppressLint;
 import android.graphics.Point;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,10 +18,8 @@ import com.androidx.reduce.tools.Idle;
 import com.androidx.view.menu.FloatMenu;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnLongClick;
-import butterknife.Unbinder;
 
 @SuppressLint("NonConstantResourceId")
 public final class MenuActivity extends BaseActivity {
@@ -35,7 +32,6 @@ public final class MenuActivity extends BaseActivity {
     @BindView(R.id.title_text)
     public AppCompatTextView titleView;
 
-    private Unbinder unbinder;
     private FloatMenu floatMenu;
     private final Point point = new Point();
 
@@ -46,12 +42,7 @@ public final class MenuActivity extends BaseActivity {
 
     @Override
     protected void onCreate() {
-        unbinder = ButterKnife.bind(aThis);
-        titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
-        titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));
-        imageView.setVisibility(View.VISIBLE);
-        imageView.setColorFilter(R.color.black);
-        titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
+        setTitle(titleLayout, imageView, titleView);
         floatMenu = new FloatMenu(aThis);
         floatMenu.inflate(R.menu.tools, Convert.Pixel.get(aThis).dp(60));
     }
@@ -63,12 +54,6 @@ public final class MenuActivity extends BaseActivity {
             point.y = (int) ev.getRawY();
         }
         return super.dispatchTouchEvent(ev);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unbinder.unbind();
     }
 
     @OnClick(R.id.title_return_image)

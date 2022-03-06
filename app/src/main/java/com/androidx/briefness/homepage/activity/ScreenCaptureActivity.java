@@ -7,7 +7,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.FrameLayout;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -29,9 +28,7 @@ import java.io.File;
 import java.util.UUID;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 /**
  * @date 2021/07/22
@@ -46,7 +43,6 @@ public final class ScreenCaptureActivity extends BaseActivity {
     public AppCompatImageView imageView;
     @BindView(R.id.title_text)
     public AppCompatTextView titleView;
-    private Unbinder unbinder;
     private ScreenRecording sr;
 
     private ActivityResultLauncher<Intent> launcher;
@@ -69,7 +65,6 @@ public final class ScreenCaptureActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unbinder.unbind();
         sr.onDestroy();
     }
 
@@ -79,12 +74,7 @@ public final class ScreenCaptureActivity extends BaseActivity {
     }
 
     private void initView() {
-        unbinder = ButterKnife.bind(aThis);
-        titleLayout.setBackgroundColor(getResources().getColor(R.color.gray, getTheme()));
-        titleView.setTextColor(getResources().getColor(R.color.black1, getTheme()));
-        imageView.setVisibility(View.VISIBLE);
-        imageView.setColorFilter(R.color.black);
-        titleView.setText(getIntent().getStringExtra(getResources().getString(R.string.title)));
+        setTitle(titleLayout, imageView, titleView);
         sr = ScreenRecording.build(aThis).setNotification(NotificationBar.setSystem(aThis, "正在使用录屏丨截屏功能", "", R.mipmap.radio_on));
 
         launcher = This.initLauncher(aThis, (resultCode, intent) -> This.resultPictureListener(aThis, intent, data -> {

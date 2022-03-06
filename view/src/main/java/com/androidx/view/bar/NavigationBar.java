@@ -20,6 +20,7 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.androidx.reduce.tools.This;
 import com.androidx.view.R;
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -73,7 +74,7 @@ public final class NavigationBar {
         this.fragments = builder.fragments;
         this.space = builder.space;
         initView(builder);
-        initData(builder.lazy);
+        This.delay(() -> initData(builder.lazy), 17);
     }
 
     @NotNull
@@ -101,7 +102,6 @@ public final class NavigationBar {
         navigationView.setOnItemSelectedListener(selectedListener);
         adjustNavigationIcoSize(navigationView);
         navigationView.setLabelVisibilityMode(b.mode);
-        navigationView.getMenu().close();
     }
 
     /**

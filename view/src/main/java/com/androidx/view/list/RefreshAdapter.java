@@ -12,6 +12,7 @@ import com.androidx.reduce.tools.Toasts;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public abstract class RefreshAdapter<M> extends RecyclerView.Adapter<HolderView> implements OnAdapterListener<M> {
 
@@ -81,11 +82,13 @@ public abstract class RefreshAdapter<M> extends RecyclerView.Adapter<HolderView>
 
     @Override
     public void onBindViewHolder(@NonNull HolderView holder, int position) {
-        try {
-            dispose(holder, position, dataSources.get(position));
-        } catch (Exception e) {
-            Toasts.e(getClass().getName(), e);
-        }
+        Executors.newCachedThreadPool().execute(() -> {
+            try {
+                dispose(holder, position, dataSources.get(position));
+            } catch (Exception e) {
+                Toasts.e(getClass().getName(), e);
+            }
+        });
     }
 
     @Override

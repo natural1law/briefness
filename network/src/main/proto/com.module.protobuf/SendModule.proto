@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+//生成的java类所在的包名
+option java_outer_classname = "SendModule";
+
+message SendRequest{
+  string token = 1;
+  string bulking = 2;
+  bytes data = 3;
+}
