@@ -3,7 +3,6 @@ package com.androidx.briefness.homepage.activity;
 import static android.content.Intent.FLAG_ACTIVITY_NEW_TASK;
 import static android.provider.Telephony.Carriers.USER;
 import static com.androidx.briefness.base.App.kv;
-import static com.androidx.briefness.base.App.toasts;
 import static com.androidx.briefness.homepage.service.NotificationService.enqueue;
 
 import android.annotation.SuppressLint;
@@ -18,17 +17,13 @@ import androidx.appcompat.widget.AppCompatTextView;
 
 import com.androidx.briefness.R;
 import com.androidx.briefness.base.BaseActivity;
-import com.androidx.briefness.homepage.module.ReceiveModule;
-import com.androidx.briefness.homepage.module.SendModule;
+import com.androidx.briefness.homepage.module.LoginModule;
 import com.androidx.briefness.homepage.service.NotificationService;
 import com.androidx.http.use.Rn;
 import com.androidx.reduce.tools.Idle;
 import com.androidx.reduce.tools.Secure;
 import com.androidx.reduce.tools.Storage;
 import com.androidx.reduce.tools.Toasts;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.protobuf.ByteString;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -81,6 +76,7 @@ public final class NetworkRequestActivity extends BaseActivity {
 //          Toasts.i("webSocket1", msg);
 //          Toasts.i("webSocket2", data);
 //        });
+
         Map<String, Object> map = new WeakHashMap<>();
         map.put("id", "123");
         enqueue = Rn.initWebSocket(wsUrl(), map)
@@ -96,6 +92,8 @@ public final class NetworkRequestActivity extends BaseActivity {
 //            String v1;
 //            Toasts.i("私钥加密", v1 = Secure.RSA.encryptPrivate(k2, "http://192.168.1.122:9981/api/user/login.ios"));
 //            Toasts.i("公钥加密", Secure.RSA.decryptPublic(k1, v1));
+
+        publicKey = "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAxsUJNFAFtPyVonKfnTYdWLJnZG;vIGLPjZ8ihNvebye5EM8R;Aj60hGwksitw5e1rP2M3C4YFj97iEMmfqVy@oQQEAjX@licT8F0iCetvE8kdIJWph04As;srRW85K6aOT8zqYCMh@gEU0n6IEo3m1ygtfA8TEdf5u;Mwa@vet11JLuIPCx9rg5PL7ufP54xJkDLJ;0Ka5r65qf1Wz;gDPa22aAv3SSRLZQ2T9rbsv9uOQF4j2kOrUSbeXnCHldcSL5hNHzDR4oAYAGt@w9XLq@hVRpXN7fLDyGfY53RdZPgiyFmuq56crHDzwUdFUy7@hrFvppnCZQyxHPzPVu@8T@U12qcX4S@bu@1dqwxZKzAxTD0tlBIBSDp2cYogKwR4BXc6mFNX0iG1UQ9UUpLfMvlsg91sz7D8KTOs8l3;cQuKgUIxgebA5103SOuAMZExPndZNGwDX1KcPmoAirpjx48h4V3Ci4Azd5pwdkK2PXAd8tCDxiS@pwLd3Rtk2cS2QJSZ8ifTdRR3u9n5w5gKcZZQh2bEiatfs5n3B68AowbFObvPpJbRxTjMb;HPe;dtIktx651H@z1ncNMj9ziAtQvo@mYwHro3Abe6hqWjcvu3jXmmVeZsvwezmtONoPPsUZ2YeeuE7SCknZltFsv4nrDviqnppQ@cXYQAWvQvUsCAwEAAQ==";
     }
 
     @Override
@@ -154,13 +152,18 @@ public final class NetworkRequestActivity extends BaseActivity {
 
     @OnClick(R.id.network_send2)
     public void send2() {
+
+//        JsonObject json = new JsonObject();
+//        json.addProperty("mobile", "15555555555");
+//        json.addProperty("password", "123456");
+//        Rn.sendJsonPost(url1(), json, data -> {
+//            Toasts.i("数据", data);
+//        });
+
         String key = Secure.AES.key();
-        JsonObject json = new JsonObject();
-        json.addProperty("mobile", "15555555555");
-        json.addProperty("pass", "123456");
-        String encode = Secure.AES.encrypt(key, json.toString());
-        SendModule.SendRequest request = SendModule.SendRequest.newBuilder()
-                .setData(ByteString.copyFromUtf8(encode))
+        LoginModule.LoginParam param = LoginModule.LoginParam.newBuilder()
+                .setMobile(Secure.AES.encrypt(key, "15555555555"))
+                .setPassword(Secure.AES.encrypt(key, "123456"))
                 .build();
 
         Rn.setInterceptor(chain -> {
@@ -171,17 +174,18 @@ public final class NetworkRequestActivity extends BaseActivity {
                     .build();//请求
             return chain.proceed(req);//响应
         });
-
-        Rn.sendBytes(url1(), request.toByteArray(), data -> {
-            ReceiveModule.ReceiveResult result = ReceiveModule.ReceiveResult.parseFrom(data);
-            if (result.getCode() == 1) {
-                if (Secure.RSA.verify(publicKey, result.getToken(), result.getSign())) {
-                    String aesKey = Secure.RSA.decryptPublic(publicKey, result.getToken());
-                    String decode = Secure.AES.decrypt(aesKey, result.getData());
-                    JsonObject resData = new Gson().fromJson(decode, JsonObject.class);
-                    contentView.setText(resData.toString());
-                } else contentView.setText("无效数据");
-            } else toasts.setMsg(result.getMsg()).showError();
+        Rn.show();
+        Rn.sendBytes(url1(), param.toByteArray(), data -> {
+            Toasts.i("数据", new String(data));
+//            ReceiveModule.ReceiveResult result = ReceiveModule.ReceiveResult.parseFrom(data);
+//            if (result.getCode() == 1) {
+//                if (Secure.RSA.verify(publicKey, result.getToken(), result.getSign())) {
+//                    String aesKey = Secure.RSA.decryptPublic(publicKey, result.getToken());
+//                    String decode = Secure.AES.decrypt(aesKey, result.getData());
+//                    JsonObject resData = new Gson().fromJson(decode, JsonObject.class);
+//                    contentView.setText(resData.toString());
+//                } else contentView.setText("无效数据");
+//            } else toasts.setMsg(result.getMsg()).showError();
         });
 
     }

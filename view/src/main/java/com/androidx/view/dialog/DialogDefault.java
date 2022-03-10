@@ -2,6 +2,7 @@ package com.androidx.view.dialog;
 
 import static android.view.Gravity.BOTTOM;
 import static android.view.Gravity.CENTER;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 
 import android.app.Activity;
 import android.content.Context;
@@ -49,6 +50,7 @@ public final class DialogDefault {
                 .setLayoutViewId(R.id.dialog_frame)
                 .setCanceled(false)
                 .setCancelable(false)
+                .setLayoutHeight(WRAP_CONTENT)
                 .setLayoutGravity(CENTER)
                 .build()
                 .get(context);
@@ -95,6 +97,7 @@ public final class DialogDefault {
                 .setLayoutViewId(R.id.dialog_frame)
                 .setCanceled(false)
                 .setCancelable(false)
+                .setLayoutHeight(WRAP_CONTENT)
                 .setLayoutGravity(BOTTOM)
                 .build()
                 .get(context);
@@ -116,7 +119,7 @@ public final class DialogDefault {
             switch (position + 1) {
                 case 1:
                     EasyPhotos.createCamera((Activity) context, false)
-                            .setFileProviderAuthority("com.androidx.view.photos.fileProvider")
+                            .setFileProviderAuthority(context.getApplicationInfo().packageName + ".view.photos.fileProvider")
                             .start(new SelectCallback() {
                                 @Override
                                 public void onResult(ArrayList<Photo> photos, boolean isOriginal) {
@@ -131,7 +134,7 @@ public final class DialogDefault {
                     break;
                 case 2:
                     EasyPhotos.createAlbum((Activity) context, true, false, GlideEngine.getInstance())
-                            .setFileProviderAuthority("com.androidx.view.photos.fileProvider")
+                            .setFileProviderAuthority(context.getApplicationInfo().packageName + ".view.photos.fileProvider")
                             .setCount(maxCount)
                             .setVideo(true)
                             .setGif(true)
@@ -186,6 +189,7 @@ public final class DialogDefault {
                 .setLayoutViewId(R.id.dialog_frame)
                 .setCanceled(false)
                 .setCancelable(false)
+                .setLayoutHeight(WRAP_CONTENT)
                 .setLayoutGravity(BOTTOM)
                 .build()
                 .get(context);
@@ -213,6 +217,7 @@ public final class DialogDefault {
                 .setLayoutViewId(R.id.dialog_frame)
                 .setCanceled(false)
                 .setCancelable(false)
+                .setLayoutHeight(WRAP_CONTENT)
                 .setLayoutGravity(CENTER)
                 .build()
                 .get(context)
@@ -234,6 +239,7 @@ public final class DialogDefault {
                 .setLayoutViewId(R.id.dialog_frame)
                 .setCanceled(false)
                 .setCancelable(false)
+                .setLayoutHeight(WRAP_CONTENT)
                 .setLayoutGravity(CENTER)
                 .build()
                 .get(context)

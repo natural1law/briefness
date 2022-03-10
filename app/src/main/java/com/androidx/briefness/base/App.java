@@ -16,7 +16,7 @@ public class App extends Application {
     public static volatile MMKV kv;
 
     static {
-        Runtime.getRuntime().loadLibrary("url");
+        Runtime.getRuntime().loadLibrary("briefnessUrl");
     }
 
     @Override

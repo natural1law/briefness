@@ -377,7 +377,7 @@ class HttpRequest : HttpRequestListener {
     ) {
         val start = System.currentTimeMillis()
         listener.start()
-        hnl.downloadRequest(url, listener).enqueue(object : Callback {
+        hnl.downloadRequest(url, outPath, listener).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 val m = MsgModule(Log.getStackTraceString(e), listener)
                 val msg = handler.obtainMessage(102, m)

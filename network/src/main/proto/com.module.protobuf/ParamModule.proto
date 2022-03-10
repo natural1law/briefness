@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+//生成的java类所在的包名
+option java_outer_classname = "ParamModule";
+
+message ParamRequest{
+  string m1 = 1;
+  string m2 = 2;
+}
+
+message ParamResponse{
+  string m1 = 1;
+  string m2 = 2;
+}

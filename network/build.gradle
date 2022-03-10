@@ -79,25 +79,24 @@ dependencies {
     api 'com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.5'
     api 'org.conscrypt:conscrypt-android:2.5.2'
 
-//    api 'com.google.protobuf:protoc:4.0.0-rc-2'
-//    api 'com.google.protobuf:protobuf-java:4.0.0-rc-2'
-    api 'com.google.protobuf:protobuf-javalite:4.0.0-rc-2'
+    api 'com.google.protobuf:protoc:3.19.4'
+    api 'com.google.protobuf:protobuf-java:3.19.4'
 
     api 'com.google.code.gson:gson:2.9.0'
     implementation project(path: ':reduce')
 
 }
-protobuf {
-    protoc { artifact = 'com.google.protobuf:protoc:4.0.0-rc-2' }
-    generateProtoTasks {
-        all().each { task -> task.builtins {java {option "lite"} } }
-    }
-}
-
-//protobuf { //配置protobuf编译器
-//    protoc {artifact = 'com.google.protobuf:protoc:3.18.1'}
-//    plugins {javalite {artifact = 'com.google.protobuf:protoc-gen-javalite:3.18.1'}}
-//    //这里配置生成目录，编译后会在build的目录下生成对应的java文件
-//    generateProtoTasks { all().each { task -> task.builtins { remove java  }
-//        task.builtins {  java {}  } } }
+//protobuf {
+//    protoc { artifact = 'com.google.protobuf:protoc:4.0.0-rc-2' }
+//    generateProtoTasks {
+//        all().each { task -> task.builtins {java {option "lite"} } }
+//    }
 //}
+
+protobuf { //配置protobuf编译器
+    protoc {artifact = 'com.google.protobuf:protoc:3.19.4'}
+    plugins {javalite {artifact = 'com.google.protobuf:protoc-gen-java:3.19.4'}}
+    //这里配置生成目录，编译后会在build的目录下生成对应的java文件
+    generateProtoTasks { all().each { task -> task.builtins { remove java  }
+        task.builtins {  java {}  } } }
+}
