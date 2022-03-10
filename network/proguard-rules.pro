@@ -99,6 +99,7 @@
 -keep public class com.androidx.http.module.*{*;}
 -keep public class com.androidx.http.use.*{*;}
 -keep public class com.androidx.http.net.listener.*{*;}
+-keep public class com.module.protobuf.*{*;}
 
 ##---------------Begin: proguard configuration for Gson  ----------
 # Gson uses generic type information stored in a class file when working with fields. Proguard
