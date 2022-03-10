@@ -3,7 +3,6 @@ package com.androidx.view.dialog;
 import static android.view.Gravity.CENTER;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
-import static com.androidx.view.dialog.DialogCall.Builder.module;
 
 import android.content.Context;
 import android.os.Parcel;
@@ -22,34 +21,7 @@ public final class DialogCall {
     }
 
     public static Builder builder() {
-        return Singleton.builder();
-    }
-
-    private static final class Singleton {
-
-        private Singleton() {
-        }
-
-        private static volatile DialogCall dc;
-        private static volatile Builder builder;
-
-        private static final DialogCall INSTANCE = new DialogCall(module);
-        private static final Builder BUILDER = new Builder();
-
-        private static DialogCall dialogCall() {
-            if (dc == null) synchronized (DialogCall.class) {
-                if (dc == null) dc = INSTANCE;
-            }
-            return dc;
-        }
-
-        private static Builder builder() {
-            if (builder == null) synchronized (DialogCall.class) {
-                if (builder == null) builder = BUILDER;
-            }
-            return builder;
-        }
-
+        return new Builder();
     }
 
     public DialogServlet get(Context context) {
@@ -156,7 +128,7 @@ public final class DialogCall {
             module.setLayoutViewMarginsEnd(layoutViewMarginsEnd);
             module.setLayoutViewMarginsTop(layoutViewMarginsTop);
             module.setLayoutViewMarginsBottom(layoutViewMarginsBottom);
-            return Singleton.dialogCall();
+            return new DialogCall(module);
         }
 
     }
