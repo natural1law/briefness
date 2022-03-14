@@ -29,7 +29,7 @@ class NetHttp private constructor() {
 
         @JvmStatic
         fun builder(): Builder {
-            synchronized(Builder::class.java) { return Singleton.getInstance()!! }
+            synchronized(Builder::class.java) { return Builder() }
         }
 
     }
