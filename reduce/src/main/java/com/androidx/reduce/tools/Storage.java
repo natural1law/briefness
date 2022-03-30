@@ -319,7 +319,13 @@ public final class Storage {
         @RequiresApi(api = Build.VERSION_CODES.Q)
         public static Uri generateDownLoadPath(Context c, String... param) {
             String path = Environment.DIRECTORY_DOWNLOADS + "/" + param[0];
-            return baseGenerateUri(c, path, param);
+            ContentResolver cr = c.getContentResolver();
+            Uri uri = MediaStore.Downloads.EXTERNAL_CONTENT_URI;
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Downloads.RELATIVE_PATH, path);
+            values.put(MediaStore.Downloads.DISPLAY_NAME, param[1] + "." + param[2]);
+            values.put(MediaStore.Downloads.TITLE, path);
+            return cr.insert(uri, values);
         }
 
         /**
@@ -331,7 +337,13 @@ public final class Storage {
         @RequiresApi(api = Build.VERSION_CODES.Q)
         public static Uri generatePicturesPath(Context c, String... param) {
             String path = Environment.DIRECTORY_PICTURES + "/" + param[0];
-            return baseGenerateUri(c, path, param);
+            ContentResolver cr = c.getContentResolver();
+            Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.RELATIVE_PATH, path);
+            values.put(MediaStore.Images.Media.DISPLAY_NAME, param[1] + "." + param[2]);
+            values.put(MediaStore.Images.Media.TITLE, path);
+            return cr.insert(uri, values);
         }
 
         /**
@@ -343,7 +355,13 @@ public final class Storage {
         @RequiresApi(api = Build.VERSION_CODES.Q)
         public static Uri generateScreenshotsPath(Context c, String... param) {
             String path = Environment.DIRECTORY_SCREENSHOTS + "/" + param[0];
-            return baseGenerateUri(c, path, param);
+            ContentResolver cr = c.getContentResolver();
+            Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Images.Media.RELATIVE_PATH, path);
+            values.put(MediaStore.Images.Media.DISPLAY_NAME, param[1] + "." + param[2]);
+            values.put(MediaStore.Images.Media.TITLE, path);
+            return cr.insert(uri, values);
         }
 
         /**
@@ -355,7 +373,13 @@ public final class Storage {
         @RequiresApi(api = Build.VERSION_CODES.Q)
         public static Uri generateVideoPath(Context c, String... param) {
             String path = Environment.DIRECTORY_MOVIES + "/" + param[0];
-            return baseGenerateUri(c, path, param);
+            ContentResolver cr = c.getContentResolver();
+            Uri uri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Video.Media.RELATIVE_PATH, path);
+            values.put(MediaStore.Video.Media.DISPLAY_NAME, param[1] + "." + param[2]);
+            values.put(MediaStore.Video.Media.TITLE, path);
+            return cr.insert(uri, values);
         }
 
         /**
@@ -367,7 +391,13 @@ public final class Storage {
         @RequiresApi(api = Build.VERSION_CODES.Q)
         public static Uri generateAudioPath(Context c, String... param) {
             String path = Environment.DIRECTORY_MUSIC + "/" + param[0];
-            return baseGenerateUri(c, path, param);
+            ContentResolver cr = c.getContentResolver();
+            Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+            ContentValues values = new ContentValues();
+            values.put(MediaStore.Audio.Media.RELATIVE_PATH, path);
+            values.put(MediaStore.Audio.Media.DISPLAY_NAME, param[1] + "." + param[2]);
+            values.put(MediaStore.Audio.Media.TITLE, path);
+            return cr.insert(uri, values);
         }
 
         private static String defaultValue(String root, String suffix) throws IOException {
@@ -407,16 +437,6 @@ public final class Storage {
             return file.getPath();
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.Q)
-        private static Uri baseGenerateUri(Context c, String path, String... param) {
-            ContentResolver cr = c.getContentResolver();
-            Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-            ContentValues values = new ContentValues();
-            values.put(MediaStore.Audio.Media.RELATIVE_PATH, path);
-            values.put(MediaStore.Audio.Media.DISPLAY_NAME, param[1] + "." + param[2]);
-            values.put(MediaStore.Audio.Media.TITLE, path);
-            return cr.insert(uri, values);
-        }
     }
 
 }

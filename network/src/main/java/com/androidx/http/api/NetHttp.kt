@@ -29,6 +29,7 @@ class NetHttp private constructor() {
 
         @JvmStatic
         fun builder(): Builder {
+//            synchronized(Builder::class.java) { return Singleton.INSTANCE!! }
             synchronized(Builder::class.java) { return Builder() }
         }
 
@@ -206,19 +207,19 @@ class NetHttp private constructor() {
         init(b, HttpRequest())
     }
 
-    private object Singleton {
-        @Volatile
-        private var instance: Builder? = null
-
-        @JvmStatic
-        private val INSTANCE = Builder()
-
-        fun getInstance(): Builder? {
-            if (instance == null) synchronized(Builder::class.java) {
-                if (instance == null) return INSTANCE.also { instance = it }
-            }
-            return instance
-        }
-    }
+//    private object Singleton {
+//        @Volatile
+//        private var instance: Builder? = null
+//
+//        @JvmStatic
+//        val INSTANCE = getInstance()
+//
+//        fun getInstance(): Builder? {
+//            if (instance == null) synchronized(Builder::class.java) {
+//                if (instance == null) instance = Builder()
+//            }
+//            return instance
+//        }
+//    }
 
 }

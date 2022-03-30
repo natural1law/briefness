@@ -255,11 +255,10 @@ public final class HttpNetwork implements HttpNetworkListener {
      */
     @NonNull
     @Override
-    public Call downloadRequest(@NonNull String url, @NonNull String path, @NonNull DownloadListener downloadListener) {
+    public Call downloadRequest(@NonNull String url, @NonNull DownloadListener downloadListener) {
         OkHttpClient.Builder client = client().addInterceptor(chain -> {
             Response response = chain.proceed(chain.request());
             return response.newBuilder()
-                    .addHeader("path", path)
                     .body(new ProgressResponseBody(response.body(), downloadListener))
                     .build();
         });

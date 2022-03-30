@@ -77,11 +77,11 @@ public final class NetworkRequestActivity extends BaseActivity {
 //          Toasts.i("webSocket2", data);
 //        });
 
-        Map<String, Object> map = new WeakHashMap<>();
-        map.put("id", "123");
-        enqueue = Rn.initWebSocket(wsUrl(), map)
-                .setLoginCallback(() -> Toasts.i("webSocket", "连接成功"))
-                .setMsgCallback((code, msg, data) -> publicKey = Secure.Base64.decode(data.toStringUtf8()));
+//        Map<String, Object> map = new WeakHashMap<>();
+//        map.put("id", "123");
+//        enqueue = Rn.initWebSocket(wsUrl(), map)
+//                .setLoginCallback(() -> Toasts.i("webSocket", "连接成功"))
+//                .setMsgCallback((code, msg, data) -> publicKey = Secure.Base64.decode(data.toStringUtf8()));
 
 //            initView();
 //            KeyPair key = Secure.RSA.keyPair();
@@ -93,7 +93,7 @@ public final class NetworkRequestActivity extends BaseActivity {
 //            Toasts.i("私钥加密", v1 = Secure.RSA.encryptPrivate(k2, "http://192.168.1.122:9981/api/user/login.ios"));
 //            Toasts.i("公钥加密", Secure.RSA.decryptPublic(k1, v1));
 
-        publicKey = "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAxsUJNFAFtPyVonKfnTYdWLJnZG;vIGLPjZ8ihNvebye5EM8R;Aj60hGwksitw5e1rP2M3C4YFj97iEMmfqVy@oQQEAjX@licT8F0iCetvE8kdIJWph04As;srRW85K6aOT8zqYCMh@gEU0n6IEo3m1ygtfA8TEdf5u;Mwa@vet11JLuIPCx9rg5PL7ufP54xJkDLJ;0Ka5r65qf1Wz;gDPa22aAv3SSRLZQ2T9rbsv9uOQF4j2kOrUSbeXnCHldcSL5hNHzDR4oAYAGt@w9XLq@hVRpXN7fLDyGfY53RdZPgiyFmuq56crHDzwUdFUy7@hrFvppnCZQyxHPzPVu@8T@U12qcX4S@bu@1dqwxZKzAxTD0tlBIBSDp2cYogKwR4BXc6mFNX0iG1UQ9UUpLfMvlsg91sz7D8KTOs8l3;cQuKgUIxgebA5103SOuAMZExPndZNGwDX1KcPmoAirpjx48h4V3Ci4Azd5pwdkK2PXAd8tCDxiS@pwLd3Rtk2cS2QJSZ8ifTdRR3u9n5w5gKcZZQh2bEiatfs5n3B68AowbFObvPpJbRxTjMb;HPe;dtIktx651H@z1ncNMj9ziAtQvo@mYwHro3Abe6hqWjcvu3jXmmVeZsvwezmtONoPPsUZ2YeeuE7SCknZltFsv4nrDviqnppQ@cXYQAWvQvUsCAwEAAQ==";
+//        publicKey = "MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAxSE3hpppa50zhIeqb6x5qQZo7KGd2mEi0qB5;aLGkjaoeJnsVjSeEtRfTeRfZqUFfQSqE@oMtp6yzbzqSmiKJ@1JWqu6YSIKZEjgTUY2BExjzoFuK60Q6ABdXDIVo43Uab3DAXmpLGgf1oJtVvndOzKcAWcpRPV;vOGasQQC8bzhkIyij6G8SGBYimMcziAe4ZMfNudQiu30qaVgP39ZrBaU;riXsbyaBDp5;Hrh@lJGXXMJNZ4Ifx2SI9HtZ6YgOo9Xk59E0UnWmlN0r;ne6@RdDWqfKIgaUqgzYbcGBRzzkJvSilhsKKMxkVAK4esOq;Evr2t@o2;FGRNAV3o5rOYk3kc7;TBiXqvdsr7f30kErJ1P4kHgnxsyyvLJwzfVKzh5eUMz;0oHhcDzDgjeuHkFMdLAgUOvmSp1l6FzOt@Lvpt1@Tgb3dSyg9b98803ETUgyu;@fN@O5rd6z7GASho5U566Q4R9OMRGoH6lSAPR0pLdinWdvLsxVLEsBcwZKFAYgU;3YjbEDzn55v4LtG4jVmjBAMvF4xhRNkHxFKAroevLnZzUiivqWQZGIN7ITqUxhaEC829@jrHdltOotIBD@Oo5zDBc4HeQ@smwhTTIEAZ8STz1zObLLQTDa6r7ZFE8X0NQRwUHuTpcvcqtch2dnHbYzGCOsXhgaEgm6DECAwEAAQ==";
     }
 
     @Override
@@ -153,13 +153,6 @@ public final class NetworkRequestActivity extends BaseActivity {
     @OnClick(R.id.network_send2)
     public void send2() {
 
-//        JsonObject json = new JsonObject();
-//        json.addProperty("mobile", "15555555555");
-//        json.addProperty("password", "123456");
-//        Rn.sendJsonPost(url1(), json, data -> {
-//            Toasts.i("数据", data);
-//        });
-
         String key = Secure.AES.key();
         LoginModule.LoginParam param = LoginModule.LoginParam.newBuilder()
                 .setMobile(Secure.AES.encrypt(key, "15555555555"))
@@ -170,22 +163,25 @@ public final class NetworkRequestActivity extends BaseActivity {
             Request req = chain.request().newBuilder()
                     .addHeader("Connection", "Upgrade, HTTP2-Settings")
                     .addHeader("Upgrade", "h2c")
-                    .addHeader("key", rsa(publicKey, key))
+                    .addHeader("token", rsa(publicKey, key))
                     .build();//请求
             return chain.proceed(req);//响应
         });
         Rn.show();
         Rn.sendBytes(url1(), param.toByteArray(), data -> {
-            Toasts.i("数据", new String(data));
-//            ReceiveModule.ReceiveResult result = ReceiveModule.ReceiveResult.parseFrom(data);
-//            if (result.getCode() == 1) {
-//                if (Secure.RSA.verify(publicKey, result.getToken(), result.getSign())) {
-//                    String aesKey = Secure.RSA.decryptPublic(publicKey, result.getToken());
-//                    String decode = Secure.AES.decrypt(aesKey, result.getData());
-//                    JsonObject resData = new Gson().fromJson(decode, JsonObject.class);
-//                    contentView.setText(resData.toString());
-//                } else contentView.setText("无效数据");
-//            } else toasts.setMsg(result.getMsg()).showError();
+            LoginModule.LoginResult result = LoginModule.LoginResult.parseFrom(data);
+            contentView.setText(result.getMsg());
+            if (result.getCode() == 200) {
+                if (Secure.RSA.verify(publicKey, result.getToken(), result.getSign())) {
+                    String token = Secure.RSA.decryptPublic(publicKey, result.getToken());
+                    LoginModule.LoginResult enRes = LoginModule.LoginResult.newBuilder()
+                            .setId(Secure.AES.decrypt(token, result.getId()))
+                            .setMobile(Secure.AES.decrypt(token, result.getMobile()))
+                            .setUsername(Secure.AES.decrypt(token, result.getUsername()))
+                            .build();
+                    contentView.setText(enRes.toString());
+                } else contentView.setText("无效数据");
+            }
         });
 
     }
