@@ -35,8 +35,6 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 import okhttp3.Interceptor;
 import okio.Buffer;
@@ -47,8 +45,6 @@ import okio.Buffer;
  */
 @SuppressWarnings({"unused", "FieldMayBeFinal"})
 public final class Rn {
-
-    private static volatile Executor executor = Executors.newWorkStealingPool();
 
     /**
      * 设置SSL证书
@@ -234,7 +230,7 @@ public final class Rn {
      */
     public static void sendBytes(String url, byte[] param, Callback callback) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setMode(POST_BYTES)
                 .setBytes(param == null ? "".getBytes() : param)
@@ -259,7 +255,7 @@ public final class Rn {
                         }
                     }
                 })
-                .build());
+                .build();
     }
 
     /**
@@ -271,13 +267,13 @@ public final class Rn {
      */
     public static void sendMapGet(String url, Map<String, Object> param, Response response) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setMode(GET_MAP)
                 .setMap(param == null ? new WeakHashMap<>() : param)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(response))
-                .build());
+                .build();
     }
 
     /**
@@ -288,13 +284,13 @@ public final class Rn {
      */
     public static <C> void sendMapGet(String url, Map<String, Object> param, Class<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setMaxAnewCount(Configuration.count)
                 .setMode(GET_MAP)
                 .setMap(param == null ? new WeakHashMap<>() : param)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     /**
@@ -305,13 +301,13 @@ public final class Rn {
      */
     public static <C> void sendMapGetList(String url, Map<String, Object> param, TypeToken<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setMaxAnewCount(Configuration.count)
                 .setMode(GET_MAP)
                 .setMap(param == null ? new WeakHashMap<>() : param)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     /**
@@ -323,13 +319,13 @@ public final class Rn {
      */
     public static void sendJsonPost(String url, JsonObject param, Response response) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setMode(POST_JSON)
                 .setJson(param == null ? new JsonObject() : param)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(response))
-                .build());
+                .build();
     }
 
     /**
@@ -340,13 +336,13 @@ public final class Rn {
      */
     public static <C> void sendJsonPost(String url, JsonObject param, Class<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setMode(POST_JSON)
                 .setMaxAnewCount(Configuration.count)
                 .setJson(param == null ? new JsonObject() : param)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     /**
@@ -357,13 +353,13 @@ public final class Rn {
      */
     public static <C> void sendJsonPostList(String url, JsonObject param, TypeToken<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setMode(POST_JSON)
                 .setMaxAnewCount(Configuration.count)
                 .setJson(param == null ? new JsonObject() : param)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     /**
@@ -375,13 +371,13 @@ public final class Rn {
      */
     public static void sendMapPost(String url, Map<String, Object> param, Response response) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setMode(POST_MAP)
                 .setMap(param == null ? new WeakHashMap<>() : param)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(response))
-                .build());
+                .build();
     }
 
     /**
@@ -392,13 +388,13 @@ public final class Rn {
      */
     public static <C> void sendMapPost(String url, Map<String, Object> param, Class<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setMode(POST_MAP)
                 .setMap(param == null ? new WeakHashMap<>() : param)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     /**
@@ -409,13 +405,13 @@ public final class Rn {
      */
     public static <C> void sendMapPostList(String url, Map<String, Object> param, TypeToken<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setMode(POST_MAP)
                 .setMap(param == null ? new WeakHashMap<>() : param)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     /**
@@ -427,13 +423,13 @@ public final class Rn {
      */
     public static void sendMapDelete(String url, Map<String, Object> param, Response response) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setMode(DEL_MAP)
                 .setMap(param == null ? new WeakHashMap<>() : param)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(response))
-                .build());
+                .build();
     }
 
     /**
@@ -444,13 +440,13 @@ public final class Rn {
      */
     public static <C> void sendMapDelete(String url, Map<String, Object> param, Class<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setMode(DEL_MAP)
                 .setMaxAnewCount(Configuration.count)
                 .setMap(param == null ? new WeakHashMap<>() : param)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     /**
@@ -461,13 +457,13 @@ public final class Rn {
      */
     public static <C> void sendMapDeleteList(String url, Map<String, Object> param, TypeToken<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setMode(DEL_MAP)
                 .setMaxAnewCount(Configuration.count)
                 .setMap(param == null ? new WeakHashMap<>() : param)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     /**
@@ -479,13 +475,13 @@ public final class Rn {
      */
     public static void sendJsonDelete(String url, JsonObject param, Response response) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setMode(DEL_JSON)
                 .setJson(param == null ? new JsonObject() : param)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(response))
-                .build());
+                .build();
     }
 
     /**
@@ -496,13 +492,13 @@ public final class Rn {
      */
     public static <C> void sendJsonDelete(String url, JsonObject param, Class<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setMode(DEL_JSON)
                 .setJson(param == null ? new JsonObject() : param)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     /**
@@ -513,13 +509,13 @@ public final class Rn {
      */
     public static <C> void sendJsonDeleteList(String url, JsonObject param, TypeToken<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setMode(DEL_JSON)
                 .setJson(param == null ? new JsonObject() : param)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     /**
@@ -531,14 +527,14 @@ public final class Rn {
      */
     public static void sendJsonFrom(String url, String key, JsonObject param, Response response) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setJsonKey(key)
                 .setHosts(url)
                 .setMaxAnewCount(Configuration.count)
                 .setMode(FROM_JSON)
                 .setJson(param == null ? new JsonObject() : param)
                 .setCallback(response(response))
-                .build());
+                .build();
     }
 
     /**
@@ -549,14 +545,14 @@ public final class Rn {
      */
     public static <C> void sendJsonFrom(String url, String key, JsonObject param, Class<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setJsonKey(key)
                 .setHosts(url)
                 .setMode(FROM_JSON)
                 .setMaxAnewCount(Configuration.count)
                 .setJson(param == null ? new JsonObject() : param)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     /**
@@ -567,14 +563,14 @@ public final class Rn {
      */
     public static <C> void sendJsonFromList(String url, String key, JsonObject param, TypeToken<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setJsonKey(key)
                 .setHosts(url)
                 .setMode(FROM_JSON)
                 .setMaxAnewCount(Configuration.count)
                 .setJson(param == null ? new JsonObject() : param)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     /**
@@ -622,7 +618,7 @@ public final class Rn {
     public static void sendUpload(String url, Map<String, Object> param, String key, String path, Response response) {
         if (Re.isUrl(url)) return;
         else if (Re.isPath(path)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setFile(path)
                 .setMap(param == null ? new WeakHashMap<>() : param)
@@ -630,13 +626,13 @@ public final class Rn {
                 .setMode(UPLOAD_MAP)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(response))
-                .build());
+                .build();
     }
 
     public static <C> void sendUpload(String url, Map<String, Object> param, String key, String path, Class<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
         else if (Re.isPath(path)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setFile(path)
                 .setMap(param == null ? new WeakHashMap<>() : param)
@@ -644,13 +640,13 @@ public final class Rn {
                 .setMode(UPLOAD_MAP)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     public static <C> void sendUpload(String url, Map<String, Object> param, String key, String path, TypeToken<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
         else if (Re.isPath(path)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setFile(path)
                 .setMap(param == null ? new WeakHashMap<>() : param)
@@ -658,13 +654,13 @@ public final class Rn {
                 .setMode(UPLOAD_MAP)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     public static void sendUpload(String url, JsonObject param, String key, String path, Response response) {
         if (Re.isUrl(url)) return;
         else if (Re.isPath(path)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setFile(path)
                 .setJson(param == null ? new JsonObject() : param)
@@ -672,13 +668,13 @@ public final class Rn {
                 .setMode(UPLOAD_JSON)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(response))
-                .build());
+                .build();
     }
 
     public static <C> void sendUpload(String url, JsonObject param, String key, String path, Class<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
         else if (Re.isPath(path)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setFile(path)
                 .setJson(param == null ? new JsonObject() : param)
@@ -686,13 +682,13 @@ public final class Rn {
                 .setMode(UPLOAD_JSON)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     public static <C> void sendUpload(String url, JsonObject param, String key, String path, TypeToken<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
         else if (Re.isPath(path)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setFile(path)
                 .setJson(param == null ? new JsonObject() : param)
@@ -700,7 +696,7 @@ public final class Rn {
                 .setMode(UPLOAD_JSON)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     public static void sendUpload(String url, List<String> pathList, Response response) {
@@ -751,7 +747,7 @@ public final class Rn {
     public static void sendUpload(String url, Map<String, Object> param, String key, List<String> pathList, Response response) {
         if (Re.isUrl(url)) return;
         if (Re.isPaths(pathList)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setFilePathList(pathList)
                 .setMap(param == null ? new WeakHashMap<>() : param)
@@ -759,13 +755,13 @@ public final class Rn {
                 .setMode(UPLOAD_MANY_MAP)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(response))
-                .build());
+                .build();
     }
 
     public static <C> void sendUpload(String url, Map<String, Object> param, String key, List<String> pathList, Class<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
         if (Re.isPaths(pathList)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setFilePathList(pathList)
                 .setMap(param == null ? new WeakHashMap<>() : param)
@@ -773,13 +769,13 @@ public final class Rn {
                 .setMode(UPLOAD_MANY_MAP)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     public static <C> void sendUpload(String url, Map<String, Object> param, String key, List<String> pathList, TypeToken<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
         if (Re.isPaths(pathList)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setFilePathList(pathList)
                 .setMap(param == null ? new WeakHashMap<>() : param)
@@ -787,13 +783,13 @@ public final class Rn {
                 .setMode(UPLOAD_MANY_MAP)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     public static void sendUpload(String url, JsonObject param, String key, List<String> pathList, Response response) {
         if (Re.isUrl(url)) return;
         if (Re.isPaths(pathList)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setFilePathList(pathList)
                 .setJson(param == null ? new JsonObject() : param)
@@ -801,13 +797,13 @@ public final class Rn {
                 .setMode(UPLOAD_MANY_JSON)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(response))
-                .build());
+                .build();
     }
 
     public static <C> void sendUpload(String url, JsonObject param, String key, List<String> pathList, Class<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
         if (Re.isPaths(pathList)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setFilePathList(pathList)
                 .setJson(param == null ? new JsonObject() : param)
@@ -815,13 +811,13 @@ public final class Rn {
                 .setMode(UPLOAD_MANY_JSON)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     public static <C> void sendUpload(String url, JsonObject param, String key, List<String> pathList, TypeToken<C> type, ResponseType<C> rt) {
         if (Re.isUrl(url)) return;
         if (Re.isPaths(pathList)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setFilePathList(pathList)
                 .setJson(param == null ? new JsonObject() : param)
@@ -829,7 +825,7 @@ public final class Rn {
                 .setMode(UPLOAD_MANY_JSON)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(type, rt))
-                .build());
+                .build();
     }
 
     /**
@@ -841,7 +837,7 @@ public final class Rn {
     public static void sendDownload(String url, String outPath, DownloadListener listener) {
         if (Re.isUrl(url)) return;
         else if (Re.isPath(outPath)) return;
-        executor.execute(() -> NetHttp.builder()
+        NetHttp.builder()
                 .setHosts(url)
                 .setMode(DOWNLOAD)
                 .setMaxAnewCount(Configuration.count)
@@ -853,7 +849,7 @@ public final class Rn {
                         Log.e(Rn.class.getName(), Log.getStackTraceString(e));
                     }
                 })
-                .build());
+                .build();
     }
 
 }
