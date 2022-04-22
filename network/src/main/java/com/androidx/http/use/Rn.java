@@ -34,7 +34,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import okhttp3.Interceptor;
 import okio.Buffer;
@@ -45,6 +45,8 @@ import okio.Buffer;
  */
 @SuppressWarnings({"unused", "FieldMayBeFinal"})
 public final class Rn {
+
+    private static final ConcurrentHashMap<String, Object> map = new ConcurrentHashMap<>();
 
     /**
      * 设置SSL证书
@@ -211,7 +213,7 @@ public final class Rn {
         if (Re.isUrl(url)) return null;
         WebConfiguration.builder()
                 .setUrl(url)
-                .setParam(param == null ? new WeakHashMap<>() : param)
+                .setParam(param == null ? map : param)
                 .setReconnectInterval(time)
                 .setConnect(connect)
                 .setDisconnect(disconnect)
@@ -270,7 +272,7 @@ public final class Rn {
         NetHttp.builder()
                 .setHosts(url)
                 .setMode(GET_MAP)
-                .setMap(param == null ? new WeakHashMap<>() : param)
+                .setMap(param == null ? map : param)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(response))
                 .build();
@@ -288,7 +290,7 @@ public final class Rn {
                 .setHosts(url)
                 .setMaxAnewCount(Configuration.count)
                 .setMode(GET_MAP)
-                .setMap(param == null ? new WeakHashMap<>() : param)
+                .setMap(param == null ? map : param)
                 .setCallback(response(type, rt))
                 .build();
     }
@@ -305,7 +307,7 @@ public final class Rn {
                 .setHosts(url)
                 .setMaxAnewCount(Configuration.count)
                 .setMode(GET_MAP)
-                .setMap(param == null ? new WeakHashMap<>() : param)
+                .setMap(param == null ? map : param)
                 .setCallback(response(type, rt))
                 .build();
     }
@@ -374,7 +376,7 @@ public final class Rn {
         NetHttp.builder()
                 .setHosts(url)
                 .setMode(POST_MAP)
-                .setMap(param == null ? new WeakHashMap<>() : param)
+                .setMap(param == null ? map : param)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(response))
                 .build();
@@ -391,7 +393,7 @@ public final class Rn {
         NetHttp.builder()
                 .setHosts(url)
                 .setMode(POST_MAP)
-                .setMap(param == null ? new WeakHashMap<>() : param)
+                .setMap(param == null ? map : param)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(type, rt))
                 .build();
@@ -408,7 +410,7 @@ public final class Rn {
         NetHttp.builder()
                 .setHosts(url)
                 .setMode(POST_MAP)
-                .setMap(param == null ? new WeakHashMap<>() : param)
+                .setMap(param == null ? map : param)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(type, rt))
                 .build();
@@ -426,7 +428,7 @@ public final class Rn {
         NetHttp.builder()
                 .setHosts(url)
                 .setMode(DEL_MAP)
-                .setMap(param == null ? new WeakHashMap<>() : param)
+                .setMap(param == null ? map : param)
                 .setMaxAnewCount(Configuration.count)
                 .setCallback(response(response))
                 .build();
@@ -444,7 +446,7 @@ public final class Rn {
                 .setHosts(url)
                 .setMode(DEL_MAP)
                 .setMaxAnewCount(Configuration.count)
-                .setMap(param == null ? new WeakHashMap<>() : param)
+                .setMap(param == null ? map : param)
                 .setCallback(response(type, rt))
                 .build();
     }
@@ -461,7 +463,7 @@ public final class Rn {
                 .setHosts(url)
                 .setMode(DEL_MAP)
                 .setMaxAnewCount(Configuration.count)
-                .setMap(param == null ? new WeakHashMap<>() : param)
+                .setMap(param == null ? map : param)
                 .setCallback(response(type, rt))
                 .build();
     }
@@ -621,7 +623,7 @@ public final class Rn {
         NetHttp.builder()
                 .setHosts(url)
                 .setFile(path)
-                .setMap(param == null ? new WeakHashMap<>() : param)
+                .setMap(param == null ? map : param)
                 .setJsonKey(key)
                 .setMode(UPLOAD_MAP)
                 .setMaxAnewCount(Configuration.count)
@@ -635,7 +637,7 @@ public final class Rn {
         NetHttp.builder()
                 .setHosts(url)
                 .setFile(path)
-                .setMap(param == null ? new WeakHashMap<>() : param)
+                .setMap(param == null ? map : param)
                 .setJsonKey(key)
                 .setMode(UPLOAD_MAP)
                 .setMaxAnewCount(Configuration.count)
@@ -649,7 +651,7 @@ public final class Rn {
         NetHttp.builder()
                 .setHosts(url)
                 .setFile(path)
-                .setMap(param == null ? new WeakHashMap<>() : param)
+                .setMap(param == null ? map : param)
                 .setJsonKey(key)
                 .setMode(UPLOAD_MAP)
                 .setMaxAnewCount(Configuration.count)
@@ -700,7 +702,7 @@ public final class Rn {
     }
 
     public static void sendUpload(String url, List<String> pathList, Response response) {
-        sendUpload(url, new WeakHashMap<>(), pathList, response);
+        sendUpload(url, map, pathList, response);
     }
 
     public static void sendUpload(String url, Map<String, Object> param, List<String> pathList, Response response) {
@@ -750,7 +752,7 @@ public final class Rn {
         NetHttp.builder()
                 .setHosts(url)
                 .setFilePathList(pathList)
-                .setMap(param == null ? new WeakHashMap<>() : param)
+                .setMap(param == null ? map : param)
                 .setJsonKey(key)
                 .setMode(UPLOAD_MANY_MAP)
                 .setMaxAnewCount(Configuration.count)
@@ -764,7 +766,7 @@ public final class Rn {
         NetHttp.builder()
                 .setHosts(url)
                 .setFilePathList(pathList)
-                .setMap(param == null ? new WeakHashMap<>() : param)
+                .setMap(param == null ? map : param)
                 .setJsonKey(key)
                 .setMode(UPLOAD_MANY_MAP)
                 .setMaxAnewCount(Configuration.count)
@@ -778,7 +780,7 @@ public final class Rn {
         NetHttp.builder()
                 .setHosts(url)
                 .setFilePathList(pathList)
-                .setMap(param == null ? new WeakHashMap<>() : param)
+                .setMap(param == null ? map : param)
                 .setJsonKey(key)
                 .setMode(UPLOAD_MANY_MAP)
                 .setMaxAnewCount(Configuration.count)

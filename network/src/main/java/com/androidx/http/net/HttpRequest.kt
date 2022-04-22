@@ -16,14 +16,12 @@ import java.io.File
 import java.io.IOException
 import java.io.InputStream
 import java.net.SocketTimeoutException
-import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 class HttpRequest : HttpRequestListener {
 
     private var currentConnect = 0
     private val hnl: HttpNetworkListener = HttpNetwork.builder()
-    private val executor: Executor = Executors.newWorkStealingPool()
     private val handler = Handler(getMainLooper(), Handler.Callback label@{ message: Message ->
         val msg = message.obj as MsgModule
         when (message.what) {
@@ -70,7 +68,7 @@ class HttpRequest : HttpRequestListener {
         maxAnewCount: Int,
         resonse: com.androidx.http.net.listener.Response?
     ) {
-        executor.execute {
+        Executors.newWorkStealingPool().execute {
             hnl.getRequest(url, map).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     val obj = MsgModule(Log.getStackTraceString(e), resonse!!)
@@ -99,7 +97,7 @@ class HttpRequest : HttpRequestListener {
         maxAnewCount: Int,
         callback: com.androidx.http.net.listener.Callback?
     ) {
-        executor.execute {
+        Executors.newWorkStealingPool().execute {
             hnl.postRequestProto(url, bytes).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     val obj = MsgModule(Log.getStackTraceString(e).toByteArray(), callback!!)
@@ -128,7 +126,7 @@ class HttpRequest : HttpRequestListener {
         maxAnewCount: Int,
         resonse: com.androidx.http.net.listener.Response?
     ) {
-        executor.execute {
+        Executors.newWorkStealingPool().execute {
             hnl.postRequest(url, map).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     val obj = MsgModule(Log.getStackTraceString(e), resonse!!)
@@ -157,7 +155,7 @@ class HttpRequest : HttpRequestListener {
         maxAnewCount: Int,
         resonse: com.androidx.http.net.listener.Response?
     ) {
-        executor.execute {
+        Executors.newWorkStealingPool().execute {
             hnl.postRequest(url, json).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     val obj = MsgModule(Log.getStackTraceString(e), resonse!!)
@@ -186,7 +184,7 @@ class HttpRequest : HttpRequestListener {
         maxAnewCount: Int,
         resonse: com.androidx.http.net.listener.Response?
     ) {
-        executor.execute {
+        Executors.newWorkStealingPool().execute {
             hnl.deleteRequest(url, json).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     val obj = MsgModule(Log.getStackTraceString(e), resonse!!)
@@ -215,7 +213,7 @@ class HttpRequest : HttpRequestListener {
         maxAnewCount: Int,
         resonse: com.androidx.http.net.listener.Response?
     ) {
-        executor.execute {
+        Executors.newWorkStealingPool().execute {
             hnl.deleteRequest(url, map).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     val obj = MsgModule(Log.getStackTraceString(e), resonse!!)
@@ -245,7 +243,7 @@ class HttpRequest : HttpRequestListener {
         maxAnewCount: Int,
         resonse: com.androidx.http.net.listener.Response?
     ) {
-        executor.execute {
+        Executors.newWorkStealingPool().execute {
             hnl.forrequest(url, key, json).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     val obj = MsgModule(Log.getStackTraceString(e), resonse!!)
@@ -277,7 +275,7 @@ class HttpRequest : HttpRequestListener {
         maxAnewCount: Int,
         resonse: com.androidx.http.net.listener.Response?
     ) {
-        executor.execute {
+        Executors.newWorkStealingPool().execute {
             hnl.uploadRequest(url, param, key, path).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     val obj = MsgModule(Log.getStackTraceString(e), resonse!!)
@@ -308,7 +306,7 @@ class HttpRequest : HttpRequestListener {
         maxAnewCount: Int,
         resonse: com.androidx.http.net.listener.Response?
     ) {
-        executor.execute {
+        Executors.newWorkStealingPool().execute {
             hnl.uploadRequest(url, param, key, path).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     val obj = MsgModule(Log.getStackTraceString(e), resonse!!)
@@ -339,7 +337,7 @@ class HttpRequest : HttpRequestListener {
         maxAnewCount: Int,
         resonse: com.androidx.http.net.listener.Response?
     ) {
-        executor.execute {
+        Executors.newWorkStealingPool().execute {
             hnl.uploadRequest(url, param, key, pathList).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     val obj = MsgModule(Log.getStackTraceString(e), resonse!!)
@@ -370,7 +368,7 @@ class HttpRequest : HttpRequestListener {
         maxAnewCount: Int,
         resonse: com.androidx.http.net.listener.Response?
     ) {
-        executor.execute {
+        Executors.newWorkStealingPool().execute {
             hnl.uploadRequest(url, param, key, pathList).enqueue(object : Callback {
                 override fun onFailure(call: Call, e: IOException) {
                     val obj = MsgModule(Log.getStackTraceString(e), resonse!!)
@@ -400,7 +398,7 @@ class HttpRequest : HttpRequestListener {
         maxAnewCount: Int,
         listener: DownloadListener
     ) {
-        executor.execute {
+        Executors.newWorkStealingPool().execute {
             val start = System.currentTimeMillis()
             listener.start()
             hnl.downloadRequest(url, listener).enqueue(object : Callback {
