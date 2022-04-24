@@ -114,9 +114,9 @@ public final class This implements ThisListener, LauncherStartListener, HostList
                             FragmentActivity activity = (FragmentActivity) launcherContext.get();
                             if (isAnimation) {
                                 intent.putExtras(ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
-                                if (isFinish) activity.finishAfterTransition();
+                                if (isFinish) delay(activity::finishAfterTransition, 1000);
                             } else {
-                                if (isFinish) activity.finish();
+                                if (isFinish) delay(activity::finish, 1000);
                             }
                             if (bundle != null && !bundle.isEmpty()) {
                                 if (launcher != null) launcher.launch(intent.putExtras(bundle));
@@ -186,10 +186,8 @@ public final class This implements ThisListener, LauncherStartListener, HostList
                 FragmentActivity activity = (FragmentActivity) context;
                 if (isAnimation) {
                     intent.putExtras(ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
-                    if (isFinish) activity.finishAfterTransition();
-                } else {
-                    if (isFinish) activity.finish();
-                }
+                    if (isFinish) delay(activity::finishAfterTransition, 1000);
+                } else if (isFinish) delay(activity::finish, 1000);
                 if (bundle != null) activity.startActivity(intent.putExtras(bundle));
                 else activity.startActivity(intent);
             } else if (context instanceof Activity) {
@@ -199,10 +197,8 @@ public final class This implements ThisListener, LauncherStartListener, HostList
                 } else activity.startActivity(intent);
                 if (isAnimation) {
                     intent.putExtras(ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
-                    if (isFinish) activity.finishAfterTransition();
-                } else {
-                    if (isFinish) activity.finish();
-                }
+                    if (isFinish) delay(activity::finishAfterTransition, 1000);
+                } else if (isFinish) delay(activity::finish, 1000);
             } else {
                 if (bundle != null) context.startActivity(intent, bundle);
                 else context.startActivity(intent);
