@@ -2,8 +2,6 @@ package com.androidx.reduce.tools;
 
 import android.annotation.SuppressLint;
 import android.os.CountDownTimer;
-import android.os.Parcel;
-import android.os.Parcelable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,9 +21,11 @@ public final class CountDown extends CountDownTimer {
     private static String prefixWordage;//设置倒计时执行时前缀文字
     private static String suffixWordage;//设置倒计时执行时后缀文字
     private static WeakReference<TextView> wrTextView;//文本布局
+    private static final int COUNT = 1000;
+    private volatile long millis;
 
     private CountDown(Builder builder) {
-        super(builder.millisInFuture, 1000);
+        super(builder.millisInFuture, COUNT);
         wrTextView = new WeakReference<>(builder.view);
         finishWordage = builder.finishWordage;
         prefixWordage = builder.prefixWordage;
@@ -42,48 +42,31 @@ public final class CountDown extends CountDownTimer {
     public void onTick(long millisUntilFinished) {
         //防止计时过程中重复点击
         wrTextView.get().setClickable(false);
-        wrTextView.get().setText(prefixWordage + (millisUntilFinished / 1000) + suffixWordage);
+        this.millis = millisUntilFinished;
+        long time = (millis / COUNT);
+        wrTextView.get().setText(prefixWordage + time + suffixWordage);
     }
 
     @Override
     public void onFinish() {
         wrTextView.get().setClickable(true);
         wrTextView.get().setText(finishWordage);
+        millis = 0;
         cancel();
     }
 
     @SuppressWarnings({"unused", "RedundantSuppression"})
-    public static final class Builder implements Parcelable {
+    public static final class Builder {
 
-        private Builder builder = this;
+        private final Builder builder = this;
         private TextView view;//文本布局
-        private int millisInFuture = 60000;//总时长(默认一分钟)
+        private volatile int millisInFuture = 60000;//总时长(默认一分钟)
         private String finishWordage = "重新获取";//设置倒计时完成文字
         private String prefixWordage = "";//设置倒计时执行时前缀文字
         private String suffixWordage = " s";//设置倒计时执行时后缀文字
 
         private Builder() {
         }
-
-        private Builder(Parcel in) {
-            builder = in.readParcelable(Builder.class.getClassLoader());
-            millisInFuture = in.readInt();
-            finishWordage = in.readString();
-            prefixWordage = in.readString();
-            suffixWordage = in.readString();
-        }
-
-        protected static final Creator<Builder> CREATOR = new Creator<Builder>() {
-            @Override
-            public Builder createFromParcel(Parcel in) {
-                return new Builder(in);
-            }
-
-            @Override
-            public Builder[] newArray(int size) {
-                return new Builder[size];
-            }
-        };
 
         /**
          * 设置文本布局
@@ -139,19 +122,6 @@ public final class CountDown extends CountDownTimer {
             return new CountDown(builder);
         }
 
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeParcelable(builder, flags);
-            dest.writeInt(millisInFuture);
-            dest.writeString(finishWordage);
-            dest.writeString(prefixWordage);
-            dest.writeString(suffixWordage);
-        }
     }
 
 }
