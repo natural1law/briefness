@@ -8,8 +8,6 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
 
-import androidx.annotation.RequiresApi;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.text.ParseException;
@@ -86,36 +84,19 @@ public final class Convert {
         private Timestamp() {
         }
 
-        /**
-         * 获取当前日期时间
-         *
-         * @param format 时间格式
-         */
-        @SuppressLint("SimpleDateFormat")
-        @RequiresApi(api = Build.VERSION_CODES.O)
-        public static String getCurrentDatetime(String... format) {
-            return dispose(LocalDateTime.now(), format[0]);
-        }
-
         @SuppressLint("SimpleDateFormat")
         private static <Timestamp> String dispose(Timestamp timestamp, String format) {
             try {
                 Date date;
                 SimpleDateFormat sdf = new SimpleDateFormat(format);
-                if (timestamp instanceof Long) {
-                    date = sdf.parse(sdf.format(timestamp));
-                } else if (timestamp instanceof String) {
-                    date = sdf.parse(sdf.format(timestamp));
-                } else {
-                    date = new Date();
-                }
+                if (timestamp instanceof Long) date = sdf.parse(sdf.format(timestamp));
+                else if (timestamp instanceof String) date = sdf.parse(sdf.format(timestamp));
+                else date = new Date();
                 assert date != null;
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     LocalDateTime datetime = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
                     return DateTimeFormatter.ofPattern(format).format(datetime);
-                } else {
-                    return new SimpleDateFormat(format).format(date);
-                }
+                } else return new SimpleDateFormat(format).format(date);
             } catch (Exception e) {
                 return Log.getStackTraceString(e);
             }
@@ -154,10 +135,31 @@ public final class Convert {
         }
 
         /**
+         * 获取斜杠格式日期
+         */
+        public static <Timestamp> String getDateTimeOblique(Timestamp timestamp) {
+            return dispose(timestamp, DATE_FORMAT11);
+        }
+
+        /**
          * 获取正短格式日期
          */
         public static <Timestamp> String getDateStraight(Timestamp timestamp) {
             return dispose(timestamp, DATE_FORMAT20);
+        }
+
+        /**
+         * 获取正短格式日期
+         */
+        public static <Timestamp> String getDateTimeStraight(Timestamp timestamp) {
+            return dispose(timestamp, DATE_FORMAT10);
+        }
+
+        /**
+         * 获取中文日期时间
+         */
+        public static <Timestamp> String getDateTimeChinese(Timestamp timestamp) {
+            return dispose(timestamp, DATE_FORMAT12);
         }
 
         /**

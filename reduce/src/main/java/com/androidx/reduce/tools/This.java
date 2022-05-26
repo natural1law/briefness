@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -231,17 +232,19 @@ public final class This implements ThisListener, LauncherStartListener, HostList
      * 启动service（带参）
      */
     public <T extends Service> ThisListener service(@NonNull Context c, @NonNull Class<T> c1, Bundle b) {
+        Intent intent = new Intent(c, c1).addFlags(FLAG_ACTIVITY_NEW_TASK);
+        if (b != null) intent.putExtras(b);
         if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
             host = () -> {
-                Intent intent = new Intent(c, c1).addFlags(FLAG_ACTIVITY_NEW_TASK);
-                if (b != null) intent.putExtras(b);
-                c.startService(intent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    c.startForegroundService(intent);
+                } else c.startService(intent);
             };
         } else {
             run = () -> {
-                Intent intent = new Intent(c, c1).addFlags(FLAG_ACTIVITY_NEW_TASK);
-                if (b != null) intent.putExtras(b);
-                c.startService(intent);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    c.startForegroundService(intent);
+                } else c.startService(intent);
             };
         }
         return this;
@@ -258,19 +261,11 @@ public final class This implements ThisListener, LauncherStartListener, HostList
      * 启动service（带参）
      */
     public ThisListener bindService(@NonNull Context c, @NonNull Class<?> c1, Bundle b, ServiceConnection c2) {
+        Intent intent = new Intent(c, c1);
+        if (b != null) intent.putExtras(b);
         if (Looper.getMainLooper().getThread() == Thread.currentThread()) {
-            host = () -> {
-                Intent intent = new Intent(c, c1);
-                if (b != null) intent.putExtras(b);
-                c.bindService(intent, c2, BIND_AUTO_CREATE);
-            };
-        } else {
-            run = () -> {
-                Intent intent = new Intent(c, c1);
-                if (b != null) intent.putExtras(b);
-                c.bindService(intent, c2, BIND_AUTO_CREATE);
-            };
-        }
+            host = () -> c.bindService(intent, c2, BIND_AUTO_CREATE);
+        } else run = () -> c.bindService(intent, c2, BIND_AUTO_CREATE);
         return this;
     }
 
