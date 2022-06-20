@@ -32,27 +32,27 @@ Android开发工具
 ### 使用依赖
   * 全部
   ```
-  implementation 'com.github.natural1law.briefness:3.6.8'
+  implementation 'com.github.natural1law.briefness:3.7.3'
   ```
   * 分支-网络请求
   ```
-  implementation 'com.github.natural1law.briefness:network:3.6.8'
+  implementation 'com.github.natural1law.briefness:network:3.7.3'
   ```
   * 分支-常用工具
   ```
-  implementation 'com.github.natural1law.briefness:reduce:3.6.8'
+  implementation 'com.github.natural1law.briefness:reduce:3.7.3'
   ```
   * 分支-图表统计
   ```
-  implementation 'com.github.natural1law.briefness:echarts:3.6.8'
+  implementation 'com.github.natural1law.briefness:echarts:3.7.3'
   ```
   * 分支-视图布局
   ```
-  implementation 'com.github.natural1law.briefness:view:3.6.8'
+  implementation 'com.github.natural1law.briefness:view:3.7.3'
   ```
   * 分支-加载动画（仿zyao89）
   ```
-  implementation 'com.github.natural1law.briefness:animation:3.6.8'
+  implementation 'com.github.natural1law.briefness:animation:3.7.3'
   ```
 
 ### 工具使用
