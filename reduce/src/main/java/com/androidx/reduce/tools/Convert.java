@@ -297,7 +297,7 @@ public final class Convert {
         }
 
         public static Pixel get(Context context) {
-            return new Pixel(context);
+            return Singleton.newInstance(context);
         }
 
         /**
@@ -321,5 +321,23 @@ public final class Convert {
             return (int) (px * dm.scaledDensity);
         }
 
+        public DisplayMetrics getDm() {
+            return dm;
+        }
+
+        private static final class Singleton {
+
+            private static volatile Pixel instance;
+
+            private Singleton() {
+            }
+
+            private static Pixel newInstance(Context context) {
+                if (instance == null) synchronized (Pixel.class) {
+                    if (instance == null) instance = new Pixel(context);
+                }
+                return instance;
+            }
+        }
     }
 }
