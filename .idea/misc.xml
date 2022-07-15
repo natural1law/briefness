@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/androidWords/briefness/app/src/main/res/drawable/nav_item.xml" value="0.1635" />
         <entry key="..\:/androidWords/briefness/app/src/main/res/layout/activity_dialog.xml" value="0.2" />
         <entry key="..\:/androidWords/briefness/app/src/main/res/layout/activity_dragview.xml" value="0.25136612021857924" />
         <entry key="..\:/androidWords/briefness/app/src/main/res/layout/activity_echarts.xml" value="0.13446824789594491" />
@@ -19,12 +20,33 @@
         <entry key="..\:/androidWords/briefness/app/src/main/res/layout/frag_segment.xml" value="0.17862021857923496" />
         <entry key="..\:/androidWords/briefness/app/src/main/res/layout/frag_sliding.xml" value="0.1721311475409836" />
         <entry key="..\:/androidWords/briefness/app/src/main/res/menu/nav_menu_default.xml" value="0.2714285714285714" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/alert_bg.xml" value="0.1635" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/alert_bottom_btn.xml" value="0.1635" />
         <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/alert_bottom_btn_sel.xml" value="0.1675" />
         <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/alert_bottom_single_selector.xml" value="0.1675" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/bg_theme.xml" value="0.1635" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/border.xml" value="0.1635" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/border_bottom.xml" value="0.1635" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/border_code.xml" value="0.1635" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/border_dialog_cue.xml" value="0.1635" />
         <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/dashboard.xml" value="0.2833976833976834" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/dialog_border.xml" value="0.1635" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/dialog_border_affirm.xml" value="0.1635" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/dialog_border_left.xml" value="0.1635" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/dialog_border_loading.xml" value="0.1635" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/dialog_border_quit.xml" value="0.1635" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/dialog_border_right.xml" value="0.1635" />
         <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/ic_index_dashboard.xml" value="0.2548611111111111" />
         <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/nav_icon1.xml" value="0.1375" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/nav_icon4.xml" value="0.1635" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/nav_item.xml" value="0.1635" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/pagination_background.xml" value="0.1635" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/pagination_selected.xml" value="0.1635" />
         <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/pagination_selector_tab_color.xml" value="0.1375" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/pagination_spinner.xml" value="0.1635" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/pagination_unselected.xml" value="0.1635" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/radio.xml" value="0.1635" />
+        <entry key="..\:/androidWords/briefness/view/src/main/res/drawable/selector_item.xml" value="0.1635" />
         <entry key="..\:/androidWords/briefness/view/src/main/res/layout/activity_scan.xml" value="0.274609375" />
         <entry key="..\:/androidWords/briefness/view/src/main/res/layout/dialog_alert.xml" value="0.2735655737704918" />
         <entry key="..\:/androidWords/briefness/view/src/main/res/layout/dialog_camera.xml" value="0.274609375" />

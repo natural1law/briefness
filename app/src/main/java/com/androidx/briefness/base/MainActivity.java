@@ -24,7 +24,8 @@ public class MainActivity extends BaseActivity {
                 .setMenu(R.menu.nav_menu_default)
                 .setAddFragment(new HomePageFrag())
                 .setAddFragment(new MyPageFrag())
-                .setBackgroundColor(R.color.gray)
+                .setItemTextColor(R.drawable.nav_item)
+                .setBackgroundDrawable(R.drawable.bg_theme)
                 .setLazy(true)
                 .build();
     }

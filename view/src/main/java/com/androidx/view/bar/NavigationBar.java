@@ -86,7 +86,7 @@ public final class NavigationBar {
     /**
      * 初始化布局
      */
-    @SuppressLint({"WrongConstant", "ResourceType"})
+    @SuppressLint({"WrongConstant", "ResourceType", "UseCompatLoadingForDrawables"})
     private void initView(NewBuilder b) {
         if (fragments.size() < 2 || fragments.size() > 5) {
             navigationLayout.setVisibility(View.GONE);
@@ -94,10 +94,15 @@ public final class NavigationBar {
             return;
         }
         navigationView.inflateMenu(b.menu);
-        navigationView.setItemTextColor(aThis.getResources().getColorStateList(b.itemTextColor, aThis.getTheme()));
-        navigationView.setBackgroundColor(aThis.getResources().getColor(R.color.transparent, aThis.getTheme()));
-        navigationLayout.setBackgroundColor(aThis.getResources().getColor(b.navigationBackgroundColor, aThis.getTheme()));
-        fragmentLayout.setBackgroundColor(aThis.getResources().getColor(b.frameBackgroundColor, aThis.getTheme()));
+        if (b.itemTextColor != 0) {
+            navigationView.setItemTextColor(aThis.getColorStateList(b.itemTextColor));
+        } else
+            navigationView.setItemTextColor(aThis.getColorStateList(R.drawable.pagination_selector_tab_color));
+        navigationView.setBackgroundColor(aThis.getColor(R.color.transparent));
+        if (b.navigationBackground != 0) {
+            navigationLayout.setBackground(aThis.getDrawable(b.navigationBackground));
+        } else navigationLayout.setBackgroundColor(aThis.getColor(b.navigationBackgroundColor));
+        fragmentLayout.setBackgroundColor(aThis.getColor(b.frameBackgroundColor));
         navigationView.setItemIconTintList(null);
         navigationView.setOnItemSelectedListener(selectedListener);
         adjustNavigationIcoSize(navigationView);
@@ -158,9 +163,10 @@ public final class NavigationBar {
         private final FragmentActivity aThis;
         private final NewBuilder builder;
         private int menu = R.menu.nav_menu;
-        private int itemTextColor = R.drawable.pagination_selector_tab_color;
+        private int itemTextColor = 0;
         private int frameBackgroundColor = R.color.transparent;
         private int navigationBackgroundColor = R.color.transparent;
+        private int navigationBackground = 0;
         private final List<Fragment> fragments = new LinkedList<>();
         private boolean lazy = false;
         private int mode = Mode.AUTO.getValue();
@@ -227,6 +233,14 @@ public final class NavigationBar {
          */
         public NewBuilder setBackgroundColor(@ColorRes int color) {
             this.navigationBackgroundColor = color;
+            return builder;
+        }
+
+        /**
+         * 设置底部导航栏背景颜色
+         */
+        public NewBuilder setBackgroundDrawable(@DrawableRes int color) {
+            this.navigationBackground = color;
             return builder;
         }
 

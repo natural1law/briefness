@@ -7,4 +7,8 @@
     <color name="code">#ABD4FF</color>
     <color name="hint">#8E8E8E</color>
     <color name="cameraFontColor">#006cff</color>
+    <color name="themeColor2">#B5D915</color>
+    <color name="themeColor4">#7CAB4B</color>
+    <color name="white">#FFFFFF</color>
+    <color name="purple_700">#A5EAFF</color>
 </resources>
