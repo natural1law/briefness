@@ -4,18 +4,16 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
 
 public final class Proxys<O> {
-
     private final ClassLoader cl;
     private final Class<?>[] c;
     private volatile O o;
 
     private final InvocationHandler ih = (proxy, method, args) -> method.invoke(o, args);
 
-    @SuppressWarnings("unchecked")
-    protected <T> Proxys(T target) {
-        this.o = (O) target;
-        cl = target.getClass().getClassLoader();
-        c = target.getClass().getInterfaces();
+    private Proxys(O target) {
+        this.o = target;
+        cl = o.getClass().getClassLoader();
+        c = o.getClass().getInterfaces();
     }
 
     public static <T> Proxys<T> build(T target) {

@@ -89,7 +89,7 @@ public final class HttpNetwork implements HttpNetworkListener {
                     return chain.proceed(req);
                 })
                 .connectionSpecs(Arrays.asList(spec, spec1, spec2))
-                .protocols(Arrays.asList(Protocol.HTTP_2, Protocol.HTTP_1_1))
+                .protocols(Arrays.asList(Protocol.HTTP_3, Protocol.HTTP_2, Protocol.HTTP_1_1))
                 .connectionPool(new ConnectionPool(maxConnCount, alive, TimeUnit.MINUTES))//创建连接池
                 .hostnameVerifier((hostname, session) -> hostname.equalsIgnoreCase(session.getPeerHost()));//IP主机校验
         if (ssl != null) TrustManagers.createSSL(client, ssl);

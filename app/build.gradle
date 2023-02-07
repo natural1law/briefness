@@ -12,7 +12,7 @@ android {
         minSdkVersion 24
         targetSdkVersion 33
         versionCode 3
-        versionName "3.0.0"
+        versionName "3.0.1"
         multiDexEnabled true
         externalNativeBuild {
             cmake {
@@ -94,6 +94,6 @@ dependencies {
     implementation 'com.jakewharton:butterknife:10.2.3'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.3'
 
-    implementation 'com.tencent:mmkv-static:1.2.13'
+    implementation 'com.tencent:mmkv-static:1.2.15'
 
 }
