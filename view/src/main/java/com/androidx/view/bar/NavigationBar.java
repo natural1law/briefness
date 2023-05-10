@@ -60,8 +60,8 @@ public final class NavigationBar {
         Menu menu = navigationView.getMenu();
         int let = menu.size() & fragments.size();
         for (int i = 0; i < let; i++) {
-            current = i;
             if (menu.getItem(i).getItemId() == item.getItemId()) {
+                current = i;
                 switchFragment(fragments.get(i)).commit();
             }
         }
