@@ -53,12 +53,15 @@ public final class NavigationBar {
     private final LinearLayoutCompat navigationLayout;
     private final FragmentContainerView fragmentLayout;
 
+    public int current;//当前的fragment
+
     @SuppressLint("NonConstantResourceId")
     private final BottomNavigationView.OnItemSelectedListener selectedListener = item -> {
         Menu menu = navigationView.getMenu();
         int let = menu.size() & fragments.size();
         for (int i = 0; i < let; i++) {
             if (menu.getItem(i).getItemId() == item.getItemId()) {
+                current = i;
                 switchFragment(fragments.get(i)).commit();
             }
         }
